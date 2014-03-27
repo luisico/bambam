@@ -47,6 +47,7 @@ group :test do
   gem 'email_spec', '~> 1.5.0'
   gem 'poltergeist', '~> 1.5.0'
   gem 'launchy', '~> 2.4.2'
+  gem 'selenium-webdriver'
 end
 
 group :development, :test do
