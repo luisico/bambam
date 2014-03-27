@@ -20,6 +20,9 @@ gem 'jbuilder', '~> 1.5.2'
 group :development do
   gem 'better_errors', '~> 1.1.0'
   gem 'binding_of_caller', '~> 0.7.1'
+  gem 'guard-rspec', '~> 4.2.7'
+  gem 'guard-cucumber', '~> 1.4.1'
+  gem 'rb-inotify', '~> 0.9.3', require: false
 end
 
 group :doc do
