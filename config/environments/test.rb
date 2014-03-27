@@ -31,6 +31,14 @@ Bambam::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # For MailCatcher
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {address: "localhost", port: 1025 }
+
+  # Action mailer defaults
+  config.action_mailer.default_url_options = {host: 'example.com'}
+  ActionMailer::Base.default(from: 'test@example.com')
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 end
