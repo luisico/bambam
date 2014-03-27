@@ -39,10 +39,12 @@ group :test do
   gem 'capybara', '~> 2.2.1'
   gem 'email_spec', '~> 1.5.0'
   gem 'poltergeist', '~> 1.5.0'
+  gem 'launchy', '~> 2.4.2'
 end
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.2'
   gem 'rspec-rails', '~> 2.14.1'
   gem 'shoulda-matchers', '~> 2.4.0'
+  gem 'quiet_assets', '~> 1.0.2'
 end
