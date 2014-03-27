@@ -7,6 +7,9 @@ gem 'rails', '~> 4.0.4'
 # Database
 gem 'sqlite3', '~> 1.3.9', group: [:development, :test]
 
+# Factories
+gem 'factory_girl_rails', '~> 4.4.0'
+
 # Assets
 gem 'sass-rails', '~> 4.0.2'
 gem 'uglifier', '>= 1.3.0'

@@ -22,6 +22,9 @@ guard :rspec, all_after_pass: false, all_on_start: false, cmd: 'foreman run spri
   # Turnip features and steps
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
+
+  # Factories
+  watch(%r{^spec/factories/(.+)\.rb$})                { |m| ["spec/models/#{m[1].singularize}_spec.rb", "spec/controllers/#{m[1]}_controller_spec.rb", "spec/features/#{m[1]}_spec.rb"] }
 end
 
 guard :cucumber, all_after_pass: false, all_on_start: false, cli: '--profile guard', bundler: false  do
