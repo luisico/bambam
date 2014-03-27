@@ -14,3 +14,18 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore editor tmp files
+*~
+\#*\#
+.\#*
+.*.sw[a-z]
+
+# Ignore ctags files
+TAGS
+
+# Ignore environment variables
+/.env
+
+# Ignore other unneeded files.
+.DS_Store
