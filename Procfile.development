@@ -1,0 +1,3 @@
+# Procfile for development
+web: bundle exec rails server
+log: tail -f -n 0 log/development.log
