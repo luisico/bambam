@@ -18,13 +18,17 @@ test: &test
   pool: 5
   timeout: 5000
 
-production:
+production: &production
   adapter: postgresql
   encoding: unicode
   database: bambam_production
   pool: 5
   username: ENV['DB_USERNAME']
   password: ENV['DB_PASSWORD']
+
+staging:
+  <<: *production
+  database: bambam_staging
 
 cucumber:
   <<: *test
