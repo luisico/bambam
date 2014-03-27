@@ -4,6 +4,9 @@ ruby '2.0.0'
 
 gem 'rails', '~> 4.0.4'
 
+# Env variables (must be at top)
+gem 'dotenv-rails', '~> 0.10.0', group: [:development, :test]
+
 # Database
 gem 'sqlite3', '~> 1.3.9', group: [:development, :test]
 
