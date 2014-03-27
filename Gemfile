@@ -29,4 +29,6 @@ end
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.2'
+  gem 'rspec-rails', '~> 2.14.1'
+  gem 'shoulda-matchers', '~> 2.4.0'
 end
