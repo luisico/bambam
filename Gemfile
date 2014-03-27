@@ -27,6 +27,12 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :test do
+  gem 'cucumber-rails', '~> 1.4.0', require: false
+  gem 'database_cleaner', '~> 1.2.0'
+  gem 'capybara', '~> 2.2.1'
+end
+
 group :development, :test do
   gem 'pry-rails', '~> 0.3.2'
   gem 'rspec-rails', '~> 2.14.1'
