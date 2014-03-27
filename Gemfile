@@ -17,7 +17,16 @@ gem 'turbolinks'
 # JSON APIs
 gem 'jbuilder', '~> 1.5.2'
 
+group :development do
+  gem 'better_errors', '~> 1.1.0'
+  gem 'binding_of_caller', '~> 0.7.1'
+end
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
+end
+
+group :development, :test do
+  gem 'pry-rails', '~> 0.3.2'
 end
