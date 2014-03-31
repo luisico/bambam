@@ -65,6 +65,9 @@ RSpec.configure do |config|
   # email_spec matchers
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
+
+  # Devise test helpers
+  config.include Devise::TestHelpers, :type => :controller
 end
 
 # Speed up tests
