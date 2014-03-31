@@ -17,12 +17,17 @@ describe "Users" do
     end
 
     it "routes to registration" do
-      assert_routing({ path: '/users/cancel',  method: :get },    { controller: 'devise/registrations', action: 'cancel'})
-      assert_routing({ path: '/users',         method: :post },   { controller: 'devise/registrations', action: 'create'})
-      assert_routing({ path: '/users/sign_up', method: :get },    { controller: 'devise/registrations', action: 'new'})
-      assert_routing({ path: '/users/edit',    method: :get },    { controller: 'devise/registrations', action: 'edit'})
-      assert_routing({ path: '/users',         method: :put },    { controller: 'devise/registrations', action: 'update'})
-      assert_routing({ path: '/users',         method: :delete }, { controller: 'devise/registrations', action: 'destroy'})
+      assert_routing({ path: '/users/edit',    method: :get }, { controller: 'devise_invitable/registrations', action: 'edit'})
+      assert_routing({ path: '/users',         method: :put }, { controller: 'devise_invitable/registrations', action: 'update'})
+      assert_routing({ path: '/users/sign_up', method: :get }, { controller: 'devise_invitable/registrations', action: 'new' })
+      assert_routing({ path: '/users/cancel',  method: :get }, { controller: 'devise_invitable/registrations', action: 'cancel' })
+    end
+
+    it "routes to invitations" do
+      assert_routing({ path: '/users/invitation/accept', method: :get },  { controller: 'devise/invitations', action: 'edit'})
+      assert_routing({ path: '/users/invitation',        method: :post }, { controller: 'devise/invitations', action: 'create'})
+      assert_routing({ path: '/users/invitation/new',    method: :get },  { controller: 'devise/invitations', action: 'new'})
+      assert_routing({ path: '/users/invitation',        method: :put },  { controller: 'devise/invitations', action: 'update'})
     end
   end
 end

@@ -6,7 +6,7 @@ describe User do
   subject { @user }
 
   describe "mixes in from Devise" do
-    devise_modules = [:database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable]
+    devise_modules = [:database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :invitable]
     its("devise_modules.sort") { should eq devise_modules.sort }
     devise_modules.each do |devise_module|
       its(:devise_modules) { should include devise_module }
@@ -48,6 +48,24 @@ describe User do
       it { should respond_to :last_sign_in_at }
       it { should respond_to :current_sign_in_ip }
       it { should respond_to :last_sign_in_ip }
+    end
+
+    context "invitable" do
+      it { should have_db_column :invitation_token }
+      it { should have_db_column :invitation_created_at }
+      it { should have_db_column :invitation_sent_at }
+      it { should have_db_column :invitation_accepted_at }
+      it { should have_db_column :invitation_limit }
+      it { should have_db_column :invited_by_type }
+      it { should have_db_column :invited_by_id }
+      it { should have_db_index(:invitation_token) }
+      it { should have_db_index(:invited_by_id) }
+      it { should respond_to :invitation_token }
+      it { should respond_to :invitation_created_at }
+      it { should respond_to :invitation_sent_at }
+      it { should respond_to :invitation_accepted_at }
+      it { should respond_to :invitation_limit }
+      it { should respond_to :invited_by }
     end
   end
 
