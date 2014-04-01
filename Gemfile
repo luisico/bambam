@@ -20,6 +20,7 @@ gem 'foreman', '~> 0.63.0'
 # Authentication / Authorization
 gem 'devise', '~> 3.2.3'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
+gem 'rolify', '~> 3.4.0'
 
 # Assets
 gem 'sass-rails', '~> 4.0.2'

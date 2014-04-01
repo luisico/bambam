@@ -69,6 +69,12 @@ describe User do
     end
   end
 
+  describe "mixes in from rolify" do
+    it { should have_and_belong_to_many :roles }
+    it { should respond_to :add_role }
+    it { should respond_to :has_role? }
+  end
+
   it { should be_valid }
 
   describe "email" do
