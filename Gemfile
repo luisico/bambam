@@ -19,10 +19,10 @@ gem 'foreman', '~> 0.63.0'
 
 # Assets
 gem 'sass-rails', '~> 4.0.2'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 2.5.0'
 gem 'coffee-rails', '~> 4.0.1'
-gem 'jquery-rails'
-gem 'turbolinks'
+gem 'jquery-rails', '~> 3.1.0'
+gem 'turbolinks', '~> 2.2.1 '
 
 # JSON APIs
 gem 'jbuilder', '~> 1.5.2'
@@ -44,7 +44,7 @@ group :test do
   gem 'cucumber-rails', '~> 1.4.0', require: false
   gem 'capybara', '~> 2.2.1'
   gem 'poltergeist', '~> 1.5.0'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '~> 2.40.0'
   gem 'database_cleaner', '~> 1.2.0'
   gem 'email_spec', '~> 1.5.0'
   gem 'launchy', '~> 2.4.2'
