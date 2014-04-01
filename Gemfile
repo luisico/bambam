@@ -21,6 +21,7 @@ gem 'foreman', '~> 0.63.0'
 gem 'devise', '~> 3.2.3'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
 gem 'rolify', '~> 3.4.0'
+gem 'cancancan', '~> 1.7'
 
 # Assets
 gem 'sass-rails', '~> 4.0.2'
