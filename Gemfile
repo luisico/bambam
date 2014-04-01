@@ -42,12 +42,12 @@ end
 
 group :test do
   gem 'cucumber-rails', '~> 1.4.0', require: false
-  gem 'database_cleaner', '~> 1.2.0'
   gem 'capybara', '~> 2.2.1'
-  gem 'email_spec', '~> 1.5.0'
   gem 'poltergeist', '~> 1.5.0'
-  gem 'launchy', '~> 2.4.2'
   gem 'selenium-webdriver'
+  gem 'database_cleaner', '~> 1.2.0'
+  gem 'email_spec', '~> 1.5.0'
+  gem 'launchy', '~> 2.4.2'
 end
 
 group :development, :test do
