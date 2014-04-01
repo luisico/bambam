@@ -33,6 +33,9 @@ group :development do
   gem 'guard-rspec', '~> 4.2.7'
   gem 'guard-cucumber', '~> 1.4.1'
   gem 'rb-inotify', '~> 0.9.3', require: false
+  gem 'spring', '~> 1.1.1'
+  gem 'spring-commands-rspec', '~> 1.0.1'
+  gem 'spring-commands-cucumber', '~> 1.0.1'
 end
 
 group :doc do
