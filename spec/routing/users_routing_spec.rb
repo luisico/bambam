@@ -30,4 +30,10 @@ describe "Users" do
       assert_routing({ path: '/users/invitation',        method: :put },  { controller: 'devise/invitations', action: 'update'})
     end
   end
+
+  describe "normal routes" do
+    it "index" do
+      assert_routing({ path: '/users', method: :get }, { controller: 'users', action: 'index' })
+    end
+  end
 end

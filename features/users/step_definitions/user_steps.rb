@@ -31,4 +31,15 @@ end
 
 ### When
 
+When /^I visit the users page$/ do
+  visit users_path
+end
+
 ### Then
+
+Then /^I should see a list of users$/ do
+  expect(User.count).to be > 0
+  User.all do |user|
+    expect(page).to have_content user.email
+  end
+end

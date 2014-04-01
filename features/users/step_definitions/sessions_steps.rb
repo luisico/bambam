@@ -20,6 +20,15 @@ Given /^I am signed in$/ do
   step %{I should be signed in}
 end
 
+Given /^I am signed in as an admin$/ do
+  create_admin
+  visit '/users/sign_in'
+  fill_in 'Email', with: @admin.email
+  fill_in 'Password', with: @admin.password
+  click_button I18n.t('devise.sessions.sign_in')
+  step %{I should be signed in}
+end
+
 ### When
 
 When /^I sign in( with valid email and password)?$/ do |foo|

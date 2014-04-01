@@ -1,2 +1,3 @@
-# First user
-FactoryGirl.create(:user)
+# Admin and users
+FactoryGirl.create(:admin)
+FactoryGirl.create_list(:user, 3)
