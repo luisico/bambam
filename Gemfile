@@ -55,5 +55,5 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
   gem 'shoulda-matchers', '~> 2.4.0'
   gem 'quiet_assets', '~> 1.0.2'
-  gem 'mailcatcher', github: 'sj26/mailcatcher'
+  gem 'mailcatcher', github: 'sj26/mailcatcher', ref:  '272b4fa855'
 end

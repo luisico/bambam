@@ -1,8 +1,9 @@
 GIT
   remote: git://github.com/sj26/mailcatcher.git
-  revision: 27277a6cbe44804af36bd26e927334b6da50278f
+  revision: 272b4fa855e5ef5140a02c715ff1f1182955ab5d
+  ref: 272b4fa855
   specs:
-    mailcatcher (0.6.0)
+    mailcatcher (0.5.12)
       activesupport (>= 3.0.0, < 4.1)
       eventmachine (~> 1.0.0)
       haml (>= 3.1, < 4.1)
