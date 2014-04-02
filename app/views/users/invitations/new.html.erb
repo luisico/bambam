@@ -1,0 +1,14 @@
+<h3><%= I18n.t "devise.invitations.new.header" %></h3>
+
+<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
+  <% resource.class.invite_key_fields.each do |field| %>
+    <div>
+      <%= f.label field %>
+      <%= f.text_field field %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button small' %>
+  </div>
+<% end %>

@@ -32,4 +32,43 @@ describe UsersController do
       end
     end
   end
+
+  describe "GET 'new'" do
+    context "as regular user" do
+      it "should redirect to home page" do
+        sign_in @users.first
+        get :new
+        expect(response).not_to be_success
+        expect(response).to redirect_to root_url
+        expect(flash[:notice]).to eq 'You already have an account'
+      end
+    end
+
+    context "visitor" do
+      it "should be successful" do
+        get :new
+        expect(response).to be_success
+        expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe "GET 'cancel'" do
+    context "as regular user" do
+      it "should be successful" do
+        sign_in @users.first
+        get :cancel
+        expect(response).to be_success
+        expect(response).to render_template :cancel
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :cancel
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
 end

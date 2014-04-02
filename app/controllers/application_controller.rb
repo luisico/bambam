@@ -17,4 +17,8 @@ class ApplicationController < ActionController::Base
   def after_invite_path_for(resource)
     users_path
   end
+
+  def authenticate_inviter!
+    authorize!(:create, User) && super
+  end
 end

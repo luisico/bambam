@@ -6,6 +6,13 @@ class Ability
 
     if user.has_role? :admin
       can :manage, User
+    else
+      can :show, User do |current_user|
+        current_user == user
+      end
+      can :cancel, User do |current_user|
+        current_user == user
+      end
     end
   end
 end

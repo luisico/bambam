@@ -29,6 +29,16 @@ Given /^I exist as a user$/ do
   }.to change(User, :count).by(1)
 end
 
+Given /^I do not exist as a user$/ do
+  delete_user
+  expect(@user).to be_nil
+end
+
+Given /^I am on the users page$/ do
+  visit users_path
+  expect(page).to have_css('h1', text: 'Users')
+end
+
 ### When
 
 When /^I visit the users page$/ do
@@ -37,9 +47,17 @@ end
 
 ### Then
 
+Then /^I should be on the users page$/ do
+  expect(current_path).to eq users_path
+end
+
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
   User.all do |user|
     expect(page).to have_content user.email
   end
+end
+
+Then /^I should be redirected to the sign in page$/ do
+  expect(current_path).to eq new_user_session_path
 end

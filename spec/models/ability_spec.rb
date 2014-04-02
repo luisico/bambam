@@ -19,6 +19,7 @@ describe User do
     describe "as a regular user" do
       before do
         @user = FactoryGirl.create(:user)
+        @other_user = FactoryGirl.create(:user)
         @ability = Ability.new(@user)
       end
 
@@ -26,6 +27,12 @@ describe User do
 
       context "users" do
         it { should_not be_able_to(:manage, User) }
+
+        it { should_not be_able_to(:manage, @other_user)}
+        it { should_not be_able_to(:cancel, @other_user) }
+
+        it { should be_able_to(:show, @user) }
+        it { should be_able_to(:cancel, @user) }
       end
     end
   end
