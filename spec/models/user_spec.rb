@@ -6,7 +6,7 @@ describe User do
   subject { @user }
 
   describe "mixes in from Devise" do
-    devise_modules = [:database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :invitable]
+    devise_modules = [:database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :invitable, :registerable]
     its("devise_modules.sort") { should eq devise_modules.sort }
     devise_modules.each do |devise_module|
       its(:devise_modules) { should include devise_module }
