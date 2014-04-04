@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tracks.each do |track| %>
+      <tr>
+        <td>
+          <%= track.name %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

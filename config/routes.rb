@@ -8,5 +8,7 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index]
 
+  resources :tracks, only: [:index]
+
   root 'pages#home'
 end
