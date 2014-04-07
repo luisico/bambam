@@ -3,13 +3,13 @@ require 'cancan/matchers'
 
 describe User do
   describe "abilities" do
+    subject { @ability }
+
     describe "as admin" do
       before do
         @admin = FactoryGirl.create(:admin)
         @ability = Ability.new(@admin)
       end
-
-      subject { @ability }
 
       context "users" do
         it { should be_able_to(:manage, User) }
@@ -22,8 +22,6 @@ describe User do
         @ability = Ability.new(@inviter)
       end
 
-      subject { @ability }
-
       context "users" do
         it { should be_able_to(:manage, User) }
       end
@@ -35,8 +33,6 @@ describe User do
         @other_user = FactoryGirl.create(:user)
         @ability = Ability.new(@user)
       end
-
-      subject { @ability }
 
       context "users" do
         it { should_not be_able_to(:manage, User) }
