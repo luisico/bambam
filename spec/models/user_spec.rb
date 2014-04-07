@@ -14,6 +14,8 @@ describe User do
 
     Devise::Models.check_fields!(User)
 
+    it_behaves_like "timestampable table"
+
     context "database authenticatable" do
       it { should have_db_column :email }
       it { should have_db_column :encrypted_password }

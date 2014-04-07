@@ -6,6 +6,7 @@ describe Role do
   subject { @role }
 
   describe "mixes in from rolify" do
+    it_behaves_like "timestampable table"
     it { should have_db_column :name }
     it { should have_db_column :resource_id }
     it { should have_db_column :resource_type }
