@@ -1,10 +1,11 @@
+@now
 Feature: Sign up by invitation only
   In order to get access to protected sections of the site
   As a user
-  I can sign up by invitation from and admin
+  I can sign up by invitation from an admin or inviter
 
-  Scenario: Invite a user
-    Given I am signed in as an admin
+  Scenario Outline: Invite a user
+    Given I am signed in as an <role>
     And I am on the users page
     When I click on the invite user button
     Then I should be able to invite a user
@@ -12,8 +13,13 @@ Feature: Sign up by invitation only
     And I should be on the users page
     And the invitee should receive an invitation
 
-  Scenario: Cannot invite already registered users
-    Given I am signed in as an admin
+    Examples:
+      | role     |
+      | admin    |
+      | inviter  |
+
+  Scenario Outline: Cannot invite already registered users
+    Given I am signed in as an <role>
     And I am on the users page
     When I click on the invite user button
     And I invite an already registered user
@@ -21,14 +27,24 @@ Feature: Sign up by invitation only
     And I should be on the invitation page
     And no invitation should have been sent
 
-  Scenario: Cannot invite if email is blank
-    Given I am signed in as an admin
+    Examples:
+      | role     |
+      | admin    |
+      | inviter  |
+
+  Scenario Outline: Cannot invite if email is blank
+    Given I am signed in as an <role>
     And I am on the users page
     And I click on the invite user button
     When I invite a user with a blank email
     Then the "Email" field should have the error "can't be blank"
     And I should be on the invitation page
     And no invitation should have been sent
+
+    Examples:
+      | role     |
+      | admin    |
+      | inviter  |
 
   Scenario: Regular users cannot invite another user
     Given I am signed in

@@ -8,5 +8,10 @@ FactoryGirl.define do
       sequence(:email) {|n| "admin#{n}@example.com"}
       after(:create) {|user| user.add_role(:admin)}
     end
+
+    factory :inviter do
+      sequence(:email) {|n| "inviter#{n}@example.com"}
+      after(:create) {|user| user.add_role(:inviter)}
+    end
   end
 end

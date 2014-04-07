@@ -16,6 +16,19 @@ describe User do
       end
     end
 
+    describe "as inviter" do
+      before do
+        @inviter = FactoryGirl.create(:inviter)
+        @ability = Ability.new(@inviter)
+      end
+
+      subject { @ability }
+
+      context "users" do
+        it { should be_able_to(:manage, User) }
+      end
+    end
+
     describe "as a regular user" do
       before do
         @user = FactoryGirl.create(:user)

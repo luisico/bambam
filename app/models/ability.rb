@@ -6,6 +6,8 @@ class Ability
 
     if user.has_role? :admin
       can :manage, User
+    elsif user.has_role? :inviter
+      can :manage, User
     else
       can :show, User do |current_user|
         current_user == user
