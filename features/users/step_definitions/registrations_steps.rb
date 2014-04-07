@@ -41,9 +41,13 @@ When /^I invite a user with a blank email$/ do
   }.to change(User, :count).by(0)
 end
 
-When /^an admin user invites me$/ do
-  @inviter = FactoryGirl.create(:admin)
-  @invitee = @visitor
+When /^an (admin|inviter) user invites me$/ do |role|
+  if role == 'admin'
+    @inviter = FactoryGirl.create(:admin)
+  else
+    @inviter = FactoryGirl.create(:inviter)
+  end
+    @invitee = @visitor
 
   expect {
     @user = User.invite!({email: @invitee[:email]}, @inviter)
@@ -88,6 +92,28 @@ Then /^I should be able to invite a user$/ do
     build_invitee
     fill_invitation_form
   }.to change(User, :count).by(1)
+end
+
+Then /^I (should|should not) be able to invite a user (with|without) inviter priviledges$/ do |priviledge, status|
+  if priviledge == 'should' && status == 'with'
+    build_invitee
+    fill_invitation_form do
+      expect(page).to have_content('Check to grant inviter priviledges to this user')
+      check('inviter_role')
+    end
+    expect(User.last.roles[0]).to eq :inviter
+  elsif priviledge == 'should not'
+    build_invitee
+    fill_invitation_form do
+      expect(page).not_to have_content('Check to grant inviter priviledges to this user')
+      expect(page).not_to have_css('inviter_role')
+    end
+    expect(User.last.roles[0]).to eq nil
+  else
+    build_invitee
+    fill_invitation_form
+    expect(User.last.roles[0]).to eq nil
+  end
 end
 
 Then /^I should see a message confirming that an invitation email has been sent$/ do

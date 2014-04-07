@@ -8,15 +8,17 @@ Feature: Sign up by invitation only
     Given I am signed in as an <role>
     And I am on the users page
     When I click on the invite user button
-    Then I should be able to invite a user
+    Then I <priviledge> be able to invite a user <status> inviter priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
     And the invitee should receive an invitation
 
     Examples:
-      | role     |
-      | admin    |
-      | inviter  |
+      | role    | priviledge | status  |
+      | admin   | should     | with    |
+      | admin   | should     | without |
+      | inviter | should not | with    |
+      | inviter | should     | without |
 
   Scenario Outline: Cannot invite already registered users
     Given I am signed in as an <role>
@@ -28,9 +30,9 @@ Feature: Sign up by invitation only
     And no invitation should have been sent
 
     Examples:
-      | role     |
-      | admin    |
-      | inviter  |
+      | role    |
+      | admin   |
+      | inviter |
 
   Scenario Outline: Cannot invite if email is blank
     Given I am signed in as an <role>
@@ -42,9 +44,9 @@ Feature: Sign up by invitation only
     And no invitation should have been sent
 
     Examples:
-      | role     |
-      | admin    |
-      | inviter  |
+      | role    |
+      | admin   |
+      | inviter |
 
   Scenario: Regular users cannot invite another user
     Given I am signed in
@@ -52,14 +54,19 @@ Feature: Sign up by invitation only
     Then I should be denied access
     And I should be redirected to the home page
 
-  Scenario: Invitee signs up after being invited
+  Scenario Outline: Invitee signs up after being invited
     Given I do not exist as a user
-    When an admin user invites me
+    When an <role> user invites me
     Then I should receive an invitation
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
     And I should be signed in
     And I should be on the home page
+
+    Examples:
+      | role    |
+      | admin   |
+      | inviter |
 
   Scenario: Invitee signs up with invalid password
     When I am invited
