@@ -24,10 +24,10 @@ describe "Users" do
     end
 
     it "routes to invitations" do
-      assert_routing({ path: '/users/invitation/accept', method: :get },  { controller: 'devise/invitations', action: 'edit'})
-      assert_routing({ path: '/users/invitation',        method: :post }, { controller: 'devise/invitations', action: 'create'})
-      assert_routing({ path: '/users/invitation/new',    method: :get },  { controller: 'devise/invitations', action: 'new'})
-      assert_routing({ path: '/users/invitation',        method: :put },  { controller: 'devise/invitations', action: 'update'})
+      assert_routing({ path: '/users/invitation/accept', method: :get },  { controller: 'users/invitations', action: 'edit'})
+      assert_routing({ path: '/users/invitation',        method: :post }, { controller: 'users/invitations', action: 'create'})
+      assert_routing({ path: '/users/invitation/new',    method: :get },  { controller: 'users/invitations', action: 'new'})
+      assert_routing({ path: '/users/invitation',        method: :put },  { controller: 'users/invitations', action: 'update'})
     end
   end
 
