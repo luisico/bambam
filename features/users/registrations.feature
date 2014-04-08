@@ -18,7 +18,6 @@ Feature: Sign up by invitation only
       | admin   | should     | with    |
       | admin   | should     | without |
       | inviter | should not | with    |
-      | inviter | should     | without |
 
   Scenario Outline: Cannot invite already registered users
     Given I am signed in as an <role>

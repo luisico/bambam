@@ -7,6 +7,7 @@ end
 def fill_invitation_form(invitee=nil)
   invitee ||= @invitee
   fill_in User.human_attribute_name(:email), with: invitee[:email]
+  yield if block_given?
   click_button I18n.t('devise.invitations.new.submit_button')
 end
 
@@ -95,24 +96,28 @@ Then /^I should be able to invite a user$/ do
 end
 
 Then /^I (should|should not) be able to invite a user (with|without) inviter priviledges$/ do |priviledge, status|
-  if priviledge == 'should' && status == 'with'
-    build_invitee
-    fill_invitation_form do
-      expect(page).to have_content('Check to grant inviter priviledges to this user')
-      check('inviter_role')
-    end
-    expect(User.last.roles[0]).to eq :inviter
+  if (priviledge == 'should') && (status == 'with')
+    expect{
+      build_invitee
+      fill_invitation_form do
+        check('Check to grant inviter priviledges to this user')
+      end
+    }.to change(User, :count).by(1)
+    expect(User.last.has_role?(:inviter)).to eq true
   elsif priviledge == 'should not'
-    build_invitee
-    fill_invitation_form do
-      expect(page).not_to have_content('Check to grant inviter priviledges to this user')
-      expect(page).not_to have_css('inviter_role')
-    end
-    expect(User.last.roles[0]).to eq nil
+    expect {
+      build_invitee
+      fill_invitation_form do
+        expect(page).not_to have_content('Check to grant inviter priviledges to this user')
+      end
+    }.to change(User, :count).by(1)
+    expect(User.last.has_role?(:inviter)).to eq false
   else
-    build_invitee
-    fill_invitation_form
-    expect(User.last.roles[0]).to eq nil
+    expect {
+      build_invitee
+      fill_invitation_form
+    }.to change(User, :count).by(1)
+    expect(User.last.has_role?(:inviter)).to eq false
   end
 end
 
