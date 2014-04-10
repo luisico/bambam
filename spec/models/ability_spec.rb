@@ -19,11 +19,16 @@ describe User do
     describe "as inviter" do
       before do
         @inviter = FactoryGirl.create(:inviter)
+        @user = FactoryGirl.create(:user)
         @ability = Ability.new(@inviter)
       end
 
       context "users" do
-        it { should be_able_to(:manage, User) }
+        it { should be_able_to(:invite, User) }
+        it { should be_able_to(:cancel, @inviter) }
+
+        it { should_not be_able_to(:manage, @user) }
+        it { should_not be_able_to(:cancel, @user) }
       end
     end
 

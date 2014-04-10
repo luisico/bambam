@@ -6,7 +6,7 @@
       <%= f.text_field :email %>
     </div>
 
-    <% if current_user.has_role?(:admin) %>
+    <% if can? :manage, User %>
       <div>
         <%= check_box_tag(:inviter) %>
         <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>

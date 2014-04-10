@@ -95,29 +95,27 @@ Then /^I should be able to invite a user$/ do
   }.to change(User, :count).by(1)
 end
 
-Then /^I (should|should not) be able to invite a user (with|without) inviter priviledges$/ do |priviledge, status|
-  if (priviledge == 'should') && (status == 'with')
-    expect{
-      build_invitee
-      fill_invitation_form do
-        check('Check to grant inviter priviledges to this user')
-      end
-    }.to change(User, :count).by(1)
-    expect(User.last.has_role?(:inviter)).to eq true
-  elsif priviledge == 'should not'
+Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/ do |_not, out|
+  build_invitee
+  if out
     expect {
-      build_invitee
+      fill_invitation_form
+    }.to change(User, :count).by(1)
+    expect(User.last.has_role?(:inviter)).to eq false
+  elsif _not
+    expect {
       fill_invitation_form do
         expect(page).not_to have_content('Check to grant inviter priviledges to this user')
       end
     }.to change(User, :count).by(1)
     expect(User.last.has_role?(:inviter)).to eq false
   else
-    expect {
-      build_invitee
-      fill_invitation_form
+    expect{
+      fill_invitation_form do
+        check('Check to grant inviter priviledges to this user')
+      end
     }.to change(User, :count).by(1)
-    expect(User.last.has_role?(:inviter)).to eq false
+    expect(User.last.has_role?(:inviter)).to eq true
   end
 end
 
