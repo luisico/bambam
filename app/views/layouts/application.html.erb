@@ -18,8 +18,9 @@
     <div class="flash row">
       <div class="small-8-centered columns">
         <% flash.each do |name, msg| %>
-          <div class="<%= name %>">
+          <div data-alert class="alert-box <%= name %>">
             <%= msg %>
+            <a href="#" class="close">&times;</a>
           </div>
         <% end %>
       </div>
