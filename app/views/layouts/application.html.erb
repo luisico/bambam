@@ -13,23 +13,24 @@
 
   <body>
 
-    <div class="header">
-      <% if user_signed_in? %>
-        <%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, method: 'delete' %>
-      <% else %>
-        <%= link_to I18n.t('devise.sessions.sign_in'), new_user_session_path %>
-      <% end %>
+    <%= render 'layouts/top_nav' %>
+
+    <div class="flash row">
+      <div class="small-8-centered columns">
+        <% flash.each do |name, msg| %>
+          <div class="<%= name %>">
+            <%= msg %>
+          </div>
+        <% end %>
+      </div>
     </div>
 
-    <div class="flash">
-      <% flash.each do |name, msg| %>
-        <div class="<%= name %>">
-          <%= msg %>
-        </div>
-      <% end %>
+    <div class="content row">
+      <div class="small-12 columns">
+        <%= yield %>
+      </div>
     </div>
 
-    <%= yield %>
     <%= javascript_include_tag "application" %>
   </body>
 </html>
