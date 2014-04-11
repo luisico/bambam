@@ -29,6 +29,7 @@ gem 'uglifier', '~> 2.5.0'
 gem 'coffee-rails', '~> 4.0.1'
 gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.1 '
+gem 'foundation-rails', '~> 5.2.2'
 
 # JSON APIs
 gem 'jbuilder', '~> 1.5.2'

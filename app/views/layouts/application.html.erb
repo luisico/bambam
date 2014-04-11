@@ -1,30 +1,35 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Bambam</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <div class="header">
-    <% if user_signed_in? %>
-      <%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, method: 'delete' %>
-    <% else %>
-      <%= link_to I18n.t('devise.sessions.sign_in'), new_user_session_path %>
-    <% end %>
-  </div>
+    <title>Bambam</title>
 
-  <div class="flash">
-    <% flash.each do |name, msg| %>
-      <div class="<%= name %>">
-        <%= msg %>
-      </div>
-    <% end %>
-  </div>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
 
-  <%= yield %>
+  <body>
 
-</body>
+    <div class="header">
+      <% if user_signed_in? %>
+        <%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, method: 'delete' %>
+      <% else %>
+        <%= link_to I18n.t('devise.sessions.sign_in'), new_user_session_path %>
+      <% end %>
+    </div>
+
+    <div class="flash">
+      <% flash.each do |name, msg| %>
+        <div class="<%= name %>">
+          <%= msg %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= yield %>
+    <%= javascript_include_tag "application" %>
+  </body>
 </html>
