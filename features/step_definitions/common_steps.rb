@@ -15,7 +15,7 @@ Then /^I should see the error message "(.*)"$/ do |msg|
 end
 
 Then /^I should be denied access$/ do
-  expect(page).to have_css('.flash', text: I18n.t('unauthorized.default'))
+  expect(page).to have_css('.alert-box', text: I18n.t('unauthorized.default'))
 end
 
 Then /^I should not find the page$/ do

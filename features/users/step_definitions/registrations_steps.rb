@@ -120,7 +120,7 @@ Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/
 end
 
 Then /^I should see a message confirming that an invitation email has been sent$/ do
-  expect(page).to have_css('.flash .notice', text: I18n.t("devise.invitations.send_instructions", email: @invitee[:email]))
+  expect(page).to have_css('.alert-box', text: I18n.t("devise.invitations.send_instructions", email: @invitee[:email]))
 end
 
 Then /^(I|the invitee) should receive an invitation$/ do |foo|
@@ -157,7 +157,7 @@ Then /^I should not be able to sign up with an invalid invitation token$/ do
 end
 
 Then /^I should see an invalid invitation token message$/ do
-  within('.flash') do
+  within('.alert-box') do
     expect(page).to have_content I18n.t('devise.invitations.invitation_token_invalid')
   end
 end
