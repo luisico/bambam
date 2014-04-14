@@ -1,16 +1,24 @@
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tracks.each do |track| %>
-      <tr>
-        <td>
-          <%= track.name %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="small-12 large-6 large-centered columns">
+    <h1>Tracks</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tracks.each do |track| %>
+          <tr>
+            <td><a href='#'>IGV merge</a></td>
+            <td><a href='#'>IGV new</a></td>
+            <td><b><%= track.name %></b></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
