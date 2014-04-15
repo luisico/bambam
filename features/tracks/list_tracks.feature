@@ -20,3 +20,8 @@ Feature: List of tracks
     Given there is a track in the system
     When I am on the tracks page
     Then I should see an IGV new link
+
+  Scenario: Provides links to individual track pages
+    Given there is a track in the system
+    When I am on the tracks page
+    Then I should be able to acess the track page from a link
