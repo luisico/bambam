@@ -1,6 +1,6 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_track, only: [:show, :edit, :update]
+  before_action :set_track, only: [:show, :edit, :update, :destroy]
 
   def index
     @tracks = Track.all
@@ -39,6 +39,14 @@ class TracksController < ApplicationController
         format.html { render action: 'edit' }
         format.json { render json: @track.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    @track.destroy
+    respond_to do |format|
+      format.html { redirect_to tracks_url }
+      format.json { head :no_content }
     end
   end
 
