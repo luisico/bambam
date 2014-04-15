@@ -64,4 +64,27 @@ describe TracksController do
       end
     end
   end
+
+  describe "GET 'new'" do
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
+
+      it "should be successful" do
+        get :new
+        expect(response).to be_success
+        expect(response).to render_template :new
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :new
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
 end

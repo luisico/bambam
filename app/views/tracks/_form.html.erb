@@ -1,0 +1,34 @@
+<%= form_for(@track) do |f| %>
+  <% if @track.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@track.errors.count, "error") %> prohibited this track from being saved:</h2>
+
+      <ul>
+      <% @track.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <hr/>
+
+  <div class="field">
+    <label>Enter the name of the track here. This should be short, as it will be used as the title of the track in IGV or the UCSC browser.</label>
+    <%= f.text_field :name, size: 60, placeholder: 'Track name' %>
+  </div>
+
+  <hr/>
+
+  <div class="field">
+    <label>Enter the full path to the track on the /zenodotus filesystem. This must begin with '/zenodotus'.</label>
+    <%= f.text_field :path, size: 160, placeholder: 'Full path to track' %>
+  </div>
+
+  <hr/>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+  </div>
+<% end %>
+
