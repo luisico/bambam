@@ -9,6 +9,7 @@
           <th></th>
           <th>Name</th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -18,6 +19,7 @@
             <td><a href='#'>IGV new</a></td>
             <td><b><%= track.name %></b></td>
             <td><%= link_to 'Show', track %></td>
+            <td><%= link_to 'Edit', edit_track_path(track) %></td>
           </tr>
         <% end %>
       </tbody>

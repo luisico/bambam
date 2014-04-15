@@ -6,5 +6,8 @@
       <li>Path: <%= @track.path %></li>
       <li>Created at: <%= @track.created_at %></li>
     </ul>
+
+    <%= link_to 'Edit', edit_track_path(@track) %> |
+    <%= link_to 'Back', tracks_path %>
   </div>
 </div>

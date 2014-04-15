@@ -87,4 +87,36 @@ describe TracksController do
       end
     end
   end
+
+  describe "GET 'edit'" do
+    before do
+      @track = FactoryGirl.create(:track)
+    end
+
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
+
+      it "should be successful" do
+        get :edit, id: @track
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it "should return tracks" do
+        get :edit, id: @track
+        expect(assigns(:track)).to eq @track
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :edit, id: @track
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
 end

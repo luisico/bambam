@@ -1,16 +1,19 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
+  before_action :set_track, only: [:show, :edit, :update]
 
   def index
     @tracks = Track.all
   end
 
   def show
-    @track = Track.find(params[:id])
   end
 
   def new
     @track = Track.new
+  end
+
+  def edit
   end
 
   def create
@@ -27,7 +30,23 @@ class TracksController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @track.update(track_params)
+        format.html { redirect_to @track, notice: 'Track was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @track.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
+  def set_track
+    @track = Track.find(params[:id])
+  end
+
   def track_params
     params.require(:track).permit(:name, :path)
   end
