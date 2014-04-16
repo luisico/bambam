@@ -1,6 +1,6 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_track, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   def index
     @tracks = Track.all
@@ -51,10 +51,6 @@ class TracksController < ApplicationController
   end
 
   private
-  def set_track
-    @track = Track.find(params[:id])
-  end
-
   def track_params
     params.require(:track).permit(:name, :path)
   end

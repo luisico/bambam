@@ -14,6 +14,10 @@ describe User do
       context "users" do
         it { should be_able_to(:manage, User) }
       end
+
+      context "tracks" do
+        it { should be_able_to(:manage, Track) }
+      end
     end
 
     describe "as inviter" do
@@ -29,6 +33,10 @@ describe User do
 
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }
+      end
+
+      context "tracks" do
+        it { should be_able_to(:manage, Track) }
       end
     end
 
@@ -47,6 +55,10 @@ describe User do
 
         it { should be_able_to(:show, @user) }
         it { should be_able_to(:cancel, @user) }
+      end
+
+      context "tracks" do
+        it { should be_able_to(:manage, Track) }
       end
     end
   end
