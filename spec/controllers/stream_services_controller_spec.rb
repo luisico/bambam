@@ -17,13 +17,10 @@ describe StreamServicesController do
       end
 
       it "should respond not found when file is empty" do
-        track = FactoryGirl.create(:track, path: 'tmp/emptytrack')
-        @path = track.path
-        File.open(@path, 'wb') do |f|
-          f.truncate(0)
-        end
+        track = FactoryGirl.create(:track, path: 'tmp/emptytrack.ext')
+        File.open(track.path, 'wb') { |f| f.truncate(0) }
         get :show, id: track
-        File.unlink(@path) if File.exist?(@path)
+        File.unlink(track.path) if File.exist?(track.path)
 
         expect(response).to be_not_found
       end
@@ -31,18 +28,13 @@ describe StreamServicesController do
 
     context "with valid record and file" do
       before(:all) do
-        @track = FactoryGirl.create(:track, path: 'tmp/mytrack')
+        @track = FactoryGirl.create(:track, path: 'tmp/mytrack.ext')
         @path = @track.path
         @text = ['word1', 'word2', 'word3', 'word4']
-        File.unlink(@path) if File.exist?(@path)
-        File.open(@path, 'wb') do |f|
-          f.write @text.pack('A*A*A*A*')
-        end
+        File.open(@path, 'wb') { |f| f.write @text.pack('A*A*A*A*') }
       end
 
-      after(:all) do
-        File.unlink(@path) if File.exist?(@path)
-      end
+      after(:all) { File.unlink(@path) if File.exist?(@path) }
 
       before do
         headers = {
@@ -57,43 +49,47 @@ describe StreamServicesController do
       end
 
       context "and extension format" do
-        it "should return file.ext if present" do
-          File.open("#{@path}.ext", 'wb') do |f|
-            f.write ['ext'].pack('A*')
-          end
-          head :show, id: @track.id, format: 'ext'
+        before do
+          @ext = 'ext2'
+          @extpath = "#{@path}.#{@ext}"
+          File.unlink(@extpath) if File.exist?(@extpath)
+        end
+
+        after {File.unlink(@extpath) if File.exist?(@extpath) }
+
+        it "should return file if present" do
+          File.open(@extpath, 'wb') { |f| f.write ['extension'].pack('A*') }
+          head :show, id: @track, format: @ext
 
           expect(response.status).to eq 200
         end
 
-        it "should return not found if file.ext is empty" do
-          File.open("#{@path}.ext", 'wb') do |f|
-            f.truncate(0)
-          end
-          head :show, id: @track.id, format: 'ext'
+        it "should return not found if file is empty" do
+          File.open(@extpath, 'wb') { |f| f.truncate(0) }
+          head :show, id: @track, format: @ext
           expect(response.status).to eq 404
         end
 
-        it "should return not found if file.ext is not present" do
-          head :show, id: @track.id, format: 'ext'
+        it "should return not found if file is not present" do
+          head :show, id: @track, format: @ext
           expect(response.status).to eq 404
         end
       end
 
       context "HEAD" do
         it "should be successful" do
-          head :show, id: @track.id
+          head :show, id: @track
           expect(response.status).to eq 200
         end
 
         it "should return right headers" do
-          head :show, id: @track.id
+          head :show, id: @track
           expect(response.headers['Content-Type']).to match 'text/plain'
           expect(response.headers['Content-Length']).to eq 20
         end
 
         it "should not return return a file" do
-          head :show, id: @track.id
+          head :show, id: @track
           expect(response.body).to be_blank
           expect(response).to render_template nil
         end
@@ -102,12 +98,12 @@ describe StreamServicesController do
       context "GET" do
         context "without range request" do
           it "should be successful" do
-            get :show, id: @track.id
+            get :show, id: @track
             expect(response.status).to eq 200
           end
 
           it "should return right headers" do
-            get :show, id: @track.id
+            get :show, id: @track
             expect(response.headers['Content-Type']).to match 'text/plain'
             expect(response.headers['Content-Length']).to be_nil
             expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@path}\""
@@ -115,15 +111,13 @@ describe StreamServicesController do
           end
 
           it "should return return the file" do
-            get :show, id: @track.id
+            get :show, id: @track
             expect(response.body).to eq @text.pack('A*A*A*A*')
           end
         end
 
         context "with range request" do
-          before do
-            @request.headers.merge!({'Range' => 'bytes=0-4'})
-          end
+          before { @request.headers.merge!({'Range' => 'bytes=0-4'}) }
 
           it "should be successful" do
             get :show, id: @track
@@ -150,9 +144,7 @@ describe StreamServicesController do
           end
 
           context "not satisfiable" do
-            before do
-              @request.headers.merge!({'Range' => 'bytes=1000-2000'})
-            end
+            before { @request.headers.merge!({'Range' => 'bytes=1000-2000'}) }
 
             [
               'bytes=1000-2000',
@@ -176,48 +168,49 @@ describe StreamServicesController do
         end
       end
     end
+  end
 
-    context "Rack::Utils.byte_ranges" do
-      it "should return nil if the header is missing or incorrect" do
-        [
-          {},
-          {'HTTP_RANGE' => ''},
-          {'HTTP_RANGE' => nil},
-          {'HTTP_RANGE' => []},
-          {'HTTP_RANGE' => 'bytes'},
-          {'HTTP_RANGE' => 'bytes='},
-          {'HTTP_RANGE' => 'bytes=0'},
-          {'HTTP_RANGE' => 'bytes=1'},
-          {'HTTP_RANGE' => 'bytes=9'}
-        ].each do |headers|
-          expect(Rack::Utils.byte_ranges(headers, 10)).to be_nil
-        end
+  # As a reminder of the inner workins of Rack::Utils.byte_ranges
+  describe "Rack::Utils.byte_ranges" do
+    it "should return nil if the header is missing or incorrect" do
+      [
+        {},
+        {'HTTP_RANGE' => ''},
+        {'HTTP_RANGE' => nil},
+        {'HTTP_RANGE' => []},
+        {'HTTP_RANGE' => 'bytes'},
+        {'HTTP_RANGE' => 'bytes='},
+        {'HTTP_RANGE' => 'bytes=0'},
+        {'HTTP_RANGE' => 'bytes=1'},
+        {'HTTP_RANGE' => 'bytes=9'}
+      ].each do |headers|
+        expect(Rack::Utils.byte_ranges(headers, 10)).to be_nil
       end
+    end
 
-      it "should return an empty array if none of the ranges are satisfiable" do
-        [
-          {'HTTP_RANGE' => 'bytes=10-'},
-          {'HTTP_RANGE' => 'bytes=10-12'}
-        ].each do |headers|
-          expect(Rack::Utils.byte_ranges(headers, 10)).to be_empty
-        end
+    it "should return an empty array if none of the ranges are satisfiable" do
+      [
+        {'HTTP_RANGE' => 'bytes=10-'},
+        {'HTTP_RANGE' => 'bytes=10-12'}
+      ].each do |headers|
+        expect(Rack::Utils.byte_ranges(headers, 10)).to be_empty
       end
+    end
 
-      it "should return a correct range" do
-        [
-          [{'HTTP_RANGE' => 'bytes=1-'},   [1..9]],
-          [{'HTTP_RANGE' => 'bytes=-2'},   [8..9]],
-          [{'HTTP_RANGE' => 'bytes=0-10'}, [0..9]],
-          [{'HTTP_RANGE' => 'bytes=-12'},  [0..9]]
-        ].each do |headers|
-          expect(Rack::Utils.byte_ranges(headers[0], 10)).to eq headers[1]
-        end
+    it "should return a correct range" do
+      [
+        [{'HTTP_RANGE' => 'bytes=1-'},   [1..9]],
+        [{'HTTP_RANGE' => 'bytes=-2'},   [8..9]],
+        [{'HTTP_RANGE' => 'bytes=0-10'}, [0..9]],
+        [{'HTTP_RANGE' => 'bytes=-12'},  [0..9]]
+      ].each do |headers|
+        expect(Rack::Utils.byte_ranges(headers[0], 10)).to eq headers[1]
       end
+    end
 
-      it "should return multiple range" do
-        headers = {'HTTP_RANGE' => 'bytes=1-3,4-6,8-9'}
-        expect(Rack::Utils.byte_ranges(headers, 10)).to eq [1..3, 4..6, 8..9]
-      end
+    it "should return multiple range" do
+      headers = {'HTTP_RANGE' => 'bytes=1-3,4-6,8-9'}
+      expect(Rack::Utils.byte_ranges(headers, 10)).to eq [1..3, 4..6, 8..9]
     end
   end
 end
