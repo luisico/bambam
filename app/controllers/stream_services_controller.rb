@@ -1,23 +1,20 @@
 class StreamServicesController < ApplicationController
   def show
-    # puts request.env.select{|e| e =~ /^(X-|HTTP_)/}
-    # track = "/#{params[:filename]}.#{params[:format]}"
-
     begin
       track = Track.find(params[:id])
-      filename = File.join(track.path, track.name)
-      filename << ".#{params[:format]}" if params[:format]
+      path = track.path
+      path << ".#{params[:format]}" if params[:format]
 
-      if File.size?(filename)
+      if File.size?(path)
         if request.head?
-          response.header["Content-Length"] = File.size(filename)
+          response.header["Content-Length"] = File.size(path)
           render nothing: true, status: :ok
         else
-          opts = {filename: filename, disposition: 'inline', type: 'text/plain'}
+          opts = {filename: path, disposition: 'inline', type: 'text/plain'}
 
           if request.headers["HTTP_RANGE"]
             # Send requested range. Only first range is proccessed
-            size = File.size(filename)
+            size = File.size(path)
             ranges = Rack::Utils.byte_ranges(request.headers, size)
 
             if ranges.nil? || ranges.empty?
@@ -32,10 +29,10 @@ class StreamServicesController < ApplicationController
                 "Content-Length" => length
               })
 
-              send_data IO.binread(filename, length, bytes.begin), opts.merge(status: 206)
+              send_data IO.binread(path, length, bytes.begin), opts.merge(status: 206)
             end
           else
-            send_file filename, opts
+            send_file path, opts
           end
         end
       else
@@ -44,6 +41,5 @@ class StreamServicesController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       render nothing: true, status: :not_found
     end
-
   end
 end

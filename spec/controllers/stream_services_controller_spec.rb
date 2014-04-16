@@ -17,13 +17,13 @@ describe StreamServicesController do
       end
 
       it "should respond not found when file is empty" do
-        track = FactoryGirl.create(:track, path: 'tmp')
-        @filename = File.join(track.path, track.name)
-        File.open(@filename, 'wb') do |f|
+        track = FactoryGirl.create(:track, path: 'tmp/emptytrack')
+        @path = track.path
+        File.open(@path, 'wb') do |f|
           f.truncate(0)
         end
         get :show, id: track
-        File.unlink(@filename) if File.exist?(@filename)
+        File.unlink(@path) if File.exist?(@path)
 
         expect(response).to be_not_found
       end
@@ -31,17 +31,17 @@ describe StreamServicesController do
 
     context "with valid record and file" do
       before(:all) do
-        @track = FactoryGirl.create(:track, path: 'tmp')
-        @filename = File.join(@track.path, @track.name)
+        @track = FactoryGirl.create(:track, path: 'tmp/mytrack')
+        @path = @track.path
         text = ['word1', 'word2', 'word3', 'word4']
-        File.unlink(@filename) if File.exist?(@filename)
-        File.open(@filename, 'wb') do |f|
+        File.unlink(@path) if File.exist?(@path)
+        File.open(@path, 'wb') do |f|
           f.write text.pack('A*A*A*A*')
         end
       end
 
       after(:all) do
-        File.unlink(@filename) if File.exist?(@filename)
+        File.unlink(@path) if File.exist?(@path)
       end
 
       before do
@@ -58,7 +58,7 @@ describe StreamServicesController do
 
       context "and extension format" do
         it "should return file.ext if present" do
-          File.open("#{@filename}.ext", 'wb') do |f|
+          File.open("#{@path}.ext", 'wb') do |f|
             f.write ['ext'].pack('A*')
           end
           head :show, id: @track.id, format: 'ext'
@@ -67,7 +67,7 @@ describe StreamServicesController do
         end
 
         it "should return not found if file.ext is empty" do
-          File.open("#{@filename}.ext", 'wb') do |f|
+          File.open("#{@path}.ext", 'wb') do |f|
             f.truncate(0)
           end
           head :show, id: @track.id, format: 'ext'
@@ -89,7 +89,7 @@ describe StreamServicesController do
         it "should return right headers" do
           head :show, id: @track.id
           expect(response.headers['Content-Type']).to match 'text/plain'
-          expect(response.headers['Content-Length']).to eq File.size(@filename)
+          expect(response.headers['Content-Length']).to eq File.size(@path)
         end
 
         it "should not return return a file" do
@@ -110,13 +110,13 @@ describe StreamServicesController do
             get :show, id: @track.id
             expect(response.headers['Content-Type']).to match 'text/plain'
             expect(response.headers['Content-Length']).to be_nil
-            expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@filename}\""
+            expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@path}\""
             expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
           end
 
           it "should return return the file" do
             get :show, id: @track.id
-            expect(response.body).to eq File.open(@filename){|f| f.read}
+            expect(response.body).to eq File.open(@path){|f| f.read}
           end
         end
 
@@ -134,15 +134,15 @@ describe StreamServicesController do
             get :show, id: @track
             expect(response.headers['Content-Type']).to match 'text/plain'
             expect(response.headers['Content-Length']).to eq 4
-            expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@filename}\""
+            expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@path}\""
             expect(response.headers['Accept-Ranges']).to eq 'bytes'
-            expect(response.headers['Content-Range']).to eq "bytes 0-3/#{File.size(@filename)}"
+            expect(response.headers['Content-Range']).to eq "bytes 0-3/#{File.size(@path)}"
             expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
           end
 
           it "should return the partial file" do
             get :show, id: @track
-            expect(response.body).to eq File.open(@filename){|f| f.read(4)}
+            expect(response.body).to eq File.open(@path){|f| f.read(4)}
           end
 
           context "not satisfiable" do
