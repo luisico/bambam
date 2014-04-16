@@ -7,14 +7,12 @@ describe StreamServicesController do
     context "with invalid record" do
       it "should respond not found when record is not found" do
         get :show, id: 1
-
         expect(response).to be_not_found
       end
 
       it "should respond not found when file is not found" do
         track = FactoryGirl.create(:track)
         get :show, id: track
-
         expect(response).to be_not_found
       end
 
@@ -56,6 +54,30 @@ describe StreamServicesController do
           # 'Host' => 'localhost:3000'
         }
         @request.headers.merge! headers
+      end
+
+      context "and extension format" do
+        it "should return file.ext if present" do
+          File.open("#{@filename}.ext", 'wb') do |f|
+            f.write ['ext'].pack('A*')
+          end
+          head :show, id: @track.id, format: 'ext'
+
+          expect(response.status).to eq 200
+        end
+
+        it "should return not found if file.ext is empty" do
+          File.open("#{@filename}.ext", 'wb') do |f|
+            f.truncate(0)
+          end
+          head :show, id: @track.id, format: 'ext'
+          expect(response.status).to eq 404
+        end
+
+        it "should return not found if file.ext is not present" do
+          head :show, id: @track.id, format: 'ext'
+          expect(response.status).to eq 404
+        end
       end
 
       context "HEAD" do

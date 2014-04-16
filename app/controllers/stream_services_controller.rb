@@ -6,8 +6,7 @@ class StreamServicesController < ApplicationController
     begin
       track = Track.find(params[:id])
       filename = File.join(track.path, track.name)
-#      filename = File.join(filename, ".#{params[:format]}") if params[:format]
-      # basename = File.basename(track, ".bai")
+      filename << ".#{params[:format]}" if params[:format]
 
       if File.size?(filename)
         if request.head?
