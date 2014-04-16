@@ -3,22 +3,18 @@ class TracksController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @tracks = Track.all
   end
 
   def show
   end
 
   def new
-    @track = Track.new
   end
 
   def edit
   end
 
   def create
-    @track = Track.new(track_params)
-
     respond_to do |format|
       if @track.save
         format.html { redirect_to @track, notice: 'Track was successfully created.' }
