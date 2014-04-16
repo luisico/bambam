@@ -11,7 +11,13 @@ Bambam::Application.routes.draw do
 
   resources :tracks
 
-  get 'stream/:filename', to: 'stream_services#stream', as: 'stream', filename: /.+/
+  namespace :stream_services, path: 'stream', module: false do
+    resources :track, only: :show, controller: 'stream_services'
+  end
+
+  #get 'stream/:filename', to: 'stream_services#stream', as: 'stream', filename: /.+/
+  #get 'tracks/igv/*filename', to: 'tracks#igv', as: 'igv'
+  #resources :stream_services, only: :show
 
   match 'user_root' => 'tracks#index', via: [:get]
 end

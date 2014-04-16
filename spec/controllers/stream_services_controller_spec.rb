@@ -1,18 +1,51 @@
 require 'spec_helper'
 
 describe StreamServicesController do
-  describe 'stream' do
+  describe 'show' do
     # TODO: authz users only
 
-    context "when a file is not present" do
-      it "should respond not found" do
-        get :stream, filename: 'missing_file'
+    context "with invalid record" do
+      it "should respond not found when record is not found" do
+        get :show, id: 1
+
+        expect(response).to be_not_found
+      end
+
+      it "should respond not found when file is not found" do
+        track = FactoryGirl.create(:track)
+        get :show, id: track
+
+        expect(response).to be_not_found
+      end
+
+      it "should respond not found when file is empty" do
+        track = FactoryGirl.create(:track, path: 'tmp')
+        @filename = File.join(track.path, track.name)
+        File.open(@filename, 'wb') do |f|
+          f.truncate(0)
+        end
+        get :show, id: track
+        File.unlink(@filename) if File.exist?(@filename)
 
         expect(response).to be_not_found
       end
     end
 
-    context "when a file is present" do
+    context "with valid record and file" do
+      before(:all) do
+        @track = FactoryGirl.create(:track, path: 'tmp')
+        @filename = File.join(@track.path, @track.name)
+        text = ['word1', 'word2', 'word3', 'word4']
+        File.unlink(@filename) if File.exist?(@filename)
+        File.open(@filename, 'wb') do |f|
+          f.write text.pack('A*A*A*A*')
+        end
+      end
+
+      after(:all) do
+        File.unlink(@filename) if File.exist?(@filename)
+      end
+
       before do
         headers = {
           'Accept' => 'text/plain',
@@ -23,28 +56,22 @@ describe StreamServicesController do
           # 'Host' => 'localhost:3000'
         }
         @request.headers.merge! headers
-
-        text = ['word1', 'word2', 'word3', 'word4']
-        @filename = File.join('tmp', 'test.bin')
-        File.open(@filename, 'wb') do |f|
-          f.write text.pack('A*A*A*A*')
-        end
       end
 
       context "HEAD" do
         it "should be successful" do
-          head :stream, filename: @filename
+          head :show, id: @track.id
           expect(response.status).to eq 200
         end
 
         it "should return right headers" do
-          head :stream, filename: @filename
+          head :show, id: @track.id
           expect(response.headers['Content-Type']).to match 'text/plain'
           expect(response.headers['Content-Length']).to eq File.size(@filename)
         end
 
         it "should not return return a file" do
-          head :stream, filename: @filename
+          head :show, id: @track.id
           expect(response.body).to be_blank
           expect(response).to render_template nil
         end
@@ -53,12 +80,12 @@ describe StreamServicesController do
       context "GET" do
         context "without range request" do
           it "should be successful" do
-            get :stream, filename: @filename
+            get :show, id: @track.id
             expect(response.status).to eq 200
           end
 
           it "should return right headers" do
-            get :stream, filename: @filename
+            get :show, id: @track.id
             expect(response.headers['Content-Type']).to match 'text/plain'
             expect(response.headers['Content-Length']).to be_nil
             expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@filename}\""
@@ -66,7 +93,7 @@ describe StreamServicesController do
           end
 
           it "should return return the file" do
-            get :stream, filename: @filename
+            get :show, id: @track.id
             expect(response.body).to eq File.open(@filename){|f| f.read}
           end
         end
@@ -77,12 +104,12 @@ describe StreamServicesController do
           end
 
           it "should be successful" do
-            get :stream, filename: @filename
+            get :show, id: @track
             expect(response.status).to eq 206
           end
 
           it "should return right headers" do
-            get :stream, filename: @filename
+            get :show, id: @track
             expect(response.headers['Content-Type']).to match 'text/plain'
             expect(response.headers['Content-Length']).to eq 4
             expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@filename}\""
@@ -92,7 +119,7 @@ describe StreamServicesController do
           end
 
           it "should return the partial file" do
-            get :stream, filename: @filename
+            get :show, id: @track
             expect(response.body).to eq File.open(@filename){|f| f.read(4)}
           end
 
@@ -108,12 +135,12 @@ describe StreamServicesController do
             ].each do |range|
               context "range '#{range}'" do
                 it "should return 416" do
-                  get :stream, filename: @filename
+                  get :show, id: @track
                   expect(response.status).to eq 416
                 end
 
                 it "should return a file" do
-                  get :stream, filename: @filename
+                  get :show, id: @track
                   expect(response.body).to be_blank
                   expect(response).to render_template nil
                 end
