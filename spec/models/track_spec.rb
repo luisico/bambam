@@ -6,6 +6,7 @@ describe Track do
   subject { @track }
 
   describe "database fields" do
+    it_behaves_like "timestampable table"
     it { should have_db_column(:name).with_options(null: false) }
     it { should have_db_index(:name).unique(false) }
     it { should have_db_column(:path).with_options(null:false) }
