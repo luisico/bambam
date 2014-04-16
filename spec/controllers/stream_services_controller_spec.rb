@@ -33,10 +33,10 @@ describe StreamServicesController do
       before(:all) do
         @track = FactoryGirl.create(:track, path: 'tmp/mytrack')
         @path = @track.path
-        text = ['word1', 'word2', 'word3', 'word4']
+        @text = ['word1', 'word2', 'word3', 'word4']
         File.unlink(@path) if File.exist?(@path)
         File.open(@path, 'wb') do |f|
-          f.write text.pack('A*A*A*A*')
+          f.write @text.pack('A*A*A*A*')
         end
       end
 
@@ -89,7 +89,7 @@ describe StreamServicesController do
         it "should return right headers" do
           head :show, id: @track.id
           expect(response.headers['Content-Type']).to match 'text/plain'
-          expect(response.headers['Content-Length']).to eq File.size(@path)
+          expect(response.headers['Content-Length']).to eq 20
         end
 
         it "should not return return a file" do
@@ -116,13 +116,13 @@ describe StreamServicesController do
 
           it "should return return the file" do
             get :show, id: @track.id
-            expect(response.body).to eq File.open(@path){|f| f.read}
+            expect(response.body).to eq @text.pack('A*A*A*A*')
           end
         end
 
         context "with range request" do
           before do
-            @request.headers.merge!({'Range' => 'bytes=0-3'})
+            @request.headers.merge!({'Range' => 'bytes=0-4'})
           end
 
           it "should be successful" do
@@ -133,16 +133,20 @@ describe StreamServicesController do
           it "should return right headers" do
             get :show, id: @track
             expect(response.headers['Content-Type']).to match 'text/plain'
-            expect(response.headers['Content-Length']).to eq 4
+            expect(response.headers['Content-Length']).to eq 5
             expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{@path}\""
             expect(response.headers['Accept-Ranges']).to eq 'bytes'
-            expect(response.headers['Content-Range']).to eq "bytes 0-3/#{File.size(@path)}"
+            expect(response.headers['Content-Range']).to eq "bytes 0-4/20"
             expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
           end
 
           it "should return the partial file" do
-            get :show, id: @track
-            expect(response.body).to eq File.open(@path){|f| f.read(4)}
+            ranges = ['0-4', '5-9', '10-14', '15-19']
+            ranges.each_index do |idx|
+              @request.headers.merge!({'Range' => "bytes=#{ranges[idx]}"})
+              get :show, id: @track
+              expect(response.body).to eq @text[idx]
+            end
           end
 
           context "not satisfiable" do
