@@ -5,10 +5,7 @@ describe TracksController do
     before { @tracks = FactoryGirl.create_list(:track, 3) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :index
@@ -35,10 +32,7 @@ describe TracksController do
     before { @track = FactoryGirl.create(:track) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :show, id: @track
@@ -63,10 +57,7 @@ describe TracksController do
 
   describe "GET 'new'" do
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :new
@@ -93,10 +84,7 @@ describe TracksController do
     before { @track = FactoryGirl.create(:track) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :edit, id: @track
@@ -123,10 +111,7 @@ describe TracksController do
     before { @track_attr = FactoryGirl.attributes_for(:track) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       context "with valid parameters" do
         it "should create a new track" do
@@ -182,10 +167,7 @@ describe TracksController do
     before { @track = FactoryGirl.create(:track) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       context 'with valid parameters' do
         before { @track_attrs = {name: 'new_name', path: 'new_path'}.with_indifferent_access }
@@ -244,10 +226,7 @@ describe TracksController do
     before { @track = FactoryGirl.create(:track) }
 
     context "as a signed in user" do
-      before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should delete the track" do
         expect{
