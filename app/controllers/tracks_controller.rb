@@ -1,24 +1,20 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_track, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   def index
-    @tracks = Track.all
   end
 
   def show
   end
 
   def new
-    @track = Track.new
   end
 
   def edit
   end
 
   def create
-    @track = Track.new(track_params)
-
     respond_to do |format|
       if @track.save
         format.html { redirect_to @track, notice: 'Track was successfully created.' }
@@ -51,10 +47,6 @@ class TracksController < ApplicationController
   end
 
   private
-  def set_track
-    @track = Track.find(params[:id])
-  end
-
   def track_params
     params.require(:track).permit(:name, :path)
   end
