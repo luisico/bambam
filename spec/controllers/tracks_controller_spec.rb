@@ -1,32 +1,26 @@
 require 'spec_helper'
 
-def build_track
-  FactoryGirl.attributes_for(:track)
-end
-
 describe TracksController do
   describe "GET 'index'" do
     before do
       @tracks = FactoryGirl.create_list(:track, 3)
     end
 
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
-        it "should be successful" do
-          get :index
-          expect(response).to be_success
-          expect(response).to render_template :index
-        end
+      it "should be successful" do
+        get :index
+        expect(response).to be_success
+        expect(response).to render_template :index
+      end
 
-        it "should return all tracks" do
-          get :index
-          expect(assigns(:tracks)).to eq @tracks
-        end
+      it "should return all tracks" do
+        get :index
+        expect(assigns(:tracks)).to eq @tracks
       end
     end
 
@@ -44,23 +38,21 @@ describe TracksController do
       @track = FactoryGirl.create(:track)
     end
 
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
-        it "should be successful" do
-          get :show, id: @track
-          expect(response).to be_success
-          expect(response).to render_template :show
-        end
+      it "should be successful" do
+        get :show, id: @track
+        expect(response).to be_success
+        expect(response).to render_template :show
+      end
 
-        it "should return tracks" do
-          get :show, id: @track
-          expect(assigns(:track)).to eq @track
-        end
+      it "should return tracks" do
+        get :show, id: @track
+        expect(assigns(:track)).to eq @track
       end
     end
 
@@ -74,18 +66,16 @@ describe TracksController do
   end
 
   describe "GET 'new'" do
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
-        it "should be successful" do
-          get :new
-          expect(response).to be_success
-          expect(response).to render_template :new
-        end
+      it "should be successful" do
+        get :new
+        expect(response).to be_success
+        expect(response).to render_template :new
       end
     end
 
@@ -103,23 +93,21 @@ describe TracksController do
       @track = FactoryGirl.create(:track)
     end
 
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
-        it "should be successful" do
-          get :edit, id: @track
-          expect(response).to be_success
-          expect(response).to render_template :edit
-        end
+      it "should be successful" do
+        get :edit, id: @track
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
 
-        it "should return tracks" do
-          get :edit, id: @track
-          expect(assigns(:track)).to eq @track
-        end
+      it "should return tracks" do
+        get :edit, id: @track
+        expect(assigns(:track)).to eq @track
       end
     end
 
@@ -133,113 +121,113 @@ describe TracksController do
   end
 
   describe "Post 'create'" do
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+        @track_attr = FactoryGirl.attributes_for(:track)
+      end
 
-        it "should redirect to show page with a notice on successful save" do
+      context "with valid parameters" do
+        it "should create a new track" do
           expect{
-            post :create, track: build_track
+            post :create, track: @track_attr
           }.to change(Track, :count).by(1)
-          expect(response).to redirect_to track_path(assigns[:track])
-          expect(flash[:notice]).not_to be_nil
         end
 
-        ['name', 'path'].each do |field|
-          it "should re-render new template with invalid #{field}" do
-            expect{
-              post :create, track: build_track.merge(field => '')
-            }.to_not change(Track, :count)
-            expect(response).to render_template :new
-            expect(flash[:notice]).to be_nil
-          end
+        it "should redirect to the show page" do
+          post :create, track: @track_attr
+          expect(response).to redirect_to track_path(assigns[:track])
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render new template" do
+          post :create, track: @track_attr.merge(name: '')
+          expect(response).to be_success
+          expect(response).to render_template :new
+        end
+
+        it "should not create a new track" do
+          expect{
+            post :create, track: @track_attr.merge(name: '')
+          }.not_to change(Track, :count)
+          expect(assigns(:track)).to be_new_record
+        end
+
+        it "should highlight invalid parameters" do
+          post :create, track: @track_attr.merge(name: '', path: '')
+          expect(assigns(:track)).not_to be_valid
+          expect(assigns(:track).errors[:name]).not_to be_blank
+          expect(assigns(:track).errors[:path]).not_to be_blank
         end
       end
     end
   end
 
   describe "Patch 'update'" do
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-          @track = FactoryGirl.create(:track)
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+        @track = FactoryGirl.create(:track)
+      end
+
+      context 'with valid parameters' do
+        it "should change @track's attributes" do
+          patch :update, id: @track, track: @track.attributes.merge(name: 'new_name', path: 'new_path')
+          @track.reload
+          expect(@track.name).to eq('new_name')
+          expect(@track.path).to eq('new_path')
         end
 
-        context 'valid attributes' do
-          it 'located the requested @track' do
-            patch :update, id: @track, track: @track.attributes
-            expect(assigns(:track)).to eq(@track)
-          end
+        it "should redirect to the updated show page" do
+          patch :update, id: @track, track: @track.attributes
+          expect(response).to redirect_to @track
+        end
+      end
 
-          ['name', 'path'].each do |field|
-            it "changes @track's #{field} attribute" do
-              patch :update, id: @track, track: @track.attributes.merge(field => 'change')
-              @track.reload
-              if field == 'name'
-                expect(@track.name).to eq('change')
-                expect(@track.path).to eq(@track.path)
-              else
-                expect(@track.name).to eq(@track.name)
-                expect(@track.path).to eq('change')
-              end
-            end
-          end
-
-          it "redirects to the updated track" do
-            patch :update, id: @track, track: @track.attributes
-            expect(response).to redirect_to @track
-          end
+      context "with invalid parameters" do
+        it "should render the edit template" do
+          patch :update, id: @track, track: @track.attributes.merge(name: 'new_name', path: '')
+          expect(response).to be_success
+          expect(response).to render_template :edit
         end
 
-        context "with invalid attributes" do
-          ['name', 'path'].each do |field|
-            it "doesn't change the track's #{field} attribute and renders edit template" do
-              if field == 'name'
-                track_attributes = @track.attributes.merge(name: 'change', path: '' )
-              else
-                track_attributes = @track.attributes.merge(name: '', path: 'change' )
-              end
-              patch :update, id: @track, track: track_attributes
-              @track.reload
-              if field == 'name'
-                expect(@track.name).to_not eq('change')
-                expect(@track.path).to eq(@track.path)
-              else
-                expect(@track.path).to_not eq('change')
-                expect(@track.name).to eq(@track.name)
-              end
-              expect(response).to render_template :edit
-            end
-          end
+        it "should not change the track's attributes" do
+          patch :update, id: @track, track: @track.attributes.merge(name: 'new_name', path: '')
+          @track.reload
+          expect(@track.name).to_not eq('new_name')
+          expect(@track.path).to eq(@track.path)
+        end
+
+        it "should highlight invalid parameters" do
+          post :create, track: @track.attributes.merge(name: '', path: '')
+          expect(assigns(:track)).not_to be_valid
+          expect(assigns(:track).errors[:name]).not_to be_blank
+          expect(assigns(:track).errors[:path]).not_to be_blank
         end
       end
     end
   end
 
   describe "Delete 'destroy'" do
-    ['admin', 'inviter', 'user'].each do |user_type|
-      context "as a signed in #{user_type}" do
-        before do
-          @user_type = FactoryGirl.create(user_type)
-          sign_in @user_type
-          @track = FactoryGirl.create(:track)
-        end
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+        @track = FactoryGirl.create(:track)
+      end
 
-        it "deletes the track" do
-          expect{
-            delete :destroy, id: @track
-          }.to change(Track, :count).by(-1)
-        end
-
-        it "redirects to track#index" do
+      it "should delete the track" do
+        expect{
           delete :destroy, id: @track
-          expect(response).to redirect_to tracks_url
-        end
+        }.to change(Track, :count).by(-1)
+      end
+
+      it "should redirect to track#index" do
+        delete :destroy, id: @track
+        expect(response).to redirect_to tracks_url
       end
     end
   end
