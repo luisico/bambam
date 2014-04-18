@@ -40,7 +40,7 @@ describe TracksController do
         expect(response).to render_template :show
       end
 
-      it "should return tracks" do
+      it "should return the track" do
         get :show, id: @track
         expect(assigns(:track)).to eq @track
       end
@@ -92,7 +92,7 @@ describe TracksController do
         expect(response).to render_template :edit
       end
 
-      it "should return tracks" do
+      it "should return the track" do
         get :edit, id: @track
         expect(assigns(:track)).to eq @track
       end
@@ -238,7 +238,7 @@ describe TracksController do
         expect(response).to redirect_to new_user_session_url
       end
 
-      it "should not change the number of tracks" do
+      it "should not delete the track" do
         expect{
           delete :destroy, id: @track
         }.not_to change(Track, :count)
