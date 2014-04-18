@@ -5,8 +5,6 @@
     <table>
       <thead>
         <tr>
-          <th></th>
-          <th></th>
           <th>Name</th>
           <th></th>
           <th></th>
@@ -16,8 +14,6 @@
       <tbody>
         <% @tracks.each do |track| %>
           <tr>
-            <td><a href='#'>IGV merge</a></td>
-            <td><a href='#'>IGV new</a></td>
             <td><b><%= track.name %></b></td>
             <td><%= link_to 'Show', track %></td>
             <td><%= link_to 'Edit', edit_track_path(track) %></td>
