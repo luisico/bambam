@@ -114,16 +114,16 @@ describe TracksController do
       before { sign_in FactoryGirl.create(:user) }
 
       context "with valid parameters" do
+        it "should be a redirect to the new track show page" do
+          post :create, track: @track_attr
+          expect(response).to redirect_to track_path(Track.last)
+        end
+
         it "should create a new track" do
           expect{
             post :create, track: @track_attr
           }.to change(Track, :count).by(1)
           expect(assigns(:track)).to eq Track.last
-        end
-
-        it "should redirect to the show page" do
-          post :create, track: @track_attr
-          expect(response).to redirect_to track_path(Track.last)
         end
       end
 
@@ -140,13 +140,6 @@ describe TracksController do
           }.not_to change(Track, :count)
           expect(assigns(:track)).to be_new_record
         end
-
-        it "should mark invalid parameters" do
-          post :create, track: @track_attr.merge(name: '', path: '')
-          expect(assigns(:track)).not_to be_valid
-          expect(assigns(:track).errors[:name]).not_to be_blank
-          expect(assigns(:track).errors[:path]).not_to be_blank
-        end
       end
     end
 
@@ -158,7 +151,9 @@ describe TracksController do
       end
 
       it "should not create a new track" do
-        post :create, track: @track_attr
+        expect{
+          post :create, track: @track_attr
+        }.not_to change(Track, :count)
       end
     end
   end
@@ -170,7 +165,12 @@ describe TracksController do
       before { sign_in FactoryGirl.create(:user) }
 
       context 'with valid parameters' do
-        before { @track_attrs = {name: 'new_name', path: 'new_path'}.with_indifferent_access }
+        before { @track_attrs = FactoryGirl.attributes_for(:track).stringify_keys }
+
+        it "should redirect to the updated show page" do
+          patch :update, id: @track, track: @track_attrs
+          expect(response).to redirect_to @track
+        end
 
         it "should update the track" do
           patch :update, id: @track, track: @track_attrs
@@ -178,33 +178,21 @@ describe TracksController do
           expect(assigns(:track)).to eq @track
           expect(@track.attributes.except('id', 'created_at', 'updated_at')).to eq @track_attrs
         end
-
-        it "should redirect to the updated show page" do
-          patch :update, id: @track, track: @track_attrs
-          expect(response).to redirect_to @track
-        end
       end
 
       context "with invalid parameters" do
         it "should render the edit template" do
-          patch :update, id: @track, track: {path: ''}
+          patch :update, id: @track, track: {name: ''}
           expect(response).to be_success
           expect(response).to render_template :edit
         end
 
         it "should not change the track's attributes" do
           expect {
-            patch :update, id: @track, track: {path: ''}
+            patch :update, id: @track, track: {name: ''}
             @track.reload
-          }.not_to change(@track, :path)
+          }.not_to change(@track, :name)
           expect(assigns(:track)).to eq @track
-        end
-
-        it "should mark invalid parameters" do
-          patch :update, id: @track, track: {name: '', path: ''}
-          expect(assigns(:track)).not_to be_valid
-          expect(assigns(:track).errors[:name]).not_to be_blank
-          expect(assigns(:track).errors[:path]).not_to be_blank
         end
       end
     end
@@ -216,8 +204,10 @@ describe TracksController do
         expect(response).to redirect_to new_user_session_url
       end
 
-      it "should not create a new track" do
-        patch :update, id: @track, track: {name: ''}
+      it "should not change the track's attributes" do
+        expect{
+          patch :update, id: @track, track: {name: ''}
+        }.not_to change(@track, :name)
       end
     end
   end
@@ -228,16 +218,16 @@ describe TracksController do
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
+      it "should redirect to track#index" do
+        delete :destroy, id: @track
+        expect(response).to redirect_to tracks_url
+      end
+
       it "should delete the track" do
         expect{
           delete :destroy, id: @track
         }.to change(Track, :count).by(-1)
         expect(assigns(:track)).to eq @track
-      end
-
-      it "should redirect to track#index" do
-        delete :destroy, id: @track
-        expect(response).to redirect_to tracks_url
       end
     end
 
@@ -246,6 +236,12 @@ describe TracksController do
         delete :destroy, id: @track
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not change the number of tracks" do
+        expect{
+          delete :destroy, id: @track
+        }.not_to change(Track, :count)
       end
     end
   end
