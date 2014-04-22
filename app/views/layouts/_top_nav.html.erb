@@ -1,7 +1,11 @@
 <nav class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><%= link_to 'Bambam', root_url %></h1>
+      <% if user_signed_in? %>
+        <h1><%= link_to 'Bambam', tracks_path %></h1>
+      <% else %>
+        <h1><%= link_to 'Bambam', root_url %></h1>
+      <% end %>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>

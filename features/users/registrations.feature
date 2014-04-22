@@ -60,7 +60,7 @@ Feature: Sign up by invitation only
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
     And I should be signed in
-    And I should be on the home page
+    And I should be on the tracks page
 
     Examples:
       | role    |

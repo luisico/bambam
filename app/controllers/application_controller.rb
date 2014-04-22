@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_sign_in_path_for(resource)
+    tracks_path
+  end
+
   protected
 
   def after_invite_path_for(resource)
