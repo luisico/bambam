@@ -39,6 +39,14 @@ Given /^I am on the users page$/ do
   expect(page).to have_css('h1', text: 'Users')
 end
 
+Given /^there is( not)? a users link in the navigation bar$/ do |negate|
+  if negate
+    expect(page).not_to have_css('li a', text: 'Users')
+  else
+    expect(page).to have_css('li a', text: 'Users')
+  end
+end
+
 ### When
 
 When /^I visit the users page$/ do

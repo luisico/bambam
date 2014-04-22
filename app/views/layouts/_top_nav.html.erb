@@ -14,7 +14,9 @@
     <!-- Left Nav Section -->
     <ul class="left">
       <li class="divider"></li>
-      <li><%= link_to 'Users', users_url %></li>
+      <% if can? :invite, User %>
+        <li><%= link_to 'Users', users_url %></li>
+      <% end %>
       <li><%= link_to 'Tracks', tracks_path %></li>
     </ul>
 
