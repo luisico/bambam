@@ -68,6 +68,7 @@ RSpec.configure do |config|
 
   # Devise test helpers
   config.include Devise::TestHelpers, :type => :controller
+  config.include Controller::TestHelpers, :type => :controller
 end
 
 # Speed up tests

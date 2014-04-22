@@ -1,4 +1,6 @@
 class StreamServicesController < ApplicationController
+  before_filter :authenticate_user!
+
   def show
     begin
       track = Track.find(params[:id])
