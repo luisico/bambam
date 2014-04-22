@@ -6,12 +6,6 @@ Feature: Edit track information
   Background:
     Given I am signed in
 
-  Scenario: User can access the track edit page from the tracks page
-    Given there is a track in the system
-    When I am on the tracks page
-    And I click on the track edit link
-    Then I should be on the edit track page
-
   Scenario: User can access the track edit page from the track show page
     Given there is a track in the system
     When I am on the track page

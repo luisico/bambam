@@ -9,7 +9,7 @@ Feature: Show a track
   Scenario: User can access the track show page from the tracks page
     Given there is a track in the system
     When I am on the tracks page
-    And I click on the track show link
+    And I click on the track name
     Then I should be on the show track page
 
   Scenario: Show a track's information
@@ -18,3 +18,4 @@ Feature: Show a track
     Then I should see the track's name
     And I should see the track's path
     And I should see the track's creation date
+    And I should see the date of the track's last update

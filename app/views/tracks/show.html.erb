@@ -1,13 +1,14 @@
-<div class="row">
+<div class="row box">
   <div class="small-12 large-6 large-centered columns">
-    <h3><%= @track.name %></h3>
-
-    <ul>
-      <li>Path: <%= @track.path %></li>
-      <li>Created at: <%= @track.created_at %></li>
+    <ul class="pricing-table">
+      <li class="title"><%= @track.name %></li>
+      <li class="bullet-item"><%= @track.path %></li>
+      <li class="description">Created at: <%= @track.created_at %></li>
+      <li class="description">Updated at: <%= @track.updated_at %></li>
     </ul>
 
-    <%= link_to 'Edit', edit_track_path(@track) %> |
-    <%= link_to 'Back', tracks_path %>
+    <%= link_to 'Edit', edit_track_path(@track), class: 'button tiny radius' %>
+    <%= link_to 'Back', tracks_path, class: 'button tiny radius' %>
+    <%= link_to 'Delete', @track, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny radius [secondary alert success] right' %>
   </div>
 </div>

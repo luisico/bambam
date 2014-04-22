@@ -4,8 +4,8 @@
 
 ### When
 
-When /^I click on the track show link$/ do
-  click_link 'Show'
+When /^I click on the track name$/ do
+  click_link @track.name
 end
 
 When /^I am on the track page$/ do
@@ -30,7 +30,11 @@ Then /^I should see the track's creation date$/ do
   expect(page).to have_content @track.created_at
 end
 
+Then /^I should see the date of the track's last update$/ do
+  expect(page).to have_content @track.updated_at
+end
+
 Then /^I should be able to acess the track page from a link$/ do
-  click_link 'Show'
+  click_link @track.name
   expect(current_path).to eq track_path(@track)
 end

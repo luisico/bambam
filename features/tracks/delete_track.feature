@@ -8,5 +8,5 @@ Feature: Delate a track
 
   Scenario: User can access the track edit page from the tracks page
     Given there is a track in the system
-    When I am on the tracks page
+    When I am on the track page
     Then I should be able to delete a track
