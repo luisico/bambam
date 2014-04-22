@@ -3,8 +3,8 @@
     <ul class="pricing-table">
       <li class="title"><%= @track.name %></li>
       <li class="bullet-item"><%= @track.path %></li>
-      <li class="description">Created at: <%= @track.created_at %></li>
-      <li class="description">Updated at: <%= @track.updated_at %></li>
+      <li class="description">Created <%= local_time_ago(@track.created_at) %></li>
+      <li class="description">Updated <%= local_time_ago(@track.updated_at) %></li>
     </ul>
 
     <%= link_to 'Edit', edit_track_path(@track), class: 'button tiny radius' %>

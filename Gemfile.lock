@@ -156,6 +156,8 @@ GEM
       celluloid-io (>= 0.15.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    local_time (1.0.0)
+      coffee-rails
     lumberjack (1.0.5)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -314,6 +316,7 @@ DEPENDENCIES
   jbuilder (~> 1.5.2)
   jquery-rails (~> 3.1.0)
   launchy (~> 2.4.2)
+  local_time
   mailcatcher!
   pg (~> 0.17.1)
   poltergeist (~> 1.5.0)
