@@ -7,7 +7,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Invite a user
     Given I am signed in as an <role>
     And I am on the users page
-    When I click on the invite user button
     Then I <priviledge> be able to invite a user <status> inviter priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
@@ -22,7 +21,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Cannot invite already registered users
     Given I am signed in as an <role>
     And I am on the users page
-    When I click on the invite user button
     And I invite an already registered user
     Then the "Email" field should have the error "has already been taken"
     And I should be on the invitation page
@@ -36,7 +34,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Cannot invite if email is blank
     Given I am signed in as an <role>
     And I am on the users page
-    And I click on the invite user button
     When I invite a user with a blank email
     Then the "Email" field should have the error "can't be blank"
     And I should be on the invitation page

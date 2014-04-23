@@ -36,7 +36,7 @@ end
 
 Given /^I am on the users page$/ do
   visit users_path
-  expect(page).to have_css('h1', text: 'Users')
+  expect(page).to have_css('li', text: 'Current users')
 end
 
 Given /^there is( not)? a users link in the navigation bar$/ do |negate|

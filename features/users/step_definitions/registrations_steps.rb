@@ -23,10 +23,6 @@ end
 
 ### When
 
-When /^I click on the invite user button$/ do
-  click_link 'Invite User'
-end
-
 When /^I invite an already registered user$/ do
   registered_user = FactoryGirl.create(:user)
   expect{
@@ -162,8 +158,8 @@ Then /^I should see an invalid invitation token message$/ do
   end
 end
 
-Then /^I should see a link to invite new users$/ do
-  expect(page).to have_link 'Invite User'
+Then /^I should see a form to invite a new user$/ do
+  expect(page).to have_content 'Invite a new user'
 end
 
 Then /^I should find account sign up instuctions$/ do

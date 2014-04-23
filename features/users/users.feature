@@ -8,7 +8,7 @@ Feature: List of users
     And there is a users link in the navigation bar
     When I visit the users page
     Then I should see a list of users
-    And I should see a link to invite new users
+    And I should see a form to invite a new user
 
   Examples:
     | role    |
