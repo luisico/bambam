@@ -15,3 +15,8 @@ Feature: List of tracks
     Given there is a track in the system
     When I am on the tracks page
     Then I should be able to acess the track page from a link
+
+  Scenario: Provides link to open the track in IGV
+    Given there is a track in the system
+    When I am on the tracks page
+    Then I should see links to open the tracks in IGV

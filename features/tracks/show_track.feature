@@ -19,3 +19,4 @@ Feature: Show a track
     And I should see the track's path
     And I should see the track's creation date
     And I should see the date of the track's last update
+    And I should see a link to open the track in IGV

@@ -1,0 +1,8 @@
+.service.button {
+  padding: rem-calc(5 10);
+  &.fi-eye:before {
+    font-size: rem-calc(20);
+    vertical-align: middle;
+    margin-right: rem-calc(5);
+  }
+}

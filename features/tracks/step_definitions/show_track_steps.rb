@@ -38,3 +38,8 @@ Then /^I should be able to acess the track page from a link$/ do
   click_link @track.name
   expect(current_path).to eq track_path(@track)
 end
+
+Then /^I should see a link to open the track in IGV$/ do
+  encoded = ERB::Util.url_encode stream_services_track_url(@track)
+  expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='Open in IGV']")
+end

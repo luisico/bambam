@@ -4,7 +4,10 @@
     <ul class="pricing-table">
       <li class="title">Tracks</li>
       <% @tracks.each do |track| %>
-        <li class="bullet-item"><%= link_to track.name, track %></li>
+        <li class="bullet-item">
+          <%= link_to_igv(track) %>
+          <%= link_to track.name, track %>
+        </li>
       <% end %>
     </ul>
   </div>
