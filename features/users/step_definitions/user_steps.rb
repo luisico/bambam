@@ -61,7 +61,7 @@ end
 
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
-  User.all do |user|
+  User.all.each do |user|
     expect(page).to have_content user.email
   end
 end
