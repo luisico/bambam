@@ -25,11 +25,3 @@ Then /^I should see a list of tracks$/ do
     expect(page).to have_content track.name
   end
 end
-
-Then /^I should see an IGV merge link$/ do
-  expect(page).to have_link "IGV merge"
-end
-
-Then /^I should see an IGV new link$/ do
-  expect(page).to have_link "IGV merge"
-end
