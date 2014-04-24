@@ -48,7 +48,7 @@ Feature: Sign up by invitation only
     Given I am signed in
     When I try to invite a user
     Then I should be denied access
-    And I should be redirected to the home page
+    And I should be redirected to the tracks page
 
   Scenario Outline: Invitee signs up after being invited
     Given I do not exist as a user

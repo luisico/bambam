@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe 'Application' do
   describe "root" do
-    it "routes to pages#home" do
-      expect(get("/")).to route_to("pages#home")
+    it "routes to sign in form" do
+      expect(get("/")).to route_to("devise/sessions#new")
     end
   end
 end

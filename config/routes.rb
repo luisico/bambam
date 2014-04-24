@@ -5,10 +5,11 @@ Bambam::Application.routes.draw do
     get 'users/cancel'  => 'users#cancel',                          as: 'user_cancel'
     get 'users/edit'    => 'devise_invitable/registrations#edit',   as: 'edit_user_registration'
     put 'users'         => 'devise_invitable/registrations#update', as: 'user_registration'
+    root to: 'devise/sessions#new'
   end
   resources :users, only: [:index]
 
   resources :tracks
 
-  root 'pages#home'
+  match 'user_root' => 'tracks#index', via: [:get]
 end
