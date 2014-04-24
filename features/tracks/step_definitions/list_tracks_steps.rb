@@ -21,9 +21,8 @@ end
 
 Then /^I should see a list of tracks$/ do
   expect(Track.count).to be > 0
-  Track.all do |track|
+  Track.all.each do |track|
     expect(page).to have_content track.name
-    expect(page).to have_content track.path
   end
 end
 
