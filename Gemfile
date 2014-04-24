@@ -31,6 +31,7 @@ gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.1 '
 gem 'foundation-rails', '~> 5.2.2'
 gem 'local_time'
+gem 'foundation-icons-sass-rails'
 
 # JSON APIs
 gem 'jbuilder', '~> 1.5.2'
