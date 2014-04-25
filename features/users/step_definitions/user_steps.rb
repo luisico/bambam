@@ -63,6 +63,11 @@ Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
   User.all.each do |user|
     expect(page).to have_content user.email
+    if user.has_role? :admin
+      expect(page).to have_css('.fi-crown')
+    elsif user.has_role? :inviter
+      expect(page).to have_css('.fi-key')
+    end
   end
 end
 
