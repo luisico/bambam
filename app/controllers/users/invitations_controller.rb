@@ -1,5 +1,10 @@
 class Users::InvitationsController < Devise::InvitationsController
 
+  # GET /resource/invitation/new
+  def new
+    redirect_to users_path
+  end
+
   # POST /resource/invitation
   def create
     self.resource = invite_resource
