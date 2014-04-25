@@ -1,23 +1,28 @@
-<h3>Sign in</h3>
+<div class="row">
+  <div class="small-9 small-centered columns">
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div>
-    <%= f.label :email %>
-    <%= f.email_field :email, autofocus: true %>
+    <h1>Welcome to Bambam!</h1></br>
+
+    <h3>Sign in</h3>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div>
+        <%= f.email_field :email, autofocus: true, placeholder: 'Email' %>
+      </div>
+
+      <div>
+        <%= f.password_field :password, placeholder: 'Password' %>
+      </div>
+
+      <% if devise_mapping.rememberable? -%>
+        <label><%= f.check_box :remember_me %> Remember me</label>
+      <% end -%>
+
+      <div>
+        <%= f.submit 'Sign in', class: 'button tiny radius' %>
+      </div>
+    <% end %>
+
+    <%= render "users/shared/links" %>
   </div>
-
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <label><%= f.check_box :remember_me %> Remember me</label>
-  <% end -%>
-
-  <div>
-    <%= f.submit 'Sign in', class: 'button small' %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+</div>
