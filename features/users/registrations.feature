@@ -1,4 +1,3 @@
-@now
 Feature: Sign up by invitation only
   In order to get access to protected sections of the site
   As a user
