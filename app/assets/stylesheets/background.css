@@ -1,12 +1,7 @@
-body::after {
-  content: "";
-  background: url("http://www.partyshelf.com/images/Misc/BamBam.jpg") no-repeat fixed;
+body{
+  background-image: url("bambam-helix-fade.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
   background-size: cover;
-  opacity: 0.1;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
 }
