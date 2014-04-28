@@ -43,3 +43,7 @@ Then /^I should see a link to open the track in IGV$/ do
   encoded = ERB::Util.url_encode stream_services_track_url(@track)
   expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='Open in IGV']")
 end
+
+Then /^I should see a text with the track line for UCSC$/ do
+  expect(page).to have_content "bigDataUrl="
+end

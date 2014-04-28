@@ -1,9 +1,21 @@
 <div class="row">
-  <div class="small-12 medium-6 medium-centered columns">
+  <div class="small-12 medium-10 medium-centered columns">
     <ul class="pricing-table">
       <li class="title"><%= @track.name %></li>
-      <li class="bullet-item"><%= @track.path %></li>
-      <li class="bullet-item"><%= link_to_igv(@track) %></li>
+      <li class="price">Path</li>
+      <li class="bullet-item">
+        <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i>
+        <span id="track_path"><%= @track.path %></span>
+      </li>
+      <li class="price">Services</li>
+      <li class="bullet-item">
+        <%= link_to_igv(@track, 'Open in IGV') %>
+      </li>
+      <li class="price">UCSC track line</li>
+      <li class="bullet-item">
+        <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i>
+        <span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span>
+      </li>
       <li class="description">Created <%= local_time_ago(@track.created_at) %></li>
       <li class="description">Updated <%= local_time_ago(@track.updated_at) %></li>
     </ul>

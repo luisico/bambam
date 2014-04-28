@@ -66,4 +66,91 @@ describe TracksHelper do
       expect(helper.link_to_igv(@track, 'mytext')).to match ">mytext</a>"
     end
   end
+
+  describe "#ucsc_url" do
+    before { @track = FactoryGirl.create(:track) }
+
+    it "needs a track as argument" do
+      expect{helper.ucsc_url}.to raise_error(ArgumentError)
+    end
+
+    it "points to the track's stream service" do
+      url = helper.ucsc_url(@track)
+      userinfo = URI(url).userinfo
+      expect(url.sub("#{userinfo}@",'')).to eq stream_services_track_url(@track)
+    end
+
+    context "user credentials" do
+      it "are encoded when present" do
+        user = FactoryGirl.build(:user)
+        uri = URI(helper.ucsc_url(@track, user))
+        credentials =  "#{ERB::Util.url_encode(user.email)}:#{user.password}"
+        expect(uri.userinfo).to eq credentials
+      end
+
+      it "are not included when missing" do
+        uri = URI(helper.ucsc_url(@track))
+        expect(uri.userinfo).to be_nil
+      end
+    end
+  end
+
+  describe "#ucsc_track_line" do
+    before do
+      @track = FactoryGirl.build(:track)
+      allow(helper).to receive(:ucsc_url).and_return('myurl')
+    end
+
+    it "needs a track as argument" do
+      expect{helper.ucsc_track_line}.to raise_error(ArgumentError)
+    end
+
+    it "starts with the word 'track'" do
+      expect(helper.ucsc_track_line(@track)).to match /^track /
+    end
+
+    context "track type" do
+      it "for bam files" do
+        @track.path << '.bam'
+        expect(helper.ucsc_track_line(@track)).to match /type=bam/
+      end
+
+      it "for bigwig files" do
+        @track.path << '.bw'
+        expect(helper.ucsc_track_line(@track)).to match /type=bigWig/
+      end
+
+      it "is not included when unkown" do
+        expect(helper.ucsc_track_line(@track)).not_to include 'type='
+      end
+    end
+
+    context "track name" do
+      it "is included when known" do
+        expect(helper.ucsc_track_line(@track)).to match /name=#{@track.name}/
+      end
+
+      it "is not included when empty" do
+        @track.name = ''
+        expect(helper.ucsc_track_line(@track)).not_to include 'name='
+      end
+
+      it "is not included when nil" do
+        @track.name = nil
+        expect(helper.ucsc_track_line(@track)).not_to include 'name='
+      end
+    end
+
+    context "track url" do
+      it "points the track's stream service" do
+        expect(helper.ucsc_track_line(@track)).to match /bigDataUrl=myurl/
+      end
+
+      it "include credentials when requested" do
+        user = FactoryGirl.build(:user)
+        expect(helper).to receive(:ucsc_url).with(@track,user).once
+        helper.ucsc_track_line(@track,user)
+      end
+    end
+  end
 end
