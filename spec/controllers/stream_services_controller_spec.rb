@@ -60,21 +60,56 @@ describe StreamServicesController do
 
           it "should return file if present" do
             File.open(@extpath, 'wb') { |f| f.write ['extension'].pack('A*') }
-            head :show, id: @track, format: @ext
+            get :show, id: @track, format: @ext
 
             expect(response.status).to eq 200
           end
 
           it "should return not found if file is empty" do
             File.open(@extpath, 'wb') { |f| f.truncate(0) }
-            head :show, id: @track, format: @ext
+            get :show, id: @track, format: @ext
             expect(response.status).to eq 404
           end
 
           it "should return not found if file is not present" do
-            head :show, id: @track, format: @ext
+            get :show, id: @track, format: @ext
             expect(response.status).to eq 404
           end
+
+          it "should return the file if format is nil" do
+            get :show, id: @track, format: nil
+            expect(response.status).to eq 200
+          end
+
+          it "should respond forbidden when format is out of scope" do
+            formats = [
+              '',
+              '/../Gemfile', '../Gemfile', './Gemfile', '/Gemfile',
+              '.%2FGemfile'
+            ]
+
+            # For a file
+            formats.each do |format|
+              get :show, id: @track, format: format
+              expect(response).to be_forbidden, "#{@track.path} . #{format}"
+            end
+
+            # For a directory
+            @track.update(path: 'tmp')
+            formats.each do |format|
+              get :show, id: @track, format: format
+              expect(response).to be_forbidden, "#{@track.path} . #{format}"
+            end
+
+            # For a directory with trailing slash
+            @track.update(path: 'tmp/')
+            formats.each do |format|
+              get :show, id: @track, format: format
+              expect(response).to be_forbidden, "#{@track.path} . #{format}"
+            end
+          end
+
+
         end
 
         context "HEAD" do

@@ -7,6 +7,8 @@ class StreamServicesController < ApplicationController
       path = track.path
       path << ".#{params[:format]}" if params[:format]
 
+      raise Errno::EACCES if params[:format] && Pathname.new(path).cleanpath.extname != ".#{params[:format]}"
+
       raise Errno::ENOENT unless File.size?(path)
 
       if request.head?
@@ -21,8 +23,10 @@ class StreamServicesController < ApplicationController
         end
       end
 
-    rescue ActiveRecord::RecordNotFound, Errno::ENOENT
+    rescue ActiveRecord::RecordNotFound, ActionController::MissingFile, Errno::ENOENT
       render nothing: true, status: :not_found
+    rescue Errno::EACCES
+      render nothing: true, status: :forbidden
     rescue RangeError
       render nothing: true, status: 416
     end
