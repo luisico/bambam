@@ -6,6 +6,10 @@ module ActiveModel
         unless File.exist?(value)
           record.errors.add(attr_name, :exist)
         end
+
+        if options[:allow_empty] != true && File.zero?(value)
+          record.errors.add(attr_name, :empty)
+        end
       end
     end
 
