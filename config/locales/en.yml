@@ -5,3 +5,7 @@ en:
   hello: "Hello world"
   unauthorized:
     default: You are not authorized to access this page
+
+  errors:
+    messages:
+      exist: must exist in filesystem
