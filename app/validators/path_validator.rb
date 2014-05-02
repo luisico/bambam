@@ -7,12 +7,23 @@ module ActiveModel
           record.errors.add(attr_name, :exist)
         end
 
-        if options[:allow_empty] != true && File.zero?(value)
-          record.errors.add(attr_name, :empty)
-        end
+        if File.file?(value)
 
-        if options[:allow_directory] == false && File.directory?(value)
-          record.errors.add(attr_name, :directory)
+          if options[:allow_empty] != true && File.zero?(value)
+            record.errors.add(attr_name, :empty)
+          end
+
+        elsif File.directory?(value)
+
+          if options[:allow_directory] == false
+            record.errors.add(attr_name, :directory)
+            return
+          end
+
+          if options[:allow_empty] != true && Dir["#{value}/*"].empty?
+            record.errors.add(attr_name, :empty)
+          end
+
         end
       end
     end
