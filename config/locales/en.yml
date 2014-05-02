@@ -9,3 +9,4 @@ en:
   errors:
     messages:
       exist: must exist in filesystem
+      directory: cannot be a directory

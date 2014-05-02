@@ -10,6 +10,10 @@ module ActiveModel
         if options[:allow_empty] != true && File.zero?(value)
           record.errors.add(attr_name, :empty)
         end
+
+        if options[:allow_directory] == false && File.directory?(value)
+          record.errors.add(attr_name, :directory)
+        end
       end
     end
 
