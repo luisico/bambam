@@ -154,6 +154,50 @@ describe ActiveModel::Validations::PathValidator do
         end
       end
     end
+
+    describe "optionally ensure that directory is pre-approved" do
+      before(:all) do
+        class Validatable
+          include ActiveModel::Validations
+          attr_accessor :path
+          validates_path_of :path, within: ENV['ALLOWED_TRACK_PATHS'].split(":")
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      context "approved directory" do
+        before { subject.path = @path = ENV['ALLOWED_TRACK_PATHS'].split(":")[0] }
+
+        it "should be valid" do
+          Dir.mkdir @path
+          File.open("#{@path}/mytrack", 'w') { |f| f.puts "file contents" }
+          expect(subject).to be_valid
+        end
+
+        it "should be valid given a child directory of an approved parent" do
+          FileUtils.mkpath @path + '/tracks'
+          File.open("#{@path}/mytrack", 'w') { |f| f.puts "file contents" }
+          expect(subject).to be_valid
+        end
+      end
+
+      context "un-approved directory" do
+        before do
+          subject.path = @path = 'invalid_directory'
+          Dir.mkdir @path
+          File.open("#{@path}/mytrack", 'w') { |f| f.puts "file contents" }
+        end
+
+        it { should_not be_valid }
+
+        it "should add :invalid translation to errors" do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.invalid')
+        end
+      end
+    end
   end
 
   describe "as a directory" do
@@ -300,6 +344,49 @@ describe ActiveModel::Validations::PathValidator do
             }.to change(subject.errors, :size).by(1)
             expect(subject.errors[:path]).to include I18n.t('errors.messages.directory')
           end
+        end
+      end
+    end
+
+    describe "optionally ensure that directory is approved" do
+      before(:all) do
+        class Validatable
+          include ActiveModel::Validations
+          attr_accessor :path
+          validates_path_of :path, within: ENV['ALLOWED_TRACK_PATHS'].split(":")
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      context "approved directory" do
+        before { subject.path = @path = ENV['ALLOWED_TRACK_PATHS'].split(":")[0] }
+
+        it "should be valid" do
+          Dir.mkdir @path
+          File.open("#{@path}/mytrack", 'w') { |f| f.puts "file contents" }
+          expect(subject).to be_valid
+        end
+
+        it "should be valid given a child directory of an approved parent" do
+          FileUtils.mkpath @path + '/tracks'
+          expect(subject).to be_valid
+        end
+      end
+
+      context "un-approved directory" do
+        before do
+          subject.path = @path = 'invalid_directory'
+          Dir.mkdir @path
+          File.open("#{@path}/mytrack", 'w') { |f| f.puts "file contents" }
+        end
+
+        it { should_not be_valid }
+
+        it "should add :invalid translation to errors" do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.invalid')
         end
       end
     end

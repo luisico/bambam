@@ -2,7 +2,15 @@ module ActiveModel
   module Validations
 
     class PathValidator < EachValidator
+
       def validate_each(record, attr_name, value)
+        if options[:within]
+          self.class.send(:include, Clusivity)
+          unless include?(record, value)
+            record.errors.add(attr_name, :invalid)
+          end
+        end
+
         unless File.exist?(value)
           record.errors.add(attr_name, :exist)
         end
@@ -25,6 +33,21 @@ module ActiveModel
           end
 
         end
+
+      end
+
+      private
+
+      def include?(record, value)
+        members = if delimiter.respond_to?(:call)
+            delimiter.call(record)
+          elsif delimiter.respond_to?(:to_sym)
+            record.send(delimiter)
+          else
+            delimiter
+          end
+
+        members.any? { |m| value.starts_with?(m) }
       end
     end
 
