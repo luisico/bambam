@@ -4,6 +4,8 @@ module ActiveModel
     class PathValidator < EachValidator
 
       def validate_each(record, attr_name, value)
+        value.chomp!('/')
+
         if options[:within]
           self.class.send(:include, Clusivity)
           unless include?(record, value)

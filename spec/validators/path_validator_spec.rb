@@ -32,6 +32,22 @@ describe ActiveModel::Validations::PathValidator do
 
   subject { Validatable.new }
 
+  describe "remove tailing slashes from path before validation" do
+    before(:all) do
+      class Validatable < ValidatableA
+        validates_path_of :path
+      end
+    end
+    after(:all) { Object.send(:remove_const, :Validatable) }
+
+    it "should remove trailing slash from path before validation" do
+      subject.path = TEST_BASE + '/'
+      without_file(subject.path)
+      subject.valid?
+      expect(subject.path).to eq TEST_BASE
+    end
+  end
+
   describe "validates path exists in filesystem" do
     before(:all) do
       class Validatable < ValidatableA
