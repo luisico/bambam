@@ -314,7 +314,41 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
-    #TODO :allow_directory false & :allow_empty true
+    context "with option :allow_directory false and :allow_empty true" do
+      before(:all) do
+        class Validatable
+          include ActiveModel::Validations
+          attr_accessor :path
+          validates_path_of :path, allow_directory: false, allow_empty: true
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      context "as a path to a file" do
+        it "should be valid as a non-empty file" do
+          file_path_with_file
+          expect(subject).to be_valid
+        end
+
+        it "should be valid as an empty file" do
+          file_path_with_file
+          File.truncate("#{@path}/mytrack", 0)
+          expect(subject).to be_valid
+        end
+      end
+
+      context "as a path to a directory" do
+        it "should not be valid as an empty directory" do
+          empty_directory_path
+          expect(subject).not_to be_valid
+        end
+
+        it "should not be valid as a directory with a file" do
+          directory_path_with_file
+          expect(subject).not_to be_valid
+        end
+      end
+    end
   end
 
   describe "optionally ensure that directory is pre-approved" do
