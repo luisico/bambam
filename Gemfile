@@ -72,4 +72,5 @@ end
 
 group :production, :staging do
   gem 'therubyracer', platforms: :ruby
+  gem 'nokogiri', '~> 1.6.1'
 end
