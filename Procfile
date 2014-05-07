@@ -1,3 +1,2 @@
 # Procfile for production
-web: bundle exec unicorn -c config/unicorn.rb
-log: tail -f -n 0 log/production.log
+web: bundle exec puma -e $RACK_ENV
