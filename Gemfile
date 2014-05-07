@@ -69,3 +69,7 @@ group :development, :test do
   gem 'quiet_assets', '~> 1.0.2'
   gem 'mailcatcher', github: 'sj26/mailcatcher', ref:  '272b4fa855'
 end
+
+group :production, :staging do
+  gem 'therubyracer', platforms: :ruby
+end
