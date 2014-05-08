@@ -12,7 +12,7 @@ def with_file(path)
     dirname.rmtree
 end
 
-def without_file(path)
+def with_directory(path)
   dirname = Pathname.new(path)
   dirname.mkpath
   yield if block_given?
@@ -42,9 +42,9 @@ describe ActiveModel::Validations::PathValidator do
 
     it "should remove trailing slash from path before validation" do
       subject.path = TEST_BASE + '/'
-      without_file(subject.path)
-      subject.valid?
-      expect(subject.path).to eq TEST_BASE
+      expect{
+        subject.valid?
+      }.to change(subject, :path).to(TEST_BASE)
     end
   end
 
@@ -79,7 +79,7 @@ describe ActiveModel::Validations::PathValidator do
     end
   end
 
-  describe "validates path exists in filesystem" do
+  describe "optionally validates path is not empty" do
     context "with option :allow_empty true" do
       before(:all) do
         class Validatable < ValidatableA
@@ -107,17 +107,18 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should be valid as an empty directory" do
-          without_file(subject.path) { expect(subject).to be_valid }
+          with_directory(subject.path) { expect(subject).to be_valid }
         end
 
         it "should be valid as a non-empty directory" do
-          with_file(File.join "#{subject.path}", 'file1') { expect(subject).to be_valid }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+            expect(subject).to be_valid
+          end
         end
       end
     end
-  end
 
-  describe "optionally validates path is not empty" do
     context "with option :allow_empty false" do
       before(:all) do
         class Validatable < ValidatableA
@@ -158,11 +159,11 @@ describe ActiveModel::Validations::PathValidator do
 
         context "as an empty directory" do
           it "should not be valid" do
-            without_file(subject.path) { expect(subject).not_to be_valid }
+            with_directory(subject.path) { expect(subject).not_to be_valid }
           end
 
           it "should add :empty translation to errors" do
-            without_file(subject.path) do
+            with_directory(subject.path) do
               expect{
                 subject.valid?
               }.to change(subject.errors, :size).by(1)
@@ -173,8 +174,8 @@ describe ActiveModel::Validations::PathValidator do
 
         context "as a non-empty directory" do
           it "should be valid" do
-            without_file(subject.path) do
-              File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
               expect(subject).to be_valid
             end
           end
@@ -190,7 +191,7 @@ describe ActiveModel::Validations::PathValidator do
       end
       after(:all) { Object.send(:remove_const, :Validatable) }
 
-      context "as a path to a an empty file" do
+      context "as a path to an empty file" do
         before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
 
         it "should not be valid" do
@@ -215,11 +216,11 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should not be valid" do
-          without_file(subject.path) { expect(subject).not_to be_valid }
+          with_directory(subject.path) { expect(subject).not_to be_valid }
         end
 
         it "should add :empty translation to errors" do
-          without_file(subject.path) do
+          with_directory(subject.path) do
             expect{
               subject.valid?
             }.to change(subject.errors, :size).by(1)
@@ -270,19 +271,19 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should be valid as a directory containing a file" do
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).to be_valid
           end
         end
 
         context "should not be valid as an empty directory" do
           it "should not be valid" do
-            without_file(subject.path) { expect(subject).not_to be_valid }
+            with_directory(subject.path) { expect(subject).not_to be_valid }
           end
 
           it "should add :empty translation to errors" do
-            without_file(subject.path) do
+            with_directory(subject.path) do
               expect{
                 subject.valid?
               }.to change(subject.errors, :size).by(1)
@@ -320,12 +321,12 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should be valid as an empty directory" do
-          without_file(subject.path) { expect(subject).to be_valid }
+          with_directory(subject.path) { expect(subject).to be_valid }
         end
 
         it "should be valid as a directory with a file" do
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).to be_valid
           end
         end
@@ -343,7 +344,7 @@ describe ActiveModel::Validations::PathValidator do
       context "as a path to a file" do
         before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
 
-        it "should be valid as a file" do
+        it "should be valid" do
           with_file(subject.path) { expect(subject).to be_valid }
         end
       end
@@ -352,11 +353,11 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should not be valid" do
-          without_file(subject.path) { expect(subject).not_to be_valid }
+          with_directory(subject.path) { expect(subject).not_to be_valid }
         end
 
         it "should add :directory translation to errors" do
-          without_file(subject.path) do
+          with_directory(subject.path) do
             expect{
               subject.valid?
             }.to change(subject.errors, :size).by(1)
@@ -393,12 +394,12 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join TEST_BASE, 'dir1' }
 
         it "should not be valid as an empty directory" do
-          without_file(subject.path) { expect(subject).not_to be_valid }
+          with_directory(subject.path) { expect(subject).not_to be_valid }
         end
 
         it "should not be valid as a directory with a file" do
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).not_to be_valid
           end
         end
@@ -418,16 +419,16 @@ describe ActiveModel::Validations::PathValidator do
       context "in an approved directory" do
         it "should be valid" do
           subject.path = File.join TEST_BASE, 'dir1'
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).to be_valid
           end
         end
 
         it "should be valid given a child directory of an approved parent" do
           subject.path = File.join TEST_BASE, 'dir1', 'subdir1'
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).to be_valid
           end
         end
@@ -437,15 +438,15 @@ describe ActiveModel::Validations::PathValidator do
         before { subject.path = File.join 'un_approved', 'dir1', 'file1' }
 
         it "should not be valid" do
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect(subject).not_to be_valid
           end
         end
 
         it "should add :invalid translation to errors" do
-          without_file(subject.path) do
-            File.open(File.join("#{subject.path}",'file1'), 'w') { |f| f.puts "file contents" }
+          with_directory(subject.path) do
+            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
             expect{
               subject.valid?
             }.to change(subject.errors, :size).by(1)
