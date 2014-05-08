@@ -1,24 +1,20 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <ul class="pricing-table">
-      <li class="title"><%= @track.name %></li>
-      <li class="price">Path</li>
-      <li class="bullet-item">
-        <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i>
-        <span id="track_path"><%= @track.path %></span>
-      </li>
-      <li class="price">Services</li>
-      <li class="bullet-item">
-        <%= link_to_igv(@track, 'Open in IGV') %>
-      </li>
-      <li class="price">UCSC track line</li>
-      <li class="bullet-item">
-        <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i>
-        <span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span>
-      </li>
-      <li class="description">Created <%= local_time_ago(@track.created_at) %></li>
-      <li class="description">Updated <%= local_time_ago(@track.updated_at) %></li>
-    </ul>
+    <div class="panel">
+      <h3><%= @track.name %></h3>
+      <h5><small> created <%= local_time_ago(@track.created_at) %>, updated <%= local_time_ago(@track.updated_at) %></small></h5>
+      <h5>Path:</h5>
+      <ul class="inline-list">
+        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i></li>
+        <li id="track_path"><%= @track.path %></li>
+        <li><%= link_to_igv(@track, 'Open in IGV') %></li>
+      </ul>
+      <h5>UCSC track line:</h5>
+      <ul class="inline-list">
+        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i></li>
+        <li><span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span></li>
+      </ul>
+    </div>
 
     <%= link_to 'Edit', edit_track_path(@track), class: 'button tiny radius' %>
     <%= link_to 'Back', tracks_path, class: 'button tiny radius' %>
