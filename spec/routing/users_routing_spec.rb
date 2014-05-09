@@ -31,7 +31,7 @@ describe "Users" do
     end
   end
 
-  describe "normal routes" do
+  describe "routes to" do
     it "index" do
       assert_routing({ path: '/users', method: :get }, { controller: 'users', action: 'index' })
     end
