@@ -32,7 +32,7 @@ describe ActiveModel::Validations::PathValidator do
 
   subject { Validatable.new }
 
-  describe "remove tailing slashes from path before validation" do
+  describe "default behavoir and validations" do
     before(:all) do
       class Validatable < ValidatableA
         validates_path_of :path
@@ -40,41 +40,76 @@ describe ActiveModel::Validations::PathValidator do
     end
     after(:all) { Object.send(:remove_const, :Validatable) }
 
-    it "should remove trailing slash from path before validation" do
-      subject.path = TEST_BASE + '/'
-      expect{
-        subject.valid?
-      }.to change(subject, :path).to(TEST_BASE)
-    end
-  end
-
-  describe "validates path exists in filesystem" do
-    before(:all) do
-      class Validatable < ValidatableA
-        validates_path_of :path
-      end
-    end
-    after(:all) { Object.send(:remove_const, :Validatable) }
-
-    context "with an existing path containing a file" do
-      it "should be valid" do
-        subject.path = File.join TEST_BASE, 'dir1', 'file1'
-        with_file(subject.path) { expect(subject).to be_valid }
-      end
-    end
-
-    context "without an existing path" do
-      before { subject.path = 'non_existing_path' }
-
-      it "should not be valid" do
-        expect(subject).not_to be_valid
-      end
-
-      it "should add :exist translation to errors" do
-         expect{
+    context "remove tailing slashes from path before validation" do
+      it "should remove trailing slash from path before validation" do
+        subject.path = TEST_BASE + '/'
+        expect{
           subject.valid?
-        }.to change(subject.errors, :size).by(1)
-        expect(subject.errors[:path]).to include I18n.t('errors.messages.exist')
+        }.to change(subject, :path).to(TEST_BASE)
+      end
+    end
+
+    context "validates path exists in filesystem" do
+      context "with an existing path containing a file" do
+        it "should be valid" do
+          subject.path = File.join TEST_BASE, 'dir1', 'file1'
+          with_file(subject.path) { expect(subject).to be_valid }
+        end
+      end
+
+      context "without an existing path" do
+        before { subject.path = 'non_existing_path' }
+
+        it "should not be valid" do
+          expect(subject).not_to be_valid
+        end
+
+        it "should add :exist translation to errors" do
+           expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.exist')
+        end
+      end
+    end
+
+    context "validates that directories and files are not empty" do
+      context "as a path to an empty file" do
+        before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
+
+        it "should not be valid" do
+          with_file(subject.path) do
+            File.truncate(subject.path, 0)
+            expect(subject).not_to be_valid
+          end
+        end
+
+        it "should add :empty translation to errors" do
+          with_file(subject.path) do
+            File.truncate(subject.path, 0)
+            expect{
+              subject.valid?
+            }.to change(subject.errors, :size).by(1)
+            expect(subject.errors[:path]).to include I18n.t('errors.messages.empty')
+          end
+        end
+      end
+
+      context "as a path to an empty directory" do
+        before { subject.path = File.join TEST_BASE, 'dir1' }
+
+        it "should not be valid" do
+          with_directory(subject.path) { expect(subject).not_to be_valid }
+        end
+
+        it "should add :empty translation to errors" do
+          with_directory(subject.path) do
+            expect{
+              subject.valid?
+            }.to change(subject.errors, :size).by(1)
+            expect(subject.errors[:path]).to include I18n.t('errors.messages.empty')
+          end
+        end
       end
     end
   end
@@ -178,53 +213,6 @@ describe ActiveModel::Validations::PathValidator do
               File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
               expect(subject).to be_valid
             end
-          end
-        end
-      end
-    end
-
-    context "option :allow_empty defaults to false" do
-      before(:all) do
-        class Validatable < ValidatableA
-          validates_path_of :path
-        end
-      end
-      after(:all) { Object.send(:remove_const, :Validatable) }
-
-      context "as a path to an empty file" do
-        before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
-
-        it "should not be valid" do
-          with_file(subject.path) do
-            File.truncate(subject.path, 0)
-            expect(subject).not_to be_valid
-          end
-        end
-
-        it "should add :empty translation to errors" do
-          with_file(subject.path) do
-            File.truncate(subject.path, 0)
-            expect{
-              subject.valid?
-            }.to change(subject.errors, :size).by(1)
-            expect(subject.errors[:path]).to include I18n.t('errors.messages.empty')
-          end
-        end
-      end
-
-      context "as a path to an empty directory" do
-        before { subject.path = File.join TEST_BASE, 'dir1' }
-
-        it "should not be valid" do
-          with_directory(subject.path) { expect(subject).not_to be_valid }
-        end
-
-        it "should add :empty translation to errors" do
-          with_directory(subject.path) do
-            expect{
-              subject.valid?
-            }.to change(subject.errors, :size).by(1)
-            expect(subject.errors[:path]).to include I18n.t('errors.messages.empty')
           end
         end
       end
