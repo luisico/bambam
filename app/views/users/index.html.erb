@@ -1,9 +1,46 @@
-<h1>Users</h1>
+<div class="row">
+  <div class="medium-6 columns">
+    <ul class="pricing-table">
+      <li class="title">Current users</li>
+      <li class="description">
+        <i class="fi-ticket medium icon_key"> Invite outstanding</i>
+        <i class="fi-crown medium icon_key"> Admin</i>
+        <i class="fi-key medium icon_key"> Inviter</i>
+      </li>
+      <% @users.each do |user| %>
+        <li class="bullet-item">
+          <%= user.email %>
+          <% if user.invitation_accepted? == false %>
+            <i class="fi-ticket medium"></i>
+          <% end %>
+          <% if user.has_role? :admin %>
+            <i class="fi-crown medium"></i>
+          <% end %>
+          <% if user.has_role? :inviter %>
+            <i class="fi-key medium"></i>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="medium-6 columns">
+    <div class="panel">
+      <h3>Invite a new user</h3>
+      <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
+        <div>
+          <%= f.text_field :email, placeholder: 'Email' %>
+        </div>
 
-<%= link_to 'Invite User', new_user_invitation_path %>
-
-<ul>
-  <% @users.each do |user| %>
-    <li><%= user.email %></li>
-  <% end %>
-</ul>
+        <% if can? :manage, User %>
+          <div>
+            <%= check_box_tag(:inviter) %>
+            <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
+          </div>
+        <% end %>
+        <div>
+          <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

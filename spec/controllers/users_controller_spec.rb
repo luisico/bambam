@@ -28,7 +28,7 @@ describe UsersController do
       it "should be denied" do
         get :index
         expect(response).not_to be_success
-        expect(response).to redirect_to root_url
+        expect(response).to redirect_to tracks_path
       end
     end
   end

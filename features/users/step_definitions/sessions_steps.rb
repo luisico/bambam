@@ -56,27 +56,27 @@ end
 ### Then
 
 Then /^I should be signed in$/ do
-  within('.header') do
+  within('.top-bar') do
     expect(page).to have_content I18n.t('devise.sessions.sign_out')
     expect(page).not_to have_content I18n.t('devise.sessions.sign_in')
   end
 end
 
 Then /^I should be signed out$/ do
-  within('.header') do
+  within('.top-bar') do
     expect(page).to have_content I18n.t('devise.sessions.sign_in')
     expect(page).not_to have_content I18n.t('devise.sessions.sign_out')
   end
 end
 
 Then /^I should see a successful sign in message$/ do
-  expect(page).to have_css '.flash', text: I18n.t('devise.sessions.signed_in')
+  expect(page).to have_css '.alert-box', text: I18n.t('devise.sessions.signed_in')
 end
 
 Then /^I should see a signed out message$/ do
-  expect(page).to have_css '.flash', text: I18n.t('devise.sessions.signed_out')
+  expect(page).to have_css '.alert-box', text: I18n.t('devise.sessions.signed_out')
 end
 
 Then /^I should see an invalid sign in message$/ do
-  expect(page).to have_css '.flash', text: I18n.t('devise.failure.invalid')
+  expect(page).to have_css '.alert-box', text: I18n.t('devise.failure.invalid')
 end

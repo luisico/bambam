@@ -8,9 +8,9 @@ describe ApplicationController do
   end
 
   describe "CanCan AccessDenied exceptions" do
-    it "redirect to the root page" do
+    it "redirect to the tracks page" do
       get :index
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(tracks_path)
     end
   end
 end

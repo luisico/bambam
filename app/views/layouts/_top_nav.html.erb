@@ -1,7 +1,11 @@
 <nav class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><%= link_to 'Bambam', root_url %></h1>
+      <% if user_signed_in? %>
+        <h1><%= link_to ' Bambam', tracks_path, class: "fi-home" %></h1>
+      <% else %>
+        <h1><%= link_to ' Bambam', root_url, class: "fi-home" %></h1>
+      <% end %>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
@@ -10,9 +14,10 @@
     <!-- Left Nav Section -->
     <ul class="left">
       <li class="divider"></li>
-      <li><%= link_to 'Users', users_url %></li>
-      <li><%= link_to 'Tracks', '#' %></li>
-      <li><%= link_to 'Directories', '#' %></li>
+      <% if can? :invite, User %>
+        <li><%= link_to 'Users', users_url %></li>
+      <% end %>
+      <li><%= link_to 'Tracks', tracks_path %></li>
     </ul>
 
     <!-- Right Nav Section -->

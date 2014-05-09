@@ -1,25 +1,29 @@
-<h3>Change your password</h3>
+<div class="row">
+  <div class="small-9 small-centered columns">
+    <h3>Change your password</h3>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :put}) do |f| %>
-  <%= f.hidden_field :reset_password_token %>
-  <% if resource.errors %>
-    <% resource.errors[:reset_password_token].each do |msg| %>
-      <div class="error"><small><%= "#{User.human_attribute_name(:reset_password_token).capitalize} #{msg}" %></small></div>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :put}) do |f| %>
+      <%= f.hidden_field :reset_password_token %>
+      <% if resource.errors %>
+        <% resource.errors[:reset_password_token].each do |msg| %>
+          <div class="error"><small><%= "#{User.human_attribute_name(:reset_password_token).capitalize} #{msg}" %></small></div>
+        <% end %>
+      <% end %>
+
+      <div>
+        <%= f.label :password, 'New password' %>
+        <%= f.password_field :password, autofocus: true %></div>
+
+      <div>
+        <%= f.label :password_confirmation, 'Confirm new password' %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+
+      <div>
+        <%= f.submit 'Change my password', class: 'button tiny radius' %>
+      </div>
     <% end %>
-  <% end %>
 
-  <div>
-    <%= f.label :password, 'New password' %>
-    <%= f.password_field :password, autofocus: true %></div>
-
-  <div>
-    <%= f.label :password_confirmation, 'Confirm new password' %>
-    <%= f.password_field :password_confirmation %>
+    <%= render "users/shared/links" %>
   </div>
-
-  <div>
-    <%= f.submit 'Change my password', class: 'button small' %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+</div>

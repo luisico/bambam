@@ -7,7 +7,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Invite a user
     Given I am signed in as an <role>
     And I am on the users page
-    When I click on the invite user button
     Then I <priviledge> be able to invite a user <status> inviter priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
@@ -22,7 +21,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Cannot invite already registered users
     Given I am signed in as an <role>
     And I am on the users page
-    When I click on the invite user button
     And I invite an already registered user
     Then the "Email" field should have the error "has already been taken"
     And I should be on the invitation page
@@ -36,7 +34,6 @@ Feature: Sign up by invitation only
   Scenario Outline: Cannot invite if email is blank
     Given I am signed in as an <role>
     And I am on the users page
-    And I click on the invite user button
     When I invite a user with a blank email
     Then the "Email" field should have the error "can't be blank"
     And I should be on the invitation page
@@ -51,7 +48,7 @@ Feature: Sign up by invitation only
     Given I am signed in
     When I try to invite a user
     Then I should be denied access
-    And I should be redirected to the home page
+    And I should be redirected to the tracks page
 
   Scenario Outline: Invitee signs up after being invited
     Given I do not exist as a user
@@ -60,7 +57,7 @@ Feature: Sign up by invitation only
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
     And I should be signed in
-    And I should be on the home page
+    And I should be on the tracks page
 
     Examples:
       | role    |

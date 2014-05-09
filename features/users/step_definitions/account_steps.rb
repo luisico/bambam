@@ -29,7 +29,7 @@ Then /^I should be able to edit my email$/ do
     update_account
     @user.reload
   }.to change(@user, :email)
-  expect(page).to have_css('.flash .notice', text: I18n.t('devise.registrations.updated'))
+  expect(page).to have_css('.alert-box', text: I18n.t('devise.registrations.updated'))
 end
 
 Then /^I should be able to edit my password$/ do
@@ -40,7 +40,7 @@ Then /^I should be able to edit my password$/ do
     update_account
     @user.reload
   }.to change(@user, :encrypted_password)
-  expect(page).to have_css('.flash .notice', text: I18n.t('devise.registrations.updated'))
+  expect(page).to have_css('.alert-box', text: I18n.t('devise.registrations.updated'))
 end
 
 Then /^I should not be able to edit my password with an invalid current password$/ do

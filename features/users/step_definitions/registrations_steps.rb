@@ -23,10 +23,6 @@ end
 
 ### When
 
-When /^I click on the invite user button$/ do
-  click_link 'Invite User'
-end
-
 When /^I invite an already registered user$/ do
   registered_user = FactoryGirl.create(:user)
   expect{
@@ -120,7 +116,7 @@ Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/
 end
 
 Then /^I should see a message confirming that an invitation email has been sent$/ do
-  expect(page).to have_css('.flash .notice', text: I18n.t("devise.invitations.send_instructions", email: @invitee[:email]))
+  expect(page).to have_css('.alert-box', text: I18n.t("devise.invitations.send_instructions", email: @invitee[:email]))
 end
 
 Then /^(I|the invitee) should receive an invitation$/ do |foo|
@@ -157,13 +153,13 @@ Then /^I should not be able to sign up with an invalid invitation token$/ do
 end
 
 Then /^I should see an invalid invitation token message$/ do
-  within('.flash') do
+  within('.alert-box') do
     expect(page).to have_content I18n.t('devise.invitations.invitation_token_invalid')
   end
 end
 
-Then /^I should see a link to invite new users$/ do
-  expect(page).to have_link 'Invite User'
+Then /^I should see a form to invite a new user$/ do
+  expect(page).to have_content 'Invite a new user'
 end
 
 Then /^I should find account sign up instuctions$/ do
@@ -172,4 +168,8 @@ end
 
 Then /^I should find account termination instructions$/ do
   expect(current_path).to eq user_cancel_path
+end
+
+Then /^I should be (on|redirected to) the tracks page$/ do |foo|
+  expect(current_path).to eq tracks_path
 end

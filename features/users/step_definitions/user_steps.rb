@@ -36,7 +36,15 @@ end
 
 Given /^I am on the users page$/ do
   visit users_path
-  expect(page).to have_css('h1', text: 'Users')
+  expect(page).to have_css('li', text: 'Current users')
+end
+
+Given /^there is( not)? a users link in the navigation bar$/ do |negate|
+  if negate
+    expect(page).not_to have_css('li a', text: 'Users')
+  else
+    expect(page).to have_css('li a', text: 'Users')
+  end
 end
 
 ### When
@@ -53,8 +61,13 @@ end
 
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
-  User.all do |user|
+  User.all.each do |user|
     expect(page).to have_content user.email
+    if user.has_role? :admin
+      expect(page).to have_css('.fi-crown')
+    elsif user.has_role? :inviter
+      expect(page).to have_css('.fi-key')
+    end
   end
 end
 

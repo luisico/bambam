@@ -1,24 +1,28 @@
-<h3><%= I18n.t 'devise.invitations.edit.header' %></h3>
+<div class="row">
+  <div class="small-9 small-centered columns">
+    <h3><%= I18n.t 'devise.invitations.edit.header' %></h3>
 
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :put}) do |f| %>
-  <%= f.hidden_field :invitation_token %>
-  <% if resource.errors %>
-    <% resource.errors[:invitation_token].each do |msg| %>
-      <div class="error"><small><%= "#{User.human_attribute_name(:invitation_token).capitalize} #{msg}" %></small></div>
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :put}) do |f| %>
+      <%= f.hidden_field :invitation_token %>
+      <% if resource.errors %>
+        <% resource.errors[:invitation_token].each do |msg| %>
+          <div class="error"><small><%= "#{User.human_attribute_name(:invitation_token).capitalize} #{msg}" %></small></div>
+        <% end %>
+      <% end %>
+
+      <div>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+
+      <div>
+        <%= f.submit I18n.t('devise.invitations.edit.submit_button'), class: 'button tiny radius' %>
+      </div>
     <% end %>
-  <% end %>
-
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
   </div>
-
-  <div>
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-
-  <div>
-    <%= f.submit I18n.t('devise.invitations.edit.submit_button'), class: 'button small' %>
-  </div>
-<% end %>
+</div>
