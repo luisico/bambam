@@ -396,49 +396,72 @@ describe ActiveModel::Validations::PathValidator do
   end
 
   describe "optionally ensure that directory is pre-approved" do
-    before(:all) do
-      class Validatable < ValidatableA
-        validates_path_of :path, within: [File.join(TEST_BASE, 'dir1')]
+    context "understands option :within" do
+      before(:all) do
+        class Validatable < ValidatableA
+          validates_path_of :path, within: [File.join(TEST_BASE, 'dir1')]
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      context "as a path to a directory" do
+        context "in an approved directory" do
+          it "should be valid" do
+            subject.path = File.join TEST_BASE, 'dir1'
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+              expect(subject).to be_valid
+            end
+          end
+
+          it "should be valid given a child directory of an approved parent" do
+            subject.path = File.join TEST_BASE, 'dir1', 'subdir1'
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+              expect(subject).to be_valid
+            end
+          end
+        end
+
+        context "in an un-approved directory" do
+          before { subject.path = File.join 'un_approved', 'dir1', 'file1' }
+
+          it "should not be valid" do
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+              expect(subject).not_to be_valid
+            end
+          end
+
+          it "should add :invalid translation to errors" do
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+              expect{
+                subject.valid?
+              }.to change(subject.errors, :size).by(1)
+              expect(subject.errors[:path]).to include I18n.t('errors.messages.invalid')
+            end
+          end
+        end
       end
     end
-    after(:all) { Object.send(:remove_const, :Validatable) }
 
-    context "as a path to a directory" do
-      context "in an approved directory" do
-        it "should be valid" do
-          subject.path = File.join TEST_BASE, 'dir1'
-          with_directory(subject.path) do
-            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
-            expect(subject).to be_valid
-          end
-        end
-
-        it "should be valid given a child directory of an approved parent" do
-          subject.path = File.join TEST_BASE, 'dir1', 'subdir1'
-          with_directory(subject.path) do
-            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
-            expect(subject).to be_valid
-          end
+    context "understands option :in" do
+      before(:all) do
+        class Validatable < ValidatableA
+          validates_path_of :path, within: [File.join(TEST_BASE, 'dir1')]
         end
       end
+      after(:all) { Object.send(:remove_const, :Validatable) }
 
-      context "in an un-approved directory" do
-        before { subject.path = File.join 'un_approved', 'dir1', 'file1' }
-
-        it "should not be valid" do
-          with_directory(subject.path) do
-            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
-            expect(subject).not_to be_valid
-          end
-        end
-
-        it "should add :invalid translation to errors" do
-          with_directory(subject.path) do
-            File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
-            expect{
-              subject.valid?
-            }.to change(subject.errors, :size).by(1)
-            expect(subject.errors[:path]).to include I18n.t('errors.messages.invalid')
+      context "as a path to a directory" do
+        context "in an approved directory" do
+          it "should be valid" do
+            subject.path = File.join TEST_BASE, 'dir1'
+            with_directory(subject.path) do
+              File.open(File.join(subject.path,'file1'), 'w') { |f| f.puts "file contents" }
+              expect(subject).to be_valid
+            end
           end
         end
       end

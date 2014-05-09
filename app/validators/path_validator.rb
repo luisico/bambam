@@ -6,9 +6,8 @@ module ActiveModel
       def validate_each(record, attr_name, value)
         value.chomp!('/')
 
-        if options[:within]
-          self.class.send(:include, Clusivity)
-          unless include?(record, value)
+        if members = options[:within]
+          unless members.any? { |m| value.starts_with?(m) }
             record.errors.add(attr_name, :invalid)
           end
         end
@@ -36,20 +35,6 @@ module ActiveModel
 
         end
 
-      end
-
-      private
-
-      def include?(record, value)
-        members = if delimiter.respond_to?(:call)
-            delimiter.call(record)
-          elsif delimiter.respond_to?(:to_sym)
-            record.send(delimiter)
-          else
-            delimiter
-          end
-
-        members.any? { |m| value.starts_with?(m) }
       end
     end
 
