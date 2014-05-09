@@ -2,14 +2,11 @@ module ActiveModel
   module Validations
 
     class PathValidator < EachValidator
-
       def validate_each(record, attr_name, value)
         value.chomp!('/')
 
-        if members = options[:within]
-          unless members.any? { |m| value.starts_with?(m) }
-            record.errors.add(attr_name, :invalid)
-          end
+        if allowed_paths && !value.to_s.starts_with?(*allowed_paths)
+          record.errors.add(attr_name, :inclusion)
         end
 
         unless File.exist?(value)
@@ -17,24 +14,34 @@ module ActiveModel
         end
 
         if File.file?(value)
-
-          if options[:allow_empty] != true && File.zero?(value)
+          if !allow_empty? && File.zero?(value)
             record.errors.add(attr_name, :empty)
           end
 
         elsif File.directory?(value)
-
-          if options[:allow_directory] == false
+          if !allow_directory?
             record.errors.add(attr_name, :directory)
             return
           end
 
-          if options[:allow_empty] != true && Dir["#{value}/*"].empty?
+          if !allow_empty? && Dir["#{value}/*"].empty?
             record.errors.add(attr_name, :empty)
           end
-
         end
+      end
 
+      private
+
+      def allow_empty?
+        options.include?(:allow_empty) ? options[:allow_empty] : false
+      end
+
+      def allow_directory?
+        options.include?(:allow_directory) ? options[:allow_directory] : true
+      end
+
+      def allowed_paths
+        options[:within] || options[:in]
       end
     end
 
