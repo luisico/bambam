@@ -11,6 +11,7 @@ module ActiveModel
 
         unless File.exist?(value)
           record.errors.add(attr_name, :exist)
+          return
         end
 
         if File.file?(value)
@@ -27,6 +28,9 @@ module ActiveModel
           if !allow_empty? && Dir["#{value}/*"].empty?
             record.errors.add(attr_name, :empty)
           end
+
+        else
+          record.errors.add(attr_name, :ftype)
         end
       end
 

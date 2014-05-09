@@ -10,3 +10,4 @@ en:
     messages:
       exist: must exist in filesystem
       directory: cannot be a directory
+      ftype: must be a file or directory

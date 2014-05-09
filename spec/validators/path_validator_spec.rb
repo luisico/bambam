@@ -77,6 +77,26 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
+    context "only allows files and directories" do
+      before do
+        subject.path = File.join TEST_BASE, 'weird-ftype'
+        expect(File).to receive(:file?).and_return(false)
+        expect(File).to receive(:directory?).and_return(false)
+        expect(File).to receive(:exist?).and_return(true)
+      end
+
+      it "should not be valid" do
+        expect(subject).not_to be_valid
+      end
+
+      it "should add :exist translation to errors" do
+        expect{
+          subject.valid?
+        }.to change(subject.errors, :size)
+        expect(subject.errors[:path]).to include I18n.t('errors.messages.ftype')
+      end
+    end
+
     context "options" do
       it ":allow_empty defaults to 'false'" do
         validator = subject._validators[:path].first
