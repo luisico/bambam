@@ -46,6 +46,13 @@ describe ActiveModel::Validations::PathValidator do
     end
     after(:all) { Object.send(:remove_const, :Validatable) }
 
+    it "removes redirection from pathname" do
+      subject.path = File.join TEST_BASE, 'dir1', '..'
+      expect{
+        subject.valid?
+      }.to change(subject, :path).to(TEST_BASE)
+    end
+
     it "should remove trailing slash from path before validation" do
       subject.path = TEST_BASE + '/'
       expect{
