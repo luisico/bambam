@@ -25,7 +25,7 @@ module ActiveModel
             return
           end
 
-          if !allow_empty? && Dir["#{value}/*"].empty?
+          if !allow_empty? && Dir[File.join value, '*'].empty?
             record.errors.add(attr_name, :empty)
           end
 
