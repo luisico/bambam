@@ -23,7 +23,7 @@ def with_directory(path)
   dirname.mkpath
   yield if block_given?
 ensure
-  dirname.rmtree
+  dirname.cleanpath.rmtree
 end
 
 describe ActiveModel::Validations::PathValidator do
@@ -292,6 +292,23 @@ describe ActiveModel::Validations::PathValidator do
 
       it "should add :invalid translation to errors" do
         with_file(subject.path) do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.inclusion')
+        end
+      end
+    end
+
+    context "in an un-approved directory that initially matches approved path" do
+      before { subject.path = File.join TEST_BASE, 'dir1', '..', 'dir3' }
+
+      it "should not be valid" do
+        with_directory(subject.path) { expect(subject).not_to be_valid }
+      end
+
+      it "should add :invalid translation to errors" do
+        with_directory(subject.path) do
           expect{
             subject.valid?
           }.to change(subject.errors, :size).by(1)

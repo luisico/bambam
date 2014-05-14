@@ -8,6 +8,7 @@ module ActiveModel
 
         if allowed_paths && !value.to_s.starts_with?(*allowed_paths)
           record.errors.add(attr_name, :inclusion)
+          return
         end
 
         unless File.exist?(value)
