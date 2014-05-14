@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-TEST_BASE = File.join 'tmp', 'tests'
+TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
