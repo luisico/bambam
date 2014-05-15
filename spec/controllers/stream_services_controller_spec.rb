@@ -13,6 +13,7 @@ describe StreamServicesController do
 
         it "should respond not found when file is not found" do
           track = FactoryGirl.create(:track)
+          File.unlink track.path
           get :show, id: track
           expect(response).to be_not_found
         end
@@ -108,8 +109,6 @@ describe StreamServicesController do
               expect(response).to be_forbidden, "#{@track.path} . #{format}"
             end
           end
-
-
         end
 
         context "HEAD" do
