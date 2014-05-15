@@ -46,6 +46,23 @@ describe ActiveModel::Validations::PathValidator do
     end
     after(:all) { Object.send(:remove_const, :Validatable) }
 
+    [nil, ''].each do |blank_value|
+      context "does not allow #{blank_value.inspect} values" do
+        before { subject.path = blank_value }
+
+        it "should not be valid" do
+          expect(subject).not_to be_valid
+        end
+
+        it "should add :exist translation to errors" do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.blank')
+        end
+      end
+    end
+
     it "removes redirection from pathname" do
       [
         ['..',                        TEST_BASE],

@@ -3,6 +3,11 @@ module ActiveModel
 
     class PathValidator < EachValidator
       def validate_each(record, attr_name, value)
+        if value.blank?
+          record.errors.add(attr_name, :blank)
+          return
+        end
+
         #verify the true path and remove any trailing slashes
         value.replace Pathname.new(value).cleanpath.to_s
 
