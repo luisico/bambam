@@ -1,6 +1,13 @@
 FactoryGirl.define do
   factory :track do
-    sequence(:name) {|n| "track#{n}"}
-    sequence(:path) {|n| File.join "", "zenodotus", "track#{n}"}
+    sequence(:name) {|n| "track#{n}" }
+    sequence(:path) {|n| File.join("tmp", "tracks", "track#{n}") }
+
+    after(:build) do |track|
+      unless File.exist?(track.path)
+        Pathname.new(track.path).dirname.mkpath
+        File.open(track.path, 'w'){|f| f.puts track.name}
+      end
+    end
   end
 end
