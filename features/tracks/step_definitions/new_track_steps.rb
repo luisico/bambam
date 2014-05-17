@@ -1,7 +1,7 @@
 ### Methods
 
 def build_track
-  @track ||= FactoryGirl.attributes_for(:track)
+  @track ||= FactoryGirl.attributes_for(:test_track)
 end
 
 def build_track_with_path

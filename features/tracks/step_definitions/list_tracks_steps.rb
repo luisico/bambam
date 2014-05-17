@@ -4,9 +4,9 @@
 
 Given /^there (is|are) (\d+|a|an) tracks? in the system$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  
+
   expect {
-    FactoryGirl.create_list(:track, n)
+    FactoryGirl.create_list(:test_track, n)
   }.to change(Track, :count).by(n)
   @track = Track.last
 end

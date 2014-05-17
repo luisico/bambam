@@ -28,8 +28,11 @@ Then /^I should be able to edit the track name$/ do
 end
 
 Then /^I should be able to edit the track path$/ do
+  path = File.join 'tmp', 'tests', 'new_track_path'
+  FileUtils.mkdir(File.join('tmp', 'tests')) if !File.exist?(File.join('tmp', 'tests'))
+  File.open(path, 'w') {|f| f.puts 'file content' }
   expect {
-    fill_in 'Full path to track', with: '/zenodontus/new_track_path'
+    fill_in 'Full path to track', with: path
     click_button 'Update'
     @track.reload
   }.to change(@track, :path)
