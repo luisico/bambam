@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TracksController do
   describe "GET 'index'" do
-    before { @tracks = FactoryGirl.create_list(:track, 3) }
+    before { @tracks = FactoryGirl.create_list(:test_track, 3) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
@@ -29,7 +29,7 @@ describe TracksController do
   end
 
   describe "GET 'show'" do
-    before { @track = FactoryGirl.create(:track) }
+    before { @track = FactoryGirl.create(:test_track) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
@@ -81,7 +81,7 @@ describe TracksController do
   end
 
   describe "GET 'edit'" do
-    before { @track = FactoryGirl.create(:track) }
+    before { @track = FactoryGirl.create(:test_track) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
@@ -109,7 +109,7 @@ describe TracksController do
 
   describe "Post 'create'" do
     before do
-      @track_attr = FactoryGirl.attributes_for(:track, path: File.join('tmp', 'mytrack'))
+      @track_attr = FactoryGirl.attributes_for(:test_track, path: File.join('tmp', 'mytrack'))
       File.open(@track_attr[:path], 'w'){|f| f.puts 'track contents'}
     end
     after { File.unlink(@track_attr[:path]) if File.exist?(@track_attr[:path]) }
@@ -163,24 +163,29 @@ describe TracksController do
   end
 
   describe "Patch 'update'" do
-    before { @track = FactoryGirl.create(:track) }
+    before { @track = FactoryGirl.create(:test_track) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
       context 'with valid parameters' do
-        before { @track_attrs = FactoryGirl.attributes_for(:track).stringify_keys }
+        before do
+          @new_track = FactoryGirl.attributes_for(:test_track)
+          path = @new_track[:path]
+          FileUtils.mkdir(File.dirname(path)) if !File.exist?(File.dirname(path))
+          File.open(path, 'w') {|f| f.puts 'file content' }
+        end
 
         it "should redirect to the updated show page" do
-          patch :update, id: @track, track: @track_attrs
+          patch :update, id: @track, track: @new_track
           expect(response).to redirect_to @track
         end
 
         it "should update the track" do
-          patch :update, id: @track, track: @track_attrs
+          patch :update, id: @track, track: @new_track
           @track.reload
           expect(assigns(:track)).to eq @track
-          expect(@track.attributes.except('id', 'created_at', 'updated_at')).to eq @track_attrs
+          expect(@track.attributes.except('id', 'created_at', 'updated_at')).to eq @new_track.stringify_keys
         end
       end
 
@@ -217,7 +222,7 @@ describe TracksController do
   end
 
   describe "Delete 'destroy'" do
-    before { @track = FactoryGirl.create(:track) }
+    before { @track = FactoryGirl.create(:test_track) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }

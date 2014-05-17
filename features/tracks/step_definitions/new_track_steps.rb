@@ -4,6 +4,13 @@ def build_track
   @track ||= FactoryGirl.attributes_for(:track)
 end
 
+def build_track_with_path
+  build_track
+  path = @track[:path]
+  FileUtils.mkdir(File.dirname(path)) if !File.exist?(File.dirname(path))
+  File.open(path, 'w') {|f| f.puts 'file content' }
+ end
+
 def fill_track_form(track=nil)
   track ||= @track
   fill_in 'Track name', with: track[:name]
@@ -25,7 +32,7 @@ end
 
 When /^I create a new track$/ do
   expect{
-    build_track
+    build_track_with_path
     fill_track_form
   }.to change(Track, :count).by(1)
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Track do
-  before { @track = FactoryGirl.build(:track) }
+  before { @track = FactoryGirl.build(:test_track) }
 
   subject { @track }
 
@@ -41,7 +41,7 @@ describe Track do
         end
 
         it "when it is not included in allowed paths" do
-          @track.path = File.join '/tmp', 'mytrack'
+          @track.path = File.join '', 'tmp', 'mytrack'
           File.open(@track.path, 'w'){|f| f.puts 'file content'}
           expect(@track).not_to be_valid
         end
