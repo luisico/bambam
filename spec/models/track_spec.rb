@@ -46,6 +46,12 @@ describe Track do
           expect(@track).not_to be_valid
         end
       end
+
+      context "env var ALLOWED_TRACK_PATHS" do
+        it "should be splitted if for paths" do
+          pending "Works, but don't know how to change ENV dynamically in rspec"
+        end
+      end
     end
   end
 end
