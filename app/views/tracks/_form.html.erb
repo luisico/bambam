@@ -17,7 +17,7 @@
   </div>
 
   <div class="field">
-    <label>Enter the full path to the track on the /zenodotus filesystem. This must begin with '/zenodotus'.</label>
+    <label>Enter the full path to the track. This must begin with '<%= ENV['ALLOWED_TRACK_PATHS'].split(':').join(' or ') %>'.</label>
     <%= f.text_field :path, size: 160, placeholder: 'Full path to track' %>
   </div>
 

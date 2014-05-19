@@ -69,6 +69,11 @@ RSpec.configure do |config|
   # Devise test helpers
   config.include Devise::TestHelpers, :type => :controller
   config.include Controller::TestHelpers, :type => :controller
+
+  # Remove file created during testing
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/tmp/tests"]) if File.exist?("#{Rails.root}/tmp/tests")
+  end
 end
 
 # Speed up tests

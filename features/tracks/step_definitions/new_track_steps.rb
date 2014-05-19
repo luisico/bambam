@@ -1,8 +1,15 @@
 ### Methods
 
 def build_track
-  @track ||= FactoryGirl.attributes_for(:track)
+  @track ||= FactoryGirl.attributes_for(:test_track)
 end
+
+def build_track_with_path
+  build_track
+  path = @track[:path]
+  FileUtils.mkdir(File.dirname(path)) if !File.exist?(File.dirname(path))
+  File.open(path, 'w') {|f| f.puts 'file content' }
+ end
 
 def fill_track_form(track=nil)
   track ||= @track
@@ -25,7 +32,7 @@ end
 
 When /^I create a new track$/ do
   expect{
-    build_track
+    build_track_with_path
     fill_track_form
   }.to change(Track, :count).by(1)
 end
@@ -56,4 +63,8 @@ end
 
 Then /^I should see a message that the track was created successfully$/ do
   expect(page).to have_content('Track was successfully created')
+end
+
+Then /^I should see instructions to use the allowed paths$/ do
+  expect(page).to have_content("This must begin with '#{ENV['ALLOWED_TRACK_PATHS'].split(':').join(' or ')}'")
 end

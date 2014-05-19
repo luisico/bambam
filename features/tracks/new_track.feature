@@ -26,3 +26,8 @@ Feature: Create a track
     When I create a track without a path
     Then the "Full path to track" field should have the error "can't be blank"
     And I should be on the new track page
+
+  Scenario: Text explaining allowed paths uses the env variable ALLOWED_TRACK_PATHS
+    Given environment variable ALLOWED_TRACK_PATHS is "/tmp/path1:/tmp/path2"
+    When I am on the new track page
+    Then I should see instructions to use the allowed paths

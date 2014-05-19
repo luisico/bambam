@@ -3,10 +3,17 @@ module ActiveModel
 
     class PathValidator < EachValidator
       def validate_each(record, attr_name, value)
-        value.chomp!('/')
+        if value.blank?
+          record.errors.add(attr_name, :blank)
+          return
+        end
+
+        #verify the true path and remove any trailing slashes
+        value.replace Pathname.new(value).cleanpath.to_s
 
         if allowed_paths && !value.to_s.starts_with?(*allowed_paths)
           record.errors.add(attr_name, :inclusion)
+          return
         end
 
         unless File.exist?(value)
@@ -25,7 +32,7 @@ module ActiveModel
             return
           end
 
-          if !allow_empty? && Dir["#{value}/*"].empty?
+          if !allow_empty? && Dir[File.join value, '*'].empty?
             record.errors.add(attr_name, :empty)
           end
 

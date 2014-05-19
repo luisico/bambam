@@ -69,5 +69,10 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+# Remove file created during cucumber tests
+at_exit do
+  FileUtils.rm_rf(File.join('tmp','tests')) if File.exist?(File.join('tmp','tests'))
+end
+
 # Speed up tests
 Rails.logger.level = 4

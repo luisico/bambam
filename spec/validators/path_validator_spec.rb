@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-TEST_BASE = File.join 'tmp', 'tests'
+TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
@@ -23,7 +23,7 @@ def with_directory(path)
   dirname.mkpath
   yield if block_given?
 ensure
-  dirname.rmtree
+  dirname.cleanpath.rmtree
 end
 
 describe ActiveModel::Validations::PathValidator do
@@ -45,6 +45,36 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
     after(:all) { Object.send(:remove_const, :Validatable) }
+
+    [nil, ''].each do |blank_value|
+      context "does not allow #{blank_value.inspect} values" do
+        before { subject.path = blank_value }
+
+        it "should not be valid" do
+          expect(subject).not_to be_valid
+        end
+
+        it "should add :exist translation to errors" do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.blank')
+        end
+      end
+    end
+
+    it "removes redirection from pathname" do
+      [
+        ['..',                        TEST_BASE],
+        [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
+        [File.join('..', '..', '..'), File.join(Rails.root)],
+      ].each do |item|
+        subject.path = File.join TEST_BASE, 'dir1', item[0]
+        expect{
+          subject.valid?
+        }.to change(subject, :path).to(item[1])
+      end
+    end
 
     it "should remove trailing slash from path before validation" do
       subject.path = TEST_BASE + '/'
@@ -285,6 +315,23 @@ describe ActiveModel::Validations::PathValidator do
 
       it "should add :invalid translation to errors" do
         with_file(subject.path) do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.inclusion')
+        end
+      end
+    end
+
+    context "in an un-approved directory that initially matches approved path" do
+      before { subject.path = File.join TEST_BASE, 'dir1', '..', 'dir3' }
+
+      it "should not be valid" do
+        with_directory(subject.path) { expect(subject).not_to be_valid }
+      end
+
+      it "should add :invalid translation to errors" do
+        with_directory(subject.path) do
           expect{
             subject.valid?
           }.to change(subject.errors, :size).by(1)

@@ -4,6 +4,10 @@
 
 ### When
 
+When /^environment variable (.*?) is "(.*?)"$/ do |name, value|
+  ENV[name] = value
+end
+
 ### Then
 
 Then /^the "(.*)" field should have the error "(.*)"$/ do |field, msg|
