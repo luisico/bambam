@@ -64,3 +64,7 @@ end
 Then /^I should see a message that the track was created successfully$/ do
   expect(page).to have_content('Track was successfully created')
 end
+
+Then /^I should see instructions to use the allowed paths$/ do
+  expect(page).to have_content("This must begin with '#{ENV['ALLOWED_TRACK_PATHS'].split(':').join(' or ')}'")
+end
