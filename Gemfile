@@ -14,9 +14,6 @@ gem 'pg', '~> 0.17.1', group: [:production, :staging]
 # Factories
 gem 'factory_girl_rails', '~> 4.4.0'
 
-# Launcher
-gem 'foreman', '~> 0.63.0'
-
 # Authentication / Authorization
 gem 'devise', '~> 3.2.3'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
@@ -68,6 +65,7 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 2.4.0'
   gem 'quiet_assets', '~> 1.0.2'
   gem 'mailcatcher', github: 'sj26/mailcatcher', ref:  '272b4fa855'
+  gem 'foreman', '~> 0.63.0'
 end
 
 group :production, :staging do
