@@ -1,7 +1,7 @@
 <%= form_for(@track) do |f| %>
   <% if @track.errors.any? %>
-    <div id="error_explanation" class="alert-box alert">
-      Please, check the highlighted <%= "error".pluralize(@track.errors.count) %> below
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@track.errors.count) %> below:</p>
     </div>
   <% end %>
 
