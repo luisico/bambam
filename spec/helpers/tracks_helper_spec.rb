@@ -97,7 +97,7 @@ describe TracksHelper do
 
   describe "#ucsc_track_line" do
     before do
-      @track = FactoryGirl.build(:test_track)
+      @track = FactoryGirl.build(:test_track, path: File.join("tmp", "tests", "mytrack"))
       allow(helper).to receive(:ucsc_url).and_return('myurl')
     end
 

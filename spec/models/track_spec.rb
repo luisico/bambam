@@ -22,10 +22,10 @@ describe Track do
     it { should validate_presence_of(:path) }
 
     context 'is validated' do
-      before { @track.path = File.join 'tmp', 'mytrack' }
+      before { @track.path = File.join 'tmp', 'mytrack.bam' }
       after { File.unlink(@track.path) if File.exist?(@track.path) }
 
-      it "should be valid when it exists" do
+      it "should be valid when it exists with allowed file extension" do
         File.open(@track.path, 'w'){|f| f.puts 'file content'}
         expect(@track).to be_valid
       end
@@ -43,6 +43,11 @@ describe Track do
         it "when it is not included in allowed paths" do
           @track.path = File.join '', 'tmp', 'mytrack'
           File.open(@track.path, 'w'){|f| f.puts 'file content'}
+          expect(@track).not_to be_valid
+        end
+
+        it "when it does not have a valid file extenstion" do
+          @track.path = File.join 'tmp', 'mytrack.ext'
           expect(@track).not_to be_valid
         end
       end
