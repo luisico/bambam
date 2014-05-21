@@ -10,11 +10,12 @@ module TracksHelper
   end
 
   def igv_url(track)
+    format = File.extname(track.path).slice(1..-1)
     url = URI::Generic.build(
       scheme: 'http', host: 'localhost', port: 60151,
       path: '/load',
       query: {
-        file: stream_services_track_url(track),
+        file: stream_services_track_url(track, format: format),
         genome: 'hg19',
         name: track.name,
         merge: true

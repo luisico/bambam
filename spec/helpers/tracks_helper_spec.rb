@@ -17,26 +17,26 @@ describe TracksHelper do
       expect(path).to eq '/load'
     end
 
-    context "query parameters include" do
-      it "file properly encoded" do
+    context "query parameter" do
+      it "file is properly encoded and includes extension" do
         query = URI(helper.igv_url(@track)).query
-        encoded = ERB::Util.url_encode stream_services_track_url(@track)
+        encoded = ERB::Util.url_encode stream_services_track_url(@track, format: 'bam')
         expect(query).to match %r{file=#{encoded}}
       end
 
-      it "name properly encoded" do
+      it "name is properly encoded" do
         query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode @track.name
         expect(query).to match /name=#{encoded}/
       end
 
-      it "genome properly encoded" do
+      it "genome is properly encoded" do
         query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode 'hg19'
         expect(query).to match /genome=#{encoded}/
       end
 
-      it "merge properly encoded" do
+      it "merge is properly encoded" do
         query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode 'true'
         expect(query).to match /merge=#{encoded}/
@@ -121,6 +121,7 @@ describe TracksHelper do
       end
 
       it "is not included when unkown" do
+        @track.path << '.unk'
         expect(helper.ucsc_track_line(@track)).not_to include 'type='
       end
     end
