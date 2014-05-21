@@ -9,7 +9,7 @@ module ActiveModel
         end
 
         #verify the true path and remove any trailing slashes
-        value.replace Pathname.new(value).cleanpath.to_s
+        value.replace Pathname.new(value).cleanpath.to_s.strip
 
         if allowed_paths && !value.to_s.starts_with?(*allowed_paths)
           record.errors.add(attr_name, :inclusion)
