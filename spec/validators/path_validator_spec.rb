@@ -83,6 +83,13 @@ describe ActiveModel::Validations::PathValidator do
       }.to change(subject, :path).to(TEST_BASE)
     end
 
+    it "should remove leading and trailing whitespace from path before validation" do
+      subject.path = ' '+ TEST_BASE + ' '
+      expect{
+        subject.valid?
+      }.to change(subject, :path).to(TEST_BASE)
+    end
+
     context "validates path exists in filesystem" do
       context "with an existing path" do
         it "should be valid" do
