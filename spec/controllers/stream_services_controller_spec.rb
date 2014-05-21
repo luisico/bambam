@@ -19,7 +19,7 @@ describe StreamServicesController do
         end
 
         it "should respond not found when file is empty" do
-          track = FactoryGirl.create(:test_track, path: 'tmp/emptytrack.ext')
+          track = FactoryGirl.create(:test_track, path: 'tmp/emptytrack.bam')
           File.open(track.path, 'wb') { |f| f.truncate(0) }
           get :show, id: track
           File.unlink(track.path) if File.exist?(track.path)
@@ -30,7 +30,7 @@ describe StreamServicesController do
 
       context "with valid record and file" do
         before(:all) do
-          @path = 'tmp/mytrack.ext'
+          @path = 'tmp/mytrack.bam'
           @text = ['word1', 'word2', 'word3', 'word4']
           File.open(@path, 'wb') { |f| f.write @text.pack('A*A*A*A*') }
         end

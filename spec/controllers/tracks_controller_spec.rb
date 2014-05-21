@@ -109,7 +109,7 @@ describe TracksController do
 
   describe "Post 'create'" do
     before do
-      @track_attr = FactoryGirl.attributes_for(:test_track, path: File.join('tmp', 'mytrack'))
+      @track_attr = FactoryGirl.attributes_for(:test_track, path: File.join('tmp', 'mytrack.bam'))
       File.open(@track_attr[:path], 'w'){|f| f.puts 'track contents'}
     end
     after { File.unlink(@track_attr[:path]) if File.exist?(@track_attr[:path]) }

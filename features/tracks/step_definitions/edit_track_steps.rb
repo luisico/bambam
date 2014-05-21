@@ -28,7 +28,7 @@ Then /^I should be able to edit the track name$/ do
 end
 
 Then /^I should be able to edit the track path$/ do
-  path = File.join 'tmp', 'tests', 'new_track_path'
+  path = File.join 'tmp', 'tests', 'new_track_path.bam'
   FileUtils.mkdir(File.join('tmp', 'tests')) if !File.exist?(File.join('tmp', 'tests'))
   File.open(path, 'w') {|f| f.puts 'file content' }
   expect {

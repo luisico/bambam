@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     factory :test_track do
       sequence(:name) {|n| "track#{n}" }
-      sequence(:path) {|n| File.join("tmp", "tests", "track#{n}") }
+      sequence(:path) {|n| File.join("tmp", "tests", "track#{n}.bam") }
     end
 
     after(:build) do |track|
