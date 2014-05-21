@@ -1,15 +1,12 @@
 class StreamServicesController < ApplicationController
   before_filter :authenticate_user!
 
+  AUX_FORMATS = ['.bai']
+
   def show
     begin
       track = Track.find(params[:id])
-      path = track.path
-      path << ".#{params[:format]}" if params[:format]
-
-      raise Errno::EACCES if params[:format] && Pathname.new(path).cleanpath.extname != ".#{params[:format]}"
-
-      raise Errno::ENOENT unless File.size?(path)
+      path = find_path_with_format(track.path, params[:format])
 
       if request.head?
         response.header["Content-Length"] = File.size(path)
@@ -54,5 +51,26 @@ class StreamServicesController < ApplicationController
     opts.merge!(status: 206)
 
     send_data IO.binread(path, length, bytes.begin), opts
+  end
+
+  def find_path_with_format(path, format=nil)
+    unless format.blank?
+      format = ".#{format}"
+      altpath = path.sub(/#{File.extname(path)}$/, format)
+      unless File.extname(path) == format
+        raise Errno::EACCES unless AUX_FORMATS.include?(format)
+        path = path + format
+      end
+
+      begin
+        path = find_path_with_format(path)
+      rescue Errno::ENOENT
+        path = find_path_with_format(altpath)
+      end
+    end
+
+    raise Errno::ENOENT unless File.size?(path)
+
+    path
   end
 end

@@ -5,7 +5,7 @@ describe StreamServicesController do
     context "as a sign_in user" do
       before { stub_sign_in }
 
-      context "with invalid record" do
+      context "with invalid record or file" do
         it "should respond not found when record is not found" do
           get :show, id: 1
           expect(response).to be_not_found
@@ -16,6 +16,13 @@ describe StreamServicesController do
           File.unlink track.path
           get :show, id: track
           expect(response).to be_not_found
+        end
+
+        it "should respond forbidden when the format is non-standard" do
+          track = FactoryGirl.create(:test_track)
+          File.unlink track.path
+          get :show, id: track, format: 'non'
+          expect(response).to be_forbidden
         end
 
         it "should respond not found when file is empty" do
@@ -48,67 +55,6 @@ describe StreamServicesController do
             # 'Host' => 'localhost:3000'
           }
           @request.headers.merge! headers
-        end
-
-        context "and extension format" do
-          before do
-            @ext = 'ext2'
-            @extpath = "#{@path}.#{@ext}"
-            File.unlink(@extpath) if File.exist?(@extpath)
-          end
-
-          after {File.unlink(@extpath) if File.exist?(@extpath) }
-
-          it "should return file if present" do
-            File.open(@extpath, 'wb') { |f| f.write ['extension'].pack('A*') }
-            get :show, id: @track, format: @ext
-
-            expect(response.status).to eq 200
-          end
-
-          it "should return not found if file is empty" do
-            File.open(@extpath, 'wb') { |f| f.truncate(0) }
-            get :show, id: @track, format: @ext
-            expect(response.status).to eq 404
-          end
-
-          it "should return not found if file is not present" do
-            get :show, id: @track, format: @ext
-            expect(response.status).to eq 404
-          end
-
-          it "should return the file if format is nil" do
-            get :show, id: @track, format: nil
-            expect(response.status).to eq 200
-          end
-
-          it "should respond forbidden when format is out of scope" do
-            formats = [
-              '',
-              '/../Gemfile', '../Gemfile', './Gemfile', '/Gemfile',
-              '.%2FGemfile'
-            ]
-
-            # For a file
-            formats.each do |format|
-              get :show, id: @track, format: format
-              expect(response).to be_forbidden, "#{@track.path} . #{format}"
-            end
-
-            # For a directory
-            @track.update(path: 'tmp')
-            formats.each do |format|
-              get :show, id: @track, format: format
-              expect(response).to be_forbidden, "#{@track.path} . #{format}"
-            end
-
-            # For a directory with trailing slash
-            @track.update(path: 'tmp/')
-            formats.each do |format|
-              get :show, id: @track, format: format
-              expect(response).to be_forbidden, "#{@track.path} . #{format}"
-            end
-          end
         end
 
         context "HEAD" do
@@ -210,6 +156,84 @@ describe StreamServicesController do
         get :show, id: 1
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
+
+  describe "#find_path_with_format" do
+    before(:all) do
+      @track = FactoryGirl.create(:test_track)
+      @path = @track.path
+    end
+
+    after(:all) do
+      File.unlink(@path) if File.exist?(@path)
+    end
+
+    context "without format" do
+      it "should point to the file if it exists" do
+        path = controller.send(:find_path_with_format, @path, '')
+        expect(path).to eq @path
+      end
+
+      it "should raise 'not found'error if file does not exists" do
+        expect {
+          controller.send(:find_path_with_format, '/tmp/missing_file.bam', '')
+        }.to raise_error Errno::ENOENT
+      end
+    end
+
+    context "with regular format" do
+      it "should point to the file if it exists" do
+        path = controller.send(:find_path_with_format, @path, 'bam')
+        expect(path).to eq @path
+      end
+
+      it "should raise 'not found' error if file does not exists" do
+        expect {
+          controller.send(:find_path_with_format, '/tmp/missing_file.bam', 'bam')
+        }.to raise_error Errno::ENOENT
+      end
+    end
+
+    context "with alternate format" do
+      it "should point to the auxiliary file if present with a second extension" do
+        auxpath = @path + '.bai'
+        File.open(auxpath, 'w') {|f| f.puts 'content'}
+        path = controller.send(:find_path_with_format, @path, 'bai')
+        expect(path).to eq auxpath
+        File.unlink(auxpath) if File.exist?(auxpath)
+      end
+
+      it "should point to the auxiliary file if present with an alternate extension" do
+        auxpath = @path.sub('.bam', '.bai')
+        File.open(auxpath, 'w') {|f| f.puts 'content'}
+        path = controller.send(:find_path_with_format, @path, 'bai')
+        expect(path).to eq auxpath
+        File.unlink(auxpath) if File.exist?(auxpath)
+      end
+
+      it "should raise 'not found' error when auxiliary file does not exist" do
+        expect {
+          controller.send(:find_path_with_format, @path, 'bai')
+        }.to raise_error Errno::ENOENT
+      end
+    end
+
+    context "acceptable auxiliary files" do
+      it "should allow bai extension" do
+        auxpath = @path + '.bai'
+        File.open(auxpath, 'w') {|f| f.puts 'content'}
+        expect {
+          controller.send(:find_path_with_format, @path, 'bai')
+        }.not_to raise_error
+        File.unlink(auxpath) if File.exist?(auxpath)
+      end
+
+      it "should raise 'permission denied' when format is out of scope" do
+        expect {
+          controller.send(:find_path_with_format, @path, 'non')
+        }.to raise_error Errno::EACCES
       end
     end
   end
