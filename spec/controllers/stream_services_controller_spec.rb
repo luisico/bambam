@@ -221,13 +221,15 @@ describe StreamServicesController do
     end
 
     context "acceptable auxiliary files" do
-      it "should allow bai extension" do
-        auxpath = @path + '.bai'
-        File.open(auxpath, 'w') {|f| f.puts 'content'}
-        expect {
-          controller.send(:find_path_with_format, @path, 'bai')
-        }.not_to raise_error
-        File.unlink(auxpath) if File.exist?(auxpath)
+      %w(bai bam.bai).each do |format|
+        it "should allow #{format} extension" do
+          auxpath = @path + '.bai'
+          File.open(auxpath, 'w') {|f| f.puts 'content'}
+          expect {
+            controller.send(:find_path_with_format, @path, format)
+          }.not_to raise_error
+          File.unlink(auxpath) if File.exist?(auxpath)
+        end
       end
 
       it "should raise 'permission denied' when format is out of scope" do

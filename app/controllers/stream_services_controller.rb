@@ -1,7 +1,7 @@
 class StreamServicesController < ApplicationController
   before_filter :authenticate_user!
 
-  AUX_FORMATS = ['.bai']
+  AUX_FORMATS = %w(.bai .bam.bai)
 
   def show
     begin
@@ -56,16 +56,17 @@ class StreamServicesController < ApplicationController
   def find_path_with_format(path, format=nil)
     unless format.blank?
       format = ".#{format}"
-      altpath = path.sub(/#{File.extname(path)}$/, format)
+      altpath1 = path.sub(/#{File.extname(path)}$/, format)
+      altpath2 = path + format
+
       unless File.extname(path) == format
         raise Errno::EACCES unless AUX_FORMATS.include?(format)
-        path = path + format
       end
 
       begin
-        path = find_path_with_format(path)
+        path = find_path_with_format(altpath1)
       rescue Errno::ENOENT
-        path = find_path_with_format(altpath)
+        path = find_path_with_format(altpath2)
       end
     end
 
