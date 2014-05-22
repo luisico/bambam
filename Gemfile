@@ -17,7 +17,7 @@ gem 'factory_girl_rails', '~> 4.4.0'
 # Authentication / Authorization
 gem 'devise', '~> 3.2.3'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
-gem 'rolify', '~> 3.4.0'
+gem 'rolify', github: 'EppO/rolify', ref: 'befc8db'
 gem 'cancancan', '~> 1.7'
 
 # Assets
