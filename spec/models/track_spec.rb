@@ -19,7 +19,6 @@ describe Track do
 
   describe "path" do
     it { should respond_to :path }
-    it { should validate_presence_of(:path) }
 
     context 'is validated' do
       before { @track.path = File.join 'tmp', 'mytrack.bam' }
