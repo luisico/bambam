@@ -7,23 +7,21 @@
           <h3 class="right"><small> created <%= local_time_ago(@track.created_at) %>; updated <%= local_time_ago(@track.updated_at) %></small></h3>
         </div>
       </div>
-      <h5>Path:</h5>
-      <ul class="inline-list">
-        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i></li>
+      <h5><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i> Path:</h5>
+      <ul class="no-bullet">
         <li id="track_path"><%= @track.path %></li>
         <% if Pathname.new(@track.path).extname == ".bam" %>
-          <li><%= link_to "Download bam file", stream_services_track_path(@track) %>
-          <li><%= link_to "Download bai file", stream_services_track_path(@track, format: 'bai') %>
+          <li><%= link_to "download bam file", stream_services_track_path(@track) %>
+          <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai') %>
         <% elsif Pathname.new(@track.path).extname == ".bw" %>
-          <li><%= link_to "Download bw file", stream_services_track_path(@track) %>
+          <li><%= link_to "download bw file", stream_services_track_path(@track) %>
         <% end %>
       </ul>
+
       <%= link_to_igv(@track, 'Open in IGV') %>
-      <h5>UCSC track line:</h5>
-      <ul class="inline-list">
-        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i></li>
-        <li><span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span></li>
-      </ul>
+
+      <h5><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i>UCSC track line:</h5>
+      <p class="url_box"><span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span></p>
     </div>
 
     <%= link_to 'Edit', edit_track_path(@track), class: 'button tiny radius' %>

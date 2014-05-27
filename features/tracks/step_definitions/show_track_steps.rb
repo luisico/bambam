@@ -22,7 +22,7 @@ When /^I am on the track page$/ do
 end
 
 When /^I click on the download (bam|bai|bw) track link$/ do |type|
-  click_link "Download #{type} file"
+  click_link "download #{type} file"
 end
 
 When /^I click on the "(.*?)" link$/ do |text|
@@ -66,7 +66,7 @@ Then /^I should see a text with the track line for UCSC$/ do
 end
 
 Then /^I should see a link to download a (bam|bw) file$/ do |type|
-  expect(page).to have_link "Download #{type} file"
+  expect(page).to have_link "download #{type} file"
 end
 
 Then /^I should( not)? see a "(.*?)" link$/ do |negate, text|
