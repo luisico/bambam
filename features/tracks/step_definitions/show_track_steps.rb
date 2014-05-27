@@ -78,9 +78,9 @@ Then /^I should( not)? see a "(.*?)" link$/ do |negate, index|
 end
 
 Then /^a file should download$/ do
-   expect(page.response_headers['Content-Type']).to eq "text/plain"
+   expect(page.response_headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@track.path)}\""
 end
 
 Then /^an index file should download$/ do
-  expect(page.response_headers['Content-Type']).to eq "text/html; charset=utf-8"
+  expect(page.response_headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@track.path)}\""
 end
