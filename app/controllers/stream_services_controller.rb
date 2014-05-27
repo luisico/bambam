@@ -12,7 +12,7 @@ class StreamServicesController < ApplicationController
         response.header["Content-Length"] = File.size(path)
         render nothing: true, status: :ok
       else
-        opts = {filename: File.basename(path), disposition: 'inline', type: 'text/plain'}
+        opts = {filename: File.basename(path), disposition: 'attachment', type: 'text/plain'}
         if request.headers["HTTP_RANGE"]
           respond_with_range(path, opts)
         else

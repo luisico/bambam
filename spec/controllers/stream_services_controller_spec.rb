@@ -87,7 +87,7 @@ describe StreamServicesController do
               get :show, id: @track
               expect(response.headers['Content-Type']).to match 'text/plain'
               expect(response.headers['Content-Length']).to be_nil
-              expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@path)}\""
+              expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"#{File.basename(@path)}\""
               expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
             end
 
@@ -109,7 +109,7 @@ describe StreamServicesController do
               get :show, id: @track
               expect(response.headers['Content-Type']).to match 'text/plain'
               expect(response.headers['Content-Length']).to eq 5
-              expect(response.headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@path)}\""
+              expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"#{File.basename(@path)}\""
               expect(response.headers['Accept-Ranges']).to eq 'bytes'
               expect(response.headers['Content-Range']).to eq "bytes 0-4/20"
               expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
