@@ -2,11 +2,11 @@
 
 ### Given
 
-Given /^there is a (\.bam|\.bw) track in the system$/ do |type|
-  if type == '.bam'
+Given /^there is a (bam|bw) track in the system$/ do |type|
+  if type == 'bam'
     @track = FactoryGirl.create(:test_track)
-    File.open(Pathname.new(@track.path).sub_ext('bai'), 'w') {|f| f.puts '.bam file index'}
-  elsif type== '.bw'
+    File.open(Pathname.new(@track.path).sub_ext('.bai'), 'wb') {|f| f.write ['word1'].pack('A*')}
+  elsif type== 'bw'
     @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"))
   end
 end
@@ -21,12 +21,12 @@ When /^I am on the track page$/ do
   visit track_path(@track)
 end
 
-When /^I click on the download (\.bam|\.bw) track link$/ do |type|
+When /^I click on the download (bam|bai|bw) track link$/ do |type|
   click_link "Download #{type} file"
 end
 
-When /^I click on the "(.*?)" link$/ do |index|
-  click_link index
+When /^I click on the "(.*?)" link$/ do |text|
+  click_link text
 end
 
 ### Then
@@ -65,22 +65,19 @@ Then /^I should see a text with the track line for UCSC$/ do
   expect(page).to have_content "bigDataUrl="
 end
 
-Then /^I should see a link to download a (\.bam|\.bw) file$/ do |type|
+Then /^I should see a link to download a (bam|bw) file$/ do |type|
   expect(page).to have_link "Download #{type} file"
 end
 
-Then /^I should( not)? see a "(.*?)" link$/ do |negate, index|
+Then /^I should( not)? see a "(.*?)" link$/ do |negate, text|
   if negate
-    expect(page).not_to have_link index
+    expect(page).not_to have_link text
   else
-    expect(page).to have_link index
+    expect(page).to have_link text
   end
 end
 
-Then /^a file should download$/ do
-   expect(page.response_headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@track.path)}\""
-end
-
-Then /^an index file should download$/ do
-  expect(page.response_headers['Content-Disposition']).to eq "inline; filename=\"#{File.basename(@track.path)}\""
+Then /^a (bam|bai|bw) file should download$/ do |ext|
+  filename = Pathname.new(@track.path).sub_ext(".#{ext}").basename.to_s
+  expect(page.response_headers['Content-Disposition']).to eq "attachment; filename=\"#{filename}\""
 end

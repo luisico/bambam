@@ -12,10 +12,10 @@
         <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i></li>
         <li id="track_path"><%= @track.path %></li>
         <% if Pathname.new(@track.path).extname == ".bam" %>
-          <li><%= link_to "Download .bam file", stream_services_track_path(@track, format: 'bam') %>
-          <li><%= link_to "Download .bai file", stream_services_track_path(@track, format: 'bai') %>
+          <li><%= link_to "Download bam file", stream_services_track_path(@track) %>
+          <li><%= link_to "Download bai file", stream_services_track_path(@track, format: 'bai') %>
         <% elsif Pathname.new(@track.path).extname == ".bw" %>
-          <li><%= link_to "Download .bw file", stream_services_track_path(@track, format: 'bw') %>
+          <li><%= link_to "Download bw file", stream_services_track_path(@track) %>
         <% end %>
       </ul>
       <%= link_to_igv(@track, 'Open in IGV') %>
