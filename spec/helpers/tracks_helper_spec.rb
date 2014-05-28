@@ -127,7 +127,7 @@ describe TracksHelper do
 
     context "track name" do
       it "is included when known" do
-        expect(helper.ucsc_track_line(@track)).to match /name=#{@track.name}/
+        expect(helper.ucsc_track_line(@track)).to match /name="#{@track.name}"/
       end
 
       it "is not included when empty" do

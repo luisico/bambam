@@ -28,7 +28,7 @@ module TracksHelper
 
     track_line = {
       'type'       => types[Pathname.new(track.path).extname],
-      'name'       => track.name,
+      'name'       => track.name.blank? ? nil : "\"#{track.name}\"",
       'bigDataUrl' => ucsc_url(track)
     }
 

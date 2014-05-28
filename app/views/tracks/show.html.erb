@@ -22,17 +22,18 @@
       </div>
 
       <div>
-        <h5>Local path</h5>
+        <h5>Server path</h5>
         <p class="clipboard-box">
-          <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="clip_track_path"></i>
+          <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_path"></i>
           <span id="clip_track_path"><%= @track.path %></span>
         </p>
       </div>
 
       <div>
         <h5>UCSC track line</h5>
+        <h5><small>Copy and paste the track line below into the UCSC Genome Browser</h5>
         <p class="clipboard-box">
-          <i class="fi-clipboard copy-to-clipboard" data-clipboard-id="clip_track_ucsc_line"></i>
+          <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
           <span id="clip_track_ucsc_line"><%= ucsc_track_line(@track) %></span>
         </p>
       </div>
