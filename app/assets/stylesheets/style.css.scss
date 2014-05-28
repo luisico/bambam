@@ -1,11 +1,6 @@
-.pricing-table {
-  .copy-to-clipboard {
-    font-size: rem-calc(20);
-    margin: rem-calc(0 10);
-  }
-  .button {
-    margin: 0;
-  }
+.copy-to-clipboard {
+  font-size: rem-calc(20);
+  margin: rem-calc(0 10 0 0);
 }
 
 .service.button {
@@ -15,4 +10,16 @@
     vertical-align: middle;
     margin-right: rem-calc(5);
   }
+}
+
+.url_box {
+  border-style: dashed;
+  border-width: thin;
+  border-color: $primary-color;
+  background-color:  scale-color($info-color, $lightness: 80%);
+  padding: rem-calc(5);
+}
+
+.fi-download:before {
+  margin-right: rem-calc(5);
 }

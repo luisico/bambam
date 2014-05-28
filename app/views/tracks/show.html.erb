@@ -7,14 +7,15 @@
           <h3 class="right"><small> created <%= local_time_ago(@track.created_at) %>; updated <%= local_time_ago(@track.updated_at) %></small></h3>
         </div>
       </div>
-      <h5><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i> Path:</h5>
-      <ul class="no-bullet">
-        <li id="track_path"><%= @track.path %></li>
+
+      <h5><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i>Path:</h5>
+      <span id="track_path"><%= @track.path %></span>
+      <ul class="inline-list">
         <% if Pathname.new(@track.path).extname == ".bam" %>
-          <li><%= link_to "download bam file", stream_services_track_path(@track) %>
-          <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai') %>
+          <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download' %></li>
+          <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download' %></li>
         <% elsif Pathname.new(@track.path).extname == ".bw" %>
-          <li><%= link_to "download bw file", stream_services_track_path(@track) %>
+          <li><%= link_to "download bw file", stream_services_track_path(@track), class: 'fi-download' %></li>
         <% end %>
       </ul>
 
