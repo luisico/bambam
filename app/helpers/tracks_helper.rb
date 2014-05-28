@@ -23,21 +23,23 @@ module TracksHelper
     ).to_s
   end
 
-  def ucsc_track_line(track, user=nil)
+  def ucsc_track_line(track)
     types = {'.bam' => 'bam', '.bw' => 'bigWig'}
 
     track_line = {
       'type'       => types[Pathname.new(track.path).extname],
       'name'       => track.name,
-      'bigDataUrl' => ucsc_url(track, user)
+      'bigDataUrl' => ucsc_url(track)
     }
 
     'track ' << track_line.map{|k,v| "#{k}=#{v}" unless v.blank?}.join(' ')
   end
 
-  def ucsc_url(track, user=nil)
+  def ucsc_url(track)
     url = URI(stream_services_track_url(track))
-    url.userinfo = "#{ERB::Util.url_encode(user.email)}:#{user.password}" if user
+    if ENV['UCSC_USER_EMAIL'] && ENV['UCSC_USER_PASSWORD']
+      url.userinfo = "#{ERB::Util.url_encode(ENV['UCSC_USER_EMAIL'])}:#{ENV['UCSC_USER_PASSWORD']}"
+    end
     url.to_s
   end
 end
