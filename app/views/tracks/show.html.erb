@@ -1,23 +1,42 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <div class="row">
-        <div class="small-12 columns">
-          <h3 class="left"><%= @track.name %></h3>
-          <h3 class="right"><small> created <%= local_time_ago(@track.created_at) %>; updated <%= local_time_ago(@track.updated_at) %></small></h3>
-        </div>
+      <div class="clearfix">
+        <h3 class="left"><%= @track.name %></h3>
+        <h4 class="right"><small>
+          created: <%= local_time_ago(@track.created_at) %><br/>
+          updated: <%= local_time_ago(@track.updated_at) %></small>
+        </h4>
       </div>
-      <h5>Path:</h5>
-      <ul class="inline-list">
-        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_path"></i></li>
-        <li id="track_path"><%= @track.path %></li>
-      </ul>
-      <%= link_to_igv(@track, 'Open in IGV') %>
-      <h5>UCSC track line:</h5>
-      <ul class="inline-list">
-        <li><i class="fi-clipboard copy-to-clipboard" data-clipboard-id="track_ucsc_line"></i></li>
-        <li><span id="track_ucsc_line"><%= ucsc_track_line(@track) %></span></li>
-      </ul>
+
+      <div>
+        <ul class="inline-list">
+          <li><%= link_to_igv(@track, 'Open in IGV') %></li>
+          <% if Pathname.new(@track.path).extname == ".bam" %>
+            <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download' %></li>
+            <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download' %></li>
+            <% elsif Pathname.new(@track.path).extname == ".bw" %>
+            <li><%= link_to "download bw file", stream_services_track_path(@track), class: 'fi-download' %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Server path</h5>
+        <p class="clipboard-box">
+          <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_path"></i>
+          <span id="clip_track_path"><%= @track.path %></span>
+        </p>
+      </div>
+
+      <div>
+        <h5>UCSC track line</h5>
+        <h5><small>Copy and paste the track line below into the UCSC Genome Browser</h5>
+        <p class="clipboard-box">
+          <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
+          <span id="clip_track_ucsc_line"><%= ucsc_track_line(@track) %></span>
+        </p>
+      </div>
     </div>
 
     <%= link_to 'Edit', edit_track_path(@track), class: 'button tiny radius' %>

@@ -1,14 +1,16 @@
 <div class="row">
   <div class="small-12 medium-6 medium-centered columns">
     <%= link_to 'New Track', new_track_path, class: "button tiny radius" %>
-    <ul class="pricing-table">
-      <li class="title">Tracks</li>
-      <% @tracks.each do |track| %>
-        <li class="bullet-item">
-          <%= link_to_igv(track) %>
-          <%= link_to track.name, track %>
-        </li>
-      <% end %>
-    </ul>
+    <div class="panel tracks-list">
+      <h3>Tracks</h3>
+      <ul class="no-bullet">
+        <% @tracks.each do |track| %>
+          <li>
+            <%= link_to_igv(track) %>
+            <%= link_to track.name, track, class: "track" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>

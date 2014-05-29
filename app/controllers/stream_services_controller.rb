@@ -12,9 +12,9 @@ class StreamServicesController < ApplicationController
         response.header["Content-Length"] = File.size(path)
         render nothing: true, status: :ok
       else
-        opts = {filename: path, disposition: 'inline', type: 'text/plain'}
+        opts = {filename: File.basename(path), disposition: 'attachment', type: 'text/plain'}
         if request.headers["HTTP_RANGE"]
-          respond_with_range(opts)
+          respond_with_range(path, opts)
         else
           send_file path, opts
         end
@@ -33,8 +33,7 @@ class StreamServicesController < ApplicationController
 
   # Send requested range
   # Only first range is proccessed
-  def respond_with_range(opts)
-    path = opts[:filename]
+  def respond_with_range(path, opts)
     size = File.size(path)
 
     ranges = Rack::Utils.byte_ranges(request.headers, size)

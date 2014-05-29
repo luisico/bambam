@@ -27,7 +27,7 @@ Then /^I should not find the page$/ do
 end
 
 Then /^I should see button to copy the (.*) to the clipboard$/ do |text|
-  clipboard_id = text.split(/\s+/).join('_')
+  clipboard_id = 'clip_'+ text.split(/\s+/).join('_')
   expect(page).to have_selector("[data-clipboard-id=#{clipboard_id}]")
   expect(page).to have_selector("##{clipboard_id}")
 end

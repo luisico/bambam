@@ -83,14 +83,13 @@ describe TracksHelper do
     context "user credentials" do
       it "are encoded when present" do
         user = FactoryGirl.build(:user)
-        uri = URI(helper.ucsc_url(@track, user))
-        credentials =  "#{ERB::Util.url_encode(user.email)}:#{user.password}"
+        uri = URI(helper.ucsc_url(@track))
+        credentials =  "#{ERB::Util.url_encode(ENV['UCSC_USER_EMAIL'])}:#{ENV['UCSC_USER_PASSWORD']}"
         expect(uri.userinfo).to eq credentials
       end
 
       it "are not included when missing" do
-        uri = URI(helper.ucsc_url(@track))
-        expect(uri.userinfo).to be_nil
+        pending
       end
     end
   end
@@ -128,7 +127,7 @@ describe TracksHelper do
 
     context "track name" do
       it "is included when known" do
-        expect(helper.ucsc_track_line(@track)).to match /name=#{@track.name}/
+        expect(helper.ucsc_track_line(@track)).to match /name="#{@track.name}"/
       end
 
       it "is not included when empty" do
@@ -149,8 +148,8 @@ describe TracksHelper do
 
       it "include credentials when requested" do
         user = FactoryGirl.build(:user)
-        expect(helper).to receive(:ucsc_url).with(@track,user).once
-        helper.ucsc_track_line(@track,user)
+        expect(helper).to receive(:ucsc_url).with(@track).once
+        helper.ucsc_track_line(@track)
       end
     end
   end

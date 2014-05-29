@@ -1,11 +1,16 @@
-.pricing-table {
-  .copy-to-clipboard {
-    font-size: rem-calc(20);
-    margin: rem-calc(0 10);
-  }
-  .button {
-    margin: 0;
-  }
+.copy-to-clipboard {
+  font-size: rem-calc(20);
+  margin: rem-calc(0 10 0 0);
+  color: $primary-color;
+}
+
+.clipboard-box {
+  border-style: dashed;
+  border-width: thin;
+  border-color: $primary-color;
+  background-color:  scale-color($info-color, $lightness: 80%);
+  padding: rem-calc(5);
+  word-wrap: break-word;
 }
 
 .service.button {
@@ -15,4 +20,22 @@
     vertical-align: middle;
     margin-right: rem-calc(5);
   }
+}
+
+.fi-download:before {
+  margin-right: rem-calc(5);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.pricing-table {
+  .bullet-item {
+    background-color: rgba(255,255,255,0.8);
+  }
+  border: none;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow:    0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+  box-shadow:         0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 }
