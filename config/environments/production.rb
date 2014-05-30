@@ -40,7 +40,7 @@ Bambam::Application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
@@ -66,21 +66,11 @@ Bambam::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # ActionMailer settings
-  config.action_mailer.default_url_options = {host: ENV['MAILER_DOMAIN'], protocol: 'http' }
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = {host: ENV['MAILER_URL'], protocol: 'https' }
+  config.action_mailer.delivery_method = :sendmail
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default(charset: "utf-8")
   ActionMailer::Base.default(from: ENV['MAILER_SENDER'])
-
-  config.action_mailer.smtp_settings = {
-    address:              ENV['MAILER_HOST'],
-    port:                 ENV['MAILER_PORT'],
-    domain:               ENV['MAILER_DOMAIN'],
-    user_name:            ENV['MAILER_USERNAME'],
-    password:             ENV['MAILER_PASSWORD'],
-    authentication:       :plain,
-    enable_starttls_auto: true
-  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found).
