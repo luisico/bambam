@@ -10,7 +10,7 @@
       <% @users.each do |user| %>
         <li class="bullet-item">
           <%= user.email %>
-          <% if user.invitation_accepted? == false %>
+          <% if user.invitation_accepted? == false && user.sign_in_count == 0 %>
             <i class="fi-ticket medium"></i>
           <% end %>
           <% if user.has_role? :admin %>

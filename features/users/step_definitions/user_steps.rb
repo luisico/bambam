@@ -59,15 +59,31 @@ Then /^I should be on the users page$/ do
   expect(current_path).to eq users_path
 end
 
+Then /^I should see the invitee email with invitation pending icon$/ do
+  within('li', text: @invitee[:email]) do
+   expect(page).to have_css('.fi-ticket')
+  end
+end
+
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
   User.all.each do |user|
     expect(page).to have_content user.email
     if user.has_role? :admin
-      expect(page).to have_css('.fi-crown')
+      within('li', text: user.email) do
+        expect(page).to have_css('.fi-crown')
+      end
     elsif user.has_role? :inviter
-      expect(page).to have_css('.fi-key')
+      within('li', text: user.email) do
+        expect(page).to have_css('.fi-key')
+      end
     end
+  end
+end
+
+Then /^my (admin|inviter) email should not have outstanding invite icon$/ do |role|
+  within('li', text: instance_variable_get("@#{role}").email) do
+    expect(page).not_to have_css('.fi-ticket')
   end
 end
 

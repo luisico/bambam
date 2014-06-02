@@ -162,8 +162,9 @@ describe StreamServicesController do
 
   describe "#find_path_with_format" do
     before(:all) do
-      @track = FactoryGirl.create(:test_track)
-      @path = @track.path
+      @path = File.join("tmp", "tests", "track_find_paths.bam")
+      Pathname.new(@path).dirname.mkpath
+      File.open(@path, 'w'){|f| f.puts 'track for find_paths_with_format'}
     end
 
     after(:all) do
