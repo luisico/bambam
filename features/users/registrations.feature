@@ -9,7 +9,9 @@ Feature: Sign up by invitation only
     Then I <priviledge> be able to invite a user <status> inviter priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
+    And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
+
 
     Examples:
       | role    | priviledge | status  |
