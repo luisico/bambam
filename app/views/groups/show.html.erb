@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="small-12 medium-10 medium-centered columns">
+    <div class="panel">
+      <div class="clearfix">
+        <h3 class="left"><%= @group.name %></h3>
+        <h4 class="right"><small>
+          created: <%= local_time_ago(@group.created_at) %><br/>
+          updated: <%= local_time_ago(@group.updated_at) %></small>
+        </h4>
+      </div>
+
+      <div>
+        <ul class="no-bullet">
+          <% @group.users.each do |user| %>
+          <li><%= user.email %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <%= link_to 'Edit', edit_group_path(@group), class: 'button tiny radius' %>
+    <%= link_to 'Back', groups_path, class: 'button tiny radius' %>
+    <%= link_to 'Delete', @group, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny radius [secondary alert success] right' %>
+  </div>
+</div>

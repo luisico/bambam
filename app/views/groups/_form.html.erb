@@ -1,0 +1,32 @@
+<%= form_for(@group) do |f| %>
+  <% if @group.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@group.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name, size: 60, placeholder: 'Group name' %>
+  </div>
+
+  <div class="field">
+    <%= f.hidden_field :user_id, :value => current_user.id  %>
+  </div>
+
+  <div class="field">
+    <% User.all.each do |user| %>
+      <% if user == current_user %>
+        <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+        <%= hidden_field_tag "group[user_ids][]", user.id %>
+      <% else %>
+        <%= check_box_tag "group[user_ids][]", user.id, @group.user_ids.include?(user.id), id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+  </div>
+<% end %>

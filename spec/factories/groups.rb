@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
   factory :group do
-    name "Lab1"
-    user_id 1
+    sequence(:name) {|n| "Lab#{n}"}
   end
 end

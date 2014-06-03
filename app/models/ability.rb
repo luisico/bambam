@@ -5,6 +5,8 @@ class Ability
     user ||= User.new # guest user (not logged in)
     alias_action :create, :index, :show, :to => :invite
 
+    can :manage, Group
+
     if user.has_role? :admin
       can :manage, User
       can :manage, Track
