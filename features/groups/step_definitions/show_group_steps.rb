@@ -2,7 +2,7 @@
 
 ### Given
 
-Given /^there are (\d+) members of that group$/ do |number|
+Given /^there are (\d+) additional members of that group$/ do |number|
   FactoryGirl.create_list(:user, 3, :groups => [@group])
 end
 

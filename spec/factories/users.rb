@@ -13,7 +13,5 @@ FactoryGirl.define do
       sequence(:email) {|n| "inviter#{n}@example.com"}
       after(:create) {|user| user.add_role(:inviter)}
     end
-
-    groups { [FactoryGirl.create(:group)]}
   end
 end

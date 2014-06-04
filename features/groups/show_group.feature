@@ -6,7 +6,7 @@ Feature: Show a group
   Background:
     Given I am signed in
     And there is a group in the system
-    And there are 3 members of that group
+    And there are 3 additional members of that group
 
   Scenario: User can access the group show page from the groups page
     When I am on the groups page

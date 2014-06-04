@@ -7,7 +7,7 @@ describe GroupsController do
     end
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user, :groups => [@groups.first]) }
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :index
@@ -34,7 +34,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user, :groups => [@group]) }
+      before { sign_in FactoryGirl.create(:user) }
 
       it "should be successful" do
         get :show, id: @group
@@ -86,7 +86,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before { sign_in @group.user }
 
       it "should be successful" do
         get :edit, id: @group
@@ -110,10 +110,7 @@ describe GroupsController do
   end
 
   describe "Post 'create'" do
-    before do
-      @group_attr = FactoryGirl.attributes_for(:group)
-      @another_user = FactoryGirl.create(:user)
-    end
+    before { @group_attr = FactoryGirl.attributes_for(:group) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
@@ -167,7 +164,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before { sign_in @group.user }
 
       context 'with valid parameters' do
         before do
@@ -223,7 +220,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before { sign_in @group.user }
 
       it "should redirect to group#index" do
         delete :destroy, id: @group

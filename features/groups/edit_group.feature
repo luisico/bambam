@@ -5,8 +5,8 @@ Feature: Edit group information
 
   Background:
     Given I am signed in
-    And there is a group in the system
-    And there are 3 members of that group
+    And one of my groups is in the system
+    And there are 3 additional members of that group
 
   Scenario: User can access the group edit page from the group show page
     When I am on the group page
@@ -20,4 +20,3 @@ Feature: Edit group information
   Scenario: User can change the group members
     When I visit the edit group page
     Then I should be able to edit the group members
-
