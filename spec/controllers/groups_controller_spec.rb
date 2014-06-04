@@ -218,5 +218,39 @@ describe GroupsController do
       end
     end
   end
+
+  describe "Delete 'destroy'" do
+    before { @group = FactoryGirl.create(:group) }
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should redirect to group#index" do
+        delete :destroy, id: @group
+        expect(response).to redirect_to groups_url
+      end
+
+      it "should delete the group" do
+        expect{
+          delete :destroy, id: @group
+        }.to change(Group, :count).by(-1)
+        expect(assigns(:group)).to eq @group
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        delete :destroy, id: @group
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not delete the group" do
+        expect{
+          delete :destroy, id: @group
+        }.not_to change(Group, :count)
+      end
+    end
+  end
 end
 

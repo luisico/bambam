@@ -32,6 +32,11 @@ class GroupsController < ApplicationController
     end
   end
 
+  def destroy
+    @group.destroy
+    redirect_to groups_url
+  end
+
   private
   def group_params
     params.require(:group).permit(:name, :user_id, :user_ids => [])
