@@ -85,7 +85,7 @@ describe GroupsController do
   describe "GET 'edit'" do
     before { @group = FactoryGirl.create(:group) }
 
-    context "as a signed in user" do
+    context "as a signed in user and owner of @group" do
       before { sign_in @group.user }
 
       it "should be successful" do
@@ -97,6 +97,16 @@ describe GroupsController do
       it "should return the group" do
         get :edit, id: @group
         expect(assigns(:group)).to eq @group
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be denied" do
+        get :edit, id: @group
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
       end
     end
 
@@ -163,7 +173,7 @@ describe GroupsController do
   describe "Patch 'update'" do
     before { @group = FactoryGirl.create(:group) }
 
-    context "as a signed in user" do
+    context "as a signed in user and owner of @group" do
       before { sign_in @group.user }
 
       context 'with valid parameters' do
@@ -201,6 +211,19 @@ describe GroupsController do
       end
     end
 
+    context "as a signed in user" do
+      before do
+       sign_in FactoryGirl.create(:user)
+       @new_group = FactoryGirl.attributes_for(:group)
+     end
+
+      it "should be denied" do
+        patch :update, id: @group, group: @new_group
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         patch :update, id: @group, group: {name: ''}
@@ -219,7 +242,7 @@ describe GroupsController do
   describe "Delete 'destroy'" do
     before { @group = FactoryGirl.create(:group) }
 
-    context "as a signed in user" do
+    context "as a signed in user and owner of @group" do
       before { sign_in @group.user }
 
       it "should redirect to group#index" do
@@ -232,6 +255,16 @@ describe GroupsController do
           delete :destroy, id: @group
         }.to change(Group, :count).by(-1)
         expect(assigns(:group)).to eq @group
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be denied" do
+        patch :destroy, id: @group
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
       end
     end
 
