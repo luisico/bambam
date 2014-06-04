@@ -82,6 +82,33 @@ describe GroupsController do
     end
   end
 
+  describe "GET 'edit'" do
+    before { @group = FactoryGirl.create(:group) }
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be successful" do
+        get :edit, id: @group
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it "should return the group" do
+        get :edit, id: @group
+        expect(assigns(:group)).to eq @group
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :edit, id: @group
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
+
   describe "Post 'create'" do
     before do
       @group_attr = FactoryGirl.attributes_for(:group)
@@ -132,6 +159,62 @@ describe GroupsController do
         expect{
           post :create, group: @group_attr
         }.not_to change(Group, :count)
+      end
+    end
+  end
+
+  describe "Patch 'update'" do
+    before { @group = FactoryGirl.create(:group) }
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      context 'with valid parameters' do
+        before do
+          @new_group = FactoryGirl.attributes_for(:group)
+        end
+
+        it "should redirect to the updated show page" do
+          patch :update, id: @group, group: @new_group
+          expect(response).to redirect_to @group
+        end
+
+        it "should update the group" do
+          patch :update, id: @group, group: @new_group
+          @group.reload
+          expect(assigns(:group)).to eq @group
+          expect(@group.name).to eq @new_group[:name]
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render the edit template" do
+          patch :update, id: @group, group: {name: ''}
+          expect(response).to be_success
+          expect(response).to render_template :edit
+        end
+
+        it "should not change the group's attributes" do
+          expect {
+            patch :update, id: @group, group: {name: ''}
+            @group.reload
+          }.not_to change(@group, :name)
+          expect(assigns(:group)).to eq @group
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        patch :update, id: @group, group: {name: ''}
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not change the group's attributes" do
+        expect{
+          patch :update, id: @group, group: {name: ''}
+        }.not_to change(@group, :name)
       end
     end
   end

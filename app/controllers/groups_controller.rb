@@ -13,11 +13,22 @@ class GroupsController < ApplicationController
   def new
   end
 
+  def edit
+  end
+
   def create
     if @group.save
       redirect_to @group, notice: 'Group was successfully created.'
     else
       render action: 'new'
+    end
+  end
+
+  def update
+    if @group.update(group_params)
+      redirect_to @group, notice: 'Group was successfully updated.'
+    else
+     render action: 'edit'
     end
   end
 
