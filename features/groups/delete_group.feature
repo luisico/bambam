@@ -1,4 +1,3 @@
-@now
 Feature: Delate a group
   In order to remove a group from the system
   As a user
