@@ -37,14 +37,14 @@ When /^I create a group without a name$/ do
   }.to change(Group, :count).by(0)
 end
 
-Then /^my checkbox should be disabled$/ do
-  field_labeled(User.first.email, disabled: true)
-end
-
 ### Then
 
 Then /^I should be on the new group page$/ do
   expect(page).to have_content 'New group'
+end
+
+Then /^my checkbox should be disabled$/ do
+  field_labeled(User.first.email, disabled: true)
 end
 
 Then /^I should be on the group show page$/ do
