@@ -58,3 +58,7 @@ end
 Then /^I should see my email among the list of group member emails$/ do
   expect(page).to have_content User.first.email
 end
+
+Then /^I should be the groups owner$/ do
+  expect(Group.last.user).to eq(@user)
+end

@@ -3,6 +3,10 @@
     <div class="panel">
       <h1>New group</h1>
 
+      <div class="field">
+        <%= hidden_field_tag :user_id, :value => current_user.id  %>
+      </div>
+
       <%= render 'form' %>
 
       <%= link_to 'Cancel', groups_path, class: 'button tiny radius' %>

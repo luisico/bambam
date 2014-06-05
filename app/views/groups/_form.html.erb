@@ -10,12 +10,12 @@
   </div>
 
   <div class="field">
-    <%= f.hidden_field :user_id, :value => current_user.id  %>
-  </div>
-
-  <div class="field">
     <% User.all.each do |user| %>
-      <% if user == current_user %>
+      <% if !@group.user && user == current_user %>
+        <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+        <%= hidden_field_tag "group[user_ids][]", user.id %>
+      <% elsif user == @group.user %>
         <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
         <%= hidden_field_tag "group[user_ids][]", user.id %>
