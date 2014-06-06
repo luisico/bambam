@@ -9,6 +9,7 @@ Given /^there (is|are) (\d+|a|an) groups? in the system$/ do |foo, n|
     FactoryGirl.create_list(:group, n)
   }.to change(Group, :count).by(n)
   @group = Group.last
+  @group.users << @group.user
 end
 
 ### When
