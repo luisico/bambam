@@ -33,6 +33,58 @@ describe UsersController do
     end
   end
 
+  describe "GET 'show'" do
+    context "as admin" do
+      before { sign_in @admin }
+
+      it "should be successful" do
+        get :show, id: @admin
+        expect(response).to be_success
+        expect(response).to render_template :show
+      end
+
+      it "should return the correct user" do
+        get :show, id: @admin
+        expect(assigns(:user)).to eq @admin
+      end
+
+      it "should be able to view show page of another user" do
+        get :show, id: @users.first
+        expect(assigns(:user)).to eq @users.first
+      end
+    end
+
+    context "as regular user" do
+      before { sign_in @users.first }
+
+      it "should be successful" do
+        get :show, id: @users.first
+        expect(response).to be_success
+        expect(response).to render_template :show
+      end
+
+      it "should return the correct user" do
+        get :show, id: @users.first
+        expect(assigns(:user)).to eq @users.first
+      end
+
+      it "should not be able to view show page of another user" do
+        get :show, id: @users[1]
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :show, id: @users.first
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
+
+
   describe "GET 'new'" do
     context "as regular user" do
       it "should redirect to home page" do
