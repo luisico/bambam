@@ -3,7 +3,7 @@
 ### Given
 
 Given /^one of my groups is in the system$/ do
-  @group = FactoryGirl.create(:group, user: @user)
+  @group = FactoryGirl.create(:group, owner: @user)
   @group.users << @user
 end
 

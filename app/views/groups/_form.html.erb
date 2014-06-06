@@ -11,11 +11,11 @@
 
   <div class="field">
     <% User.all.each do |user| %>
-      <% if !@group.user && user == current_user %>
+      <% if !@group.owner && user == current_user %>
         <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
         <%= hidden_field_tag "group[user_ids][]", user.id %>
-      <% elsif user == @group.user %>
+      <% elsif user == @group.owner %>
         <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
         <%= hidden_field_tag "group[user_ids][]", user.id %>

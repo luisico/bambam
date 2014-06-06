@@ -3,6 +3,6 @@
 FactoryGirl.define do
   factory :group do
     sequence(:name) {|n| "Lab#{n}"}
-    user
+    owner
   end
 end

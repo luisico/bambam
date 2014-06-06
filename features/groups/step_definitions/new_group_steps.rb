@@ -60,5 +60,5 @@ Then /^I should see my email among the list of group member emails$/ do
 end
 
 Then /^I should be the groups owner$/ do
-  expect(Group.last.user).to eq(@user)
+  expect(Group.last.owner).to eq(@user)
 end

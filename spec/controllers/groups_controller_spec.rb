@@ -86,7 +86,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user and owner of @group" do
-      before { sign_in @group.user }
+      before { sign_in @group.owner }
 
       it "should be successful" do
         get :edit, id: @group
@@ -174,7 +174,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user and owner of @group" do
-      before { sign_in @group.user }
+      before { sign_in @group.owner }
 
       context 'with valid parameters' do
         before do
@@ -243,7 +243,7 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user and owner of @group" do
-      before { sign_in @group.user }
+      before { sign_in @group.owner }
 
       it "should redirect to group#index" do
         delete :destroy, id: @group
