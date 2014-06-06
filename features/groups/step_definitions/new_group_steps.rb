@@ -8,6 +8,7 @@ def fill_group_form(group=nil)
   group ||= @group
   fill_in 'Group name', with: group[:name]
   check User.last.email
+  yield if block_given?
   click_button 'Create Group'
 end
 
@@ -37,6 +38,15 @@ When /^I create a group without a name$/ do
   }.to change(Group, :count).by(0)
 end
 
+When /^I create a group with multiple members$/ do
+  expect {
+    build_group
+    fill_group_form do
+      check User.all[-2].email
+    end
+  }.to change(Group, :count).by(1)
+end
+
 ### Then
 
 Then /^I should be on the new group page$/ do
@@ -61,4 +71,10 @@ end
 
 Then /^I should be the groups owner$/ do
   expect(Group.last.owner).to eq(@user)
+end
+
+Then /^all the group member email addresses on the list$/ do
+  expect(page).to have_content Group.last.owner.email
+  expect(page).to have_content User.last.email
+  expect(page).to have_content User.all[-2].email
 end

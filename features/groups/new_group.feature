@@ -25,3 +25,10 @@ Feature: Create a group
     When I create a group without a name
     Then the "Group name" field should have the error "can't be blank"
     And I should be on the new group page
+
+  Scenario: Can add more than one user to a group
+    Given I am on the new group page
+    When I create a group with multiple members
+    Then I should be on the group show page
+    And all the group member email addresses on the list
+    And I should see a message that the group was created successfully
