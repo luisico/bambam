@@ -12,15 +12,15 @@
   <div class="field">
     <% User.all.each do |user| %>
       <% if !@group.owner && user == current_user %>
-        <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= check_box_tag "group[member_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
-        <%= hidden_field_tag "group[user_ids][]", user.id %>
+        <%= hidden_field_tag "group[member_ids][]", user.id %>
       <% elsif user == @group.owner %>
-        <%= check_box_tag "group[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= check_box_tag "group[member_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
-        <%= hidden_field_tag "group[user_ids][]", user.id %>
+        <%= hidden_field_tag "group[member_ids][]", user.id %>
       <% else %>
-        <%= check_box_tag "group[user_ids][]", user.id, @group.user_ids.include?(user.id), id: dom_id(user) %>
+        <%= check_box_tag "group[member_ids][]", user.id, @group.member_ids.include?(user.id), id: dom_id(user) %>
         <%= label_tag dom_id(user), user.email %><br>
       <% end %>
     <% end %>

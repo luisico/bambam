@@ -27,8 +27,8 @@ Then /^I should see the group's name$/ do
 end
 
 Then /^I should see the group's members$/ do
-  @group.users.each do |user|
-    expect(page).to have_content user.email
+  @group.members.each do |member|
+    expect(page).to have_content member.email
   end
 end
 

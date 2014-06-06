@@ -11,8 +11,8 @@
 
       <div>
         <ul class="no-bullet">
-          <% @group.users.each do |user| %>
-          <li><%= user.email %></li>
+          <% @group.members.each do |member| %>
+          <li><%= member.email %></li>
           <% end %>
         </ul>
       </div>

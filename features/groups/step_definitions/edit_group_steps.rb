@@ -4,7 +4,7 @@
 
 Given /^one of my groups is in the system$/ do
   @group = FactoryGirl.create(:group, owner: @user)
-  @group.users << @user
+  @group.members << @user
 end
 
 ### When
@@ -36,7 +36,7 @@ Then /^I should be able to edit the group members$/ do
   expect {
     uncheck User.last.email
     click_button 'Update'
-  }.to change(@group.users, :count).by(-1)
+  }.to change(@group.members, :count).by(-1)
   expect(page).to have_css('.alert-box', text: 'Group was successfully updated')
   expect(page).not_to have_content(User.last.email)
 end
@@ -52,6 +52,6 @@ Then /^I should be able to add myself to the group$/ do
   expect {
     check @admin.email
     click_button 'Update'
-  }.to change(@group.users, :count).by(1)
+  }.to change(@group.members, :count).by(1)
   expect(page).to have_content @admin.email
 end
