@@ -19,3 +19,5 @@ Feature: Show a group
     And I should see the group's members
     And I should see the group's creation date
     And I should see the date of the group's last update
+    And I should not see a "Delete" button
+    And I should not see an "Edit" button

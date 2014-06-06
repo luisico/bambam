@@ -44,3 +44,7 @@ Then /^I should be able to acess the group page from a link$/ do
   click_link @group.name
   expect(current_path).to eq group_path(@group)
 end
+
+Then /^I should not see (a|an) "(.*?)" button$/ do |foo, link|
+  expect(page).not_to have_link link
+end
