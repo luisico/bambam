@@ -37,7 +37,7 @@ Then /^I should be able to edit the group members$/ do
     uncheck User.last.email
     click_button 'Update'
   }.to change(@group.members, :count).by(-1)
-  expect(page).to have_css('.alert-box', text: 'Group was successfully updated')
+  expect(current_path).to eq group_path(@group)
   expect(page).not_to have_content(User.last.email)
 end
 
@@ -53,5 +53,6 @@ Then /^I should be able to add myself to the group$/ do
     check @admin.email
     click_button 'Update'
   }.to change(@group.members, :count).by(1)
+  expect(current_path).to eq group_path(@group)
   expect(page).to have_content @admin.email
 end
