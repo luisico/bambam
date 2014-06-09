@@ -137,12 +137,34 @@ describe User do
     its(:encrypted_password) { should_not be_blank }
   end
 
+  describe "associations" do
+    context "memberships" do
+      it { should have_many :memberships }
+      it { should respond_to :memberships }
+      it { should respond_to :membership_ids }
+    end
+
+    context "groups" do
+      it { should have_many :groups }
+      it { should respond_to :groups }
+      it { should respond_to :group_ids }
+    end
+  end
+
   describe "when user destroyed" do
-    before { @user.save! }
+    before do
+      group = FactoryGirl.create(:group)
+      group.members << @user
+      @user.save!
+    end
 
     it "should destroy the user" do
       expect { @user.destroy }.to change(User, :count).by(-1)
       expect { User.find(@user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should destroy associated memberships" do
+      expect { @user.destroy }.to change(Membership, :count).by(-1)
     end
   end
 end
