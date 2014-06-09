@@ -8,6 +8,12 @@ When /^environment variable (.*?) is "(.*?)"$/ do |name, value|
   ENV[name] = value
 end
 
+When /^I click on "(.*?)" in the top nav$/ do |link|
+  within(".top-bar-section") do
+    click_on link
+  end
+end
+
 ### Then
 
 Then /^the "(.*)" field should have the error "(.*)"$/ do |field, msg|
@@ -30,4 +36,12 @@ Then /^I should see button to copy the (.*) to the clipboard$/ do |text|
   clipboard_id = 'clip_'+ text.split(/\s+/).join('_')
   expect(page).to have_selector("[data-clipboard-id=#{clipboard_id}]")
   expect(page).to have_selector("##{clipboard_id}")
+end
+
+Then /^I should( not)? see a link to "(.*?)"$/ do |negate, link_text|
+  if negate
+    expect(page).not_to have_link link_text
+  else
+    expect(page).to have_link link_text
+  end
 end

@@ -12,4 +12,31 @@ Feature: Show a user
     Given I am signed in
     When I am on my Account Profile page
     And I should see my email
+    And I should see my avatar
     And I should see a link to "Edit"
+
+  Scenario Outline: Click on user image
+    Given I am signed in as an <role>
+    And there is another user in the system
+    And I am on the users page
+    When I click on the user avatar image
+    Then I should be on the account profile page
+    And I should not see a link to "Edit"
+
+    Examples:
+      | role    |
+      | admin   |
+      | inviter |
+
+  Scenario Outline: Click on user email
+    Given I am signed in as an <role>
+    And there is another user in the system
+    And I am on the users page
+    When I click on the user email
+    Then I should be on the account profile page
+    And I should not see a link to "Edit"
+
+    Examples:
+      | role    |
+      | admin   |
+      | inviter |

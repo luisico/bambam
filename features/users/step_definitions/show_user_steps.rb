@@ -4,14 +4,16 @@
 
 ### When
 
-When /^I click on "(.*?)" in the top nav$/ do |account|
-  within(".top-bar-section") do
-    click_on account
-  end
-end
-
 When /^I am on my Account Profile page$/ do
   visit user_path(@user)
+end
+
+When /^I click on the user avatar image$/ do
+  find("#hexdigest-#{Digest::MD5.hexdigest(@user.email.downcase)}").click
+end
+
+When /^I click on the user email$/ do
+  click_on @user.email
 end
 
 ### Then
@@ -20,18 +22,10 @@ Then /^I should be on the account profile page$/ do
   expect(current_path).to eq user_path(@user)
 end
 
-Then /^I should see my name$/ do
-  expect(page).to have_content @user.name
-end
-
 Then /^I should see my email$/ do
   expect(page).to have_content @user.email
 end
 
 Then /^I should see my avatar$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should see a link to "(.*?)"$/ do |link_text|
-  expect(page).to have_link link_text
+  expect(page).to have_css "#hexdigest-#{Digest::MD5.hexdigest(@user.email.downcase)}"
 end

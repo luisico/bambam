@@ -36,7 +36,7 @@ end
 
 Given /^I am on the users page$/ do
   visit users_path
-  expect(page).to have_css('li', text: 'Current users')
+  expect(page).to have_content('Current users')
 end
 
 Given /^there is( not)? a users link in the navigation bar$/ do |negate|
@@ -45,6 +45,10 @@ Given /^there is( not)? a users link in the navigation bar$/ do |negate|
   else
     expect(page).to have_css('li a', text: 'Users')
   end
+end
+
+Given /^there is another user in the system$/ do
+  @user = FactoryGirl.create(:user)
 end
 
 ### When
@@ -60,7 +64,7 @@ Then /^I should be on the users page$/ do
 end
 
 Then /^I should see the invitee email with invitation pending icon$/ do
-  within('li', text: @invitee[:email]) do
+  within('p', text: @invitee[:email]) do
    expect(page).to have_css('.fi-ticket')
   end
 end
@@ -68,21 +72,27 @@ end
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
   User.all.each do |user|
-    expect(page).to have_content user.email
+    expect(page).to have_link user.email
     if user.has_role? :admin
-      within('li', text: user.email) do
+      within('p', text: user.email) do
         expect(page).to have_css('.fi-crown')
       end
     elsif user.has_role? :inviter
-      within('li', text: user.email) do
+      within('p', text: user.email) do
         expect(page).to have_css('.fi-key')
       end
     end
   end
 end
 
+Then /^I should see their avatars$/ do
+  User.all.each do |user|
+    expect(page).to have_css "#hexdigest-#{Digest::MD5.hexdigest(user.email.downcase)}"
+  end
+end
+
 Then /^my (admin|inviter) email should not have outstanding invite icon$/ do |role|
-  within('li', text: instance_variable_get("@#{role}").email) do
+  within('p', text: instance_variable_get("@#{role}").email) do
     expect(page).not_to have_css('.fi-ticket')
   end
 end
