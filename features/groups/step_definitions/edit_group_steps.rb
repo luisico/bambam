@@ -45,7 +45,7 @@ Then /^I should be able to update group without changing group owner$/ do
   expect{
     click_button 'Update'
     @group.reload
-  }.not_to change(@group, :user_id)
+  }.not_to change(@group, :owner_id)
 end
 
 Then /^I should be able to add myself to the group$/ do

@@ -4,7 +4,7 @@
       <h1>New group</h1>
 
       <div class="field">
-        <%= hidden_field_tag :user_id, :value => current_user.id  %>
+        <%= hidden_field_tag :owner_id, :value => current_user.id  %>
       </div>
 
       <%= render 'form' %>

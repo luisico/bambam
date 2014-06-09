@@ -13,13 +13,13 @@ class Ability
       can :invite, User
       can :cancel, User, id: user.id
       can :manage, Track
-      can :manage, Group, user_id: user.id
+      can :manage, Group, owner_id: user.id
       can :read, Group
     else
       can :show, User, id: user.id
       can :cancel, User, id: user.id
       can :manage, Track
-      can :manage, Group, user_id: user.id
+      can :manage, Group, owner_id: user.id
       can :read, Group
     end
   end
