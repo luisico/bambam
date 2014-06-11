@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="row">
         <div class="small-4 medium-2 columns">
-          <%= image_tag avatar_url(@user, 100), id: "hexdigest-#{Digest::MD5.hexdigest(@user.email.downcase)}" %>
+          <%= image_tag avatar_url(@user, 100) %>
         </div>
         <div class="small-8 medium-8 columns left">
           <h3 class="text-content"><%= @user.email %></h3>

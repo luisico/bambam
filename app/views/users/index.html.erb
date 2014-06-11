@@ -10,10 +10,10 @@
 
       <% @users.each do |user| %>
         <p>
-          <a class="th" href=<%= user_path(user) %> id=<%="hexdigest-#{Digest::MD5.hexdigest(user.email.downcase)}"%>>
-            <%= image_tag avatar_url(user, 48) %>
-          </a>
-          <%= link_to user.email, user %>
+          <%= link_to user do %>
+            <%= image_tag avatar_url(user) %>
+            <%= user.email %>
+          <% end %>
           <% if user.invitation_accepted? == false && user.sign_in_count == 0 %>
             <i class="fi-ticket medium"></i>
           <% end %>

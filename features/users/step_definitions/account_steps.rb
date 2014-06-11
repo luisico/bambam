@@ -21,8 +21,7 @@ end
 
 Then /^I should be on the edit account page$/ do
   expect(page).to have_content 'Update account'
-  image_tag = page.find('.profile-avatar')['src']
-  expect(image_tag).to have_content Digest::MD5.hexdigest(@user.email.downcase)
+  expect(page).to have_xpath("//img[@alt='#{Digest::MD5.hexdigest(@user.email.downcase).titleize}']")
 end
 
 Then /^I should be able to edit my email$/ do

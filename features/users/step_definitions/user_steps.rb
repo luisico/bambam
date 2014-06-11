@@ -87,7 +87,7 @@ end
 
 Then /^I should see their avatars$/ do
   User.all.each do |user|
-    expect(page).to have_css "#hexdigest-#{Digest::MD5.hexdigest(user.email.downcase)}"
+    expect(page).to have_xpath("//img[@alt='#{Digest::MD5.hexdigest(user.email.downcase).titleize}']")
   end
 end
 
