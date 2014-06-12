@@ -7,7 +7,7 @@ Bambam::Application.routes.draw do
     put 'users'         => 'devise_invitable/registrations#update', as: 'user_registration'
     root to: 'devise/sessions#new'
   end
-  resources :users, only: [:index]
+  resources :users, only: [:index, :show]
 
   resources :tracks
 

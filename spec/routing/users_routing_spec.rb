@@ -35,5 +35,9 @@ describe "Users" do
     it "index" do
       assert_routing({ path: '/users', method: :get }, { controller: 'users', action: 'index' })
     end
+
+    it "show" do
+      assert_routing({ path: '/users/:id', method: :get }, { controller: 'users', action: 'show', id: ':id' })
+    end
   end
 end

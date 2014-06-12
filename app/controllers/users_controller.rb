@@ -10,6 +10,9 @@ class UsersController < ApplicationController
     respond_with(@users)
   end
 
+  def show
+  end
+
   def new
     if current_user
       redirect_to(root_url, notice: 'You already have an account')

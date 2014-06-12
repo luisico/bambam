@@ -23,6 +23,7 @@
     <!-- Right Nav Section -->
     <ul class="right">
       <% if user_signed_in? %>
+        <li><%= link_to 'Account Profile', user_path(current_user), title: current_user.email %></li>
         <li><%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, method: 'delete' %></li>
       <% else %>
         <li><%= link_to I18n.t('devise.sessions.sign_in'), new_user_session_path %></li>

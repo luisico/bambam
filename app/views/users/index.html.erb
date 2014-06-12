@@ -1,15 +1,19 @@
 <div class="row">
   <div class="medium-6 columns">
-    <ul class="pricing-table">
-      <li class="title">Current users</li>
-      <li class="description">
-        <i class="fi-ticket medium icon_key"> Invite outstanding</i>
-        <i class="fi-crown medium icon_key"> Admin</i>
-        <i class="fi-key medium icon_key"> Inviter</i>
-      </li>
+    <div class="panel">
+      <h3>Current users</h3>
+      <ul class="inline-list">
+        <li><i class="fi-ticket medium icon_key"> Invite outstanding</i></li>
+        <li><i class="fi-crown medium icon_key"> Admin</i></li>
+        <li><i class="fi-key medium icon_key"> Inviter</i></li>
+      </ul>
+
       <% @users.each do |user| %>
-        <li class="bullet-item">
-          <%= user.email %>
+        <p>
+          <%= link_to user do %>
+            <%= image_tag avatar_url(user) %>
+            <%= user.email %>
+          <% end %>
           <% if user.invitation_accepted? == false && user.sign_in_count == 0 %>
             <i class="fi-ticket medium"></i>
           <% end %>
@@ -19,10 +23,11 @@
           <% if user.has_role? :inviter %>
             <i class="fi-key medium"></i>
           <% end %>
-        </li>
+        </p>
       <% end %>
-    </ul>
+    </div>
   </div>
+
   <div class="medium-6 columns">
     <div class="panel">
       <h3>Invite a new user</h3>
