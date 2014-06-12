@@ -1,5 +1,9 @@
 ### Methods
 
+def gravatar_hexdigest(user)
+  Digest::MD5.hexdigest(user.email.downcase).titleize
+end
+
 ### Given
 
 ### When
@@ -23,5 +27,5 @@ Then /^I should see my email$/ do
 end
 
 Then /^I should see my avatar$/ do
-  expect(page).to have_xpath("//img[@alt='#{Digest::MD5.hexdigest(@user.email.downcase).titleize}']")
+  expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(@user)}']")
 end

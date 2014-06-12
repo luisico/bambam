@@ -21,7 +21,7 @@ end
 
 Then /^I should be on the edit account page$/ do
   expect(page).to have_content 'Update account'
-  expect(page).to have_xpath("//img[@alt='#{Digest::MD5.hexdigest(@user.email.downcase).titleize}']")
+  expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(@user)}']")
 end
 
 Then /^I should be able to edit my email$/ do
