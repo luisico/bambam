@@ -14,6 +14,10 @@ describe ApplicationController do
     end
   end
 
+  describe "Exception Notification" do
+    pending "should send an email"
+  end
+
   describe "Basic Authentication" do
     controller do
       def index
