@@ -81,6 +81,18 @@ describe User do
           it { should be_able_to(:read, @group) }
         end
       end
+
+      context "projects" do
+        before do
+          @user_project = FactoryGirl.create(:project, owner: @user)
+          @other_user_project = FactoryGirl.create(:project, owner: @other_user)
+        end
+
+        it { should be_able_to(:manage, @user_project)}
+
+        it { should be_able_to(:read, @other_user_project)}
+        it { should_not be_able_to(:manage, @other_user_project)}
+      end
     end
   end
 end

@@ -23,6 +23,9 @@ class Ability
       can :read, Group do |group|
         group.members.include?(user)
       end
+
+      can :read, Project
+      can :manage, Project, owner: user
     end
   end
 end
