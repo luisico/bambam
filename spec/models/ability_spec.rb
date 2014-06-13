@@ -18,6 +18,10 @@ describe User do
       context "tracks" do
         it { should be_able_to(:manage, Track) }
       end
+
+      context "groups" do
+        it { should be_able_to(:manage, Group) }
+      end
     end
 
     describe "as inviter" do
@@ -37,6 +41,12 @@ describe User do
 
       context "tracks" do
         it { should be_able_to(:manage, Track) }
+      end
+
+      context "groups" do
+        before { @inviter_group = FactoryGirl.create(:group, owner: @inviter) }
+        it { should be_able_to(:read, Group) }
+        it { should be_able_to(:manage, @inviter_group)}
       end
     end
 
@@ -59,6 +69,12 @@ describe User do
 
       context "tracks" do
         it { should be_able_to(:manage, Track) }
+      end
+
+      context "groups" do
+        before { @user_group = FactoryGirl.create(:group, owner: @user) }
+        it { should be_able_to(:read, Group) }
+        it { should be_able_to(:manage, @user_group)}
       end
     end
   end
