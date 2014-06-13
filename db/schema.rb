@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610161435) do
+ActiveRecord::Schema.define(version: 20140612162536) do
 
   create_table "groups", force: true do |t|
     t.string   "name"
@@ -36,6 +36,13 @@ ActiveRecord::Schema.define(version: 20140610161435) do
 
   add_index "projects", ["name"], name: "index_projects_on_name"
 
+  create_table "projects_users", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", force: true do |t|
     t.string   "name"
     t.integer  "resource_id"
@@ -52,6 +59,7 @@ ActiveRecord::Schema.define(version: 20140610161435) do
     t.string   "path",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_id"
   end
 
   add_index "tracks", ["name"], name: "index_tracks_on_name"

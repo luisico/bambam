@@ -183,7 +183,7 @@ describe TracksController do
           patch :update, id: @track, track: @new_track
           @track.reload
           expect(assigns(:track)).to eq @track
-          expect(@track.attributes.except('id', 'created_at', 'updated_at')).to eq @new_track.stringify_keys
+          expect(@track.attributes.except('id', 'created_at', 'updated_at', 'project_id')).to eq @new_track.stringify_keys
         end
       end
 
