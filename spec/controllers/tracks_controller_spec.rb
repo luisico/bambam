@@ -109,7 +109,7 @@ describe TracksController do
 
   describe "Post 'create'" do
     before do
-      @track_attr = FactoryGirl.attributes_for(:test_track, path: File.join('tmp', 'mytrack.bam'))
+      @track_attr = FactoryGirl.attributes_for(:test_track)
       cp_track @track_attr[:path]
     end
     after { File.unlink(@track_attr[:path]) if File.exist?(@track_attr[:path]) }
@@ -171,8 +171,7 @@ describe TracksController do
       context 'with valid parameters' do
         before do
           @new_track = FactoryGirl.attributes_for(:test_track)
-          path = @new_track[:path]
-          cp_track path
+          cp_track @new_track[:path]
         end
 
         it "should redirect to the updated show page" do

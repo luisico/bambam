@@ -48,9 +48,7 @@ describe ActiveModel::Validations::PathValidator do
       context "does not allow #{blank_value.inspect} values" do
         before { subject.path = blank_value }
 
-        it "should not be valid" do
-          expect(subject).not_to be_valid
-        end
+        it { should_not be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -99,9 +97,7 @@ describe ActiveModel::Validations::PathValidator do
       context "without an existing path" do
         before { subject.path = 'non_existing_path' }
 
-        it "should not be valid" do
-          expect(subject).not_to be_valid
-        end
+        it { should_not be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -120,9 +116,7 @@ describe ActiveModel::Validations::PathValidator do
         expect(File).to receive(:exist?).and_return(true)
       end
 
-      it "should not be valid" do
-        expect(subject).not_to be_valid
-      end
+      it { should_not be_valid }
 
       it "should add :exist translation to errors" do
         expect{

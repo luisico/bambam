@@ -21,33 +21,42 @@ describe Track do
     it { should respond_to :path }
 
     context 'is validated' do
-      before { @track.path = File.join 'tmp', 'mytrack.bam' }
       after { File.unlink(@track.path) if File.exist?(@track.path) }
 
-      it "should be valid when it exists with allowed file extension" do
-        File.open(@track.path, 'w'){|f| f.puts 'file content'}
+      it "should be valid when it exists with a .bam file extension" do
         expect(@track).to be_valid
+      end
+
+      it "should be valid when it exists with a .bw file extension" do
+        track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.bw'))
+        cp_track track.path, 'bw'
+        expect(track).to be_valid
+        File.unlink track.path
       end
 
       context "should not be valid" do
         it "when it does not exist" do
+          File.unlink(@track.path)
           expect(@track).not_to be_valid
         end
 
         it "when it is empty" do
-          File.open(@track.path, 'w'){|f| f.truncate(0)}
+          Pathname.new(@track.path).truncate(0)
           expect(@track).not_to be_valid
         end
 
         it "when it is not included in allowed paths" do
-          @track.path = File.join '', 'tmp', 'mytrack'
-          cp_track @track.path
-          expect(@track).not_to be_valid
+          track = FactoryGirl.build(:test_track, path: File.join('', 'tmp', 'mytrack.bam'))
+          cp_track track.path
+          expect(track).not_to be_valid
+          File.unlink track.path
         end
 
         it "when it does not have a valid file extenstion" do
-          @track.path = File.join 'tmp', 'mytrack.ext'
-          expect(@track).not_to be_valid
+          track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.ext'))
+          cp_track track.path
+          expect(track).not_to be_valid
+          File.unlink track.path
         end
       end
 

@@ -20,16 +20,16 @@ describe StreamServicesController do
 
         it "should respond forbidden when the format is non-standard" do
           track = FactoryGirl.create(:test_track)
-          File.unlink track.path
           get :show, id: track, format: 'non'
           expect(response).to be_forbidden
+          File.unlink track.path
         end
 
         it "should respond not found when file is empty" do
           track = FactoryGirl.create(:test_track, path: 'tmp/emptytrack.bam')
-          File.open(track.path, 'wb') { |f| f.truncate(0) }
+          Pathname.new(track.path).truncate(0)
           get :show, id: track
-          File.unlink(track.path) if File.exist?(track.path)
+          File.unlink(track.path)
 
           expect(response).to be_not_found
         end
@@ -166,9 +166,7 @@ describe StreamServicesController do
       cp_track @path
     end
 
-    after(:all) do
-      File.unlink(@path) if File.exist?(@path)
-    end
+    after(:all) { File.unlink(@path) if File.exist?(@path) }
 
     context "without format" do
       it "should point to the file if it exists" do
@@ -202,7 +200,7 @@ describe StreamServicesController do
         cp_track auxpath, 'bai'
         path = controller.send(:find_path_with_format, @path, 'bai')
         expect(path).to eq auxpath
-        File.unlink(auxpath) if File.exist?(auxpath)
+        File.unlink(auxpath)
       end
 
       it "should point to the auxiliary file if present with an alternate extension" do
@@ -210,7 +208,7 @@ describe StreamServicesController do
         cp_track auxpath, 'bai'
         path = controller.send(:find_path_with_format, @path, 'bai')
         expect(path).to eq auxpath
-        File.unlink(auxpath) if File.exist?(auxpath)
+        File.unlink(auxpath)
       end
 
       it "should raise 'not found' error when auxiliary file does not exist" do
@@ -228,7 +226,7 @@ describe StreamServicesController do
           expect {
             controller.send(:find_path_with_format, @path, format)
           }.not_to raise_error
-          File.unlink(auxpath) if File.exist?(auxpath)
+          File.unlink(auxpath)
         end
       end
 
