@@ -66,9 +66,10 @@ RSpec.configure do |config|
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
 
-  # Devise test helpers
+  # Test helpers
   config.include Devise::TestHelpers, :type => :controller
   config.include Controller::TestHelpers, :type => :controller
+  config.include Tracks::TestHelpers
 
   # Remove file created during testing
   config.after(:suite) do

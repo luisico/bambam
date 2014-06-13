@@ -5,10 +5,8 @@ TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
   dirname = pathname.dirname
-  dirname.mkpath
-  File.open(pathname, 'w') do |f|
-    empty ? f.truncate(0) : f.puts("file contents")
-  end
+  cp_track pathname
+  pathname.truncate(0) if empty
   yield if block_given?
 ensure
   dirname.rmtree

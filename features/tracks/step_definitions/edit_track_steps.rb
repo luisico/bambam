@@ -29,8 +29,7 @@ end
 
 Then /^I should be able to edit the track path$/ do
   path = File.join 'tmp', 'tests', 'new_track_path.bam'
-  FileUtils.mkdir(File.join('tmp', 'tests')) if !File.exist?(File.join('tmp', 'tests'))
-  File.open(path, 'w') {|f| f.puts 'file content' }
+  cp_track path
   expect {
     fill_in 'Full path to track', with: path
     click_button 'Update'

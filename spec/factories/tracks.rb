@@ -11,7 +11,7 @@ FactoryGirl.define do
     after(:build) do |track|
       unless File.exist?(track.path)
         Pathname.new(track.path).dirname.mkpath
-        File.open(track.path, 'w'){|f| f.puts track.name}
+        FileUtils.cp File.join(Rails.root, 'spec', 'data', 'tracks', 'test_500_sorted.bam'), track.path
       end
     end
   end

@@ -41,7 +41,7 @@ describe Track do
 
         it "when it is not included in allowed paths" do
           @track.path = File.join '', 'tmp', 'mytrack'
-          File.open(@track.path, 'w'){|f| f.puts 'file content'}
+          cp_track @track.path
           expect(@track).not_to be_valid
         end
 

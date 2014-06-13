@@ -163,8 +163,7 @@ describe StreamServicesController do
   describe "#find_path_with_format" do
     before(:all) do
       @path = File.join("tmp", "tests", "track_find_paths.bam")
-      Pathname.new(@path).dirname.mkpath
-      File.open(@path, 'w'){|f| f.puts 'track for find_paths_with_format'}
+      cp_track @path
     end
 
     after(:all) do
@@ -200,7 +199,7 @@ describe StreamServicesController do
     context "with alternate format" do
       it "should point to the auxiliary file if present with a second extension" do
         auxpath = @path + '.bai'
-        File.open(auxpath, 'w') {|f| f.puts 'content'}
+        cp_track auxpath, 'bai'
         path = controller.send(:find_path_with_format, @path, 'bai')
         expect(path).to eq auxpath
         File.unlink(auxpath) if File.exist?(auxpath)
@@ -208,7 +207,7 @@ describe StreamServicesController do
 
       it "should point to the auxiliary file if present with an alternate extension" do
         auxpath = @path.sub('.bam', '.bai')
-        File.open(auxpath, 'w') {|f| f.puts 'content'}
+        cp_track auxpath, 'bai'
         path = controller.send(:find_path_with_format, @path, 'bai')
         expect(path).to eq auxpath
         File.unlink(auxpath) if File.exist?(auxpath)
@@ -225,7 +224,7 @@ describe StreamServicesController do
       %w(bai bam.bai).each do |format|
         it "should allow #{format} extension" do
           auxpath = @path + '.bai'
-          File.open(auxpath, 'w') {|f| f.puts 'content'}
+          cp_track auxpath, 'bai'
           expect {
             controller.send(:find_path_with_format, @path, format)
           }.not_to raise_error
