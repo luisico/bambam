@@ -243,4 +243,38 @@ describe ProjectsController do
       end
     end
   end
+
+  describe "Delete 'destroy'" do
+    before { @project = FactoryGirl.create(:project) }
+
+    context "as a signed in user" do
+      before { sign_in @project.owner }
+
+      it "should redirect to project#index" do
+        delete :destroy, id: @project
+        expect(response).to redirect_to projects_url
+      end
+
+      it "should delete the project" do
+        expect{
+          delete :destroy, id: @project
+        }.to change(Project, :count).by(-1)
+        expect(assigns(:project)).to eq @project
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        delete :destroy, id: @project
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not delete the project" do
+        expect{
+          delete :destroy, id: @project
+        }.not_to change(Project, :count)
+      end
+    end
+  end
 end
