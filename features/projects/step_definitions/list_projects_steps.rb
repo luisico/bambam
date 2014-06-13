@@ -9,6 +9,7 @@ Given /^there (is|are) (\d+|a|an) projects? in the system$/ do |foo, n|
     @projects = FactoryGirl.create_list(:project, n)
   }.to change(Project, :count).by(n)
   @project = Project.last
+  @project.users << @project.owner
 end
 
 ### When

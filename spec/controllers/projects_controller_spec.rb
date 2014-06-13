@@ -100,42 +100,42 @@ describe ProjectsController do
     end
   end
 
-  # describe "GET 'edit'" do
-  #   before { @project = FactoryGirl.create(:project) }
+  describe "GET 'edit'" do
+    before { @project = FactoryGirl.create(:project) }
 
-  #   context "as a signed in user and owner of @project" do
-  #     before { sign_in @project.owner }
+    context "as a signed in user and owner of @project" do
+      before { sign_in @project.owner }
 
-  #     it "should be successful" do
-  #       get :edit, id: @project
-  #       expect(response).to be_success
-  #       expect(response).to render_template :edit
-  #     end
+      it "should be successful" do
+        get :edit, id: @project
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
 
-  #     it "should return the project" do
-  #       get :edit, id: @project
-  #       expect(assigns(:project)).to eq @project
-  #     end
-  #   end
+      it "should return the project" do
+        get :edit, id: @project
+        expect(assigns(:project)).to eq @project
+      end
+    end
 
-  #   context "as a signed in user" do
-  #     before { sign_in FactoryGirl.create(:user) }
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
 
-  #     it "should be denied" do
-  #       get :edit, id: @project
-  #       expect(response).not_to be_success
-  #       expect(response).to redirect_to tracks_path
-  #     end
-  #   end
+      it "should be denied" do
+        get :edit, id: @project
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
+      end
+    end
 
-  #   context "as a visitor" do
-  #     it "should redirect to the sign in page" do
-  #       get :edit, id: @project
-  #       expect(response).not_to be_success
-  #       expect(response).to redirect_to new_user_session_url
-  #     end
-  #   end
-  # end
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :edit, id: @project
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
 
   describe "Post 'create'" do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
@@ -184,6 +184,62 @@ describe ProjectsController do
         expect{
           post :create, project: @project_attr
         }.not_to change(Project, :count)
+      end
+    end
+  end
+
+  describe "Patch 'update'" do
+    before { @project = FactoryGirl.create(:project) }
+
+    context "as a signed in user" do
+      before { sign_in @project.owner }
+
+      context 'with valid parameters' do
+        before do
+          @new_project = FactoryGirl.attributes_for(:project)
+        end
+
+        it "should redirect to the updated show page" do
+          patch :update, id: @project, project: @new_project
+          expect(response).to redirect_to @project
+        end
+
+        it "should update the project" do
+          patch :update, id: @project, project: @new_project
+          @project.reload
+          expect(assigns(:project)).to eq @project
+          expect(@project.name).to eq @new_project[:name]
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render the edit template" do
+          patch :update, id: @project, project: {name: ''}
+          expect(response).to be_success
+          expect(response).to render_template :edit
+        end
+
+        it "should not change the project's attributes" do
+          expect {
+            patch :update, id: @project, project: {name: ''}
+            @project.reload
+          }.not_to change(@project, :name)
+          expect(assigns(:project)).to eq @project
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        patch :update, id: @project, project: {name: ''}
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not change the project's attributes" do
+        expect{
+          patch :update, id: @project, project: {name: ''}
+        }.not_to change(@project, :name)
       end
     end
   end
