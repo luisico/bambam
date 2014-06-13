@@ -22,6 +22,10 @@ describe User do
       context "groups" do
         it { should be_able_to(:manage, Group) }
       end
+
+      context "projects" do
+        it { should be_able_to(:manage, Project) }
+      end
     end
 
     describe "as inviter" do
@@ -85,13 +89,16 @@ describe User do
       context "projects" do
         before do
           @user_project = FactoryGirl.create(:project, owner: @user)
+          @user_on_project = FactoryGirl.create(:project)
+          @user_on_project.users << @user
           @other_user_project = FactoryGirl.create(:project, owner: @other_user)
         end
 
-        it { should be_able_to(:manage, @user_project)}
+        it { should be_able_to(:manage, @user_project) }
+        it { should be_able_to(:read, @user_on_project) }
 
-        it { should be_able_to(:read, @other_user_project)}
-        it { should_not be_able_to(:manage, @other_user_project)}
+        it { should_not be_able_to(:read, @other_user_project) }
+        it { should_not be_able_to(:manage, @other_user_project) }
       end
     end
   end

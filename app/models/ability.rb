@@ -9,6 +9,7 @@ class Ability
       can :manage, User
       can :manage, Track
       can :manage, Group
+      can :manage, Project
     else
       if user.has_role? :inviter
         can :invite, User
@@ -24,7 +25,7 @@ class Ability
         group.members.include?(user)
       end
 
-      can :read, Project
+      can :read, Project, :projects_users => { :user_id => user.id }
       can :manage, Project, owner: user
     end
   end
