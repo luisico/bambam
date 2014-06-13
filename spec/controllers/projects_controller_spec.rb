@@ -74,4 +74,117 @@ describe ProjectsController do
       end
     end
   end
+
+  describe "GET 'new'" do
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be successful" do
+        get :new
+        expect(response).to be_success
+        expect(response).to render_template :new
+      end
+
+      it "should build a new project" do
+        get :new
+        expect(assigns(:project)).to be_new_record
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        get :new
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
+
+  # describe "GET 'edit'" do
+  #   before { @project = FactoryGirl.create(:project) }
+
+  #   context "as a signed in user and owner of @project" do
+  #     before { sign_in @project.owner }
+
+  #     it "should be successful" do
+  #       get :edit, id: @project
+  #       expect(response).to be_success
+  #       expect(response).to render_template :edit
+  #     end
+
+  #     it "should return the project" do
+  #       get :edit, id: @project
+  #       expect(assigns(:project)).to eq @project
+  #     end
+  #   end
+
+  #   context "as a signed in user" do
+  #     before { sign_in FactoryGirl.create(:user) }
+
+  #     it "should be denied" do
+  #       get :edit, id: @project
+  #       expect(response).not_to be_success
+  #       expect(response).to redirect_to tracks_path
+  #     end
+  #   end
+
+  #   context "as a visitor" do
+  #     it "should redirect to the sign in page" do
+  #       get :edit, id: @project
+  #       expect(response).not_to be_success
+  #       expect(response).to redirect_to new_user_session_url
+  #     end
+  #   end
+  # end
+
+  describe "Post 'create'" do
+    before { @project_attr = FactoryGirl.attributes_for(:project) }
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      context "with valid parameters" do
+        it "should be a redirect to the new project show page" do
+          post :create, project: @project_attr
+          expect(response).to redirect_to project_path(Project.last)
+        end
+
+        it "should create a new project" do
+          expect{
+            post :create, project: @project_attr
+          }.to change(Project, :count).by(1)
+          expect(assigns(:project)).to eq Project.last
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render new template" do
+          post :create, project: @project_attr.merge(name: '')
+          expect(response).to be_success
+          expect(response).to render_template :new
+        end
+
+        it "should not create a new project" do
+          expect{
+            post :create, project: @project_attr.merge(name: '')
+          }.not_to change(Project, :count)
+          expect(assigns(:project)).to be_new_record
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        post :create, project: @project_attr
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not create a new project" do
+        expect{
+          post :create, project: @project_attr
+        }.not_to change(Project, :count)
+      end
+    end
+  end
 end
