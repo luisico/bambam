@@ -11,7 +11,7 @@ Bambam::Application.routes.draw do
 
   resources :tracks
 
-  resources :projects, only: [:index]
+  resources :projects, only: [:index, :show]
 
   namespace :stream_services, path: 'stream', module: false do
     resources :track, only: :show, controller: 'stream_services', format: /[^\/]+/

@@ -16,6 +16,39 @@ describe Project do
   end
 
   describe "owner" do
+    it { should belong_to :owner }
     it { should respond_to :owner }
+  end
+
+  describe "projects_users" do
+    it { should have_many :projects_users }
+    it { should respond_to :projects_users }
+    it { should respond_to :projects_user_ids }
+  end
+
+  describe "users" do
+    it { should have_many :users }
+    it { should respond_to :users }
+    it { should respond_to :user_ids }
+  end
+
+  describe "when project destroyed" do
+    before do
+      @project.users << @project.owner
+      @project.save!
+    end
+
+    it "should destroy the project" do
+      expect { @project.destroy }.to change(Project, :count).by(-1)
+      expect { Project.find(@project.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should destroy associated memberships" do
+      expect { @project.destroy }.to change(ProjectsUser, :count).by(-1)
+    end
+
+    it "should not destroy the user" do
+      expect { @project.destroy }.to change(User, :count).by(0)
+    end
   end
 end
