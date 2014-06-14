@@ -13,15 +13,24 @@
     <% User.all.each do |user| %>
       <% if !@group.owner && user == current_user %>
         <%= check_box_tag "group[member_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-        <%= label_tag dom_id(user), user.email %><br>
+        <%= label_tag dom_id(user) do %>
+          <%= image_tag avatar_url(user) %>
+          <%= user.email %>
+        <% end %><br><br>
         <%= hidden_field_tag "group[member_ids][]", user.id %>
       <% elsif user == @group.owner %>
         <%= check_box_tag "group[member_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-        <%= label_tag dom_id(user), user.email %><br>
+        <%= label_tag dom_id(user) do %>
+          <%= image_tag avatar_url(user) %>
+          <%= user.email %>
+        <% end %><br><br>
         <%= hidden_field_tag "group[member_ids][]", user.id %>
       <% else %>
         <%= check_box_tag "group[member_ids][]", user.id, @group.member_ids.include?(user.id), id: dom_id(user) %>
-        <%= label_tag dom_id(user), user.email %><br>
+        <%= label_tag dom_id(user) do %>
+          <%= image_tag avatar_url(user) %>
+          <%= user.email %>
+        <% end %><br><br>
       <% end %>
     <% end %>
   </div>
