@@ -12,7 +12,10 @@
       <div>
         <ul class="no-bullet">
           <% @group.members.each do |member| %>
-          <li><%= member.email %></li>
+            <%= link_to member do %>
+              <%= image_tag avatar_url(member) %>
+              <%= member.email %>
+            <% end %><br><br>
           <% end %>
         </ul>
       </div>

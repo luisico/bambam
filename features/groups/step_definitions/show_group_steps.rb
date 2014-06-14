@@ -29,6 +29,7 @@ end
 Then /^I should see the group's members$/ do
   @group.members.each do |member|
     expect(page).to have_content member.email
+    expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(member)}']")
   end
 end
 
