@@ -3,14 +3,16 @@ Feature: List of users
   As an admin user
   I should be able to list users
 
-  Scenario Outline: List of users
+  Scenario Outline: List of users and groups
     Given I am signed in as an <role>
+    And there are 3 groups in the system
     And there is a users link in the navigation bar
     When I visit the users page
     Then I should see a list of users
     And I should see their avatars
     And my <role> email should not have outstanding invite icon
     And I should see a form to invite a new user
+    And I should see a list of groups
 
   Examples:
     | role    |
