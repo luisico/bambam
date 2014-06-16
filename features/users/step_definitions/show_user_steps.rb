@@ -29,3 +29,9 @@ end
 Then /^I should see my avatar$/ do
   expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(@user)}']")
 end
+
+Then /^I should see my groups$/ do
+  @user.groups.each do |group|
+    expect(page).to have_content group.name
+  end
+end

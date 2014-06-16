@@ -10,9 +10,11 @@ Feature: Show a user
 
   Scenario: Show account profile information
     Given I am signed in
+    And one of my groups is in the system
     When I am on my Account Profile page
-    And I should see my email
+    Then I should see my email
     And I should see my avatar
+    And I should see my groups
     And I should see a link to "Edit"
 
   Scenario Outline: Admin/inviter can access the user show page from the users page
