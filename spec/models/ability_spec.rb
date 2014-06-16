@@ -44,9 +44,16 @@ describe User do
       end
 
       context "groups" do
-        before { @inviter_group = FactoryGirl.create(:group, owner: @inviter) }
+        before do
+          @inviter_group = FactoryGirl.create(:group, owner: @inviter)
+          @user_group = FactoryGirl.create(:group, owner: @user)
+        end
+
         it { should be_able_to(:read, Group) }
         it { should be_able_to(:manage, @inviter_group)}
+
+        it { should_not be_able_to(:manage, @user_group)}
+        it { should be_able_to(:read, @user_group)}
       end
     end
 
@@ -72,9 +79,16 @@ describe User do
       end
 
       context "groups" do
-        before { @user_group = FactoryGirl.create(:group, owner: @user) }
+        before do
+          @user_group = FactoryGirl.create(:group, owner: @user)
+          @other_user_group = FactoryGirl.create(:group, owner: @other_user)
+        end
+
         it { should be_able_to(:read, Group) }
         it { should be_able_to(:manage, @user_group)}
+
+        it { should_not be_able_to(:manage, @other_user_group)}
+        it { should be_able_to(:read, @other_user_group)}
       end
     end
   end
