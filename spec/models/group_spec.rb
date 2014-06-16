@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Group do
-  before do
-    @group = FactoryGirl.build(:group)
-  end
+  before { @group = FactoryGirl.build(:group) }
 
   subject { @group }
 
@@ -36,10 +34,7 @@ describe Group do
   end
 
   describe "when group destroyed" do
-    before do
-      @group.members << @group.owner
-      @group.save!
-    end
+    before { @group.save! }
 
     it "should destroy the group" do
       expect { @group.destroy }.to change(Group, :count).by(-1)
@@ -50,7 +45,7 @@ describe Group do
       expect { @group.destroy }.to change(Membership, :count).by(-1)
     end
 
-    it "should not destroy the user" do
+    it "should not destroy the owner or members" do
       expect { @group.destroy }.not_to change(User, :count)
     end
   end
