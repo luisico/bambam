@@ -5,6 +5,7 @@ Feature: Create a track
 
   Background:
     Given I am signed in
+    And there are 3 projects in the system
 
   Scenario: User enters a new track
     When I am on the tracks page

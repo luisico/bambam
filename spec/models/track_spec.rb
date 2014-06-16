@@ -10,6 +10,7 @@ describe Track do
     it { should have_db_column(:name).with_options(null: false) }
     it { should have_db_index(:name).unique(false) }
     it { should have_db_column(:path).with_options(null:false) }
+    it { should have_db_column(:project_id) }
   end
 
   describe "name" do
@@ -66,5 +67,9 @@ describe Track do
         end
       end
     end
+  end
+
+  describe "project_id" do
+    it {should respond_to :project}
   end
 end

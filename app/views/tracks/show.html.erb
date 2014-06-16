@@ -2,7 +2,14 @@
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
       <div class="clearfix">
-        <h3 class="left"><%= @track.name %></h3>
+        <h3 class="left">
+          <%= @track.name %>
+          <small>
+            <% if @track.project %>
+              (<%= link_to @track.project.name, @track.project %>)
+            <% end %>
+          </small>
+        </h3>
         <h4 class="right"><small>
           created: <%= local_time_ago(@track.created_at) %><br/>
           updated: <%= local_time_ago(@track.updated_at) %></small>

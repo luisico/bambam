@@ -17,6 +17,7 @@ Feature: Show a track
     When I am on the track page
     Then I should see the track's name
     And I should see the track's path
+    And I should see the track's project
     And I should see a link to download a <type> file
     And I <status> see a "download bai file" link
     And I should see button to copy the track path to the clipboard

@@ -13,6 +13,7 @@ def fill_track_form(track=nil)
   track ||= @track
   fill_in 'Track name', with: track[:name]
   fill_in 'Full path to track', with: track[:path]
+  select Project.first.name, from: 'track[project_id]'
   click_button 'Create Track'
 end
 

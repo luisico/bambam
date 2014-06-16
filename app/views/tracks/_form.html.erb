@@ -21,6 +21,11 @@
     <%= f.text_field :path, size: 160, placeholder: 'Full path to track' %>
   </div>
 
+  <div class="field">
+    <label>Assign track to a project</label>
+    <%= f.select :project_id,  Project.all.collect {|p| [p.name, p.id]}, {:include_blank => true, :default => nil} %>
+  </div>
+
   <div class="actions">
     <%= f.submit class: 'button tiny radius' %>
   </div>
