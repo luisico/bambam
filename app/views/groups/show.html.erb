@@ -10,14 +10,14 @@
       </div>
 
       <div>
-        <ul class="no-bullet">
-          <% @group.members.each do |member| %>
-            <%= link_to member do %>
-              <%= image_tag avatar_url(member) %>
-              <%= member.email %>
-            <% end %><br><br>
+        <% @group.members.each do |member| %>
+        <p>
+          <%= link_to member do %>
+            <%= image_tag avatar_url(member) %>
+            <%= member.email %>
           <% end %>
-        </ul>
+        </p>
+        <% end %>
       </div>
     </div>
 
