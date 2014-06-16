@@ -9,27 +9,33 @@
         </h4>
       </div>
 
-        <div class="row">
-          <div class="small-12 medium-6 columns">
-            <h4>Users</h4>
-            <ul class="no-bullet">
-              <% @project.users.each do |user| %>
-                <li><%= user.email %></li>
+      <div class="row">
+        <div class="small-12 medium-6 columns">
+          <h4>Users</h4>
+            <% @project.users.each do |user| %>
+            <p>
+              <%= link_to user do %>
+                <%= image_tag avatar_url(user) %>
+                <%= user.email %>
               <% end %>
-            </ul>
-          </div>
-          <div class="small-12 medium-6 columns">
-            <h4>Tracks</h4>
-            <ul class="no-bullet">
-              <% @project.tracks.each do |track| %>
-                <li><%= track.name %></li>
-              <% end %>
-            </ul>
-          </div>
+            </p>
+            <% end %>
+        </div>
+        <div class="small-12 medium-6 columns">
+          <h4>Tracks</h4>
+          <ul class="no-bullet">
+            <% @project.tracks.each do |track| %>
+              <li><%= track.name %></li>
+            <% end %>
+          </ul>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="small-12 medium-10 medium-centered columns">
     <% if can? :manage, @project %>
       <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
     <% end %>
