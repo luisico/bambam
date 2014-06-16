@@ -51,7 +51,7 @@ describe Group do
     end
 
     it "should not destroy the user" do
-      expect { @group.destroy }.to change(User, :count).by(0)
+      expect { @group.destroy }.not_to change(User, :count)
     end
   end
 end
