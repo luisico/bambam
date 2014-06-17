@@ -13,6 +13,8 @@ Feature: Show a user profile
     When I am on my Account Profile page
     Then I should see my email
     And I should see my avatar
+    And I should see my groups
+    And I should see my projects
     And I should see a link to "Edit"
 
   Scenario: Users can only see groups they are members of
