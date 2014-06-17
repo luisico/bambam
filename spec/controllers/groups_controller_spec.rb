@@ -139,7 +139,7 @@ describe GroupsController do
       it "should be denied" do
         get :edit, id: @group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -323,7 +323,7 @@ describe GroupsController do
       it "should be denied" do
         patch :update, id: @group, group: @new_group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -377,7 +377,7 @@ describe GroupsController do
       it "should be denied" do
         patch :destroy, id: @group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
 
       it "should not delete the group" do

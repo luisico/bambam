@@ -170,6 +170,6 @@ Then /^I should find account termination instructions$/ do
   expect(current_path).to eq user_cancel_path
 end
 
-Then /^I should be (on|redirected to) the tracks page$/ do |foo|
-  expect(current_path).to eq tracks_path
+Then /^I should be (on|redirected to) the projects page$/ do |foo|
+  expect(current_path).to eq projects_path
 end

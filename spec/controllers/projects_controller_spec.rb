@@ -124,7 +124,7 @@ describe ProjectsController do
       it "should be denied" do
         get :edit, id: @project
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 

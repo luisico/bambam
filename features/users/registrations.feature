@@ -48,7 +48,7 @@ Feature: Sign up by invitation only
     Given I am signed in
     When I try to invite a user
     Then I should be denied access
-    And I should be redirected to the tracks page
+    And I should be redirected to the projects page
 
   Scenario Outline: Invitee signs up after being invited
     Given I do not exist as a user
@@ -57,7 +57,7 @@ Feature: Sign up by invitation only
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
     And I should be signed in
-    And I should be on the tracks page
+    And I should be on the projects page
 
     Examples:
       | role    |

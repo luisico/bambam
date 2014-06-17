@@ -31,4 +31,4 @@ Feature: List of users
     And there is not a users link in the navigation bar
     When I visit the users page
     Then I should be denied access
-    And I should be redirected to the tracks page
+    And I should be redirected to the projects page

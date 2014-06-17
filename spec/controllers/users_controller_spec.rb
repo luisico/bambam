@@ -34,7 +34,7 @@ describe UsersController do
       it "should be denied" do
         get :index
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
   end
@@ -77,7 +77,7 @@ describe UsersController do
       it "should not be able to view show page of another user" do
         get :show, id: @users[1]
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
