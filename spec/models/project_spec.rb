@@ -33,10 +33,7 @@ describe Project do
   end
 
   describe "when project destroyed" do
-    before do
-      @project.users << @project.owner
-      @project.save!
-    end
+    before {@project.save!}
 
     it "should destroy the project" do
       expect { @project.destroy }.to change(Project, :count).by(-1)
