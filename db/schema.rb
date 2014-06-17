@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20140612162536) do
     t.string   "path",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "project_id"
+    t.integer  "project_id", null: false
   end
 
   add_index "tracks", ["name"], name: "index_tracks_on_name"
