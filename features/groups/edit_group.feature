@@ -5,7 +5,7 @@ Feature: Edit group information
 
   Scenario: User can access the group edit page from the group show page
     Given I am signed in
-    And one of my groups is in the system
+    And I own a group
     And there are 3 additional members of that group
     When I am on the group page
     And I click on the group edit link
@@ -13,14 +13,14 @@ Feature: Edit group information
 
   Scenario: User can change the group name
     Given I am signed in
-    And one of my groups is in the system
+    And I own a group
     And there are 3 additional members of that group
     When I visit the edit group page
     Then I should be able to edit the group name
 
   Scenario: User can change the group members
     Given I am signed in
-    And one of my groups is in the system
+    And I own a group
     And there are 3 additional members of that group
     When I visit the edit group page
     Then I should be able to edit the group members

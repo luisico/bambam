@@ -2,10 +2,6 @@
 
 ### Given
 
-Given /^there are (\d+) additional members of that group$/ do |number|
-  FactoryGirl.create_list(:user, number.to_i, :groups => [@group])
-end
-
 ### When
 
 When /^I click on the group name$/ do

@@ -2,11 +2,6 @@
 
 ### Given
 
-Given /^one of my groups is in the system$/ do
-  @group = FactoryGirl.create(:group, owner: @user)
-  @group.members << @user
-end
-
 ### When
 
 When /^I click on the group edit link$/ do

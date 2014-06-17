@@ -2,9 +2,7 @@ require 'spec_helper'
 
 describe GroupsController do
   describe "GET 'index'" do
-    before do
-      @groups = FactoryGirl.create_list(:group, 2)
-    end
+    before { @groups = FactoryGirl.create_list(:group, 2) }
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
@@ -59,7 +57,10 @@ describe GroupsController do
 
   describe "GET 'new'" do
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
       it "should be successful" do
         get :new
@@ -70,6 +71,22 @@ describe GroupsController do
       it "should build a new group" do
         get :new
         expect(assigns(:group)).to be_new_record
+        expect(assigns(:group)).to be_kind_of Group
+      end
+
+      it "should assign ownership to signed in user" do
+        get :new, id: @group
+        expect(assigns(:group).owner).to eq @user
+      end
+
+      it "should add signed in user to members" do
+        get :new, id: @group
+        expect(assigns(:group).members).to include @user
+      end
+
+      it "should assign potential members" do
+        get :new, id: @group
+        expect(assigns(:potential_members)).not_to be_empty
       end
     end
 
@@ -97,6 +114,11 @@ describe GroupsController do
       it "should return the group" do
         get :edit, id: @group
         expect(assigns(:group)).to eq @group
+      end
+
+      it "should assign potential members" do
+        get :edit, id: @group
+        expect(assigns(:potential_members)).not_to be_empty
       end
     end
 
@@ -132,10 +154,15 @@ describe GroupsController do
         end
 
         it "should create a new group" do
-          expect{
+          expect {
             post :create, group: @group_attr
           }.to change(Group, :count).by(1)
           expect(assigns(:group)).to eq Group.last
+        end
+
+        it "should assign potential members" do
+          get :new, id: @group
+          expect(assigns(:potential_members)).not_to be_empty
         end
       end
 
@@ -147,7 +174,7 @@ describe GroupsController do
         end
 
         it "should not create a new group" do
-          expect{
+          expect {
             post :create, group: @group_attr.merge(name: '')
           }.not_to change(Group, :count)
           expect(assigns(:group)).to be_new_record
@@ -163,7 +190,7 @@ describe GroupsController do
       end
 
       it "should not create a new group" do
-        expect{
+        expect {
           post :create, group: @group_attr
         }.not_to change(Group, :count)
       end
@@ -177,9 +204,7 @@ describe GroupsController do
       before { sign_in @group.owner }
 
       context 'with valid parameters' do
-        before do
-          @new_group = FactoryGirl.attributes_for(:group)
-        end
+        before { @new_group = FactoryGirl.attributes_for(:group) }
 
         it "should redirect to the updated show page" do
           patch :update, id: @group, group: @new_group
@@ -232,7 +257,7 @@ describe GroupsController do
       end
 
       it "should not change the group's attributes" do
-        expect{
+        expect {
           patch :update, id: @group, group: {name: ''}
         }.not_to change(@group, :name)
       end
@@ -251,7 +276,7 @@ describe GroupsController do
       end
 
       it "should delete the group" do
-        expect{
+        expect {
           delete :destroy, id: @group
         }.to change(Group, :count).by(-1)
         expect(assigns(:group)).to eq @group
@@ -276,11 +301,28 @@ describe GroupsController do
       end
 
       it "should not delete the group" do
-        expect{
+        expect {
           delete :destroy, id: @group
         }.not_to change(Group, :count)
       end
     end
   end
-end
 
+  describe "#potential_members" do
+    before do
+      @owner = FactoryGirl.create(:user)
+      @members = FactoryGirl.create_list(:user, 2)
+      @users = FactoryGirl.create_list(:user, 2)
+      @group = FactoryGirl.create(:group, owner: @owner, members: @members)
+    end
+
+    it "should return the owner first" do
+      expect(controller.send(:potential_members, @group).first).to eq @owner
+    end
+
+    it "should return the owner only once" do
+      selected = controller.send(:potential_members, @group).select{|m| m == @owner}
+      expect(selected.count).to eq 1
+    end
+  end
+end

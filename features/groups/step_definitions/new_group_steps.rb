@@ -1,12 +1,12 @@
 ### Methods
 
 def build_group
-  @group ||= FactoryGirl.attributes_for(:group)
+  @group_attrs ||= FactoryGirl.attributes_for(:group)
 end
 
-def fill_group_form(group=nil)
-  group ||= @group
-  fill_in 'Group name', with: group[:name]
+def fill_group_form(group_attrs=nil)
+  group_attrs ||= @group_attrs
+  fill_in 'Group name', with: group_attrs[:name]
   check User.last.email
   yield if block_given?
   click_button 'Create Group'
@@ -34,7 +34,7 @@ end
 When /^I create a group without a name$/ do
   expect{
     build_group
-    fill_group_form @group.merge(name: '')
+    fill_group_form @group_attrs.merge(name: '')
   }.to change(Group, :count).by(0)
 end
 
@@ -45,6 +45,7 @@ When /^I create a group with multiple members$/ do
       check User.all[-2].email
     end
   }.to change(Group, :count).by(1)
+  Group.last.members.count.should == 3
 end
 
 ### Then

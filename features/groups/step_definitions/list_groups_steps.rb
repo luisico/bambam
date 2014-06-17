@@ -2,16 +2,6 @@
 
 ### Given
 
-Given /^there (is|are) (\d+|a|an) groups? in the system$/ do |foo, n|
-  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-
-  expect {
-    FactoryGirl.create_list(:group, n)
-  }.to change(Group, :count).by(n)
-  @group = Group.last
-  @group.members << @group.owner
-end
-
 ### When
 
 When /^I am on the groups page$/ do

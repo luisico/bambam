@@ -1,4 +1,3 @@
-@now
 Feature: Create a group
   In order to add a new group to the application
   As a user
