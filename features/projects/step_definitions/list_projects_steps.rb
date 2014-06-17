@@ -2,16 +2,6 @@
 
 ### Given
 
-Given /^there (is|are) (\d+|a|an) projects? in the system$/ do |foo, n|
-  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-
-  expect {
-    @projects = FactoryGirl.create_list(:project, n)
-  }.to change(Project, :count).by(n)
-  @project = Project.last
-  @project.users << @project.owner
-end
-
 ### When
 
 When /^I am on the projects page$/ do

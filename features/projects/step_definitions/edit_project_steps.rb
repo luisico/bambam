@@ -2,14 +2,6 @@
 
 ### Given
 
-Given /^there are (\d+) additional users of that project$/ do |n|
-  FactoryGirl.create_list(:user, n.to_i, :projects => [@project])
-end
-
-Given /^there are (\d+) additional tracks in that project$/ do |n|
-  FactoryGirl.create_list(:test_track, n.to_i, :project => @project)
-end
-
 ### When
 
 When /^I click on the project edit link$/ do

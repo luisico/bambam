@@ -5,14 +5,14 @@ Feature: Show a project
 
   Scenario: User can access the project show page from the projects page
     Given I am signed in
-    And one of my projects is in the system
+    And I own a project
     When I am on the projects page
     And I click on the project name
     Then I should be on the show project page
 
   Scenario: Show a project's information
     Given I am signed in
-    And one of my projects is in the system
+    And I own a project
     When I am on the project page
     Then I should see the project's name
     And I should see the projects tracks

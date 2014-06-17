@@ -24,6 +24,13 @@ Feature: Show a user profile
     When I am on my Account Profile page
     Then I should only see a list of groups I am a member of
 
+  Scenario: Show multiple projects info
+    Given I am signed in
+    And I own 2 projects
+    And I belong to 2 projects
+    When I am on my Account Profile page
+    And I should see my projects
+
   Scenario Outline: Admin/inviter can access the user show page from the users page
     Given I am signed in as an <role>
     And there is another user in the system
