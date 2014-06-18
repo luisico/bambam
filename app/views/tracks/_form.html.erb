@@ -22,8 +22,7 @@
   </div>
 
   <div class="field">
-    <label>Assign track to a project</label>
-    <%= f.select :project_id,  Project.all.collect {|p| [p.name, p.id]}, {:include_blank => true, :default => nil} %>
+    <%= f.hidden_field :project_id, :value => "#{@project.id}"  %>
   </div>
 
   <div class="actions">

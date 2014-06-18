@@ -9,35 +9,22 @@
     <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
   </div>
 
-  <div class="row">
-    <div class="field">
-      <div class="small-12 medium-6 columns">
-        <h4>Add users</h4>
-        <% User.all.each do |user| %>
-          <% if !@project.owner && user == current_user %>
-            <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-            <%= label_tag dom_id(user), user.email %><br>
-            <%= hidden_field_tag "project[user_ids][]", user.id %>
-          <% elsif user == @project.owner %>
-            <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-            <%= label_tag dom_id(user), user.email %><br>
-            <%= hidden_field_tag "project[user_ids][]", user.id %>
-          <% else %>
-            <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
-            <%= label_tag dom_id(user), user.email %><br>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-    <div class="field">
-      <div class="small-12 medium-6 columns">
-        <h4>Add tracks</h4>
-        <% Track.all.each do |track| %>
-          <%= check_box_tag "project[track_ids][]", track.id, @project.track_ids.include?(track.id), id: dom_id(track) %>
-          <%= label_tag dom_id(track), track.name %><br>
-        <% end %>
-      </div>
-    </div>
+  <div class="field">
+    <h4>Add users</h4>
+    <% User.all.each do |user| %>
+      <% if !@project.owner && user == current_user %>
+        <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+        <%= hidden_field_tag "project[user_ids][]", user.id %>
+      <% elsif user == @project.owner %>
+        <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+        <%= hidden_field_tag "project[user_ids][]", user.id %>
+      <% else %>
+        <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.email %><br>
+      <% end %>
+    <% end %>
   </div>
 
   <div class="actions">
