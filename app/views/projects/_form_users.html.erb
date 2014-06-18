@@ -6,11 +6,6 @@
   <% end %>
 
   <div class="field">
-    <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
-  </div>
-
-  <div class="field">
-    <h4>Add users</h4>
     <% User.all.each do |user| %>
       <% if !@project.owner && user == current_user %>
         <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
@@ -31,3 +26,4 @@
     <%= f.submit class: 'button tiny radius' %>
   </div>
 <% end %>
+

@@ -1,0 +1,15 @@
+<%= form_for(@project) do |f| %>
+  <% if @project.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@project.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+  </div>
+<% end %>
