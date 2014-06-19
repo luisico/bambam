@@ -1,12 +1,14 @@
 module TracksHelper
   def link_to_igv(track, text=nil)
-    klass = 'tiny radius service button'
+    klass = 'tiny radius igv service button'
     if text.nil?
       text = 'igv'
       klass << ' fi-eye'
     end
 
-    link_to text, igv_url(track), class: klass
+    uri = igv_url(track)
+    link_to text, uri.to_s, class: klass,
+      data: {port: uri.port, command: uri.path.sub!(%r{^/},''), params: uri.query}
   end
 
   def igv_url(track)
@@ -20,7 +22,7 @@ module TracksHelper
         name: track.name,
         merge: true
       }.to_query
-    ).to_s
+    )
   end
 
   def ucsc_track_line(track)

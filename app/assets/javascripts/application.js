@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require foundation
 //= require local_time
+//= require igv/webstart
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

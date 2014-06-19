@@ -8,38 +8,37 @@ describe TracksHelper do
       expect{helper.igv_url}.to raise_error(ArgumentError)
     end
 
+    it "returns a URI object" do
+      expect(helper.igv_url(@track)).to be_kind_of URI
+    end
+
     it "points to a local igv instance" do
-      expect(helper.igv_url(@track)).to match %r{^http://localhost:60151}
+      expect(helper.igv_url(@track).to_s).to match %r{^http://localhost:60151}
     end
 
     it "sets the path to 'load'" do
-      path = URI(helper.igv_url(@track)).path
-      expect(path).to eq '/load'
+      expect(helper.igv_url(@track).path).to eq '/load'
     end
 
     context "query parameter" do
       it "file is properly encoded and includes extension" do
-        query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode stream_services_track_url(@track, format: 'bam')
-        expect(query).to match %r{file=#{encoded}}
+        expect(helper.igv_url(@track).query).to match %r{file=#{encoded}}
       end
 
       it "name is properly encoded" do
-        query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode @track.name
-        expect(query).to match /name=#{encoded}/
+        expect(helper.igv_url(@track).query).to match /name=#{encoded}/
       end
 
       it "genome is properly encoded" do
-        query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode 'hg19'
-        expect(query).to match /genome=#{encoded}/
+        expect(helper.igv_url(@track).query).to match /genome=#{encoded}/
       end
 
       it "merge is properly encoded" do
-        query = URI(helper.igv_url(@track)).query
         encoded = ERB::Util.url_encode 'true'
-        expect(query).to match /merge=#{encoded}/
+        expect(helper.igv_url(@track).query).to match /merge=#{encoded}/
       end
     end
   end
@@ -47,7 +46,7 @@ describe TracksHelper do
   describe "#link_to_igv" do
     before do
       @track = FactoryGirl.build(:test_track)
-      allow(helper).to receive(:igv_url).and_return('myurl')
+      allow(helper).to receive(:igv_url).and_return(URI('http://localhost:60151/load?file=myfile'))
     end
 
     it "needs a track as argument" do
@@ -55,15 +54,35 @@ describe TracksHelper do
     end
 
     it "returns a link tag" do
-      expect(helper.link_to_igv(@track)).to match 'href="myurl"'
+      expect(helper.link_to_igv(@track)).to match 'href="http://localhost'
     end
 
-    it "default text is 'IGV'" do
-      expect(helper.link_to_igv(@track)).to match '>igv</a>'
+    context "wrapps igv options in data" do
+      it "port" do
+        expect(helper.link_to_igv(@track)).to match 'data-port="60151"'
+      end
+
+      it "command" do
+        expect(helper.link_to_igv(@track)).to match 'data-command="load"'
+      end
+
+      it "params" do
+        expect(helper.link_to_igv(@track)).to match 'data-params="file=myfile"'
+      end
     end
 
-    it "accepts an optional text for the link" do
-      expect(helper.link_to_igv(@track, 'mytext')).to match ">mytext</a>"
+    context "text" do
+      it "defaults to 'IGV'" do
+        expect(helper.link_to_igv(@track)).to match '>igv</a>'
+      end
+
+      it "accepts an optional text" do
+        expect(helper.link_to_igv(@track, 'mytext')).to match ">mytext</a>"
+      end
+    end
+
+    it "contains 'igv' and 'service' css classes" do
+      expect(helper.link_to_igv(@track)).to match '<a class=".*igv service.*"'
     end
   end
 
