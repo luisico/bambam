@@ -14,6 +14,7 @@ class TracksController < ApplicationController
   end
 
   def edit
+    @project = @track.project
   end
 
   def create
