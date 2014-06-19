@@ -1,0 +1,24 @@
+<%= form_for(@project) do |f| %>
+  <% if @project.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@project.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.fields_for :tracks do |builder| %>
+      <fieldset>
+      <%= builder.label :name %>
+      <%= builder.text_field :name %>
+      <%= builder.label :path %>
+      <%= builder.text_field :path %>
+      <%= builder.check_box :_destroy %>
+      <%= builder.label :_destroy, "Remove track" %>
+      </fieldset>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+  </div>
+<% end %>
