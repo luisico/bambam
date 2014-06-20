@@ -145,7 +145,10 @@ describe GroupsController do
     before { @group_attr = FactoryGirl.attributes_for(:group) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
       context "with valid parameters" do
         it "should be a redirect to the new group show page" do
@@ -160,9 +163,14 @@ describe GroupsController do
           expect(assigns(:group)).to eq Group.last
         end
 
-        it "should assign potential members" do
-          get :new, id: @group
-          expect(assigns(:potential_members)).not_to be_empty
+        it "should assign ownership to signed in user" do
+          post :create, group: @group_attr
+          expect(assigns(:group).owner).to eq @user
+        end
+
+        it "should add signed in user to members" do
+          post :create, group: @group_attr
+          expect(assigns(:group).members).to include @user
         end
       end
 
@@ -178,6 +186,11 @@ describe GroupsController do
             post :create, group: @group_attr.merge(name: '')
           }.not_to change(Group, :count)
           expect(assigns(:group)).to be_new_record
+        end
+
+        it "should assign potential members" do
+          post :create, group: @group_attr.merge(name: '')
+          expect(assigns(:potential_members)).not_to be_empty
         end
       end
     end
@@ -201,7 +214,10 @@ describe GroupsController do
     before { @group = FactoryGirl.create(:group) }
 
     context "as a signed in user and owner of @group" do
-      before { sign_in @group.owner }
+      before do
+        @user = @group.owner
+        sign_in @user
+      end
 
       context 'with valid parameters' do
         before { @new_group = FactoryGirl.attributes_for(:group) }
@@ -216,6 +232,17 @@ describe GroupsController do
           @group.reload
           expect(assigns(:group)).to eq @group
           expect(@group.name).to eq @new_group[:name]
+        end
+
+        it "should not change ownership" do
+          expect {
+            patch :update, id: @group, group: @new_group
+          }.not_to change(@group, :owner)
+        end
+
+        it "should add owner to members if not present" do
+          patch :update, id: @group, group: @new_group.merge(member_ids: [])
+          expect(assigns(:group).members).to include @group.owner
         end
       end
 
@@ -233,6 +260,29 @@ describe GroupsController do
           }.not_to change(@group, :name)
           expect(assigns(:group)).to eq @group
         end
+      end
+    end
+
+    context "as an admin" do
+      before do
+       sign_in FactoryGirl.create(:admin)
+       @new_group = FactoryGirl.attributes_for(:group)
+     end
+
+      it "should not change ownership" do
+        expect {
+          patch :update, id: @group, group: @new_group
+        }.not_to change(@group, :owner)
+      end
+
+      it "should add owner to members if not present" do
+        patch :update, id: @group, group: @new_group.merge(member_ids: [])
+        expect(assigns(:group).members).to include @group.owner
+      end
+
+      it "should not add admin to members" do
+        patch :update, id: @group, group: @new_group.merge(member_ids: [])
+        expect(assigns(:group).members).not_to include @admin
       end
     end
 
