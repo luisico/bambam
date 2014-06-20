@@ -1,16 +1,17 @@
-<fieldset <%= k.nil? ? '' : "class=#{k}"%>>
+<div class="track-form-group <%= k.nil? ? '' : k %>">
   <ul class="inline-list">
+    <li><i class="fi-plus medium"></i></li>
     <li><%= link_to f.object.name, f.object, class: "track-name" if f.object.id %></li>
     <li><%= link_to "edit", '#', class: "edit-track" %></li>
     <li><%= link_to "done", '#', class: "done-track" %></li>
     <li><%= link_to "delete", '#', class: "remove-track" %></li>
     <li><%= link_to "restore", '#', class: "restore-track" %></li>
   </ul>
-  <div class="track-form-group">
+  <div class="track-form-fields">
     <%= f.label :name %>
     <%= f.text_field :name %>
     <%= f.label :path %>
     <%= f.text_field :path %>
     <%= f.hidden_field :_destroy %>
   </div>
-</fieldset>
+</div>
