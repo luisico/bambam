@@ -22,6 +22,10 @@ Then /^I should see the group's name$/ do
   expect(page).to have_content @group.name
 end
 
+Then /^I should see the group's owner$/ do
+  expect(page).to have_content "#{@group.owner.email} (owner)"
+end
+
 Then /^I should see the group's members$/ do
   @group.members.each do |member|
     expect(page).to have_content member.email

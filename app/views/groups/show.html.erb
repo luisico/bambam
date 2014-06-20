@@ -11,12 +11,13 @@
 
       <div>
         <% @group.members.each do |member| %>
-        <p>
-          <%= link_to member do %>
-            <%= image_tag avatar_url(member) %>
-            <%= member.email %>
-          <% end %>
-        </p>
+          <p>
+            <%= link_to member do %>
+              <%= image_tag avatar_url(member) %>
+              <%= member.email %>
+            <% end %>
+            <%= "(owner)" if member == @group.owner%>
+          </p>
         <% end %>
       </div>
     </div>

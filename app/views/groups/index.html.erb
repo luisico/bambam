@@ -5,9 +5,7 @@
       <h3>Groups</h3>
       <ul class="no-bullet">
         <% @groups.each do |group| %>
-          <li>
-            <%= link_to group.name, group %>
-          </li>
+          <li><%= link_to group.name, group %> (owner: <%= group.owner.email %>)</li>
         <% end %>
       </ul>
     </div>

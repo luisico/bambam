@@ -17,6 +17,7 @@ Feature: Show a group
     And there are 3 additional members of that group
     When I am on the group page
     Then I should see the group's name
+    And I should see the group's owner
     And I should see the group's members
     And I should see the group's creation date
     And I should see the date of the group's last update
