@@ -1,22 +1,28 @@
 jQuery ->
-  $('form').on 'click', '.remove-track', (event) ->
-    $(this).closest('fieldset').children('div.track-form-group').children('input[type=hidden]').val('1')
-    $(this).parent().siblings().find('.track-name').css('textDecoration', 'line-through')
-    $(this).parent().siblings().find('.edit-track').hide()
-    $(this).parent().siblings().find('.done-track').hide()
-    $(this).closest('fieldset').children('div.track-form-group').hide()
-    $(this).hide()
-    $(this).parent().siblings().find('.restore-track').show()
-    $('.update-project-tracks').show()
-    event.preventDefault()
+  $('.track-form-group').hide()
+  $('.edit-track').show()
 
-  $('.edit-track').click ->
+  $('form').on 'click', '.remove-track', (event) ->
+    if $(this).closest('fieldset').hasClass('new-record')
+      $(this).closest('fieldset').remove()
+    else
+      $(this).closest('fieldset').children('div.track-form-group').children('input[type=hidden]').val('1')
+      $(this).parent().siblings().find('.track-name').css('textDecoration', 'line-through')
+      $(this).parent().siblings().find('.edit-track').hide()
+      $(this).parent().siblings().find('.done-track').hide()
+      $(this).closest('fieldset').children('div.track-form-group').hide()
+      $(this).hide()
+      $(this).parent().siblings().find('.restore-track').show()
+      $('.update-project-tracks').show()
+      event.preventDefault()
+
+  $('form').on 'click', '.edit-track', (event) ->
     $(this).hide()
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('fieldset').children('div').show()
     $('.update-project-tracks').show()
 
-  $('.done-track').click ->
+  $('form').on 'click', '.done-track', (event) ->
     $(this).hide()
     text = $(this).closest('fieldset').children('div.track-form-group').find('input').first().val()
     $(this).parent().siblings().find('.track-name').text(text)
@@ -24,7 +30,7 @@ jQuery ->
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('fieldset').children('div').hide()
 
-  $('.restore-track').click ->
+  $('form').on 'click', '.restore-track', (event) ->
     $(this).hide()
     $(this).parent().siblings().find('.track-name').css('textDecoration', 'none')
     $(this).parent().siblings().find('.track-name').show()
@@ -37,7 +43,3 @@ jQuery ->
     regexp = new RegExp($(this).data('id'), 'g')
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
-
-  $('div.track-form-group').hide()
-  $('.restore-track').hide()
-  $('.done-track').hide()

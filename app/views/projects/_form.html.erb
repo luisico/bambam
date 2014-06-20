@@ -6,7 +6,7 @@
   <% end %>
 
   <%= f.fields_for :tracks do |builder| %>
-    <%= render 'track_fields', f: builder %>
+    <%= render 'track_fields', f: builder, k: nil %>
   <% end %>
   <%= link_to_add_fields "Add Track", f, :tracks %>
 
