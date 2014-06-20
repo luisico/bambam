@@ -1,0 +1,17 @@
+<%= form_for(@project) do |f| %>
+  <% if @project.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@project.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <%= f.fields_for :tracks do |builder| %>
+    <%= render 'track_fields', f: builder %>
+  <% end %>
+  <%= link_to_add_fields "Add Track", f, :tracks %>
+
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius update-project-tracks' %>
+  </div>
+<% end %>

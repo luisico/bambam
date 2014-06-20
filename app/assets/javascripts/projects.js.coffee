@@ -32,7 +32,12 @@ jQuery ->
     $(this).parent().siblings().find('.remove-track').show()
     $(this).closest('fieldset').children('div.track-form-group').children('input[type=hidden]').val('0')
 
+  $('form').on 'click', '.add_fields', (event) ->
+    time = new Date().getTime()
+    regexp = new RegExp($(this).data('id'), 'g')
+    $(this).before($(this).data('fields').replace(regexp, time))
+    event.preventDefault()
+
   $('div.track-form-group').hide()
-  $('.update-project-tracks').hide()
   $('.restore-track').hide()
   $('.done-track').hide()
