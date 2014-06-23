@@ -9,7 +9,7 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index, :show]
 
-  resources :tracks
+  resources :tracks, except: [:new, :create]
 
   resources :projects
 

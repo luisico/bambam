@@ -55,31 +55,6 @@ describe TracksController do
     end
   end
 
-  describe "GET 'new'" do
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
-
-      it "should be successful" do
-        get :new
-        expect(response).to be_success
-        expect(response).to render_template :new
-      end
-
-      it "should build a new track" do
-        get :new
-        expect(assigns(:track)).to be_new_record
-      end
-    end
-
-    context "as a visitor" do
-      it "should redirect to the sign in page" do
-        get :new
-        expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
-      end
-    end
-  end
-
   describe "GET 'edit'" do
     before { @track = FactoryGirl.create(:test_track) }
 
@@ -103,62 +78,6 @@ describe TracksController do
         get :edit, id: @track
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
-      end
-    end
-  end
-
-  describe "Post 'create'" do
-    before do
-      @project = FactoryGirl.create(:project)
-      @track_attr = FactoryGirl.attributes_for(:test_track, path: File.join('tmp', 'mytrack.bam'), project_id: @project.id)
-      File.open(@track_attr[:path], 'w'){|f| f.puts 'track contents'}
-    end
-    after { File.unlink(@track_attr[:path]) if File.exist?(@track_attr[:path]) }
-
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
-
-      context "with valid parameters" do
-        it "should be a redirect to the new track show page" do
-          post :create, track: @track_attr
-          expect(response).to redirect_to track_path(Track.last)
-        end
-
-        it "should create a new track" do
-          expect{
-            post :create, track: @track_attr
-          }.to change(Track, :count).by(1)
-          expect(assigns(:track)).to eq Track.last
-        end
-      end
-
-      context "with invalid parameters" do
-        it "should render new template" do
-          post :create, track: @track_attr.merge(name: '')
-          expect(response).to be_success
-          expect(response).to render_template :new
-        end
-
-        it "should not create a new track" do
-          expect{
-            post :create, track: @track_attr.merge(name: '')
-          }.not_to change(Track, :count)
-          expect(assigns(:track)).to be_new_record
-        end
-      end
-    end
-
-    context "as a visitor" do
-      it "should redirect to the sign in page" do
-        post :create, track: @track_attr
-        expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
-      end
-
-      it "should not create a new track" do
-        expect{
-          post :create, track: @track_attr
-        }.not_to change(Track, :count)
       end
     end
   end

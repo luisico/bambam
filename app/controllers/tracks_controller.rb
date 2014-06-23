@@ -10,20 +10,10 @@ class TracksController < ApplicationController
   def show
   end
 
-  def new
-  end
-
   def edit
     @project = @track.project
   end
 
-  def create
-    if @track.save
-      redirect_to @track, notice: 'Track was successfully created.'
-    else
-      render action: 'new'
-    end
-  end
 
   def update
     if @track.update(track_params)
