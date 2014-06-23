@@ -1,4 +1,3 @@
-@now
 Feature: Edit project information
   In order to have an up to date project
   As a user
@@ -30,12 +29,6 @@ Feature: Edit project information
     And there are 3 additional tracks in that project
     When I visit the edit project page
     Then I should be able to edit the project tracks
-
-  Scenario: User can add a new the project users
-    Given I am signed in
-    And I own a project
-    When I visit the edit project page
-    Then I should be able to add a track to the project
 
   Scenario: Admin can access the project edit page from the project show page
     Given I am signed in as an admin

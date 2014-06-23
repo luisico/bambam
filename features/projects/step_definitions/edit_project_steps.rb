@@ -50,17 +50,6 @@ Then /^I should be able to edit the project tracks$/ do
   expect(page).not_to have_content(Track.first.name)
 end
 
-Then /^I should be able to add a track to the project$/ do
-  expect {
-    click_link 'Add Track'
-    within('.new-record') {
-      fill_in 'Name', with: 'new_track_name'
-      fill_in 'Path', with: 'tmp/tests/track4.bam'
-    }
-    @project.reload
-  }.to change(@project.tracks, :count).by(1)
-end
-
 Then /^I should be able to update project without changing project owner$/ do
   expect{
     click_button 'Update'

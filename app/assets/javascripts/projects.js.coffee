@@ -1,6 +1,6 @@
 jQuery ->
-  $('.track-form-fields').hide()
   $('.edit-track').show()
+  $('.error').closest('div.track-form-fields').show()
 
   $('form').on 'click', '.remove-track', (event) ->
     if $(this).closest('div.track-form-group').hasClass('new-record')
@@ -17,14 +17,15 @@ jQuery ->
       event.preventDefault()
 
   $('form').on 'click', '.edit-track', (event) ->
-    console.log($(this))
     $(this).hide()
+    $(this).parent().siblings().find('.remove-track').hide()
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('div.track-form-group').children('div').show()
     $('.update-project-tracks').show()
 
   $('form').on 'click', '.done-track', (event) ->
     $(this).hide()
+    $(this).parent().siblings().find('.remove-track').show()
     text = $(this).closest('div.track-form-group').children('div.track-form-fields').find('input').first().val()
     $(this).parent().siblings().find('.track-name').text(text)
     $(this).parent().siblings().find('.edit-track').show()
@@ -44,3 +45,4 @@ jQuery ->
     regexp = new RegExp($(this).data('id'), 'g')
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
+    $.when(event).done($(this).siblings('.new-record').children('.track-form-fields').show())
