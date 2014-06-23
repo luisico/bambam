@@ -31,6 +31,12 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should be able to edit the project tracks
 
+  Scenario: User can add a new the project users
+    Given I am signed in
+    And I own a project
+    When I visit the edit project page
+    Then I should be able to add a track to the project
+
   Scenario: Admin can access the project edit page from the project show page
     Given I am signed in as an admin
     And there is a project in the system

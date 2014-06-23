@@ -38,11 +38,27 @@ end
 
 Then /^I should be able to edit the project tracks$/ do
   expect {
-    uncheck @project.tracks.last.name
+    track_group = first('.track-form-group')
+    within(track_group) {
+      click_link 'edit'
+      fill_in 'Name', with: 'new_track_name'
+    }
     click_button 'Update'
-  }.to change(@project.tracks, :count).by(-1)
+    @project.reload
+  }.to change(@project.tracks.first, :name)
   expect(current_path).to eq project_path(@project)
-  expect(page).not_to have_content(Track.last.name)
+  expect(page).not_to have_content(Track.first.name)
+end
+
+Then /^I should be able to add a track to the project$/ do
+  expect {
+    click_link 'Add Track'
+    within('.new-record') {
+      fill_in 'Name', with: 'new_track_name'
+      fill_in 'Path', with: 'tmp/tests/track4.bam'
+    }
+    @project.reload
+  }.to change(@project.tracks, :count).by(1)
 end
 
 Then /^I should be able to update project without changing project owner$/ do
