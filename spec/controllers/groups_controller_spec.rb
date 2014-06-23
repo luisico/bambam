@@ -4,8 +4,8 @@ describe GroupsController do
   describe "GET 'index'" do
     before { @groups = FactoryGirl.create_list(:group, 2) }
 
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+    context "as an admin" do
+      before { sign_in FactoryGirl.create(:admin) }
 
       it "should be successful" do
         get :index
@@ -13,7 +13,7 @@ describe GroupsController do
         expect(response).to render_template :index
       end
 
-      it "should return all groups" do
+      it "should return allowed groups" do
         get :index
         expect(assigns(:groups)).to eq @groups
       end
@@ -31,18 +31,44 @@ describe GroupsController do
   describe "GET 'show'" do
     before { @group = FactoryGirl.create(:group) }
 
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+    context "as a user" do
+      context "as an admin" do
+        before { sign_in FactoryGirl.create(:admin) }
 
-      it "should be successful" do
-        get :show, id: @group
-        expect(response).to be_success
-        expect(response).to render_template :show
+        it "should be successful" do
+          get :show, id: @group
+          expect(response).to be_success
+          expect(response).to render_template :show
+        end
+
+        it "should return the group" do
+          get :show, id: @group
+          expect(assigns(:group)).to eq @group
+        end
       end
 
-      it "should return the group" do
-        get :show, id: @group
-        expect(assigns(:group)).to eq @group
+      context "as a group member" do
+        before { sign_in FactoryGirl.create(:user, groups: [@group]) }
+
+        it "should be successful" do
+          get :show, id: @group
+          expect(response).to be_success
+          expect(response).to render_template :show
+        end
+
+        it "should return the group" do
+          get :show, id: @group
+          expect(assigns(:group)).to eq @group
+        end
+      end
+
+      context "as a non group member" do
+        it "should be denied" do
+          sign_in FactoryGirl.create(:user)
+          get :show, id: @group
+          expect(response).not_to be_success
+          expect(response).to redirect_to tracks_path
+        end
       end
     end
 
@@ -56,10 +82,10 @@ describe GroupsController do
   end
 
   describe "GET 'new'" do
-    context "as a signed in user" do
+    context "as an admin" do
       before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
+        @admin = FactoryGirl.create(:admin)
+        sign_in @admin
       end
 
       it "should be successful" do
@@ -75,18 +101,27 @@ describe GroupsController do
       end
 
       it "should assign ownership to signed in user" do
-        get :new, id: @group
-        expect(assigns(:group).owner).to eq @user
+        get :new
+        expect(assigns(:group).owner).to eq @admin
       end
 
       it "should add signed in user to members" do
-        get :new, id: @group
-        expect(assigns(:group).members).to include @user
+        get :new
+        expect(assigns(:group).members).to include @admin
       end
 
       it "should assign potential members" do
-        get :new, id: @group
+        get :new
         expect(assigns(:potential_members)).not_to be_empty
+      end
+    end
+
+    context "as a user" do
+      it "should be denied" do
+        sign_in FactoryGirl.create(:user)
+        get :new
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
       end
     end
 
@@ -100,10 +135,13 @@ describe GroupsController do
   end
 
   describe "GET 'edit'" do
-    before { @group = FactoryGirl.create(:group) }
+    before do
+      @admin = FactoryGirl.create(:admin)
+      @group = FactoryGirl.create(:group, owner: @admin)
+    end
 
-    context "as a signed in user and owner of @group" do
-      before { sign_in @group.owner }
+    context "as an admin and owner of group" do
+      before { sign_in @admin }
 
       it "should be successful" do
         get :edit, id: @group
@@ -122,7 +160,7 @@ describe GroupsController do
       end
     end
 
-    context "as a signed in user" do
+    context "as a user" do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
@@ -144,10 +182,10 @@ describe GroupsController do
   describe "Post 'create'" do
     before { @group_attr = FactoryGirl.attributes_for(:group) }
 
-    context "as a signed in user" do
+    context "as an admin" do
       before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
+        @admin = FactoryGirl.create(:admin)
+        sign_in @admin
       end
 
       context "with valid parameters" do
@@ -165,12 +203,12 @@ describe GroupsController do
 
         it "should assign ownership to signed in user" do
           post :create, group: @group_attr
-          expect(assigns(:group).owner).to eq @user
+          expect(assigns(:group).owner).to eq @admin
         end
 
         it "should add signed in user to members" do
           post :create, group: @group_attr
-          expect(assigns(:group).members).to include @user
+          expect(assigns(:group).members).to include @admin
         end
       end
 
@@ -195,6 +233,22 @@ describe GroupsController do
       end
     end
 
+    context "as a user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be denied" do
+        post :create, group: @group_attr
+        expect(response).not_to be_success
+        expect(response).to redirect_to tracks_path
+      end
+
+      it "should not create a new group" do
+        expect {
+          post :create, group: @group_attr
+        }.not_to change(Group, :count)
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         post :create, group: @group_attr
@@ -211,13 +265,13 @@ describe GroupsController do
   end
 
   describe "Patch 'update'" do
-    before { @group = FactoryGirl.create(:group) }
+    before do
+      @admin = FactoryGirl.create(:admin)
+      @group = FactoryGirl.create(:group, owner: @admin)
+    end
 
-    context "as a signed in user and owner of @group" do
-      before do
-        @user = @group.owner
-        sign_in @user
-      end
+    context "as an admin and owner of group" do
+      before { sign_in @admin }
 
       context 'with valid parameters' do
         before { @new_group = FactoryGirl.attributes_for(:group) }
@@ -265,7 +319,8 @@ describe GroupsController do
 
     context "as an admin" do
       before do
-       sign_in FactoryGirl.create(:admin)
+       @user = FactoryGirl.create(:admin)
+       sign_in @user
        @new_group = FactoryGirl.attributes_for(:group)
      end
 
@@ -282,11 +337,11 @@ describe GroupsController do
 
       it "should not add admin to members" do
         patch :update, id: @group, group: @new_group.merge(member_ids: [])
-        expect(assigns(:group).members).not_to include @admin
+        expect(assigns(:group).members).not_to include @user
       end
     end
 
-    context "as a signed in user" do
+    context "as a user" do
       before do
        sign_in FactoryGirl.create(:user)
        @new_group = FactoryGirl.attributes_for(:group)
@@ -301,7 +356,7 @@ describe GroupsController do
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        patch :update, id: @group, group: {name: ''}
+        patch :update, id: @group, group: {name: 'new track name'}
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
@@ -315,10 +370,13 @@ describe GroupsController do
   end
 
   describe "Delete 'destroy'" do
-    before { @group = FactoryGirl.create(:group) }
+    before do
+      @admin = FactoryGirl.create(:admin)
+      @group = FactoryGirl.create(:group, owner: @admin)
+    end
 
-    context "as a signed in user and owner of @group" do
-      before { sign_in @group.owner }
+    context "as an admin" do
+      before { sign_in @admin }
 
       it "should redirect to group#index" do
         delete :destroy, id: @group
@@ -333,13 +391,19 @@ describe GroupsController do
       end
     end
 
-    context "as a signed in user" do
+    context "as a user" do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
         patch :destroy, id: @group
         expect(response).not_to be_success
         expect(response).to redirect_to tracks_path
+      end
+
+      it "should not delete the group" do
+        expect {
+          delete :destroy, id: @group
+        }.not_to change(Group, :count)
       end
     end
 

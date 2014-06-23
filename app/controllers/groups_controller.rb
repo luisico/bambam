@@ -1,11 +1,13 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
-  skip_load_and_authorize_resource only: :new
+  skip_load_resource only: [:index, :new]
 
   respond_to :html
 
   def index
+    # Abilities with blocks cannot be magically loaded by cancan
+    @groups = Group.all
   end
 
   def show
@@ -13,7 +15,6 @@ class GroupsController < ApplicationController
 
   def new
     @group = Group.new(owner: current_user, members: [current_user])
-    authorize! :new, @group
     @potential_members = potential_members(@group)
   end
 

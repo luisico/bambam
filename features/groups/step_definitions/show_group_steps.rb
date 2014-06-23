@@ -37,15 +37,6 @@ Then /^I should see the group's creation date$/ do
   expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@group.created_at.utc.iso8601}']"
 end
 
-Then /^I should see the date of the group's last update$/ do
+Then /^I should see the group's last update$/ do
   expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@group.updated_at.utc.iso8601}']"
-end
-
-Then /^I should be able to acess the group page from a link$/ do
-  click_link @group.name
-  expect(current_path).to eq group_path(@group)
-end
-
-Then /^I should not see (a|an) "(.*?)" button$/ do |foo, link|
-  expect(page).not_to have_link link
 end

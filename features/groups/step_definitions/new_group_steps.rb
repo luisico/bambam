@@ -71,11 +71,15 @@ Then /^I should see my email among the list of group member emails$/ do
 end
 
 Then /^I should be the groups owner$/ do
-  expect(Group.last.owner).to eq(@user)
+  expect(Group.last.owner).to eq(@admin)
 end
 
 Then /^all the group member email addresses on the list$/ do
   expect(page).to have_content Group.last.owner.email
   expect(page).to have_content User.last.email
   expect(page).to have_content User.all[-2].email
+end
+
+When /^I should not see link to create a new group$/ do
+  expect(page).not_to have_link new_group_path
 end

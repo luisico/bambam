@@ -4,23 +4,22 @@
 
 Given /^I own (\d+|a) groups?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  user = User.last
-  @groups = FactoryGirl.create_list(:group, n, owner: user)
-  @group = Group.last
+  @groups = FactoryGirl.create_list(:group, n, owner: @admin)
+  @group = @groups.last
 end
 
 Given /^I belong to (\d+|a) groups?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  user = User.last
-  @groups = FactoryGirl.create_list(:group, n, members: [user])
+  @groups = FactoryGirl.create_list(:group, n, members: [@user])
+  @group = @groups.last
 end
 
 Given /^there (is|are) (\d+|a) groups? in the system$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  user = FactoryGirl.create(:user)
+  admin = FactoryGirl.create(:admin)
 
   expect {
-    FactoryGirl.create_list(:group, n, owner: user)
+    @groups = FactoryGirl.create_list(:group, n, owner: admin)
   }.to change(Group, :count).by(n)
   @group = Group.last
 end

@@ -38,23 +38,6 @@ describe User do
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }
       end
-
-      context "tracks" do
-        it { should be_able_to(:manage, Track) }
-      end
-
-      context "groups" do
-        before do
-          @inviter_group = FactoryGirl.create(:group, owner: @inviter)
-          @user_group = FactoryGirl.create(:group, owner: @user)
-        end
-
-        it { should be_able_to(:read, Group) }
-        it { should be_able_to(:manage, @inviter_group)}
-
-        it { should_not be_able_to(:manage, @user_group)}
-        it { should be_able_to(:read, @user_group)}
-      end
     end
 
     describe "as a regular user" do
@@ -67,7 +50,7 @@ describe User do
       context "users" do
         it { should_not be_able_to(:manage, User) }
 
-        it { should_not be_able_to(:manage, @other_user)}
+        it { should_not be_able_to(:manage, @other_user) }
         it { should_not be_able_to(:cancel, @other_user) }
 
         it { should be_able_to(:show, @user) }
@@ -80,15 +63,23 @@ describe User do
 
       context "groups" do
         before do
-          @user_group = FactoryGirl.create(:group, owner: @user)
-          @other_user_group = FactoryGirl.create(:group, owner: @other_user)
+          @admin = FactoryGirl.create(:admin)
+          @group = FactoryGirl.create(:group, owner: @admin)
         end
 
-        it { should be_able_to(:read, Group) }
-        it { should be_able_to(:manage, @user_group)}
+        it { should_not be_able_to(:manage, Group) }
 
-        it { should_not be_able_to(:manage, @other_user_group)}
-        it { should be_able_to(:read, @other_user_group)}
+        context "without being a member of the group" do
+          it { should_not be_able_to(:manage, @group) }
+          it { should_not be_able_to(:read, @group) }
+        end
+
+        context "being a member of the group" do
+          before { @group.members << @user }
+
+          it { should_not be_able_to(:manage, @group) }
+          it { should be_able_to(:read, @group) }
+        end
       end
     end
   end

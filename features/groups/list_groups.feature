@@ -1,17 +1,24 @@
 Feature: List of groups
   In order to manage groups
-  As a user
+  As an admin
   I should be able to list groups
 
-  Background:
+  Scenario: Admins can see all groups
+    Given I am signed in as an admin
+    And there are 3 groups in the system
+    When I am on the groups page
+    Then I should see a list of all groups
+
+    When I click on the group name
+    Then I should be on the show group page
+
+  Scenario: Users can only see groups they are members of (owners are also members)
     Given I am signed in
-
-  Scenario: List of groups
-    Given there are 10 groups in the system
+    And there are 3 groups in the system
+    And I belong to 3 groups
     When I am on the groups page
-    Then I should see a list of groups
+    Then I should only see a list of groups I am a member of
 
-  Scenario: Provides links to individual group pages
-    Given there is a group in the system
-    When I am on the groups page
-    Then I should be able to acess the group page from a link
+    When I click on the group name
+    Then I should be on the show group page
+

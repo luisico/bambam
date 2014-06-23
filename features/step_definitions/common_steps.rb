@@ -38,10 +38,14 @@ Then /^I should see button to copy the (.*) to the clipboard$/ do |text|
   expect(page).to have_selector("##{clipboard_id}")
 end
 
-Then /^I should( not)? see a link to "(.*?)"$/ do |negate, link_text|
+Then /^I should( not)? see a link to "(.*?)"$/ do |negate, text|
   if negate
-    expect(page).not_to have_link link_text
+    expect(page).not_to have_link text
   else
-    expect(page).to have_link link_text
+    expect(page).to have_link text
   end
+end
+
+Then /^I should( not)? see an? "(.*?)" button$/ do |negate, text|
+  step %{I should#{negate} see a link to "#{text}"}
 end

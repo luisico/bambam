@@ -12,7 +12,7 @@ Feature: List of users
     And I should see their avatars
     And my <role> email should not have outstanding invite icon
     And I should see a form to invite a new user
-    And I should see a list of groups
+    And I should only see a list of groups I am a member of
 
   Examples:
     | role    |

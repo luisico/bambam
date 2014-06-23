@@ -9,18 +9,20 @@ class Ability
       can :manage, User
       can :manage, Track
       can :manage, Group
-    elsif user.has_role? :inviter
-      can :invite, User
-      can :cancel, User, id: user.id
-      can :manage, Track
-      can :manage, Group, owner_id: user.id
-      can :read, Group
     else
-      can :show, User, id: user.id
-      can :cancel, User, id: user.id
+      if user.has_role? :inviter
+        can :invite, User
+        can :cancel, User, id: user.id
+      else
+        can :show, User, id: user.id
+        can :cancel, User, id: user.id
+      end
+
       can :manage, Track
-      can :manage, Group, owner_id: user.id
-      can :read, Group
+
+      can :read, Group do |group|
+        group.members.include?(user)
+      end
     end
   end
 end
