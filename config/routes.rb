@@ -15,7 +15,7 @@ Bambam::Application.routes.draw do
     resources :track, only: :show, controller: 'stream_services', format: /[^\/]+/
   end
 
-  resources :groups
+  resources :groups, except: :index
 
   match 'user_root' => 'tracks#index', via: [:get]
 end

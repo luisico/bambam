@@ -1,14 +1,9 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
-  skip_load_resource only: [:index, :new]
+  skip_load_resource only: [:new]
 
   respond_to :html
-
-  def index
-    # Abilities with blocks cannot be magically loaded by cancan
-    @groups = Group.all
-  end
 
   def show
   end
@@ -47,7 +42,7 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
-    redirect_to groups_url
+    redirect_to users_path
   end
 
   private

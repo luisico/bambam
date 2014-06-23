@@ -12,7 +12,6 @@ Feature: Sign up by invitation only
     And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
 
-
     Examples:
       | role    | priviledge | status  |
       | admin   | should     | with    |

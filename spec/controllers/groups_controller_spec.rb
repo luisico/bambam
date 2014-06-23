@@ -1,33 +1,6 @@
 require 'spec_helper'
 
 describe GroupsController do
-  describe "GET 'index'" do
-    before { @groups = FactoryGirl.create_list(:group, 2) }
-
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
-
-      it "should be successful" do
-        get :index
-        expect(response).to be_success
-        expect(response).to render_template :index
-      end
-
-      it "should return allowed groups" do
-        get :index
-        expect(assigns(:groups)).to eq @groups
-      end
-    end
-
-    context "as a visitor" do
-      it "should redirect to the sign in page" do
-        get :index
-        expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
-      end
-    end
-  end
-
   describe "GET 'show'" do
     before { @group = FactoryGirl.create(:group) }
 
@@ -378,9 +351,9 @@ describe GroupsController do
     context "as an admin" do
       before { sign_in @admin }
 
-      it "should redirect to group#index" do
+      it "should redirect to users page" do
         delete :destroy, id: @group
-        expect(response).to redirect_to groups_url
+        expect(response).to redirect_to users_path
       end
 
       it "should delete the group" do
@@ -389,6 +362,13 @@ describe GroupsController do
         }.to change(Group, :count).by(-1)
         expect(assigns(:group)).to eq @group
       end
+
+      it "should not delete owner or members" do
+        expect {
+          delete :destroy, id: @group
+        }.not_to change(User, :count)
+      end
+
     end
 
     context "as a user" do

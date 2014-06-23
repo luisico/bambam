@@ -8,7 +8,7 @@ Feature: Create a group
     And there are 3 other users in the system
 
   Scenario: Admin creates a new group (and they become a member)
-    When I am on the groups page
+    When I am on the users page
     And I follow the new group link
     Then I should be on the new group page
     And my checkbox should be disabled
@@ -32,8 +32,7 @@ Feature: Create a group
     And all the group member email addresses on the list
     And I should see a message that the group was created successfully
 
-  Scenario: User cannot create a group
-    Given I sign out
-    And I am signed in as a user
-    When I am on the groups page
-    Then I should not see link to create a new group
+  Scenario: Canceling the new group brings back to the users page
+    When I am on the new group page
+    And I click cancel
+    Then I should be on the users page

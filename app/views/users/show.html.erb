@@ -16,7 +16,7 @@
           <h4>Groups</h4>
           <ul class="no-bullet">
             <% @user.groups.each do |group| %>
-              <li><%= link_to group.name, group %></li>
+              <li><%= link_to group.name, group %> owned by <%= group.owner.email %></li>
             <% end %>
           </ul>
         </div>

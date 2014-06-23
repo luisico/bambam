@@ -14,6 +14,10 @@ When /^I click on "(.*?)" in the top nav$/ do |link|
   end
 end
 
+When /^I click cancel$/ do
+  click_link 'Cancel'
+end
+
 ### Then
 
 Then /^the "(.*)" field should have the error "(.*)"$/ do |field, msg|

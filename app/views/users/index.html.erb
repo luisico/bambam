@@ -51,9 +51,9 @@
     <div class="panel">
       <h3>Groups</h3>
       <ul class="no-bullet">
-        <% Group.all.each do |group| %>
+        <% @groups.each do |group| %>
           <% if can? :read, group %>
-            <li><%= link_to group.name, group %></li>
+            <li><%= link_to group.name, group %> owned by <%= group.owner.email %></li>
           <% end %>
         <% end %>
       </ul>

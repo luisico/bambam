@@ -3,7 +3,7 @@ Feature: Delete a group
   As a admin
   I can delete a group
 
-  Scenario: User can access the group edit page from the groups page
+  Scenario: Delete a group
     Given I am signed in as an admin
     Given I own a group
     When I am on the group page

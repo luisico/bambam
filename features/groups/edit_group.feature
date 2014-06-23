@@ -20,3 +20,8 @@ Feature: Edit group information
   Scenario: Admin can change the group members
     When I visit the edit group page
     Then I should be able to edit the group members
+
+  Scenario: Canceling the update brings back to the users page
+    When I visit the edit group page
+    And I click cancel
+    Then I should be on the users page

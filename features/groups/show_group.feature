@@ -22,7 +22,7 @@ Feature: Show a group
     And I should see an "Edit" button
 
   Scenario: Group owners can manage the group
-    Given I am signed in
+    Given I am signed in as an admin
     And I own a group
     When I am on the group page
     And I should see a "Delete" button
