@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="small-12 medium-6 columns">
+  <div class="small-12 medium-8 medium-centered columns">
     <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
     <div class="panel">
       <h3>Projects</h3>
@@ -7,20 +7,6 @@
         <% @projects.each do |project| %>
           <li>
             <%= link_to project.name, project %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="small-12 medium-6 columns">
-    <%= link_to 'New Track', new_track_path, class: "button tiny radius" %>
-    <div class="panel">
-      <h3>Tracks</h3>
-      <ul class="no-bullet">
-        <% Track.all.each do |track| %>
-          <li>
-            <%= link_to_igv(track) %>
-            <%= link_to track.name, track, class: "track" %>
           </li>
         <% end %>
       </ul>

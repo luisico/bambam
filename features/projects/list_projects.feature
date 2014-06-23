@@ -15,11 +15,3 @@ Feature: List of projects
     And there are 10 projects in the system
     When I am on the projects page
     Then I should only see a list of my projects
-
-  Scenario: User can see list of tracks on projects page
-    Given I am signed in
-    And one of my projects is in the system
-    And there are 10 tracks in the system
-    When I am on the projects page
-    Then I should see a list of tracks
-    And I should see a "New Track" button
