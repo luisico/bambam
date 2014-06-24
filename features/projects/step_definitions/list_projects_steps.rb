@@ -22,7 +22,7 @@ Then /^I should only see a list of my projects$/ do
   @user.projects.each do |project|
     expect(page).to have_content project.name
   end
-  @projects.each do |project|
+  Project.all.keep_if{|p| p.owner != @user}.each do |project|
     expect(page).not_to have_content project.name
   end
 end

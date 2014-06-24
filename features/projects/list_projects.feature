@@ -11,7 +11,7 @@ Feature: List of projects
 
   Scenario: Users can view list of their projects
     Given I am signed in
-    And one of my projects is in the system
+    And I own a project
     And there are 10 projects in the system
     When I am on the projects page
     Then I should only see a list of my projects
