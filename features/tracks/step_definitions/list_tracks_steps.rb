@@ -4,6 +4,10 @@
 
 ### When
 
+When /^I am on the tracks page$/ do
+  visit tracks_path
+end
+
 ### Then
 
 Then /^I should see a list of tracks$/ do
