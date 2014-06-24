@@ -25,7 +25,10 @@
           <h4>Tracks</h4>
           <ul class="no-bullet">
             <% @project.tracks.each do |track| %>
-              <li><%= track.name %></li>
+              <li>
+                <%= link_to_igv(track) %>
+                <%= link_to track.name, track, class: "track" %>
+              </li>
             <% end %>
           </ul>
         </div>

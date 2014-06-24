@@ -6,9 +6,21 @@ Feature: Show a track
   Background:
     Given I am signed in
 
-  Scenario: User can access the track show page from the tracks page
-    Given there is a track in the system
+  Scenario Outline: User can access the track show page from the tracks page
+    Given there is a <type> track in the system
     When I am on the tracks page
+    And I click on the track name
+    Then I should be on the show track page
+
+    Examples:
+    | type | status     |
+    | bam  | should     |
+    | bw   | should not |
+
+  Scenario: User can access the track show page from the project page
+    And I own a project
+    And there is a track in that project
+    When I am on the project page
     And I click on the track name
     Then I should be on the show track page
 
