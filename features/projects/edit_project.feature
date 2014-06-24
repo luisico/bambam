@@ -16,12 +16,12 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should be able to edit the project name
 
-  Scenario: User can change the project users
+  Scenario: User can delete a user from the project
     Given I am signed in
     And I own a project
     And there are 3 additional users of that project
     When I visit the edit project page
-    Then I should be able to edit the project users
+    Then I should be able to delete a user from the project
 
   Scenario: User can change the project tracks
     Given I am signed in
@@ -43,12 +43,12 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should be able to edit the project name
 
-  Scenario: Admin can change the project users
+  Scenario: Admin can delete a user from the project
     Given I am signed in as an admin
     And there is a project in the system
     And there are 3 additional users of that project
     When I visit the edit project page
-    Then I should be able to edit the project users
+    Then I should be able to delete a user from the project
 
   Scenario: Admin can change the project tracks
     Given I am signed in as an admin

@@ -27,7 +27,7 @@ Then /^I should be able to edit the project name$/ do
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
 
-Then /^I should be able to edit the project users$/ do
+Then /^I should be able to delete a user from the project$/ do
   expect {
     uncheck User.last.email
     click_button 'Update'
