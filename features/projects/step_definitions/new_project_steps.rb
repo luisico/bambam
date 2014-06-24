@@ -2,15 +2,22 @@
 
 def build_project
   @project ||= FactoryGirl.attributes_for(:project)
+  build_track_with_path
 end
 
 def fill_project_form(project=nil)
   project ||= @project
   fill_in 'Project name', with: project[:name]
   check User.last.email
-  check Track.last.name
   yield if block_given?
   click_button 'Create Project'
+end
+
+def add_track_to_project
+  click_link 'Add Track'
+  within('.new-record') {
+    fill_track_form
+  }
 end
 
 ### Given
@@ -25,9 +32,10 @@ When /^I follow the new project link$/ do
   click_link 'New Project'
 end
 
-When /^I create a new project$/ do
+When /^I create a new project with a user and a track$/ do
   expect{
     build_project
+    add_track_to_project
     fill_project_form
   }.to change(Project, :count).by(1)
 end
@@ -51,9 +59,13 @@ end
 When /^I create a project with multiple tracks$/ do
   expect {
     build_project
-    fill_project_form do
-      check Track.all[-2].name
-    end
+    add_track_to_project
+    click_link 'Add Track'
+    second_track = page.all(:css, '.new-record')[1]
+    within(second_track) {
+      fill_track_form
+    }
+    fill_project_form
   }.to change(Project, :count).by(1)
 end
 

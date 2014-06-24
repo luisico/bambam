@@ -71,6 +71,5 @@ describe Track do
 
   describe "project_id" do
     it {should respond_to :project}
-    it { should validate_presence_of(:project_id) }
   end
 end

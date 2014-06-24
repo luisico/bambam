@@ -11,11 +11,9 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @track = Track.new
   end
 
   def edit
-    @track = Track.new
   end
 
 
