@@ -145,9 +145,10 @@ describe TracksController do
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
-      it "should redirect to track#index" do
+      it "should redirect to track project page" do
+        project = @track.project
         delete :destroy, id: @track
-        expect(response).to redirect_to tracks_url
+        expect(response).to redirect_to project_path(project)
       end
 
       it "should delete the track" do

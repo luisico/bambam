@@ -24,8 +24,9 @@ class TracksController < ApplicationController
   end
 
   def destroy
+    project = @track.project
     @track.destroy
-    redirect_to tracks_url
+    redirect_to project_path(project)
   end
 
   private

@@ -36,20 +36,6 @@ Then /^I should be able to delete a user from the project$/ do
   expect(page).not_to have_content(User.last.email)
 end
 
-Then /^I should be able to edit the project tracks$/ do
-  expect {
-    track_group = first('.track-form-group')
-    within(track_group) {
-      click_link 'edit'
-      fill_in 'Name', with: 'new_track_name'
-    }
-    click_button 'Update'
-    @project.reload
-  }.to change(@project.tracks.first, :name)
-  expect(current_path).to eq project_path(@project)
-  expect(page).not_to have_content(Track.first.name)
-end
-
 Then /^I should be able to update project without changing project owner$/ do
   expect{
     click_button 'Update'
