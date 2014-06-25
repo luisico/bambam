@@ -34,15 +34,19 @@
   word-wrap: break-word;
 }
 
+a.track-name {
+  color: black;
+}
+
+a.edit-track {
+  display: none;
+}
+
 a.done-track {
   display: none;
 }
 
 a.restore-track {
-  display: none;
-}
-
-a.edit-track {
   display: none;
 }
 
@@ -52,4 +56,17 @@ div.track-form-fields {
 
 i.fi-plus {
   color: $primary-color;
+}
+
+div.new-record {
+  border-style: dotted;
+  border-width: thin;
+  border-color: $primary-color;
+  padding: rem-calc(10);
+  margin-top: rem-calc(10);
+  margin-bottom: rem-calc(10);
+}
+
+div.edit-record {
+  @extend div.new-record;
 }

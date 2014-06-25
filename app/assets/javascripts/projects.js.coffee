@@ -17,6 +17,7 @@ jQuery ->
       event.preventDefault()
 
   $('form').on 'click', '.edit-track', (event) ->
+    $(this).closest('div.track-form-group').addClass('edit-record')
     $(this).hide()
     $(this).parent().siblings().find('.remove-track').hide()
     $(this).parent().siblings().find('.done-track').show()
@@ -25,6 +26,7 @@ jQuery ->
 
   $('form').on 'click', '.done-track', (event) ->
     $(this).hide()
+    $(this).closest('div.track-form-group').removeClass('edit-record')
     $(this).parent().siblings().find('.remove-track').show()
     text = $(this).closest('div.track-form-group').children('div.track-form-fields').find('input').first().val()
     $(this).parent().siblings().find('.track-name').text(text)
