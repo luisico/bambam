@@ -5,10 +5,8 @@ TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
   dirname = pathname.dirname
-  dirname.mkpath
-  File.open(pathname, 'w') do |f|
-    empty ? f.truncate(0) : f.puts("file contents")
-  end
+  cp_track pathname
+  pathname.truncate(0) if empty
   yield if block_given?
 ensure
   dirname.rmtree
@@ -50,9 +48,7 @@ describe ActiveModel::Validations::PathValidator do
       context "does not allow #{blank_value.inspect} values" do
         before { subject.path = blank_value }
 
-        it "should not be valid" do
-          expect(subject).not_to be_valid
-        end
+        it { should_not be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -101,9 +97,7 @@ describe ActiveModel::Validations::PathValidator do
       context "without an existing path" do
         before { subject.path = 'non_existing_path' }
 
-        it "should not be valid" do
-          expect(subject).not_to be_valid
-        end
+        it { should_not be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -122,9 +116,7 @@ describe ActiveModel::Validations::PathValidator do
         expect(File).to receive(:exist?).and_return(true)
       end
 
-      it "should not be valid" do
-        expect(subject).not_to be_valid
-      end
+      it { should_not be_valid }
 
       it "should add :exist translation to errors" do
         expect{

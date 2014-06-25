@@ -5,7 +5,7 @@
 Given /^there is a (bam|bw) track in the system$/ do |type|
   if type == 'bam'
     @track = FactoryGirl.create(:test_track)
-    File.open(Pathname.new(@track.path).sub_ext('.bai'), 'wb') {|f| f.write ['word1'].pack('A*')}
+    cp_track Pathname.new(@track.path).sub_ext('.bai'), 'bai'
   elsif type== 'bw'
     @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"))
   end

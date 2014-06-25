@@ -6,9 +6,7 @@ end
 
 def build_track_with_path
   build_track
-  path = @track[:path]
-  FileUtils.mkdir(File.dirname(path)) if !File.exist?(File.dirname(path))
-  File.open(path, 'w') {|f| f.puts 'file content' }
+  cp_track @track[:path]
  end
 
 def fill_track_form(track=nil)
