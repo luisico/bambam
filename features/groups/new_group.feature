@@ -34,5 +34,5 @@ Feature: Create a group
 
   Scenario: Canceling the new group brings back to the users page
     When I am on the new group page
-    And I click cancel
+    And I click "Cancel"
     Then I should be on the users page

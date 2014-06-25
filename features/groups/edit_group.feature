@@ -1,7 +1,7 @@
 Feature: Edit group information
   In order to have an up to date group
   As a admin
-  I can update my group' infor
+  I can update my group' info
 
   Background:
     Given I am signed in as an admin
@@ -23,5 +23,5 @@ Feature: Edit group information
 
   Scenario: Canceling the update brings back to the users page
     When I visit the edit group page
-    And I click cancel
+    And I click "Cancel"
     Then I should be on the users page

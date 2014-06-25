@@ -9,10 +9,15 @@
         </h4>
       </div>
 
-      <div>
+      <div id="members">
         <% @group.members.each do |member| %>
           <p>
-            <%= link_to member do %>
+            <% if can? :show, member %>
+              <%= link_to member do %>
+                <%= image_tag avatar_url(member) %>
+                <%= member.email %>
+              <% end %>
+            <% else %>
               <%= image_tag avatar_url(member) %>
               <%= member.email %>
             <% end %>
@@ -24,10 +29,10 @@
 
     <% if can? :manage, @group %>
       <%= link_to 'Edit', edit_group_path(@group), class: 'button tiny radius' %>
-    <% end %>
-    <%= link_to 'Back', users_path, class: 'button tiny radius' %>
-    <% if can? :manage, @group %>
+      <%= link_to 'Back', users_path, class: 'button tiny radius' %>
       <%= link_to 'Delete', @group, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny radius [secondary alert success] right' %>
+    <% else %>
+      <%= link_to 'Back', user_path(current_user), class: 'button tiny radius' %>
     <% end %>
   </div>
 </div>

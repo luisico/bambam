@@ -14,8 +14,8 @@ When /^I click on "(.*?)" in the top nav$/ do |link|
   end
 end
 
-When /^I click cancel$/ do
-  click_link 'Cancel'
+When /^I click "(.*?)"$/ do |link|
+  click_link link
 end
 
 ### Then

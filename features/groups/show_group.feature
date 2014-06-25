@@ -34,3 +34,15 @@ Feature: Show a group
     When I am on the group page
     And I should not see a "Delete" button
     And I should not see an "Edit" button
+
+  Scenario Outline: Back link
+    Given I am signed in as <role>
+    And <group exists>
+    And I am on the group page
+    When I click "Back"
+    Then I should be on the <page> page
+
+    Examples:
+     | role     | page            | group exists                   |
+     | an admin | users           | there is a group in the system |
+     | a user   | account profile | I belong to a group            |
