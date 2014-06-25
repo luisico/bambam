@@ -15,13 +15,13 @@ Feature: Create a track
   Scenario: Cannot create a track without a name
     When I visit the edit project page
     And I create a track without a name
-    Then the "Name" field should have the error "can't be blank"
+    Then the page should have the error can't be blank
     And I should be on the edit project page
 
   Scenario: Cannot create a track without a path
     When I visit the edit project page
     And I create a track without a path
-    Then the "Path" field should have the error "can't be blank"
+    Then the page should have the error can't be blank
     And I should be on the edit project page
 
   Scenario: Text explaining allowed paths uses the env variable ALLOWED_TRACK_PATHS

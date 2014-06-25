@@ -37,6 +37,7 @@ When /^I create a track without a path$/ do
     within('.new-record') {
       fill_track_form @track.merge(path: '')
     }
+    click_button 'Update Project'
   }.to change(Track, :count).by(0)
 end
 
@@ -68,4 +69,8 @@ Then /^I should see instructions to use the allowed paths$/ do
   ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path|
     expect(page).to have_content path
   end
+end
+
+Then /^the page should have the error can't be blank$/ do
+  expect(page).to have_content "can't be blank"
 end
