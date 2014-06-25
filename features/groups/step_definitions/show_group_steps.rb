@@ -26,10 +26,18 @@ Then /^I should see the group's owner$/ do
   expect(page).to have_content "#{@group.owner.email} (owner)"
 end
 
-Then /^I should see the group's members$/ do
-  @group.members.each do |member|
-    expect(page).to have_content member.email
-    expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(member)}']")
+Then /^I should see the group's members( with links)?$/ do |links|
+  expect(@group.members.count).to be > 0
+  within('#members') do
+    @group.members.each do |member|
+      expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(member)}']")
+      if links || @user == member
+        expect(page).to have_link member.email
+      else
+        expect(page).to have_content member.email
+        expect(page).not_to have_link member.email
+      end
+    end
   end
 end
 

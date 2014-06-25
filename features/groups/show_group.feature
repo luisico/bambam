@@ -14,26 +14,26 @@ Feature: Show a group
     And I should see the group's creation date
     And I should see the group's last update
 
-  Scenario: Admins can manage the group
+  Scenario: Show member links for admins
     Given I am signed in as an admin
     And there is a group in the system
+    And there are 3 additional members of that group
     When I am on the group page
-    And I should see a "Delete" button
-    And I should see an "Edit" button
+    And I should see the group's members with links
 
-  Scenario: Group owners can manage the group
-    Given I am signed in as an admin
-    And I own a group
+  Scenario Outline: Edit and delete buttons
+    Given I am signed in as <role>
+    And <group exists>
+    And there is a group in the system
     When I am on the group page
-    And I should see a "Delete" button
-    And I should see an "Edit" button
+    And I <visible> see a "Delete" button
+    And I <visible> see an "Edit" button
 
-  Scenario: Group members cannot manage the group
-    Given I am signed in
-    And I belong to a group
-    When I am on the group page
-    And I should not see a "Delete" button
-    And I should not see an "Edit" button
+    Examples:
+     | role     | visible    | group exists                   |
+     | an admin | should     | there is a group in the system |
+     | an admin | should     | I own a group                  |
+     | a user   | should not | I belong to a group            |
 
   Scenario Outline: Back link
     Given I am signed in as <role>
