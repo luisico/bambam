@@ -20,6 +20,12 @@ describe UsersController do
         get :index
         expect(assigns(:users)).to eq [@users.reverse, @admin].flatten
       end
+
+      it "should return all the groups" do
+        groups = FactoryGirl.create_list(:group, 3)
+        get :index
+        expect(assigns(:groups)).to eq groups
+      end
     end
 
     context "as regular user" do

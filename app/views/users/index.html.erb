@@ -1,6 +1,25 @@
 <div class="row">
   <div class="medium-6 columns">
     <div class="panel">
+      <h3>Invite a new user</h3>
+      <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
+        <div>
+          <%= f.text_field :email, placeholder: 'Email' %>
+        </div>
+
+        <% if can? :manage, User %>
+          <div>
+            <%= check_box_tag(:inviter) %>
+            <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
+          </div>
+        <% end %>
+        <div>
+          <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius' %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="panel">
       <h3>Current users</h3>
       <ul class="inline-list">
         <li><i class="fi-ticket medium icon_key"> Invite outstanding</i></li>
@@ -30,22 +49,17 @@
 
   <div class="medium-6 columns">
     <div class="panel">
-      <h3>Invite a new user</h3>
-      <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
-        <div>
-          <%= f.text_field :email, placeholder: 'Email' %>
-        </div>
-
-        <% if can? :manage, User %>
-          <div>
-            <%= check_box_tag(:inviter) %>
-            <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
-          </div>
+      <h3>Groups</h3>
+      <ul class="no-bullet">
+        <% @groups.each do |group| %>
+          <% if can? :read, group %>
+            <li><%= link_to group.name, group %> owned by <%= group.owner.email %></li>
+          <% end %>
         <% end %>
-        <div>
-          <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius' %>
-        </div>
-      <% end %>
+      </ul>
+      <div>
+        <%= link_to 'New Group', new_group_path, class: "button tiny radius" %>
+      </div>
     </div>
   </div>
 </div>

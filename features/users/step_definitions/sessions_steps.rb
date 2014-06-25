@@ -14,7 +14,7 @@ Given /^I am not signed in$/ do
   step %{I should be signed out}
 end
 
-Given /^I am signed in$/ do
+Given /^I am signed in( as a user)?$/ do |foo|
   step %{I exist as a user}
   step %{I sign in}
   step %{I should be signed in}

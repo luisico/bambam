@@ -51,6 +51,10 @@ Given /^there is another user in the system$/ do
   @user = FactoryGirl.create(:user)
 end
 
+Given /^there are (\d+) other users in the system$/ do |number|
+  FactoryGirl.create_list(:user, 3)
+end
+
 ### When
 
 When /^I visit the users page$/ do

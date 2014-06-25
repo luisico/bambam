@@ -15,6 +15,7 @@ class Users::InvitationsController < Devise::InvitationsController
       respond_with resource, :location => after_invite_path_for(resource)
     else
       @users = User.order('created_at DESC')
+      @groups = Group.all
       render 'users/index'
     end
   end

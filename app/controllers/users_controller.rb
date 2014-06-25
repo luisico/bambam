@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.order('created_at DESC')
-    respond_with(@users)
+    @groups = Group.all
   end
 
   def show

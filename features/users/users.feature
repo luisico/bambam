@@ -1,6 +1,6 @@
 Feature: List of users
   In order to manage users
-  As an admin user
+  As an admin
   I should be able to list users
 
   Scenario Outline: List of users
@@ -16,6 +16,15 @@ Feature: List of users
     | role    |
     | admin   |
     | inviter |
+
+  Scenario: List of groups
+    Given I am signed in as an admin
+    And there are 3 groups in the system
+    When I visit the users page
+    And I should see a list of all groups
+
+    When I click on the group name
+    Then I should be on the show group page
 
   Scenario: Only admins and inviters can access the users page
     Given I am signed in

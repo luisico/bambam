@@ -18,6 +18,10 @@ describe User do
       context "tracks" do
         it { should be_able_to(:manage, Track) }
       end
+
+      context "groups" do
+        it { should be_able_to(:manage, Group) }
+      end
     end
 
     describe "as inviter" do
@@ -34,10 +38,6 @@ describe User do
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }
       end
-
-      context "tracks" do
-        it { should be_able_to(:manage, Track) }
-      end
     end
 
     describe "as a regular user" do
@@ -50,7 +50,7 @@ describe User do
       context "users" do
         it { should_not be_able_to(:manage, User) }
 
-        it { should_not be_able_to(:manage, @other_user)}
+        it { should_not be_able_to(:manage, @other_user) }
         it { should_not be_able_to(:cancel, @other_user) }
 
         it { should be_able_to(:show, @user) }
@@ -59,6 +59,27 @@ describe User do
 
       context "tracks" do
         it { should be_able_to(:manage, Track) }
+      end
+
+      context "groups" do
+        before do
+          @admin = FactoryGirl.create(:admin)
+          @group = FactoryGirl.create(:group, owner: @admin)
+        end
+
+        it { should_not be_able_to(:manage, Group) }
+
+        context "without being a member of the group" do
+          it { should_not be_able_to(:manage, @group) }
+          it { should_not be_able_to(:read, @group) }
+        end
+
+        context "being a member of the group" do
+          before { @group.members << @user }
+
+          it { should_not be_able_to(:manage, @group) }
+          it { should be_able_to(:read, @group) }
+        end
       end
     end
   end

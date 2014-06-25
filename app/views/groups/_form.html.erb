@@ -1,0 +1,21 @@
+<%= form_for(@group) do |f| %>
+  <% if @group.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@group.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name, size: 60, placeholder: 'Group name' %>
+  </div>
+
+  <div class="field">
+    <% @potential_members.each do |user| %>
+      <p><%= member_check_box(@group, user) %></p>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+  </div>
+<% end %>
