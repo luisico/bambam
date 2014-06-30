@@ -10,19 +10,6 @@ class TracksController < ApplicationController
   def show
   end
 
-  def edit
-    @project = @track.project
-  end
-
-
-  def update
-    if @track.update(track_params)
-      redirect_to @track, notice: 'Track was successfully updated.'
-    else
-     render action: 'edit'
-    end
-  end
-
   private
   def track_params
     params.require(:track).permit(:name, :path, :project_id)
