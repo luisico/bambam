@@ -3,13 +3,11 @@ jQuery ->
   $('.error').closest('div.track-form-fields').show()
 
   $('form').on 'click', '.remove-track', (event) ->
-    console.log($(this))
     if $(this).closest('div.track-form-group').hasClass('new-record')
       $(this).closest('div.track-form-group').remove()
     else
       $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('1')
       $(this).closest('li').siblings().first().css('textDecoration', 'line-through')
-      $(this).closest('li').siblings().find('.edit-track').hide()
       $(this).closest('li').siblings().find('.done-track').hide()
       $(this).closest('div.track-form-group').children('div.track-form-fields').hide()
       $(this).hide()
@@ -30,8 +28,8 @@ jQuery ->
     $(this).closest('div.track-form-group').removeClass('edit-record')
     $(this).parent().siblings().find('.remove-track').show()
     text = $(this).closest('div.track-form-group').children('div.track-form-fields').find('input').first().val()
-    $(this).parent().siblings().first().text(text)
-    $(this).parent().siblings().find('.edit-track').show()
+    $(this).parent().siblings().find('.track-name').show()
+    $(this).parent().siblings().first().children().text(text)
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('div.track-form-group').children('div').hide()
 

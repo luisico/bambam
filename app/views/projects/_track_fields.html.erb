@@ -1,7 +1,6 @@
 <div class="track-form-group <%= k.nil? ? '' : k %>">
   <ul class="inline-list">
-    <li class="track-name"><%= f.object.name if f.object.id %></li>
-    <li><%= link_to "edit", '#', class: "edit-track" %></li>
+    <li title="edit track"><%= link_to f.object.name, '#', class: "track-name edit-track" %></li>
     <li><%= link_to "done", '#', class: "done-track" %></li>
     <li>
       <%=link_to '#' do %>

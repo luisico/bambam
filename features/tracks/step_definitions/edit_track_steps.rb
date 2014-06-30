@@ -14,7 +14,7 @@ end
 Then /^I should be to udpate the track name on the project edit page$/ do
   track = @project.tracks.first
   expect {
-    click_link 'edit'
+    click_link track.name
     execute_script %Q{$('.track-form-group .track-form-fields').show();}
     fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
     click_button 'Update'
@@ -27,7 +27,7 @@ Then /^I should be to udpate the track path on the project edit page$/ do
   build_track_path
   track = @project.tracks.first
   expect {
-    click_link 'edit'
+    click_link track.name
     fill_in 'project[tracks_attributes][0][path]', with: @path
     click_button 'Update'
     track.reload
