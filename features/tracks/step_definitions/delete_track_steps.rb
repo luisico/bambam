@@ -20,7 +20,7 @@ Then /^I should be able to delete a track from the project$/ do
     track_group = first('.track-form-group')
     within(track_group) {
       expect(track_group).to have_content deleted_track
-      click_link 'delete'
+      find('.remove-track').trigger('click')
     }
     click_button 'Update'
     @project.reload
