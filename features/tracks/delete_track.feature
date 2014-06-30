@@ -3,13 +3,6 @@ Feature: Delate a track
   As a user
   I can delete a track
 
-  Scenario: User can access the track edit page from the tracks page
-    Given I am signed in
-    And I own a project
-    And there is a track in that project
-    When I am on the track page
-    Then I should be able to delete a track
-
   @javascript
   Scenario: User can delete a track from the project edit page
     Given I am signed in

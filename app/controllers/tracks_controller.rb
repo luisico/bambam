@@ -23,12 +23,6 @@ class TracksController < ApplicationController
     end
   end
 
-  def destroy
-    project = @track.project
-    @track.destroy
-    redirect_to project_path(project)
-  end
-
   private
   def track_params
     params.require(:track).permit(:name, :path, :project_id)

@@ -6,14 +6,6 @@
 
 ### Then
 
-Then /^I should be able to delete a track$/ do
-  expect{
-    click_link 'Delete'
-  }.to change(Track, :count).by(-1)
-
-  expect(current_path).to eq project_path(@project)
-end
-
 Then /^I should be able to delete a track from the project$/ do
   deleted_track = Track.first.name
   expect {

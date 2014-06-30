@@ -138,39 +138,4 @@ describe TracksController do
       end
     end
   end
-
-  describe "Delete 'destroy'" do
-    before { @track = FactoryGirl.create(:test_track) }
-
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
-
-      it "should redirect to track project page" do
-        project = @track.project
-        delete :destroy, id: @track
-        expect(response).to redirect_to project_path(project)
-      end
-
-      it "should delete the track" do
-        expect{
-          delete :destroy, id: @track
-        }.to change(Track, :count).by(-1)
-        expect(assigns(:track)).to eq @track
-      end
-    end
-
-    context "as a visitor" do
-      it "should redirect to the sign in page" do
-        delete :destroy, id: @track
-        expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
-      end
-
-      it "should not delete the track" do
-        expect{
-          delete :destroy, id: @track
-        }.not_to change(Track, :count)
-      end
-    end
-  end
 end
