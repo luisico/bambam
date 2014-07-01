@@ -77,6 +77,13 @@ describe User do
     it { should respond_to :has_role? }
   end
 
+  describe "user name fields" do
+    it { should have_db_column :first_name }
+    it { should respond_to :first_name }
+    it { should have_db_column :last_name }
+    it { should respond_to :last_name }
+  end
+
   it { should be_valid }
 
   describe "email" do

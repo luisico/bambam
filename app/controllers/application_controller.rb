@@ -30,5 +30,6 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:invite) << :inviter
+    devise_parameter_sanitizer.for(:accept_invitation) << [:first_name, :last_name]
   end
 end

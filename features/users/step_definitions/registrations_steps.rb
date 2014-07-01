@@ -15,6 +15,8 @@ def sign_up(invitee=nil)
   invitee ||= @invitee
   fill_in 'user_password', with: invitee[:password]
   fill_in 'user_password_confirmation', with: invitee[:password_confirmation]
+  fill_in 'user_first_name', with: invitee[:first_name]
+  fill_in 'user_last_name', with: invitee[:last_name]
   yield if block_given?
   click_button I18n.t('devise.invitations.edit.submit_button')
 end
