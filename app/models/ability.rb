@@ -26,7 +26,6 @@ class Ability
       end
 
       can :read, Project, :projects_users => { :user_id => user.id }
-      can :manage, Project, owner: user
     end
   end
 end

@@ -101,3 +101,7 @@ Then /^all the project track names should be on the list$/ do
   expect(page).to have_content Track.last.name
   expect(page).to have_content Track.all[-2].name
 end
+
+Then /^I should not see a new project link$/ do
+  expect(page).not_to have_link 'New Project'
+end

@@ -22,11 +22,11 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user and project owner" do
+    context "as a signed in user and project member" do
       before do
         @user = FactoryGirl.create(:user)
         sign_in @user
-        @user_projects = FactoryGirl.create_list(:project, 3, owner: @user)
+        @user_projects = FactoryGirl.create_list(:project, 3, users: [@user])
       end
 
       it "should be successful" do
@@ -76,8 +76,8 @@ describe ProjectsController do
   end
 
   describe "GET 'new'" do
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+    context "as an admin" do
+      before { sign_in @admin }
 
       it "should be successful" do
         get :new
@@ -91,6 +91,16 @@ describe ProjectsController do
       end
     end
 
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should redirect to the projects page" do
+        get :new
+        expect(response).not_to be_success
+        expect(response).to redirect_to projects_path
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         get :new
@@ -101,10 +111,10 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @admin) }
 
     context "as a signed in user and owner of @project" do
-      before { sign_in @project.owner }
+      before { sign_in @admin }
 
       it "should be successful" do
         get :edit, id: @project
@@ -141,7 +151,7 @@ describe ProjectsController do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before { sign_in @admin }
 
       context "with valid parameters" do
         it "should be a redirect to the new project show page" do
@@ -189,10 +199,10 @@ describe ProjectsController do
   end
 
   describe "Patch 'update'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @admin) }
 
     context "as a signed in user" do
-      before { sign_in @project.owner }
+      before { sign_in @admin }
 
       context 'with valid parameters' do
         before do
@@ -245,10 +255,10 @@ describe ProjectsController do
   end
 
   describe "Delete 'destroy'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @admin) }
 
     context "as a signed in user" do
-      before { sign_in @project.owner }
+      before { sign_in @admin }
 
       it "should redirect to project#index" do
         delete :destroy, id: @project
