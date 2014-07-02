@@ -72,4 +72,12 @@ describe Track do
   describe "project_id" do
     it {should respond_to :project}
   end
+
+  describe "association with project" do
+    it "should touch the project" do
+      expect {
+        @track.save
+      }.to change(@track.project, :updated_at)
+    end
+  end
 end

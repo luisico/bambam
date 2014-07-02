@@ -1,5 +1,5 @@
 class Track < ActiveRecord::Base
-  belongs_to :project
+  belongs_to :project, :touch => true
   validates_presence_of :name
   validates :path, format: { with: /\A.*\.(bw|bam)\z/,
     message: "file must have extension .bw or .bam" }
