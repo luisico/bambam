@@ -2,12 +2,6 @@
 
 ### Given
 
-Given /^one of my projects is in the system$/ do
-  @project = FactoryGirl.create(:project, owner: @user)
-  @track = FactoryGirl.create(:track, :project => @project)
-  @project.users << @user
-end
-
 ### When
 
 When /^I click on the project name$/ do
