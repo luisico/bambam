@@ -26,6 +26,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    authorize! :edit_name_and_users, @project if params[:project][:name] || params[:project][:user_ids]
     if @project.update(project_params)
       redirect_to @project, notice: 'Project was successfully updated.'
     else

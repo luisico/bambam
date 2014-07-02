@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe TracksController do
+  before { @admin = FactoryGirl.create(:admin) }
+
   describe "GET 'index'" do
     before { @tracks = FactoryGirl.create_list(:test_track, 3) }
 
-    context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+    context "as an admin" do
+      before { sign_in @admin }
 
       it "should be successful" do
         get :index
@@ -14,6 +16,25 @@ describe TracksController do
       end
 
       it "should return all tracks" do
+        get :index
+        expect(assigns(:tracks)).to eq @tracks
+      end
+    end
+
+    context "as a signed in user" do
+      before do
+        user = FactoryGirl.create(:user)
+        @tracks.each { |track| track.project.users << user }
+        sign_in user
+      end
+
+      it "should be successful" do
+        get :index
+        expect(response).to be_success
+        expect(response).to render_template :index
+      end
+
+      it "should return users tracks" do
         get :index
         expect(assigns(:tracks)).to eq @tracks
       end
@@ -29,10 +50,30 @@ describe TracksController do
   end
 
   describe "GET 'show'" do
-    before { @track = FactoryGirl.create(:test_track) }
+    before do
+      @user = FactoryGirl.create(:user)
+      project = FactoryGirl.create(:project)
+      project.users << @user
+      @track = FactoryGirl.create(:test_track, project_id: project.id)
+    end
+
+    context "as an admin" do
+      before { sign_in @admin }
+
+      it "should be successful" do
+        get :show, id: @track
+        expect(response).to be_success
+        expect(response).to render_template :show
+      end
+
+      it "should return the track" do
+        get :show, id: @track
+        expect(assigns(:track)).to eq @track
+      end
+    end
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
+      before { sign_in @user }
 
       it "should be successful" do
         get :show, id: @track
