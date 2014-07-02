@@ -88,7 +88,7 @@ Then /^I should see my email among the list of project member emails$/ do
 end
 
 Then /^I should be the projects owner$/ do
-  expect(Project.last.owner).to eq(@user)
+  expect(Project.last.owner).to eq(@admin)
 end
 
 Then /^all the project member email addresses should be on the list$/ do

@@ -3,10 +3,6 @@
     <div class="panel">
       <h1>New project</h1>
 
-      <div class="field">
-        <%= hidden_field_tag :owner_id, :value => current_user.id  %>
-      </div>
-
       <%= render 'form' %>
 
       <%= link_to 'Cancel', projects_path, class: 'button tiny radius' %>

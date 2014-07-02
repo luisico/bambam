@@ -20,10 +20,12 @@
                 <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
                 <%= label_tag dom_id(user), user.email %><br>
                 <%= hidden_field_tag "project[user_ids][]", user.id %>
+                <%= hidden_field_tag "project[owner_id]", user.id %>
               <% elsif user == @project.owner %>
                 <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
                 <%= label_tag dom_id(user), user.email %><br>
                 <%= hidden_field_tag "project[user_ids][]", user.id %>
+                <%= hidden_field_tag "project[owner_id]", user.id %>
               <% else %>
                 <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
                 <%= label_tag dom_id(user), user.email %><br>

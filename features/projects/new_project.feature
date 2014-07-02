@@ -45,7 +45,6 @@ Feature: Create a project
     And all the project track names should be on the list
     And I should see a message that the project was created successfully
 
-  @now
   Scenario: User cannot add a new project
     Given I am signed in as a user
     When I am on the projects page
