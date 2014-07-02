@@ -5,23 +5,23 @@ Feature: Edit project information
 
   Scenario: User can access the project edit page from the project show page
     Given I am signed in
-    And I own a project
+    And I belong to a project
     When I am on the project page
     And I click on the project edit link
     Then I should be on the edit project page
 
-  Scenario: User can change the project name
+  Scenario: User cannot change the project name
     Given I am signed in
-    And I own a project
+    And I belong to a project
     When I visit the edit project page
-    Then I should be able to edit the project name
+    Then I should not be able to edit the project name
 
-  Scenario: User can delete a user from the project
+  Scenario: User cannot delete a user from the project
     Given I am signed in
-    And I own a project
+    And I belong to a project
     And there are 3 additional users of that project
     When I visit the edit project page
-    Then I should be able to delete a user from the project
+    Then I should not be able to delete a user from the project
 
   Scenario: Admin can access the project edit page from the project show page
     Given I am signed in as an admin

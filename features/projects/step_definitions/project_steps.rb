@@ -13,6 +13,7 @@ Given /^I belong to (\d+|a) projects?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   user = User.last
   @projects = FactoryGirl.create_list(:project, n, users: [user])
+  @project = Project.last
 end
 
 Given /^there (is|are) (\d+|a) projects? in the system$/ do |foo, n|

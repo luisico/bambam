@@ -1,7 +1,11 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <h2>Edit project</h2>
+      <% if can? :edit_name_and_users, @project %>
+        <h2>Edit project</h2>
+      <% else %>
+        <h2>Edit project tracks</h2>
+      <% end %>
       <%= render 'form' %>
     </div>
   </div>
