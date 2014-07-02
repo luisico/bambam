@@ -23,9 +23,17 @@ Then /^I should only see a list of my projects$/ do
   user_projects = projects.keep_if{|p| p.users.include? @user}
 
   user_projects.each do |project|
-    expect(page).to have_content project.name
+    within("#project_#{project.id}") do
+      expect(page).to have_content project.name
+      expect(page).to have_content project.tracks.count
+      expect(page).to have_content project.owner.email
+    end
   end
   (projects - user_projects).each do |project|
-    expect(page).not_to have_content project.name
+    within("#project_#{project.id}") do
+      expect(page).not_to have_content project.name
+      expect(page).to have_content project.tracks.count
+      expect(page).to have_content project.owner.email
+    end
   end
 end

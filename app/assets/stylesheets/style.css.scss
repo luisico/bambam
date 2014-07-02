@@ -66,3 +66,7 @@ div.new-record {
 div.edit-record {
   @extend div.new-record;
 }
+
+th.normal-font-weight {
+  font-weight: normal;
+}

@@ -5,13 +5,22 @@
     <% end %>
     <div class="panel">
       <h3>Projects</h3>
-      <ul class="no-bullet">
-        <% @projects.each do |project| %>
-          <li>
-            <%= link_to project.name, project %>
-          </li>
-        <% end %>
-      </ul>
+      <table>
+        <tr>
+          <th class="text-left normal-font-weight">Name</th>
+          <th class="text-left normal-font-weight">Tracks</th>
+          <th class="text-left normal-font-weight">Owner</th>
+        </tr>
+
+      <% @projects.each do |project| %>
+        <tr id="project_<%= project.id %>">
+          <td><%= link_to project.name, project %></td>
+          <td class="text-center"><%= project.tracks.count %></td>
+          <td><%= link_to project.owner.email, project.owner %></td>
+          </td>
+        </tr>
+      <% end %>
+      </table>
     </div>
   </div>
 </div>
