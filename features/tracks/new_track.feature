@@ -6,7 +6,7 @@ Feature: Create a track
 
   Background:
     Given I am signed in
-    And I own a project
+    And I belong to a project
 
   Scenario: User can add a new track to the project
     When I visit the edit project page

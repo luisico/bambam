@@ -19,10 +19,13 @@ end
 
 Then /^I should only see a list of my projects$/ do
   expect(Project.count).to be > 0
-  @user.projects.each do |project|
+  projects = Project.all
+  user_projects = projects.keep_if{|p| p.users.include? @user}
+
+  user_projects.each do |project|
     expect(page).to have_content project.name
   end
-  Project.all.keep_if{|p| p.owner != @user}.each do |project|
+  (projects - user_projects).each do |project|
     expect(page).not_to have_content project.name
   end
 end

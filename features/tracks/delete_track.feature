@@ -6,7 +6,7 @@ Feature: Delate a track
   @javascript
   Scenario: User can delete a track from the project edit page
     Given I am signed in
-    And I own a project
+    And I belong to a project
     And there are 3 tracks in that project
     When I visit the edit project page
     Then I should be able to delete a track from the project

@@ -4,7 +4,7 @@ Feature: Show a track
   I want to be able to access a page with all the information about a track
 
   Background:
-    Given I am signed in
+    Given I am signed in as an admin
 
   Scenario Outline: User can access the track show page from the tracks page
     Given there is a <type> track in the system

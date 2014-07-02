@@ -6,7 +6,7 @@ Feature: Edit track information
 
   Background:
     Given I am signed in
-    And I own a project
+    And I belong to a project
     And there is a track in that project
 
   Scenario: User can change the track name on the project edit page

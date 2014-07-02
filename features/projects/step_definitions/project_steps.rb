@@ -4,8 +4,9 @@
 
 Given /^I own (\d+|a) projects?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  user = User.last
-  @projects = FactoryGirl.create_list(:project, n, owner: user)
+  admin = User.last
+  expect(admin.has_role? :admin).to eq(true)
+  @projects = FactoryGirl.create_list(:project, n, owner: admin)
   @project = Project.last
 end
 

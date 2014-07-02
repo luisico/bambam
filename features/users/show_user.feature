@@ -26,7 +26,7 @@ Feature: Show a user profile
 
   Scenario: Show multiple projects info
     Given I am signed in
-    And I own 2 projects
+    And I belong to 2 projects
     And I belong to 2 projects
     When I am on my Account Profile page
     And I should see my projects

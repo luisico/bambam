@@ -5,7 +5,7 @@ Feature: List of tracks
 
   Background:
     Given I am signed in
-    And I own a project
+    And I belong to a project
     And there is a track in that project
 
   Scenario: List of tracks
