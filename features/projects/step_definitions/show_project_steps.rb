@@ -20,7 +20,7 @@ end
 
 Then /^I should see the projects tracks$/ do
   @project.tracks.each do |track|
-    expect(page).to have_content track.name
+    expect(page).to have_link track.name
     encoded = ERB::Util.url_encode stream_services_track_url(track)
     expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
   end
