@@ -30,9 +30,20 @@ Then /^I should see the projects tracks$/ do
   end
 end
 
-Then /^I should see the project's users$/ do
-  @project.users.each do |user|
-    expect(page).to have_content user.email
+Then /^I should see the project's users with(out)? profile links$/ do |negate|
+  if negate
+    @project.users.each do |user|
+      within("#project-user-#{user.id}") do
+        expect(page).to have_content user.email
+        expect(page).not_to have_link user.email
+      end
+    end
+  else
+    @project.users.each do |user|
+      within("#project-user-#{user.id}") do
+        expect(page).to have_link user.email
+      end
+    end
   end
 end
 

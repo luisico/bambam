@@ -10,12 +10,17 @@ Feature: Show a project
     And I click on the project name
     Then I should be on the show project page
 
-  Scenario: Show a project's information
-    Given I am signed in
+  Scenario Outline: Show a project's information
+    Given I am signed in as a <user_type>
     And I belong to a project
     When I am on the project page
     Then I should see the project's name
     And I should see the projects tracks
-    And I should see the project's users
+    And I should see the project's users <privilege> profile links
     And I should see the project's creation date
     And I should see the date of the project's last update
+
+    Examples:
+      | user_type | privilege |
+      | admin     | with      |
+      | user      | without   |
