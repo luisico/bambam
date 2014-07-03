@@ -4,10 +4,6 @@
 
 ### When
 
-When /^I click on the project edit link$/ do
-  click_link 'Edit'
-end
-
 When /^I visit the edit project page$/ do
   visit edit_project_path(@project)
 end

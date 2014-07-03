@@ -52,7 +52,7 @@ Given /^there is another user in the system$/ do
 end
 
 Given /^there are (\d+) other users in the system$/ do |number|
-  FactoryGirl.create_list(:user, 3)
+  @users = FactoryGirl.create_list(:user, 3)
 end
 
 ### When

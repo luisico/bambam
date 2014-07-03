@@ -28,10 +28,6 @@ end
 
 ### When
 
-When /^I follow the new project link$/ do
-  click_link 'New Project'
-end
-
 When /^I create a new project with a user and a track$/ do
   expect{
     build_project
@@ -75,6 +71,12 @@ Then /^I should be on the new project page$/ do
   expect(page).to have_content 'New project'
 end
 
+Then /^I should see unchecked checkboxes for the other users$/ do
+  @users.each do |user|
+    expect(page).to have_unchecked_field user.email
+  end
+end
+
 Then /^I should be on the project show page$/ do
   expect(current_path).to eq project_path(Project.last)
 end
@@ -100,8 +102,4 @@ end
 Then /^all the project track names should be on the list$/ do
   expect(page).to have_content Track.last.name
   expect(page).to have_content Track.all[-2].name
-end
-
-Then /^I should not see a new project link$/ do
-  expect(page).not_to have_link 'New Project'
 end

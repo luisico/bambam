@@ -3,14 +3,19 @@ Feature: Create a project
   As an admin
   I want to be able to access a page where I can add a new project
 
-  @javascript
-  Scenario: Admin creates a new project (of which they must be a member)
+  Scenario: Admin goes to new project page
     Given I am signed in as an admin
     And there are 3 other users in the system
-    When I am on the projects page
-    And I follow the new project link
-    Then I should be on the new project page
-    And my checkbox should be disabled
+    And I am on the new project page
+    Then my checkbox should be disabled
+    And I should see unchecked checkboxes for the other users
+    And I should see a link to "Add Track"
+
+  @javascript
+  Scenario: Admin creates a new project
+    Given I am signed in as an admin
+    And there are 3 other users in the system
+    And I am on the new project page
 
     When I create a new project with a user and a track
     Then I should be on the project show page
@@ -44,8 +49,3 @@ Feature: Create a project
     Then I should be on the project show page
     And all the project track names should be on the list
     And I should see a message that the project was created successfully
-
-  Scenario: User cannot add a new project
-    Given I am signed in as a user
-    When I am on the projects page
-    Then I should not see a new project link

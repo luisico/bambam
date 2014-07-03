@@ -8,6 +8,10 @@ When /^I am on the projects page$/ do
   visit projects_path
 end
 
+When /^I click on the project name$/ do
+  click_link @project.name
+end
+
 ### Then
 
 Then /^I should see a list of projects$/ do
