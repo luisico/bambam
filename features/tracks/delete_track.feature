@@ -4,7 +4,7 @@ Feature: Delate a track
   I can delete a track
 
   @javascript
-  Scenario: User can delete a track from the project edit page
+  Scenario: User can delete a track
     Given I am signed in
     And I belong to a project
     And there are 3 tracks in that project
@@ -12,7 +12,7 @@ Feature: Delate a track
     Then I should be able to delete a track from the project
 
   @javascript
-  Scenario: Admin can delete a track from the project edit page
+  Scenario: Admin can delete a track
     Given I am signed in as an admin
     And there is a project in the system
     And there are 3 tracks in that project

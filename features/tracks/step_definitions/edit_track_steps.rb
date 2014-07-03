@@ -11,7 +11,7 @@ end
 
 ### Then
 
-Then /^I should be to udpate the track name on the project edit page$/ do
+Then /^I should be to udpate the track name$/ do
   track = @project.tracks.first
   expect {
     click_link track.name
@@ -23,7 +23,7 @@ Then /^I should be to udpate the track name on the project edit page$/ do
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
 
-Then /^I should be to udpate the track path on the project edit page$/ do
+Then /^I should be to udpate the track path$/ do
   build_track_path
   track = @project.tracks.first
   expect {
