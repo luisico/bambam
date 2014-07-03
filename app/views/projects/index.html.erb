@@ -17,7 +17,11 @@
         <tr id="project_<%= project.id %>">
           <td><%= link_to project.name, project %></td>
           <td class="text-center"><%= project.tracks.count %></td>
-          <td><%= link_to project.owner.email, project.owner %></td>
+          <% if can? :manage, User %>
+            <td><%= link_to project.owner.email, project.owner %></td>
+          <% else %>
+            <td><%= project.owner.email %></td>
+          <% end %>
           <td><%= local_time_ago(project.updated_at) %></td>
         </tr>
       <% end %>
