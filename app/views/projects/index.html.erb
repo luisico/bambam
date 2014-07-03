@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="small-12 medium-8 medium-centered columns">
+  <div class="small-12 medium-10 medium-centered columns">
     <% if can? :manage, Project %>
       <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
     <% end %>
@@ -10,6 +10,7 @@
           <th class="text-left normal-font-weight">Name</th>
           <th class="text-left normal-font-weight">Tracks</th>
           <th class="text-left normal-font-weight">Owner</th>
+          <th class="text-left normal-font-weight">Updated</th>
         </tr>
 
       <% @projects.each do |project| %>
@@ -17,7 +18,7 @@
           <td><%= link_to project.name, project %></td>
           <td class="text-center"><%= project.tracks.count %></td>
           <td><%= link_to project.owner.email, project.owner %></td>
-          </td>
+          <td><%= local_time_ago(project.updated_at) %></td>
         </tr>
       <% end %>
       </table>

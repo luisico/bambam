@@ -27,6 +27,7 @@ Then /^I should only see a list of my projects$/ do
       expect(page).to have_content project.name
       expect(page).to have_content project.tracks.count
       expect(page).to have_content project.owner.email
+      expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
     end
   end
   (projects - user_projects).each do |project|
@@ -34,6 +35,7 @@ Then /^I should only see a list of my projects$/ do
       expect(page).not_to have_content project.name
       expect(page).to have_content project.tracks.count
       expect(page).to have_content project.owner.email
+      expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
     end
   end
 end
