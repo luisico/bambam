@@ -26,7 +26,12 @@ Feature: List of users
     When I click on the group name
     Then I should be on the show group page
 
-  Scenario: Only admins and inviters can access the users page
+  Scenario: Admin can access users page from navigation bar
+    Given I am signed in as an admin
+    When I click on "Users" in the top nav
+    Then I should be on the users page
+
+  Scenario: User cannot access the users page from navigation bar
     Given I am signed in
     And there is not a users link in the navigation bar
     When I visit the users page
