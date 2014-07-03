@@ -14,7 +14,7 @@ Feature: List of projects
     And I belong to 3 projects
     And there are 10 projects in the system
     When I am on the projects page
-    Then I should only see a list of my projects
+    Then I should only see a list of projects I belong to
 
   Scenario: Admin can view list of all projects
     Given I am signed in as an admin

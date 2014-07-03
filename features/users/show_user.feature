@@ -13,8 +13,6 @@ Feature: Show a user profile
     When I am on my Account Profile page
     Then I should see my email
     And I should see my avatar
-    And I should see my groups
-    And I should see my projects
     And I should see a link to "Edit"
 
   Scenario: Users can only see groups they are members of
@@ -26,10 +24,10 @@ Feature: Show a user profile
 
   Scenario: Show multiple projects info
     Given I am signed in
-    And I belong to 2 projects
+    And there are 2 projects in the system
     And I belong to 2 projects
     When I am on my Account Profile page
-    And I should see my projects
+    And I should only see a list of projects I belong to
 
   Scenario Outline: Admin/inviter can access the user show page from the users page
     Given I am signed in as an <role>
