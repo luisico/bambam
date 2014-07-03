@@ -1,3 +1,4 @@
+@now
 Feature: Edit project information
   In order to have an up to date project
   As a user
@@ -28,12 +29,17 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should be able to edit the project name
 
-  Scenario: Admin can delete a user from the project
+  Scenario Outline: Admin can delete users from the project
     Given I am signed in as an admin
     And there is a project in the system
-    And there are 3 additional users of that project
+    And there are <number> additional users of that project
     When I visit the edit project page
-    Then I should be able to delete a user from the project
+    Then I should be able to delete <number> user from the project
+
+    Examples:
+    | number |
+    | 1      |
+    | 3      |
 
   Scenario: Admin can update project without changing project owner
     Given I am signed in as an admin
