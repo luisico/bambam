@@ -1,4 +1,4 @@
-Feature: Delate a project
+Feature: Delete a project
   In order to remove a project from the system
   As a user
   I can delete a project

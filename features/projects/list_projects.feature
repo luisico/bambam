@@ -9,7 +9,7 @@ Feature: List of projects
     When I click on "Projects" in the top nav
     Then I should be on the projects page
 
-  Scenario: Users can view list of only their projects
+  Scenario: Users can view list of projects they belong to
     Given I am signed in
     And I belong to 3 projects
     And there are 10 projects in the system
