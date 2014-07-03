@@ -19,8 +19,9 @@ Feature: Show a project
     And I should see the project's users <privilege> profile links
     And I should see the project's creation date
     And I should see the date of the project's last update
+    And I <privilege2> see a delete button
 
     Examples:
-      | user_type | privilege |
-      | admin     | with      |
-      | user      | without   |
+      | user_type | privilege | privilege2 |
+      | admin     | with      | should     |
+      | user      | without   | should not |

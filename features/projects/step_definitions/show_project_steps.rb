@@ -54,3 +54,11 @@ end
 Then /^I should see the date of the project's last update$/ do
   expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@project.updated_at.utc.iso8601}']"
 end
+
+Then /^I should( not)? see a delete button$/ do |negate|
+  if negate
+    expect(page).not_to have_link 'Delete'
+  else
+    expect(page).to have_link 'Delete'
+  end
+end
