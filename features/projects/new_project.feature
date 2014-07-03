@@ -49,3 +49,8 @@ Feature: Create a project
     Then I should be on the project show page
     And all the project track names should be on the list
     And I should see a message that the project was created successfully
+
+  Scenario: User can cancel out of project new page
+    Given I am signed in as an admin
+    When I am on the new project page
+    Then I should be able to cancel new project

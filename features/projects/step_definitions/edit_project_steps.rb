@@ -40,6 +40,13 @@ Then /^I should( not)? be able to delete a user from the project$/ do |negate|
   end
 end
 
+Then /^I should be able to cancel edit$/ do
+  expect {
+    fill_in 'Project name', with: 'new_project_name'
+    click_link 'Cancel'
+  }.not_to change(@project, :name)
+end
+
 Then /^I should be able to update project without changing project owner$/ do
   expect{
     click_button 'Update'

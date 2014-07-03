@@ -16,6 +16,12 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should not be able to delete a user from the project
 
+  Scenario: User can cancel out of project edit page
+    Given I am signed in as an admin
+    And I belong to a project
+    When I visit the edit project page
+    Then I should be able to cancel edit
+
   Scenario: Admin can change the project name
     Given I am signed in as an admin
     And there is a project in the system

@@ -103,3 +103,9 @@ Then /^all the project track names should be on the list$/ do
   expect(page).to have_content Track.last.name
   expect(page).to have_content Track.all[-2].name
 end
+
+Then /^I should be able to cancel new project$/ do
+  expect {
+    click_link "Cancel"
+  }.not_to change(Project, :count)
+end
