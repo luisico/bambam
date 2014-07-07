@@ -1,5 +1,18 @@
 ### Methods
 
+def project_details(project, user_link)
+  within("#project_#{project.id}") do
+    expect(page).to have_content project.name
+    expect(page).to have_content project.tracks.count
+    if user_link
+      expect(page).to have_link project.owner.email
+    else
+      expect(page).not_to have_link project.owner.email
+    end
+    expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
+  end
+end
+
 ### Given
 
 ### When
@@ -14,16 +27,10 @@ end
 
 ### Then
 
-Then /^I should see a list of projects$/ do
+Then /^I should see a list of all projects$/ do
   expect(Project.count).to be > 0
   Project.all.each do |project|
-    expect(page).to have_css "#project_#{project.id}"
-    within("#project_#{project.id}") do
-      expect(page).to have_content project.name
-      expect(page).to have_content project.tracks.count
-      expect(page).to have_link project.owner.email
-      expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
-    end
+    project_details project, true
   end
 end
 
@@ -31,14 +38,7 @@ Then /^I should only see a list of projects I belong to$/ do
   expect(Project.count).to be > 0
   Project.all.each do |project|
     if project.users.include?(@user)
-      expect(page).to have_css "#project_#{project.id}"
-      within("#project_#{project.id}") do
-        expect(page).to have_content project.name
-        expect(page).to have_content project.tracks.count
-        expect(page).to have_content project.owner.email
-        expect(page).not_to have_link project.owner.email
-        expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
-      end
+      project_details project, false
     else
       expect(page).not_to have_css "#project_#{project.id}"
     end
