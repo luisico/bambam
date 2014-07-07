@@ -1,4 +1,3 @@
-@now
 Feature: Edit project information
   In order to have an up to date project
   As a user
