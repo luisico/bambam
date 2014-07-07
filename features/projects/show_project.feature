@@ -6,6 +6,8 @@ Feature: Show a project
   Scenario Outline: Show a project's information
     Given I am signed in as a <user_type>
     And I belong to a project
+    And there are 3 additional users of that project
+    And there are 3 tracks in that project
     When I am on the project page
     Then I should see the project's name
     And I should see the projects tracks
