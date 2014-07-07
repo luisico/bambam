@@ -1,10 +1,10 @@
 Feature: Show a project
   In order to see the information about a project
-  As a user
-  I want to be able to access a page with all the information about a project
+  As a user/admin
+  I want to be able to access a page with the proper information about a project
 
   Scenario Outline: Show a project's information
-    Given I am signed in as a <user_type>
+    Given I am signed in as <role>
     And I belong to a project
     And there are 3 additional users of that project
     And there are 3 tracks in that project
@@ -17,9 +17,9 @@ Feature: Show a project
     And I <privilege2> see a "Delete" button
 
     Examples:
-      | user_type | privilege | privilege2 |
-      | admin     | with      | should     |
-      | user      | without   | should not |
+      | role     | privilege | privilege2 |
+      | an admin | with      | should     |
+      | a user   | without   | should not |
 
   Scenario: User can access a track show page
     Given I am signed in
