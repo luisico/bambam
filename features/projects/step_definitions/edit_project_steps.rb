@@ -27,21 +27,28 @@ Then /^I should( not)? be able to edit the project name$/ do |negate|
   end
 end
 
-Then /^I should( not)? be able to delete (\d+|a) users? from the project$/ do |negate, n|
-  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+Then /^I should( not)? be able to change memberships in the project$/ do |negate|
   if negate
-    expect(page).not_to have_content User.last.email
+    expect(page).not_to have_selector('h4', text: 'Users')
+    expect(page).not_to have_selector(:xpath, "//input[@name='project[user_ids][]']")
   else
+    expect(page).to have_selector(:xpath, "//input[@name='project[user_ids][]']")
+    deleted = []
     expect {
-      i = n
-      while i > 0 do
-        uncheck User.all[-i].email
-        i -= 1
-      end
+      @project.users[-2..-1].each{ |u| uncheck u.email; deleted << u }
+      @users.each{ |u| check u.email}
       click_button 'Update'
-    }.to change(@project.users, :count).by(-n)
+      @project.reload
+    }.to change(@project.users, :count).by(1)
     expect(current_path).to eq project_path(@project)
-    expect(page).not_to have_content(User.last.email)
+    deleted.each do |u|
+      expect(@project.users).not_to include(u)
+      expect(page).not_to have_content(u.email)
+    end
+    @users.each do |u|
+      expect(@project.users).to include(u)
+      expect(page).to have_content(u.email)
+    end
   end
 end
 
