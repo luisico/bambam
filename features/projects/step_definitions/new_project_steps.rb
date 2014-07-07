@@ -1,12 +1,12 @@
 ### Methods
 
 def build_project
-  @project ||= FactoryGirl.attributes_for(:project)
+  @project_attrs ||= FactoryGirl.attributes_for(:project)
   build_track_with_path
 end
 
 def fill_project_form(project=nil)
-  project ||= @project
+  project ||= @project_attrs
   fill_in 'Project name', with: project[:name]
   check User.last.email
   yield if block_given?
@@ -39,7 +39,7 @@ end
 When /^I create a project without a name$/ do
   expect{
     build_project
-    fill_project_form @project.merge(name: '')
+    fill_project_form @project_attrs.merge(name: '')
   }.to change(Project, :count).by(0)
 end
 
@@ -89,19 +89,14 @@ Then /^I should see my email among the list of project member emails$/ do
   expect(page).to have_content User.first.email
 end
 
-Then /^I should be the projects owner$/ do
+Then /^I should be the project's owner$/ do
   expect(Project.last.owner).to eq(@admin)
 end
 
-Then /^all the project member email addresses should be on the list$/ do
+Then /^I should see all project members$/ do
   expect(page).to have_content Project.last.owner.email
   expect(page).to have_content User.last.email
   expect(page).to have_content User.all[-2].email
-end
-
-Then /^all the project track names should be on the list$/ do
-  expect(page).to have_content Track.last.name
-  expect(page).to have_content Track.all[-2].name
 end
 
 Then /^I should be able to cancel new project$/ do
@@ -109,3 +104,12 @@ Then /^I should be able to cancel new project$/ do
     click_link "Cancel"
   }.not_to change(Project, :count)
 end
+
+Then /^I should see all the project tracks$/ do
+  project = @project || Project.last
+  expect(project.tracks.count).to be > 0
+  project.tracks.each do |track|
+    expect(page).to have_link track.name
+  end
+end
+

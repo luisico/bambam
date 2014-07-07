@@ -10,7 +10,7 @@ Feature: Show a project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should see the project's name
-    And I should see the projects tracks
+    And I should see the project's tracks
     And I should see the project's users <privilege> profile links
     And I should see the project's creation date
     And I should see the date of the project's last update

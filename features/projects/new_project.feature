@@ -14,18 +14,19 @@ Feature: Create a project
   @javascript
   Scenario: Admin creates a new project
     Given I am signed in as an admin
-    And there are 3 other users in the system
+    And there is another user in the system
     And I am on the new project page
 
     When I create a new project with a user and a track
     Then I should be on the project show page
     And I should see a message that the project was created successfully
     And I should see my email among the list of project member emails
-    And I should be the projects owner
+    And I should be the project's owner
+    And I should see the project's tracks
 
   Scenario: Admin cannot create a project without a name
     Given I am signed in as an admin
-    And there are 3 other users in the system
+    And there is another user in the system
     And I am on the new project page
     When I create a project without a name
     Then the "Project name" field should have the error "can't be blank"
@@ -37,20 +38,20 @@ Feature: Create a project
     And I am on the new project page
     When I create a project with multiple members
     Then I should be on the project show page
-    And all the project member email addresses should be on the list
+    And I should see the project's users with profile links
     And I should see a message that the project was created successfully
 
   @javascript
   Scenario: Admin can add multiple tracks to a project
     Given I am signed in as an admin
-    And there are 3 other users in the system
+    And there is another user in the system
     And I am on the new project page
     When I create a project with multiple tracks
     Then I should be on the project show page
-    And all the project track names should be on the list
+    And I should see the project's tracks
     And I should see a message that the project was created successfully
 
-  Scenario: User can cancel out of project new page
+  Scenario: Admin can cancel out of project new page
     Given I am signed in as an admin
     When I am on the new project page
     Then I should be able to cancel new project

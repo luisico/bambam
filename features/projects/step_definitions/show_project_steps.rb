@@ -18,25 +18,22 @@ Then /^I should see the project's name$/ do
   expect(page).to have_content @project.name
 end
 
-Then /^I should see the projects tracks$/ do
-  @project.tracks.each do |track|
+Then /^I should see the project's tracks$/ do
+  project = @project || Project.last
+  project.tracks.each do |track|
     expect(page).to have_link track.name
-    encoded = ERB::Util.url_encode stream_services_track_url(track)
-    expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
+    expect(page).to have_selector(:xpath, "//a[contains(@href, 'http://localhost:60151/load') and text()='igv']")
   end
 end
 
 Then /^I should see the project's users with(out)? profile links$/ do |negate|
-  if negate
-    @project.users.each do |user|
-      within("#project-user-#{user.id}") do
+  project = @project || Project.last
+  project.users.each do |user|
+    within("#project-user-#{user.id}") do
+      if negate
         expect(page).to have_content user.email
         expect(page).not_to have_link user.email
-      end
-    end
-  else
-    @project.users.each do |user|
-      within("#project-user-#{user.id}") do
+      else
         expect(page).to have_link user.email
       end
     end
