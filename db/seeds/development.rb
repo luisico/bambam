@@ -8,12 +8,10 @@ users = FactoryGirl.create_list(:user, 3)
 FactoryGirl.create(:group, owner: admin1, members: [inviter, users[0], users[1]])
 FactoryGirl.create(:group, owner: admin2, members: [admin1, users[2]])
 
-# Tracks
-tracks = FactoryGirl.create_list(:track, 3)
-
 # Projects & projects_users
-FactoryGirl.create(:project, owner: admin1, users: [admin1, inviter, users[0], users[1]], tracks: [tracks[0], tracks[2]])
-FactoryGirl.create(:project, owner: admin2, users: [inviter, users[2]], tracks: [tracks[1]])
+project1 = FactoryGirl.create(:project, owner: admin1, users: [admin1, inviter, users[0], users[1]])
+project2 = FactoryGirl.create(:project, owner: admin2, users: [inviter, users[2]])
 
-# Add owner to orphaned project
-Project.where(name: 'orphaned_projects').first.update_attributes(owner_id: admin1.id)
+# Tracks
+FactoryGirl.create_list(:track, 2, project: project1)
+FactoryGirl.create(:track, project: project2)
