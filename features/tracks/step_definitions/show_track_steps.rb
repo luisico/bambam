@@ -47,14 +47,6 @@ Then /^I should see the track's project$/ do
   expect(page).to have_content @track.project.name
 end
 
-Then /^I should see the track's creation date$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@track.created_at.utc.iso8601}']"
-end
-
-Then /^I should see the date of the track's last update$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@track.updated_at.utc.iso8601}']"
-end
-
 Then /^I should be able to acess the track page from a link$/ do
   click_link @track.name
   expect(current_path).to eq track_path(@track)

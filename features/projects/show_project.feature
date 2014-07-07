@@ -12,8 +12,7 @@ Feature: Show a project
     Then I should see the project's name
     And I should see the project's tracks
     And I should see the project's users <privilege> profile links
-    And I should see the project's creation date
-    And I should see the date of the project's last update
+    And I should see the project's timestamps
     And I <privilege2> see a "Delete" button
 
     Examples:

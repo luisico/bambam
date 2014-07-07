@@ -21,8 +21,7 @@ Feature: Show a track
     And I should see a link to download a <type> file
     And I <status> see a "download bai file" link
     And I should see button to copy the track path to the clipboard
-    And I should see the track's creation date
-    And I should see the date of the track's last update
+    And I should see the track's timestamps
     And I should see a link to open the track in IGV
     And I should see a text with the track line for UCSC
     And I should see button to copy the track ucsc line to the clipboard

@@ -53,3 +53,9 @@ end
 Then /^I should( not)? see an? "(.*?)" button$/ do |negate, text|
   step %{I should#{negate} see a link to "#{text}"}
 end
+
+Then /^I should see the (.*?)'s timestamps$/ do |model|
+  object = eval "@#{model}"
+  expect(page).to have_selector(:xpath, "//span[contains(.,'created:') and contains(.,time[@data-local='time-ago' and @datetime='#{object.created_at.utc.iso8601}'])]")
+  expect(page).to have_selector(:xpath, "//span[contains(.,'updated:') and contains(.,time[@data-local='time-ago' and @datetime='#{object.updated_at.utc.iso8601}'])]")
+end

@@ -40,11 +40,3 @@ Then /^I should see the group's members( with links)?$/ do |links|
     end
   end
 end
-
-Then /^I should see the group's creation date$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@group.created_at.utc.iso8601}']"
-end
-
-Then /^I should see the group's last update$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@group.updated_at.utc.iso8601}']"
-end

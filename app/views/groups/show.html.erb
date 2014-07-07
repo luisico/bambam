@@ -4,9 +4,9 @@
       <div class="clearfix">
         <h3 class="left"><%= @group.name %></h3>
         <h4 class="right"><small>
-          created: <%= local_time_ago(@group.created_at) %><br/>
-          updated: <%= local_time_ago(@group.updated_at) %></small>
-        </h4>
+          <span>created: <%= local_time_ago(@group.created_at) %></span><br/>
+          <span>updated: <%= local_time_ago(@group.updated_at) %></span>
+        </small></h4>
       </div>
 
       <div id="members">

@@ -39,11 +39,3 @@ Then /^I should see the project's users with(out)? profile links$/ do |negate|
     end
   end
 end
-
-Then /^I should see the project's creation date$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@project.created_at.utc.iso8601}']"
-end
-
-Then /^I should see the date of the project's last update$/ do
-  expect(page).to have_selector "time[data-local='time-ago'][datetime='#{@project.updated_at.utc.iso8601}']"
-end
