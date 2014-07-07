@@ -2,18 +2,13 @@ class AddProjectIdToTracks < ActiveRecord::Migration
   def self.up
     add_column :tracks, :project_id, :integer
 
-    if Track.all.any?
+    if Track.count > 0
       project = Project.create(name: 'orphaned_projects')
-
       Track.reset_column_information
-
-      Track.all.each do |track|
-        track.project = project
-        track.save!
-      end
+      Track.all.each{ |t| t.update!(project: project) }
     end
 
-    change_column :tracks, :project_id, :integer, :null => false
+    change_column :tracks, :project_id, :integer, null: false
   end
 
   def self.down

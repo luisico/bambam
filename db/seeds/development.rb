@@ -13,5 +13,5 @@ project1 = FactoryGirl.create(:project, owner: admin1, users: [admin1, inviter, 
 project2 = FactoryGirl.create(:project, owner: admin2, users: [inviter, users[2]])
 
 # Tracks
-FactoryGirl.create_list(:track, 2, project: project1)
+FactoryGirl.create_list(:track, 3, project: project1)
 FactoryGirl.create(:track, project: project2)
