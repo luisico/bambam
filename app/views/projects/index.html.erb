@@ -5,27 +5,26 @@
     <% end %>
     <div class="panel">
       <h3>Projects</h3>
-      <table>
-        <tr>
-          <th class="text-left normal-font-weight">Name</th>
-          <th class="text-left normal-font-weight">Tracks</th>
-          <th class="text-left normal-font-weight">Owner</th>
-          <th class="text-left normal-font-weight">Updated</th>
-        </tr>
-
-      <% @projects.each do |project| %>
-        <tr id="project_<%= project.id %>">
-          <td><%= link_to project.name, project %></td>
-          <td class="text-center"><%= project.tracks.count %></td>
-          <% if can? :manage, User %>
-            <td><%= link_to project.owner.email, project.owner %></td>
-          <% else %>
-            <td><%= project.owner.email %></td>
-          <% end %>
-          <td><%= local_time_ago(project.updated_at) %></td>
-        </tr>
+      <% @projects.each_slice(3) do |projects_slice| %>
+        <ul class="small-block-grid-3">
+        <% projects_slice.each do |project| %>
+          <li id="project_<%= project.id %>">
+            <ul class="no-bullet">
+              <li>
+                <b><%= link_to project.name, project %></b>
+                <span class="secondary radius label"><%= project.tracks.count %> tracks</span>
+              </li>
+              <% if can? :manage, User %>
+                <li>owner: <%= link_to project.owner.email, project.owner %></li>
+                <% else %>
+                 <li>owner: <%= project.owner.email %></li>
+                <% end %>
+              <li>updated: <%= local_time_ago(project.updated_at) %></li>
+            </ul>
+          </li>
+        <% end %>
+        </ul>
       <% end %>
-      </table>
     </div>
   </div>
 </div>
