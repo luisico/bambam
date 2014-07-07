@@ -6,7 +6,7 @@ Feature: List of tracks
   Background:
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there are 5 tracks in that project
 
   Scenario: List of tracks
     When I am on the tracks page
