@@ -12,8 +12,8 @@
             </li>
             <li>
               <i class="fi-paw small"></i>
-              <%= project.tracks.count %> |
-              <i class="fi-torsos small"></i>
+              <%= project.tracks.count %>
+              <i class="fi-torsos small left-buffer"></i>
               <%= project.users.count %>
             </li>
             <% if can? :manage, User %>
