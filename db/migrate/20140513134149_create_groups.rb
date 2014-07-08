@@ -7,9 +7,13 @@ class CreateGroups < ActiveRecord::Migration
       t.timestamps
     end
 
-    if User.count > 0
-      if admin = User.with_role(:admin).first
-        Group.create(name: 'Orphan Group', members: User.all, owner: admin)
+    reversible do |dir|
+      dir.up do
+        if User.count > 0
+          if admin = User.with_role(:admin).first
+            Group.create(name: 'Orphan Group', members: User.all, owner: admin)
+          end
+        end
       end
     end
   end
