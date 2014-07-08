@@ -6,5 +6,9 @@ class CreateGroups < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    if User.count > 0
+      Group.create(name: 'Orphan', members: User.all, owner: User.first)
+    end
   end
 end
