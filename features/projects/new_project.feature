@@ -55,3 +55,11 @@ Feature: Create a project
     Given I am signed in as an admin
     When I am on the new project page
     Then I should be able to cancel new project
+
+  @javascript
+  Scenario: Admin can delete a track before creating project
+    Given I am signed in as an admin
+    And there is another user in the system
+    When I am on the new project page
+    And I delete a track before creating project
+    Then I should not create a new track

@@ -65,6 +65,16 @@ When /^I create a project with multiple tracks$/ do
   }.to change(Project, :count).by(1)
 end
 
+When /^I delete a track before creating project$/ do
+  expect {
+    build_project
+    add_track_to_project
+    find('.remove-track').trigger('click')
+    fill_project_form
+  }.to change(Project, :count).by(1)
+  expect(current_path).to eq project_path(Project.last)
+end
+
 ### Then
 
 Then /^I should be on the new project page$/ do
@@ -111,5 +121,10 @@ Then /^I should see all the project tracks$/ do
   project.tracks.each do |track|
     expect(page).to have_link track.name
   end
+end
+
+Then /^I should not create a new track$/ do
+  expect(Track.count).to eq(0)
+  expect(page).not_to have_link @track[:name]
 end
 
