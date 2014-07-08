@@ -9,7 +9,12 @@
           <ul class="no-bullet panel">
             <li class="headline">
               <%= link_to project.name, project, class: "text-panel-overhang" %>
-              <span class="secondary radius label"><%= project.tracks.count %> tracks</span>
+            </li>
+            <li>
+              <i class="fi-paw small"></i>
+              <%= project.tracks.count %> |
+              <i class="fi-torsos small"></i>
+              <%= project.users.count %>
             </li>
             <% if can? :manage, User %>
               <li class="sub-text">owner: <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %></li>
