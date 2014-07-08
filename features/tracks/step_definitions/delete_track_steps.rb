@@ -38,3 +38,16 @@ Then /^I should be able to delete tracks from the project$/ do
   expect(@project.tracks).to include(Track.last)
   expect(page).to have_content Track.last.name
 end
+
+
+Then /^I should be able to restore a deleted track$/ do
+  expect {
+    track_group = first('.track-form-group')
+    within(track_group) {
+      find('.remove-track').trigger('click')
+      find('.restore-track').trigger('click')
+    }
+    click_button 'Update'
+    @project.reload
+  }.not_to change(@project.tracks, :count)
+end
