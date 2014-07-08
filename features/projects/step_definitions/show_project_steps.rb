@@ -39,3 +39,7 @@ Then /^I should see the project's users with(out)? profile links$/ do |negate|
     end
   end
 end
+
+Then /^I should be on the tracks page$/ do
+  expect(current_path).to eq tracks_path
+end

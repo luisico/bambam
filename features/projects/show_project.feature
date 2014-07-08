@@ -20,6 +20,14 @@ Feature: Show a project
       | an admin | with      | should     |
       | a user   | without   | should not |
 
+  Scenario: User can access the tracks page
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I am on the project page
+    And I click "Tracks"
+    Then I should be on the tracks page
+
   Scenario: User can access a track show page
     Given I am signed in
     And I belong to a project

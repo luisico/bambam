@@ -27,7 +27,10 @@
             <% end %>
         </div>
         <div class="small-12 medium-6 columns">
-          <h4><i class="fi-paw large"></i>Tracks</h4>
+          <h4><i class="fi-paw large"></i>
+            Tracks
+            <small>view tracks from all your projects <%= link_to 'here', tracks_path %></small>
+          </h4>
           <ul class="no-bullet">
             <% @project.tracks.each do |track| %>
               <li>
@@ -53,4 +56,3 @@
     <% end %>
   </div>
 </div>
-
