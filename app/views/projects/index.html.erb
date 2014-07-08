@@ -3,28 +3,23 @@
     <% if can? :manage, Project %>
       <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
     <% end %>
-    <div class="panel">
-      <h3>Projects</h3>
-      <% @projects.each_slice(3) do |projects_slice| %>
-        <ul class="small-block-grid-3">
-        <% projects_slice.each do |project| %>
-          <li id="project_<%= project.id %>">
-            <ul class="no-bullet">
-              <li>
-                <b><%= link_to project.name, project %></b>
-                <span class="secondary radius label"><%= project.tracks.count %> tracks</span>
-              </li>
-              <% if can? :manage, User %>
-                <li>owner: <%= link_to project.owner.email, project.owner %></li>
-                <% else %>
-                 <li>owner: <%= project.owner.email %></li>
-                <% end %>
-              <li>updated: <%= local_time_ago(project.updated_at) %></li>
-            </ul>
-          </li>
-        <% end %>
-        </ul>
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+      <% @projects.each do |project| %>
+        <li id="project_<%= project.id %>">
+          <ul class="no-bullet panel">
+            <li class="headline">
+              <%= link_to project.name, project, class: "text-panel-overhang" %>
+              <span class="secondary radius label"><%= project.tracks.count %> tracks</span>
+            </li>
+            <% if can? :manage, User %>
+              <li class="sub-text">owner: <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %></li>
+              <% else %>
+               <li class="sub-text text-panel-overhang">owner: <%= project.owner.email %></li>
+              <% end %>
+            <li class="sub-text">updated: <%= local_time_ago(project.updated_at) %></li>
+          </ul>
+        </li>
       <% end %>
-    </div>
+    </ul>
   </div>
 </div>
