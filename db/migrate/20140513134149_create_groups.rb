@@ -8,7 +8,9 @@ class CreateGroups < ActiveRecord::Migration
     end
 
     if User.count > 0
-      Group.create(name: 'Orphan', members: User.all, owner: User.first)
+      if admin = User.with_role(:admin).first
+        Group.create(name: 'Orphan Group', members: User.all, owner: admin)
+      end
     end
   end
 end
