@@ -13,6 +13,7 @@ describe Project do
 
   describe "name" do
     it { should respond_to :name }
+    it { should validate_presence_of(:name) }
   end
 
   describe "owner" do
@@ -30,6 +31,12 @@ describe Project do
     it { should have_many :users }
     it { should respond_to :users }
     it { should respond_to :user_ids }
+  end
+
+  describe "tracks" do
+    it { should have_many :tracks }
+    it { should respond_to :tracks }
+    it { should respond_to :track_ids }
   end
 
   describe "when project destroyed" do
