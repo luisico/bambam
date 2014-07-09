@@ -158,9 +158,9 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = FactoryGirl.create(:project, owner: @admin) }
+    before { @project = @projects.first }
 
-    context "as a signed in user and owner of @project" do
+    context "as an admin" do
       before { sign_in @admin }
 
       it "should be successful" do
@@ -175,11 +175,30 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user" do
+    context "as a signed in user and project member" do
+      before do
+        user = FactoryGirl.create(:user)
+        @project.users << user
+        sign_in user
+      end
+
+      it "should be successful" do
+        get :edit, id: @project
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it "should return the project" do
+        get :edit, id: @project
+        expect(assigns(:project)).to eq @project
+      end
+    end
+
+    context "as a signed in user but not project member" do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
-        get :edit, id: @project
+        get :edit, id: @projects.last
         expect(response).not_to be_success
         expect(response).to redirect_to projects_path
       end
