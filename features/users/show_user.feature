@@ -10,9 +10,13 @@ Feature: Show a user profile
 
   Scenario: Show account profile information
     Given I am signed in
+    And I belong to a project
+    And I belong to a group
     When I am on my account profile page
     Then I should see my email
     And I should see my avatar
+    And I should see my projects
+    And I should see my groups
     And I should see a link to "Edit"
 
   Scenario: Users can only see groups they are members of

@@ -29,3 +29,21 @@ end
 Then /^I should see my avatar$/ do
   expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(@user)}']")
 end
+
+Then /^I should see my projects$/ do
+  @user.projects.each do |project|
+    within("#project_#{project.id}") do
+      expect(page).to have_link project.name
+      expect(page).to have_content project.owner.email
+    end
+  end
+end
+
+Then /^I should see my groups$/ do
+  @user.groups.each do |group|
+    within("#group_#{group.id}") do
+      expect(page).to have_link group.name
+      expect(page).to have_content group.owner.email
+    end
+  end
+end
