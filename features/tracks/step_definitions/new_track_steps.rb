@@ -45,6 +45,19 @@ When /^I click the "(.*?)" link$/ do |link|
   click_link link
 end
 
+When /^I delete a track before updating project$/ do
+  build_track_with_path
+  expect {
+    click_link 'Add Track'
+    within('.new-record') {
+      fill_track_form
+    }
+    find('.remove-track').trigger('click')
+    find('.update-project-tracks').trigger('click')
+    @project.reload
+  }.not_to change(@project.tracks, :count)
+end
+
 ### Then
 
 Then /^I should be able to add a track to the project$/ do
@@ -73,4 +86,8 @@ end
 
 Then /^the page should have the error can't be blank$/ do
   expect(page).to have_content "can't be blank"
+end
+
+Then /^I should not add a track to the project$/ do
+  expect(Project.last.tracks.count).to eq(0)
 end

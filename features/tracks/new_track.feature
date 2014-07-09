@@ -29,3 +29,8 @@ Feature: Create a track
     When I visit the edit project page
     And I click the "Add Track" link
     Then I should see instructions to use the allowed paths
+
+  Scenario: Delete a track before updating project
+    When I visit the edit project page
+    And I delete a track before updating project
+    Then I should not add a track to the project
