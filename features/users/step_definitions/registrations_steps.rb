@@ -28,14 +28,14 @@ When /^I invite an already registered user$/ do
   expect{
     build_invitee
     fill_invitation_form @invitee.merge(email: registered_user.email)
-  }.to change(User, :count).by(0)
+  }.not_to change(User, :count)
 end
 
 When /^I invite a user with a blank email$/ do
   expect{
     build_invitee
     fill_invitation_form @invitee.merge(email: '')
-  }.to change(User, :count).by(0)
+  }.not_to change(User, :count)
 end
 
 When /^an (admin|inviter) user invites me$/ do |role|

@@ -27,7 +27,7 @@ When /^I create a track without a name$/ do
       fill_track_form @track.merge(name: '')
     }
     click_button 'Update Project'
-  }.to change(Track, :count).by(0)
+  }.not_to change(Track, :count)
 end
 
 When /^I create a track without a path$/ do
@@ -38,7 +38,7 @@ When /^I create a track without a path$/ do
       fill_track_form @track.merge(path: '')
     }
     click_button 'Update Project'
-  }.to change(Track, :count).by(0)
+  }.not_to change(Track, :count)
 end
 
 When /^I click the "(.*?)" link$/ do |link|

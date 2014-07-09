@@ -52,7 +52,7 @@ describe Project do
     end
 
     it "should not destroy the user" do
-      expect { @project.destroy }.to change(User, :count).by(0)
+      expect { @project.destroy }.not_to change(User, :count)
     end
   end
 end

@@ -35,7 +35,7 @@ When /^I create a group without a name$/ do
   expect{
     build_group
     fill_group_form @group_attrs.merge(name: '')
-  }.to change(Group, :count).by(0)
+  }.not_to change(Group, :count)
 end
 
 When /^I create a group with multiple members$/ do

@@ -40,7 +40,7 @@ When /^I create a project without a name$/ do
   expect{
     build_project
     fill_project_form @project_attrs.merge(name: '')
-  }.to change(Project, :count).by(0)
+  }.not_to change(Project, :count)
 end
 
 When /^I create a project with multiple members$/ do
