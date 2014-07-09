@@ -2,12 +2,13 @@
 
 ### Given
 
-Given /^there is a (bam|bw) track in the system$/ do |type|
+Given /^there is a (bam|bw) track in that project$/ do |type|
+  @project ||= @projects.last
   if type == 'bam'
-    @track = FactoryGirl.create(:test_track)
+    @track = FactoryGirl.create(:test_track, project: @project)
     cp_track Pathname.new(@track.path).sub_ext('.bai'), 'bai'
   elsif type== 'bw'
-    @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"))
+    @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"), project: @project)
   end
 end
 
@@ -44,7 +45,7 @@ Then /^I should see the track's path$/ do
 end
 
 Then /^I should see the track's project$/ do
-  expect(page).to have_content @track.project.name
+  expect(page).to have_link @track.project.name
 end
 
 Then /^I should see a link to open the track in IGV$/ do

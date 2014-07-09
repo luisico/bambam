@@ -4,11 +4,11 @@ Feature: Show a track
   I want to be able to access a page with all the information about a track
 
   Background:
-    Given I am signed in as an admin
-
+    Given I am signed in
+    And I belong to a project
 
   Scenario Outline: Show a track's information
-    Given there is a <type> track in the system
+    Given there is a <type> track in that project
     When I am on the track page
     Then I should see the track's name
     And I should see the track's path
@@ -24,10 +24,9 @@ Feature: Show a track
    Examples:
     | type | status     |
     | bam  | should     |
-    | bw   | should not |
 
   Scenario Outline: Download track
-    Given there is a <type> track in the system
+    Given there is a <type> track in that project
     When I am on the track page
     And I click on the download <ext> track link
     Then a <ext> file should download
