@@ -14,4 +14,4 @@ Feature: List of tracks
 
   Scenario: Provides links to individual track pages
     When I am on the tracks page
-    Then I should be able to acess the track page from a link
+    Then I should be able to access the track page from a link

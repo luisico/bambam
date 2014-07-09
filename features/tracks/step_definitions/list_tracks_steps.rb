@@ -18,3 +18,8 @@ Then /^I should see a list of tracks with IGV link$/ do
     expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
   end
 end
+
+Then /^I should be able to access the track page from a link$/ do
+  click_link @track.name
+  expect(current_path).to eq track_path(@track)
+end

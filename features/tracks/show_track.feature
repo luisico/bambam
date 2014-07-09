@@ -6,11 +6,6 @@ Feature: Show a track
   Background:
     Given I am signed in as an admin
 
-  Scenario: User can access the track show page from the tracks page
-    Given there is a bam track in the system
-    When I am on the tracks page
-    And I click on the track name
-    Then I should be on the show track page
 
   Scenario Outline: Show a track's information
     Given there is a <type> track in the system
