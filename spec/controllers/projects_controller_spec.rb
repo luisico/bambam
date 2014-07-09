@@ -66,24 +66,56 @@ describe ProjectsController do
   end
 
   describe "GET 'show'" do
-    context "as a signed in user and project owner" do
-      before {sign_in @admin}
+    before { @project = @projects.first }
+
+    context "as an admin" do
+      before { sign_in @admin }
 
       it "should be successful" do
-        get :show, id: @projects.first
+        get :show, id: @project
         expect(response).to be_success
         expect(response).to render_template :show
       end
 
       it "should return the project" do
-        get :show, id: @projects.first
-        expect(assigns(:project)).to eq @projects.first
+        get :show, id: @project
+        expect(assigns(:project)).to eq @project
+      end
+    end
+
+    context "as a signed in user" do
+      before do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
+
+      context "and project member" do
+        before { @project.users << @user }
+
+        it "should be successful" do
+          get :show, id: @project
+          expect(response).to be_success
+          expect(response).to render_template :show
+        end
+
+        it "should return the project" do
+          get :show, id: @project
+          expect(assigns(:project)).to eq @project
+        end
+      end
+
+      context "not project member" do
+        it "should redirect to projects page" do
+          get :show, id: @projects.last
+          expect(response).not_to be_success
+          expect(response).to redirect_to projects_path
+        end
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :show, id: @projects.first
+        get :show, id: @project
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
