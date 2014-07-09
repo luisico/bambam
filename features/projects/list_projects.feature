@@ -26,7 +26,7 @@ Feature: List of projects
     And I belong to a project
     When I am on the projects page
     And I click on the project name
-    Then I should be on the show project page
+    Then I should be on the project page
 
   Scenario: Admin can access the new project page
     Given I am signed in as an admin

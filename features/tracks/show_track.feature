@@ -3,12 +3,10 @@ Feature: Show a track
   As a user
   I want to be able to access a page with all the information about a track
 
-  Background:
+  Scenario Outline: Show a track's information
     Given I am signed in
     And I belong to a project
-
-  Scenario Outline: Show a track's information
-    Given there is a <type> track in that project
+    And there is a <type> track in that project
     When I am on the track page
     Then I should see the track's name
     And I should see the track's path
@@ -26,7 +24,9 @@ Feature: Show a track
     | bam  | should     |
 
   Scenario Outline: Download track
-    Given there is a <type> track in that project
+    Given I am signed in
+    And I belong to a project
+    And there is a <type> track in that project
     When I am on the track page
     And I click on the download <ext> track link
     Then a <ext> file should download
@@ -36,3 +36,17 @@ Feature: Show a track
       | bam  | bam |
       | bam  | bai |
       | bw   | bw  |
+
+  Scenario Outline: Back button
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    When I am on the <source> page
+    And I click on the track name
+    And I click "Back"
+    Then I should be on the <source> page
+
+    Examples:
+      | source  |
+      | tracks  |
+      | project |

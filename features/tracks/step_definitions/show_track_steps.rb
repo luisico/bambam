@@ -16,6 +16,7 @@ end
 
 When /^I click on the track name$/ do
   click_link @track.name
+  expect(current_path).to eq track_path(@track)
 end
 
 When /^I am on the track page$/ do

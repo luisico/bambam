@@ -10,7 +10,7 @@ end
 
 ### Then
 
-Then /^I should be on the show project page$/ do
+Then /^I should be on the project page$/ do
   expect(current_path).to eq project_path(@project)
 end
 
