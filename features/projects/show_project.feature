@@ -43,9 +43,15 @@ Feature: Show a project
     And I click "Edit"
     Then I should be on the edit project page
 
-  Scenario: User can go back to the projects page
+  Scenario Outline: Back button
     Given I am signed in
     And I belong to a project
-    When I am on the project page
+    When I am on the <source> page
+    And I click on the project name
     And I click "Back"
-    Then I should be on the projects page
+    Then I should be on the <source> page
+
+    Examples:
+      | source          |
+      | account profile |
+      | projects        |

@@ -50,7 +50,7 @@
     <% if can? :edit, @project %>
       <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
     <% end %>
-    <%= link_to 'Back', projects_path, class: 'button tiny radius' %>
+    <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>
       <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny radius [secondary alert success] right' %>
     <% end %>

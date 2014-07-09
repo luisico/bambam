@@ -6,11 +6,11 @@ Feature: Show a user profile
   Scenario: User can access their account settings page
     Given I am signed in
     When I click on "Account Profile" in the top nav
-    Then I should be on the account profile page
+    Then I should be on my account profile page
 
   Scenario: Show account profile information
     Given I am signed in
-    When I am on my Account Profile page
+    When I am on my account profile page
     Then I should see my email
     And I should see my avatar
     And I should see a link to "Edit"
@@ -19,14 +19,14 @@ Feature: Show a user profile
     Given I am signed in
     And there are 2 groups in the system
     And I belong to 2 groups
-    When I am on my Account Profile page
+    When I am on my account profile page
     Then I should only see a list of groups I am a member of
 
   Scenario: Show multiple projects info
     Given I am signed in
     And there are 2 projects in the system
     And I belong to 2 projects
-    When I am on my Account Profile page
+    When I am on my account profile page
     And I should only see a list of projects I belong to
 
   Scenario Outline: Admin/inviter can access the user show page from the users page

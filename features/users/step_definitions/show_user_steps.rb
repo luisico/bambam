@@ -8,7 +8,7 @@ end
 
 ### When
 
-When /^I am on my Account Profile page$/ do
+When /^I am on (my|the)? account profile page$/ do |foo|
   visit user_path(@user)
 end
 
@@ -18,7 +18,7 @@ end
 
 ### Then
 
-Then /^I should be on the account profile page$/ do
+Then /^I should be on (my|the)? account profile page$/ do |foo|
   expect(current_path).to eq user_path(@user)
 end
 
