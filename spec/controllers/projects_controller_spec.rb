@@ -41,6 +41,21 @@ describe ProjectsController do
       end
     end
 
+    context "as a signed user without a project" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should redirect to a static contact admin page" do
+        get :index
+        expect(response).to be_success
+        expect(response).to render_template :index
+      end
+
+      it "should return no project" do
+        get :index
+        expect(assigns(:projects)).to eq []
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         get :index

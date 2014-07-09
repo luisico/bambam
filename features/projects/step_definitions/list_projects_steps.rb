@@ -15,6 +15,14 @@ end
 
 ### Given
 
+Given /^I do( not)? have an inviter$/ do |negate|
+  unless negate
+    @admin = FactoryGirl.create(:admin)
+    @user.invited_by = @admin
+    @user.save!
+  end
+end
+
 ### When
 
 When /^I am on the projects page$/ do
@@ -42,5 +50,13 @@ Then /^I should only see a list of projects I belong to$/ do
     else
       expect(page).not_to have_css "#project_#{project.id}"
     end
+  end
+end
+
+Then /^I should see a special message$/ do
+  if @user.invited_by
+    expect(page).to have_content "Please contact #{@admin.email} to be added to a project"
+  else
+    expect(page).to have_content "Please contact your admin to be added to a project"
   end
 end

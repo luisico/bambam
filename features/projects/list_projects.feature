@@ -36,5 +36,18 @@ Feature: List of projects
 
   Scenario: User cannot access the new project page
     Given I am signed in as a user
+    And I belong to a project
     When I am on the projects page
     Then I should not see a link to "New Project"
+
+  Scenario Outline: User with no projects will get special message
+    Given I am signed in as a user
+    And I <status> have an inviter
+    When I am on the projects page
+    Then I should see a special message
+
+    Examples:
+    |status |
+    |do     |
+    |do not |
+
