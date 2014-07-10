@@ -4,6 +4,7 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
     alias_action :create, :index, :show, :to => :invite
+    #TODO remove this alias
     alias_action :index, :show, :edit, :update, :to => :user_access
 
     if user.has_role? :admin

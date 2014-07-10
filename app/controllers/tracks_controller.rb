@@ -5,9 +5,11 @@ class TracksController < ApplicationController
   respond_to :html
 
   def index
-    if current_user.has_role? :admin
+    #TODO maybe pull this into a scope
+    if can? :manage, Track
       @tracks = Track.all
     else
+      #TODO replace this with single ActiveRecord statement using includes
       @tracks = []
       current_user.projects.each do |project|
         project.tracks.each do |track|

@@ -85,8 +85,7 @@ describe User do
 
       context "projects" do
         before do
-          @user_on_project = FactoryGirl.create(:project)
-          @user_on_project.users << @user
+          @user_on_project = FactoryGirl.create(:project, users: [@user])
           @other_user_project = FactoryGirl.create(:project, owner: @other_user)
         end
 
@@ -98,7 +97,13 @@ describe User do
       end
 
       context "tracks" do
+        before do
+          @track = FactoryGirl.create(:test_track, project: FactoryGirl.create(:project))
+        end
+
         it { should be_able_to(:read, Track, :project => { :user_ids => @user.id }) }
+
+        it { should_not be_able_to(:read, @track) }
       end
     end
   end
