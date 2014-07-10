@@ -52,8 +52,8 @@ When /^I delete a track before updating project$/ do
     within('.new-record') {
       fill_track_form
     }
-    find('.remove-track').trigger('click')
-    find('.update-project-tracks').trigger('click')
+    find('.remove-track').trigger('click') #TODO this is the offending line of code
+    click_button 'Update Project'
     @project.reload
   }.not_to change(@project.tracks, :count)
 end
