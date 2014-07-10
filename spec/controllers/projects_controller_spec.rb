@@ -216,7 +216,7 @@ describe ProjectsController do
   describe "Post 'create'" do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
-    context "as a signed in user" do
+    context "as an admin" do
       before { sign_in @admin }
 
       context "with valid parameters" do
@@ -246,6 +246,22 @@ describe ProjectsController do
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
         end
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should redirect to the projects page" do
+        post :create, project: @project_attr
+        expect(response).not_to be_success
+        expect(response).to redirect_to projects_path
+      end
+
+      it "should not create a new project" do
+        expect {
+          post :create, project: @project_attr
+        }.not_to change(Project, :count)
       end
     end
 
