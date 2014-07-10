@@ -391,7 +391,7 @@ describe ProjectsController do
   describe "Delete 'destroy'" do
     before { @project = FactoryGirl.create(:project, owner: @admin) }
 
-    context "as a signed in user" do
+    context "as an admin" do
       before { sign_in @admin }
 
       it "should redirect to project#index" do
@@ -404,6 +404,21 @@ describe ProjectsController do
           delete :destroy, id: @project
         }.to change(Project, :count).by(-1)
         expect(assigns(:project)).to eq @project
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+      it "should redirect to the projects page" do
+        delete :destroy, id: @project
+        expect(response).not_to be_success
+        expect(response).to redirect_to projects_path
+      end
+
+      it "should not delete the project" do
+        expect{
+          delete :destroy, id: @project
+        }.not_to change(Project, :count)
       end
     end
 
