@@ -16,6 +16,7 @@ Then /^I should see a list of tracks with IGV link$/ do
     expect(page).to have_link track.name
     encoded = ERB::Util.url_encode stream_services_track_url(track)
     expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
+    expect(page).to have_link track.project.name
   end
 end
 

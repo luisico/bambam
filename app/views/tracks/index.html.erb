@@ -8,6 +8,7 @@
             <li>
               <%= link_to_igv(track) %>
               <%= link_to track.name, track, class: "track" %>
+              (<%= link_to track.project.name, track.project %>)
             </li>
           <% end %>
         </ul>
