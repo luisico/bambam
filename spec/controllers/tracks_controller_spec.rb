@@ -66,10 +66,8 @@ describe TracksController do
 
   describe "GET 'show'" do
     before do
-      @user = FactoryGirl.create(:user)
-      project = FactoryGirl.create(:project)
-      project.users << @user
-      @track = FactoryGirl.create(:test_track, project_id: project.id)
+      @project = FactoryGirl.create(:project)
+      @track = FactoryGirl.create(:test_track, project: @project)
     end
 
     context "as an admin" do
@@ -87,8 +85,12 @@ describe TracksController do
       end
     end
 
-    context "as a signed in user" do
-      before { sign_in @user }
+    context "as a signed in user with a project" do
+      before do
+        user = FactoryGirl.create(:user)
+        @project.users << user
+        sign_in user
+      end
 
       it "should be successful" do
         get :show, id: @track
