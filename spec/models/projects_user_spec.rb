@@ -12,24 +12,14 @@ describe ProjectsUser do
   end
 
   describe "user_id" do
+    it { should belong_to :user }
+    it { should respond_to :user }
     it { should respond_to :user_id }
   end
 
   describe "project_id" do
+    it { should belong_to :project }
+    it { should respond_to :project }
     it { should respond_to :project_id }
-  end
-
-  describe "associations" do
-    context "users" do
-      it { should belong_to :user }
-      it { should respond_to :user }
-      it { should respond_to :user_id }
-    end
-
-    context "projects" do
-      it { should belong_to :project }
-      it { should respond_to :project }
-      it { should respond_to :project_id }
-    end
   end
 end
