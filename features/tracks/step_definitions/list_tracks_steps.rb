@@ -23,3 +23,7 @@ Then /^I should be able to access the track page from a link$/ do
   click_link @track.name
   expect(current_path).to eq track_path(@track)
 end
+
+Then /^I should see instuctions on how to add tracks$/ do
+  expect(page).to have_content 'You either have no projects or no tracks'
+end

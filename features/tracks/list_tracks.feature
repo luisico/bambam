@@ -3,15 +3,22 @@ Feature: List of tracks
   As a user
   I should be able to list tracks
 
-  Background:
+  Scenario: List of tracks
     Given I am signed in
     And I belong to a project
-    And there are 5 tracks in that project
-
-  Scenario: List of tracks
+    And there are 3 tracks in that project
     When I am on the tracks page
     Then I should see a list of tracks with IGV link
 
   Scenario: Provides links to individual track pages
+    Given I am signed in
+    And I belong to a project
+    And there are 3 tracks in that project
     When I am on the tracks page
     Then I should be able to access the track page from a link
+
+  Scenario: User with no tracks will see instructions on how to add tracks
+    Given I am signed in
+    And I belong to a project
+    When I am on the tracks page
+    Then I should see instuctions on how to add tracks

@@ -2,14 +2,20 @@
   <div class="small-12 medium-6 medium-centered columns">
     <div class="panel tracks-list">
       <h3>Tracks</h3>
-      <ul class="no-bullet">
-        <% @tracks.each do |track| %>
-          <li>
-            <%= link_to_igv(track) %>
-            <%= link_to track.name, track, class: "track" %>
-          </li>
-        <% end %>
-      </ul>
+      <% if @tracks.count > 0 %>
+        <ul class="no-bullet">
+          <% @tracks.each do |track| %>
+            <li>
+              <%= link_to_igv(track) %>
+              <%= link_to track.name, track, class: "track" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <h5>You either have no projects or no tracks.</h5>
+        <p>If you belong to a project, you can add tracks to the project edit page.</p>
+        <p>If you don't belong to a project, please contact your administrator</p>
+      <% end %>
     </div>
   </div>
 </div>

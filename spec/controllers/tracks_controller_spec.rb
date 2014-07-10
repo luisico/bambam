@@ -21,7 +21,7 @@ describe TracksController do
       end
     end
 
-    context "as a signed in user" do
+    context "as a signed in user with projects" do
       before do
         user = FactoryGirl.create(:user)
         @tracks.each { |track| track.project.users << user }
@@ -37,6 +37,21 @@ describe TracksController do
       it "should return users tracks" do
         get :index
         expect(assigns(:tracks)).to eq @tracks
+      end
+    end
+
+    context "as a signed in user without projects" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should be successful" do
+        get :index
+        expect(response).to be_success
+        expect(response).to render_template :index
+      end
+
+      it "should return users tracks" do
+        get :index
+        expect(assigns(:tracks)).to eq []
       end
     end
 
