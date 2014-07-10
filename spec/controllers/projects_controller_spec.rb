@@ -281,26 +281,28 @@ describe ProjectsController do
   end
 
   describe "Patch 'update'" do
-    before { @project = FactoryGirl.create(:project, owner: @admin) }
+    before do
+     @project = @projects.first
+     @new_project = FactoryGirl.attributes_for(:project)
+    end
 
-    context "as a signed in user" do
+    context "as an admin" do
       before { sign_in @admin }
 
       context 'with valid parameters' do
-        before do
-          @new_project = FactoryGirl.attributes_for(:project)
-        end
+        before { @user = FactoryGirl.create(:user) }
 
         it "should redirect to the updated show page" do
-          patch :update, id: @project, project: @new_project
+          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
           expect(response).to redirect_to @project
         end
 
         it "should update the project" do
-          patch :update, id: @project, project: @new_project
+          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
           @project.reload
           expect(assigns(:project)).to eq @project
           expect(@project.name).to eq @new_project[:name]
+          expect(@project.users).to include @user
         end
       end
 
@@ -321,16 +323,66 @@ describe ProjectsController do
       end
     end
 
+    context "as a signed in user and project member" do
+      before { sign_in FactoryGirl.create(:user, projects: [@project]) }
+
+      context "project name" do
+        it "should redirect to the projects path" do
+          patch :update, id: @project, project: @new_project
+          expect(response).not_to be_success
+          expect(response).to redirect_to projects_path
+        end
+
+        it "should not change the project's attributes" do
+          expect{
+            patch :update, id: @project, project: @new_project
+          }.not_to change(@project, :name)
+        end
+      end
+
+      context "project users" do
+        before { @user = FactoryGirl.create(:user) }
+
+        it "should redirect to the projects path" do
+          patch :update, id: @project, project: { user_ids: [@user.id] }
+          expect(response).not_to be_success
+          expect(response).to redirect_to projects_path
+        end
+
+        it "should not change the project's attributes" do
+          expect{
+            patch :update, id: @project, project: { user_ids: [@user.id] }
+          }.not_to change(@project, :users)
+        end
+      end
+
+      context "project tracks" do
+        before { @track = FactoryGirl.create(:test_track, project: @project) }
+
+        it "should redirect to the updated show page" do
+          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+          expect(response).to redirect_to @project
+        end
+
+        it "should update the project" do
+          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+          @track.reload
+          expect(assigns(:project)).to eq @project
+          expect(@track.name).to eq('new_name')
+        end
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        patch :update, id: @project, project: {name: ''}
+        patch :update, id: @project, project: @new_project
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
 
       it "should not change the project's attributes" do
         expect{
-          patch :update, id: @project, project: {name: ''}
+          patch :update, id: @project, project: @new_project
         }.not_to change(@project, :name)
       end
     end
