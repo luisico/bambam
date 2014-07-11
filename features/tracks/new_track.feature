@@ -30,6 +30,7 @@ Feature: Create a track
     And I click the "Add Track" link
     Then I should see instructions to use the allowed paths
 
+  @allow-rescue
   Scenario: Delete a track before updating project
     When I visit the edit project page
     And I delete a track before updating project
