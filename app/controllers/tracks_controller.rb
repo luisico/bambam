@@ -5,17 +5,10 @@ class TracksController < ApplicationController
   respond_to :html
 
   def index
-    #TODO maybe pull this into a scope
     if can? :manage, Track
       @tracks = Track.all
     else
-      #TODO replace this with single ActiveRecord statement using includes
-      @tracks = []
-      current_user.projects.each do |project|
-        project.tracks.each do |track|
-          @tracks << track
-        end
-      end
+      @tracks = Track.includes(:project => [:projects_users]).where(:projects_users => {:user_id => @current_user.id})
     end
   end
 
