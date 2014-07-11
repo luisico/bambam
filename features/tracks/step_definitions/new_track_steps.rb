@@ -90,4 +90,5 @@ end
 
 Then /^I should not add a track to the project$/ do
   expect(Project.last.tracks.count).to eq(0)
+  expect(page).to have_css('.alert-box', text: 'Nothing was changed in the project')
 end
