@@ -8,7 +8,7 @@ class TracksController < ApplicationController
     if can? :manage, Track
       @tracks = Track.all
     else
-      @tracks = Track.includes(:project => [:projects_users]).where(:projects_users => {:user_id => @current_user.id})
+      @tracks = Track.includes(project: :projects_users).where(projects_users: {user_id: @current_user}).references(:projects_users)
     end
   end
 
