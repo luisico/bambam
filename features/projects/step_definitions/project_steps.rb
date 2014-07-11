@@ -6,15 +6,20 @@ Given /^I own (\d+|a) projects?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   admin = User.last
   expect(admin.has_role? :admin).to eq(true)
-  @projects = FactoryGirl.create_list(:project, n, owner: admin)
+  expect {
+    @projects = FactoryGirl.create_list(:project, n, owner: admin)
+  }.to change(Project, :count).by(n)
   @project = Project.last
 end
 
 Given /^I belong to (\d+|a) projects?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   user = User.last
-  @projects = FactoryGirl.create_list(:project, n, users: [user])
+  expect {
+    @projects = FactoryGirl.create_list(:project, n, users: [user])
+  }.to change(Project, :count).by(n)
   @project = Project.last
+
 end
 
 Given /^there (is|are) (\d+|a) projects? in the system$/ do |foo, n|
