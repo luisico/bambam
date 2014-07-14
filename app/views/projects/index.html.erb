@@ -11,9 +11,9 @@
               <%= link_to project.name, project, class: "text-panel-overhang" %>
             </li>
             <li>
-              <i class="fi-paw small"></i>
+              <i class="fi-paw small" title="tracks"></i>
               <%= project.tracks.count %>
-              <i class="fi-torsos small left-buffer"></i>
+              <i class="fi-torsos small left-buffer" title="users"></i>
               <%= project.users.count %>
             </li>
             <% if can? :manage, User %>
