@@ -17,7 +17,7 @@
           <ul class="no-bullet">
             <% @user.groups.each do |group| %>
               <li id="group_<%= group.id %>">
-                <%= link_to group.name, group %> owned by <%= group.owner.email %>
+                <%= link_to group.name, group %> <span class="text-color-grey">owned by <%= group.owner.email %></span>
               </li>
             <% end %>
           </ul>
@@ -27,7 +27,7 @@
           <ul class="no-bullet">
             <% @user.projects.each do |project| %>
               <li id="project_<%= project.id %>">
-                <%= link_to project.name, project %> owned by <%= project.owner.email %>
+                <%= link_to project.name, project %> <span class="text-color-grey">owned by <%= project.owner.email %></span>
               </li>
             <% end %>
           </ul>
