@@ -32,12 +32,7 @@
             <small>view tracks from all your projects <%= link_to 'here', tracks_path %></small>
           </h4>
           <ul class="no-bullet">
-            <% @project.tracks.each do |track| %>
-              <li>
-                <%= link_to_igv(track) %>
-                <%= link_to track.name, track, class: "track" %>
-              </li>
-            <% end %>
+            <%= render @project.tracks %>
           </ul>
         </div>
       </div>
