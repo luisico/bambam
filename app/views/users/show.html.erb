@@ -42,6 +42,6 @@
     <% if @user == current_user %>
       <%= link_to 'Edit', edit_user_registration_path, class: 'button tiny radius' %>
     <% end %>
-    <%= link_to 'Back', users_path, class: 'button tiny radius' %>
+    <%= link_to 'Back', :back, class: 'button tiny radius' %>
   </div>
 </div>

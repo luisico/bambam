@@ -45,3 +45,18 @@ Feature: Show a user profile
       | role    |
       | admin   |
       | inviter |
+
+  Scenario Outline: Back button
+    Given I am signed in
+    And I belong to a project
+    When I am on the <source> page
+    And I click on "Account Profile" in the top nav
+    Then I should be on my account profile page
+
+    And I click "Back"
+    Then I should be on the <source> page
+
+    Examples:
+      | source   |
+      | project  |
+      | projects |
