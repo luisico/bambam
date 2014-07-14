@@ -15,11 +15,7 @@
         <div class="small-12 medium-6 columns">
           <h4>Groups</h4>
           <ul class="no-bullet">
-            <% @user.groups.each do |group| %>
-              <li id="group_<%= group.id %>">
-                <%= link_to group.name, group %> <span class="text-color-grey">owned by <%= group.owner.email %></span>
-              </li>
-            <% end %>
+            <%= render @user.groups %>
           </ul>
         </div>
         <div class="small-12 medium-6 columns">
