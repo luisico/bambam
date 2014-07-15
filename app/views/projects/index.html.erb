@@ -12,17 +12,25 @@
                 <%= link_to project.name, project, class: "text-panel-overhang" %>
               </li>
               <li>
-                <i class="fi-paw small" title="tracks"></i>
+                <i class="fi-paw small margin-right" title="tracks"></i>
                 <%= project.tracks.count %>
-                <i class="fi-torsos small left-buffer" title="users"></i>
+                <i class="fi-torsos small left-buffer margin-right" title="users"></i>
                 <%= project.users.count %>
               </li>
               <% if can? :manage, User %>
-                <li class="sub-text">owner: <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %></li>
-                <% else %>
-                 <li class="sub-text text-panel-overhang">owner: <%= project.owner.email %></li>
-                <% end %>
-              <li class="sub-text">updated: <%= local_time_ago(project.updated_at) %></li>
+                <li class="sub-text text-panel-overhang">
+                  <i class="fi-sheriff-badge small margin-right" title="owner"></i>
+                  <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %>
+                </li>
+              <% else %>
+                <li class="sub-text text-panel-overhang">
+                  <i class="fi-star small margin-right" title="owner"></i>
+                  <%= project.owner.email %>
+                </li>
+              <% end %>
+              <li class="sub-text"><i class="fi-clock small margin-right" title="updated_at"></i>
+                <%= local_time_ago(project.updated_at) %>
+              </li>
             </ul>
           </li>
         <% end %>

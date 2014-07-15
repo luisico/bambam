@@ -67,10 +67,6 @@ div.edit-record {
   @extend div.new-record;
 }
 
-th.normal-font-weight {
-  font-weight: normal;
-}
-
 li.headline {
   font-size: rem-calc(20)
 }
@@ -79,11 +75,7 @@ li.sub-text {
   font-size: rem-calc(15)
 }
 
-.fi-paw:before {
-  margin-right: rem-calc(5);
-}
-
-.fi-torsos:before {
+i.margin-right {
   margin-right: rem-calc(5);
 }
 
