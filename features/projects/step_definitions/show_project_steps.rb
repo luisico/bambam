@@ -40,6 +40,13 @@ Then /^I should see the project's users with(out)? profile links$/ do |negate|
   end
 end
 
+Then /^I should see the project's owner$/ do
+  project = @project || Project.last
+  within("#project-user-#{project.owner.id}") do
+    expect(page).to have_css('.fi-sheriff-badge')
+  end
+end
+
 Then /^I should be on the tracks page$/ do
   expect(current_path).to eq tracks_path
 end

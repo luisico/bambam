@@ -29,6 +29,9 @@
                 <%= image_tag avatar_url(user) %>
                 <%= user.email %>
               <% end %>
+              <% if user == @project.owner%>
+                <i class="fi-sheriff-badge small" title="owner"></i>
+              <% end %>
             </p>
             <% end %>
         </div>
