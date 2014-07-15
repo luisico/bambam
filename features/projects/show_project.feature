@@ -25,7 +25,7 @@ Feature: Show a project
     And I belong to a project
     And there is a track in that project
     When I am on the project page
-    And I click "Tracks"
+    And I click "here"
     Then I should be on the tracks page
 
   Scenario: User can access a track show page
