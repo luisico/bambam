@@ -46,6 +46,13 @@ Feature: Show a user profile
       | admin   |
       | inviter |
 
+  Scenario: Access projects page
+    Given I am signed in
+    And I belong to a project
+    When I am on my account profile page
+    And I click "projects"
+    Then I should be on the projects page
+
   Scenario Outline: Back button
     Given I am signed in
     And I belong to a project

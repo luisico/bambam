@@ -19,7 +19,7 @@
           </ul>
         </div>
         <div class="small-12 medium-6 columns">
-          <h4>Projects</h4>
+          <h4>Projects<small> full index of your <%= link_to "projects", projects_path %></small></h4>
           <ul class="no-bullet">
             <% @user.projects.each do |project| %>
               <li id="project_<%= project.id %>">
