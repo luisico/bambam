@@ -3,10 +3,16 @@
     <div class="panel">
       <div class="clearfix">
         <h3 class="left"><%= @group.name %></h3>
-        <h4 class="right"><small>
-          <span>created: <%= local_time_ago(@group.created_at) %></span><br/>
-          <span>updated: <%= local_time_ago(@group.updated_at) %></span>
-        </small></h4>
+        <h4 class="right">
+          <small>
+            <span class="created-at"><i class="fi-upload-cloud medium margin-right" title="created"></i>
+              <%= local_time_ago(@group.created_at) %>
+            </span><br/>
+            <span class="updated-at"><i class="fi-clock medium margin-right" title="updated"></i>
+              updated: <%= local_time_ago(@group.updated_at) %>
+            </span>
+          </small>
+        </h4>
       </div>
 
       <div id="members">

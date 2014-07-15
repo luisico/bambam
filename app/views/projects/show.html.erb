@@ -3,15 +3,21 @@
     <div class="panel">
       <div class="clearfix">
         <h3 class="left"><%= @project.name %></h3>
-        <h4 class="right"><small>
-          <span>created: <%= local_time_ago(@project.created_at) %></span><br/>
-          <span>updated: <%= local_time_ago(@project.updated_at) %></span>
-        </small></h4>
+        <h4 class="right">
+          <small>
+            <span class="created-at"><i class="fi-upload-cloud medium margin-right" title="created"></i>
+              <%= local_time_ago(@project.created_at) %>
+            </span><br/>
+            <span class="updated-at"><i class="fi-clock medium margin-right" title="updated"></i>
+              <%= local_time_ago(@project.updated_at) %>
+            </span>
+          </small>
+        </h4>
       </div>
 
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <h4><i class="fi-torsos large"></i>Users</h4>
+          <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
             <% @project.users.each do |user| %>
             <p id="project-user-<%= user.id %>">
               <% if can? :manage, User %>
@@ -27,8 +33,7 @@
             <% end %>
         </div>
         <div class="small-12 medium-6 columns">
-          <h4><i class="fi-paw large"></i>
-            Tracks
+          <h4><i class="fi-paw large margin-right"></i>Tracks
             <small>view tracks from all your projects <%= link_to 'here', tracks_path %></small>
           </h4>
           <ul class="no-bullet">
