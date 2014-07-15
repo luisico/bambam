@@ -23,7 +23,11 @@
           <ul class="no-bullet">
             <% @user.projects.each do |project| %>
               <li id="project_<%= project.id %>">
-                <%= link_to project.name, project %> <span class="text-color-grey">owned by <%= project.owner.email %></span>
+                <%= link_to project.name, project %>
+                <span class="text-color-grey">
+                  <i class="fi-sheriff-badge small" title="owner"></i>
+                  <%= project.owner.email %>
+                </span>
               </li>
             <% end %>
           </ul>
