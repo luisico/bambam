@@ -53,6 +53,14 @@ Feature: Show a user profile
     And I click "projects"
     Then I should be on the projects page
 
+  @now
+  Scenario: Access tracks page
+    Given I am signed in
+    And I belong to a project
+    When I am on my account profile page
+    And I click "tracks"
+    Then I should be on the tracks page
+
   Scenario Outline: Back button
     Given I am signed in
     And I belong to a project
