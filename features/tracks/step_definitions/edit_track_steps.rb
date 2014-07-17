@@ -34,3 +34,19 @@ Then /^I should be to udpate the track path$/ do
   }.to change(track, :path)
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
+
+Then /^I should( not)? be able to change the track's project$/ do |negate|
+  track = @project.tracks.first
+  if negate
+    click_link track.name
+    expect(page).not_to have_content "Assign track to a project"
+  else
+    expect {
+      click_link track.name
+      select "#{Project.first.name}", from: "Assign track to a project"
+      click_button 'Update'
+      track.reload
+    }.to change(track, :project_id)
+    expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  end
+end

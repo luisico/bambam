@@ -20,6 +20,13 @@
       </ul>
     </label>
     <%= f.text_field :path, placeholder: 'Path' %>
+
+    <% if current_user.has_role? :admin %>
+      <!-- <label>Assign track to a project</label> -->
+      <%= f.label :project_id, "Assign track to a project" %>
+      <%= f.collection_select(:project_id, Project.all, :id, :name) %>
+    <% end %>
+
     <%= f.hidden_field :_destroy %>
   </div>
 </div>
