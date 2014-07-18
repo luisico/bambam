@@ -12,7 +12,6 @@ class Ability
       can :manage, Track
       can :manage, Group
       can :manage, Project
-      can :edit_name_and_users, Project
     else
       if user.has_role? :inviter
         can :invite, User

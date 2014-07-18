@@ -25,7 +25,6 @@ describe User do
 
       context "projects" do
         it { should be_able_to(:manage, Project) }
-        it { should be_able_to(:edit_name_and_users, Project) }
       end
     end
 
