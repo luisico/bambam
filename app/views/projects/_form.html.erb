@@ -6,7 +6,7 @@
   <% end %>
 
     <div class="row">
-      <% if can? :edit_name_and_users, @project %>
+      <% if can? :manage, @project %>
         <div class="small-12 medium-5 columns">
           <h4>Name</h4>
           <div class="field">
@@ -34,7 +34,7 @@
           </div>
         </div>
       <% end %>
-      <% if can? :edit_name_and_users, @project %>
+      <% if can? :manage, @project %>
         <div class="small-12 medium-offset-1 medium-6 columns">
           <h4>Tracks</h4>
       <% else %>
