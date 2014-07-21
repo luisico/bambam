@@ -12,14 +12,14 @@ end
 ### Then
 
 Then /^I should be to udpate the track name$/ do
-  track = @project.tracks.first
+  @track = @project.tracks.first
   expect {
-    click_link track.name
+    click_link @track.name
     execute_script %Q{$('.track-form-group .track-form-fields').show();}
     fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
     click_button 'Update'
-    track.reload
-  }.to change(track, :name)
+    @track.reload
+  }.to change(@track, :name)
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
 
@@ -49,4 +49,8 @@ Then /^I should( not)? be able to change the track's project$/ do |negate|
     }.to change(track, :project_id)
     expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
   end
+end
+
+Then /^the track project should not change$/ do
+  expect(@track.project).to eq(@project)
 end

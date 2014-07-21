@@ -11,6 +11,14 @@ Feature: Edit track information
     When I visit the edit project page
     Then I should be to udpate the track name
 
+  Scenario: Admin can change name without changing project
+    Given I am signed in as an admin
+    And I belong to a project
+    And there is a track in that project
+    When I visit the edit project page
+    Then I should be to udpate the track name
+    And the track project should not change
+
   Scenario: User can change the track path
     Given I am signed in
     And I belong to a project
