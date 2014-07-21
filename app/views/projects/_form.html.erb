@@ -13,7 +13,7 @@
           <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
         </div>
 
-        <h4>Users</h4>
+        <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
         <div class="field">
           <% User.all.each do |user| %>
             <% if !@project.owner && user == current_user %>
@@ -33,12 +33,12 @@
           <% end %>
         </div>
       <% else %>
-        <h4>Users</h4>
+        <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
         <%= render @project.users %>
       <% end %>
     </div>
     <div class="small-12 medium-offset-1 medium-6 columns">
-      <h4>Tracks</h4>
+      <h4><i class="fi-paw large margin-right"></i>Tracks</h4>
       <%= f.fields_for :tracks do |builder| %>
         <%= render 'track_fields', f: builder, k: nil %>
       <% end %>
