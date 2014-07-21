@@ -9,22 +9,21 @@ Feature: Edit track information
     And I belong to a project
     And there is a track in that project
     When I visit the edit project page
-    Then I should be to udpate the track name
+    Then I should be able to update the track name
 
-  Scenario: Admin can change name without changing project
+  Scenario: Admin can verfiy track properties
     Given I am signed in as an admin
-    And I belong to a project
+    And there are 2 projects in the system
     And there is a track in that project
     When I visit the edit project page
-    Then I should be to udpate the track name
-    And the track project should not change
+    Then I should be able to verify track properties
 
   Scenario: User can change the track path
     Given I am signed in
     And I belong to a project
     And there is a track in that project
     When I visit the edit project page
-    Then I should be to udpate the track path
+    Then I should be able to update the track path
 
   Scenario: Admin can change the track project
     Given I am signed in as an admin

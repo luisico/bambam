@@ -11,19 +11,28 @@ end
 
 ### Then
 
-Then /^I should be to udpate the track name$/ do
-  @track = @project.tracks.first
+Then /^I should be able to verify track properties$/ do
+  track = @project.tracks.last
+  click_link track.name
+  within(find(".track-form-fields")) do
+    expect(page).to have_select("project[tracks_attributes][0][project_id]", :selected => @track.project.name)
+    expect(find_field('Name').value).to eq track.name
+    expect(find_field('Path').value).to eq track.path
+  end
+end
+
+Then /^I should be able to update the track name$/ do
+  track = @project.tracks.first
   expect {
     click_link @track.name
-    execute_script %Q{$('.track-form-group .track-form-fields').show();}
     fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
     click_button 'Update'
-    @track.reload
-  }.to change(@track, :name)
+    track.reload
+  }.to change(track, :name)
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
 
-Then /^I should be to udpate the track path$/ do
+Then /^I should be able to update the track path$/ do
   build_track_path
   track = @project.tracks.first
   expect {
@@ -49,8 +58,4 @@ Then /^I should( not)? be able to change the track's project$/ do |negate|
     }.to change(track, :project_id)
     expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
   end
-end
-
-Then /^the track project should not change$/ do
-  expect(@track.project).to eq(@project)
 end
