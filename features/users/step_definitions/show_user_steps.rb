@@ -18,10 +18,6 @@ end
 
 ### Then
 
-Then /^I should be on (my|the)? account profile page$/ do |foo|
-  expect(current_path).to eq user_path(@user)
-end
-
 Then /^I should see my email$/ do
   expect(page).to have_content @user.email
 end
