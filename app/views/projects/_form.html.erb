@@ -5,46 +5,45 @@
     </div>
   <% end %>
 
-    <div class="row">
+  <div class="row">
+    <div class="small-12 medium-5 columns">
       <% if can? :manage, @project %>
-        <div class="small-12 medium-5 columns">
-          <h4>Name</h4>
-          <div class="field">
-            <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
-          </div>
-
-          <h4>Users</h4>
-          <div class="field">
-            <% User.all.each do |user| %>
-              <% if !@project.owner && user == current_user %>
-                <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-                <%= label_tag dom_id(user), user.email %><br>
-                <%= hidden_field_tag "project[user_ids][]", user.id %>
-                <%= hidden_field_tag "project[owner_id]", user.id %>
-              <% elsif user == @project.owner %>
-                <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-                <%= label_tag dom_id(user), user.email %><br>
-                <%= hidden_field_tag "project[user_ids][]", user.id %>
-                <%= hidden_field_tag "project[owner_id]", user.id %>
-              <% else %>
-                <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
-                <%= label_tag dom_id(user), user.email %><br>
-              <% end %>
-            <% end %>
-          </div>
+        <h4>Name</h4>
+        <div class="field">
+          <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
         </div>
-      <% end %>
-      <% if can? :manage, @project %>
-        <div class="small-12 medium-offset-1 medium-6 columns">
-          <h4>Tracks</h4>
+
+        <h4>Users</h4>
+        <div class="field">
+          <% User.all.each do |user| %>
+            <% if !@project.owner && user == current_user %>
+              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+              <%= hidden_field_tag "project[user_ids][]", user.id %>
+              <%= hidden_field_tag "project[owner_id]", user.id %>
+            <% elsif user == @project.owner %>
+              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+              <%= hidden_field_tag "project[user_ids][]", user.id %>
+              <%= hidden_field_tag "project[owner_id]", user.id %>
+            <% else %>
+              <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+            <% end %>
+          <% end %>
+        </div>
       <% else %>
-        <div class="small-12 medium-6 columns">
+        <h4>Users</h4>
+        <%= render @project.users %>
       <% end %>
-        <%= f.fields_for :tracks do |builder| %>
-          <%= render 'track_fields', f: builder, k: nil %>
-        <% end %>
-        <%= link_to_add_fields "Add Track", f, :tracks %>
-      </div>
+    </div>
+    <div class="small-12 medium-offset-1 medium-6 columns">
+      <h4>Tracks</h4>
+      <%= f.fields_for :tracks do |builder| %>
+        <%= render 'track_fields', f: builder, k: nil %>
+      <% end %>
+      <%= link_to_add_fields "Add Track", f, :tracks %>
+    </div>
   </div></br></br>
 
   <div class="actions">

@@ -11,7 +11,11 @@ end
 ### Then
 
 Then /^I should be on the edit project page$/ do
-  expect(page).to have_content 'Edit project'
+  if @admin
+    expect(page).to have_content 'Edit project'
+  else
+    expect(page).to have_content "Edit #{@project.name}"
+  end
 end
 
 Then /^I should( not)? be able to edit the project name$/ do |negate|
@@ -29,7 +33,6 @@ end
 
 Then /^I should( not)? be able to change memberships in the project$/ do |negate|
   if negate
-    expect(page).not_to have_selector('h4', text: 'Users')
     expect(page).not_to have_selector(:xpath, "//input[@name='project[user_ids][]']")
   else
     expect(page).to have_selector(:xpath, "//input[@name='project[user_ids][]']")

@@ -18,22 +18,7 @@
       <div class="row">
         <div class="small-12 medium-6 columns">
           <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
-            <% @project.users.each do |user| %>
-            <p id="project-user-<%= user.id %>">
-              <% if can? :manage, User %>
-                <%= link_to user do %>
-                  <%= image_tag avatar_url(user) %>
-                  <%= user.email %>
-                <% end %>
-              <% else %>
-                <%= image_tag avatar_url(user) %>
-                <%= user.email %>
-              <% end %>
-              <% if user == @project.owner%>
-                <i class="fi-sheriff-badge small" title="owner"></i>
-              <% end %>
-            </p>
-            <% end %>
+          <%= render @project.users %>
         </div>
         <div class="small-12 medium-6 columns">
           <h4><i class="fi-paw large margin-right"></i>Tracks
