@@ -17,6 +17,7 @@ def add_track_to_project
   click_link 'Add Track'
   within('.new-record') {
     fill_track_form
+    expect(page).not_to have_content "Assign track to a project"
   }
 end
 
