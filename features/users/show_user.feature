@@ -3,11 +3,6 @@ Feature: Show a user profile
   As a user
   I want to be able to access a page with all the information about my account
 
-  Scenario: User can access their account settings page
-    Given I am signed in
-    When I click on "Account Profile" in the top nav
-    Then I should be on my account profile page
-
   Scenario: Show account profile information
     Given I am signed in
     And I belong to a project
@@ -57,7 +52,7 @@ Feature: Show a user profile
     Given I am signed in
     And I belong to a project
     When I am on the <source> page
-    And I click on "Account Profile" in the top nav
+    And I click on "my email" in the top nav
     Then I should be on my account profile page
 
     And I click "Back"

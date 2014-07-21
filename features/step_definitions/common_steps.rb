@@ -8,12 +8,6 @@ When /^environment variable (.*?) is "(.*?)"$/ do |name, value|
   ENV[name] = value
 end
 
-When /^I click on "(.*?)" in the top nav$/ do |link|
-  within(".top-bar") do
-    click_on link
-  end
-end
-
 When /^I click "(.*?)"$/ do |link|
   click_link link
 end
