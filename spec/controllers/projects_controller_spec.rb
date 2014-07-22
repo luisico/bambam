@@ -371,6 +371,19 @@ describe ProjectsController do
           expect(@track.name).to eq('new_name')
         end
       end
+
+      context "track project" do
+        before do
+          @track = FactoryGirl.create(:test_track, project: @project)
+          @another_project = FactoryGirl.create(:project)
+        end
+
+        it "should redirect to the projects path" do
+          patch :update, id: @project, project: {tracks_attributes: {"0" => {project_id: @another_project.id}}}
+          expect(response).not_to be_success
+          expect(response).to redirect_to projects_path
+        end
+      end
     end
 
     context "as a visitor" do

@@ -16,7 +16,6 @@ class ProjectsController < ApplicationController
   def edit
   end
 
-
   def create
     if @project.save
       redirect_to @project, notice: 'Project was successfully created.'
@@ -27,7 +26,7 @@ class ProjectsController < ApplicationController
 
   def update
     if params[:project]
-      authorize! :manage, @project if (params[:project][:name] || params[:project][:user_ids])
+      authorize! :manage, @project if admin_project_params
       if @project.update(project_params)
         redirect_to @project, notice: 'Project was successfully updated.'
       else
@@ -44,6 +43,20 @@ class ProjectsController < ApplicationController
   end
 
   private
+  def admin_project_params
+    if params[:project][:name]
+      true
+    elsif params[:project][:user_ids]
+      true
+    elsif params[:project][:tracks_attributes]
+      if params[:project][:tracks_attributes].map {|k, v| v[:project_id]}.any?
+        true
+      else
+        false
+      end
+    end
+  end
+
   def project_params
     params.require(:project).permit(:name, :owner_id, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
   end
