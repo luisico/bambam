@@ -5,6 +5,8 @@ jQuery ->
   $('form').on 'click', '.remove-track', (event) ->
     if $(this).closest('div.track-form-group').hasClass('new-record')
       $(this).closest('div.track-form-group').remove()
+      if $(".track-form-group").length == 0
+        $('.add_fields').text('Add Track')
     else
       $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('1')
       $(this).closest('li').siblings().first().css('textDecoration', 'line-through')
@@ -46,3 +48,8 @@ jQuery ->
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
     $.when(event).done($(this).siblings('.new-record').children('.track-form-fields').show())
+    $(this).text('Add another track')
+
+  $(document).ready ->
+    if $(".track-form-group").length > 0
+      $('.add_fields').text('Add another track')

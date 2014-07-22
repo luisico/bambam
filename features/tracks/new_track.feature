@@ -12,6 +12,11 @@ Feature: Create a track
     When I visit the edit project page
     Then I should be able to add a track to the project
 
+  Scenario: Add Track button changes depending on track count
+    And there is a track in that project
+    When I visit the edit project page
+    Then I should be able to add a track to the project
+
   Scenario: Cannot create a track without a name
     When I visit the edit project page
     And I create a track without a name

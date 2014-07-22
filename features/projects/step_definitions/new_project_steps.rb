@@ -57,7 +57,7 @@ When /^I create a project with multiple tracks$/ do
   expect {
     build_project
     add_track_to_project
-    click_link 'Add Track'
+    click_link 'Add another track'
     second_track = page.all(:css, '.new-record')[1]
     within(second_track) {
       fill_track_form
@@ -128,4 +128,3 @@ Then /^I should not create a new track$/ do
   expect(Track.count).to eq(0)
   expect(page).not_to have_link @track[:name]
 end
-

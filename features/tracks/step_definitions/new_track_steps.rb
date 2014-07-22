@@ -49,10 +49,12 @@ When /^I delete a track before updating project$/ do
   build_track_with_path
   expect {
     click_link 'Add Track'
+    expect(page).to have_link 'Add another track'
     within('.new-record') {
       fill_track_form
       find('.remove-track').trigger('click')
     }
+    expect(page).to have_link 'Add Track'
     click_button 'Update Project'
     @project.reload
   }.not_to change(@project.tracks, :count)
@@ -61,9 +63,14 @@ end
 ### Then
 
 Then /^I should be able to add a track to the project$/ do
+  if @project.tracks.any?
+    link = 'Add another track'
+  else
+    link = 'Add Track'
+  end
   build_track_with_path
   expect {
-    click_link 'Add Track'
+    click_link link
     within('.new-record') {
       fill_track_form
     }
