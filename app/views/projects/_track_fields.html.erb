@@ -9,21 +9,33 @@
     </li>
     <li><%= link_to "restore", '#', class: "restore-track" %></li>
   </ul>
+
   <div class="track-form-fields">
+    <div class="row collapse with-instructions">
+      <div class="small-4 large-2 columns">
+        <label class="prefix with-instructions">Name</label>
+      </div>
+      <div class="small-8 large-10 columns">
+        <%= f.text_field :name, class: "with-instructions", placeholder: "Track name" %>
+      </div>
+    </div>
+    <span class="text-color-grey small-text">The track name should be short, as it will be used as the title of the track in IGV or the UCSC browser</span><br><br>
 
-      <%= f.label :name %>
-      <%= f.text_field :name, class: "with-instructions" %>
-      <span class="text-color-grey small-text">The track name should be short, as it will be used as the title of the track in IGV or the UCSC browser</span><br><br>
-
-      <%= f.label :path %>
-      <%= f.text_field :path, class: "with-instructions" %>
-      <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
-        <ul class="no-bullet allowed-track-paths">
-          <% ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path| %>
-            <li><%= path %></li>
-          <% end %>
-        </ul>
-      </span>
+    <div class="row collapse with-instructions">
+      <div class="small-4 large-2 columns">
+        <label class="prefix with-instructions">Path</label>
+      </div>
+      <div class="small-8 large-10 columns">
+        <%= f.text_field :path, class: "with-instructions", placeholder: "Track path" %>
+      </div>
+    </div>
+    <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
+      <ul class="no-bullet allowed-track-paths">
+        <% ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path| %>
+          <li><%= path %></li>
+        <% end %>
+      </ul>
+    </span>
 
     <% if current_user.has_role?(:admin) && @project.id %>
       <%= f.label :project_id, "Assign track to a project" %>

@@ -8,9 +8,13 @@
   <div class="row">
     <div class="small-12 medium-5 columns">
       <% if can? :manage, @project %>
-        <h4>Name</h4>
-        <div class="field">
-          <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
+        <div class="row collapse">
+          <div class="small-4 large-2 columns">
+            <span class="prefix">Name</span>
+          </div>
+          <div class="small-8 large-10 columns">
+            <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
+          </div>
         </div>
 
         <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>

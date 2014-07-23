@@ -16,8 +16,8 @@ Then /^I should be able to verify track properties$/ do
   click_link track.name
   within(find(".track-form-fields")) do
     expect(page).to have_select("project[tracks_attributes][0][project_id]", :selected => @track.project.name)
-    expect(find_field('Name').value).to eq track.name
-    expect(find_field('Path').value).to eq track.path
+    expect(find_field('Track name').value).to eq track.name
+    expect(find_field('Track path').value).to eq track.path
   end
 end
 

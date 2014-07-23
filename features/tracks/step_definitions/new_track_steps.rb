@@ -11,8 +11,8 @@ def build_track_with_path
 
 def fill_track_form(track=nil)
   track ||= @track
-  fill_in 'Name', with: track[:name]
-  fill_in 'Path', with: track[:path]
+  fill_in 'Track name', with: track[:name]
+  fill_in 'Track path', with: track[:path]
 end
 
 def link_to_add_track
