@@ -280,6 +280,52 @@ describe ProjectsController do
     end
   end
 
+  describe "#admin_attr" do
+    before do
+      @project = @projects.first
+    end
+
+    context "with project users parameters" do
+      before do
+        @user = FactoryGirl.create(:user)
+        @new_project = FactoryGirl.attributes_for(:project)
+      end
+
+      it "should equal true" do
+        patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
+        expect(controller.instance_eval{ admin_attr }).to eq true
+      end
+    end
+
+    context "with project name parameters" do
+      it "should equal true" do
+        patch :update, id: @project, project: { name: "new_name" }
+        expect(controller.instance_eval{ admin_attr }).to eq true
+      end
+    end
+
+    context "with track project parameters" do
+      before do
+        @track = FactoryGirl.create(:test_track, project: @project)
+        @another_project = FactoryGirl.create(:project)
+      end
+
+      it "should equal true" do
+        patch :update, id: @project, project: {tracks_attributes: {"0" => {project_id: @another_project.id}}}
+        expect(controller.instance_eval{ admin_attr }).to eq true
+      end
+    end
+
+    context "with project tracks parameters" do
+      before { @track = FactoryGirl.create(:test_track, project: @project) }
+
+      it "should redirect to the updated show page" do
+        patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+        expect(controller.instance_eval{ admin_attr }).to eq false
+      end
+    end
+  end
+
   describe "Patch 'update'" do
     before do
      @project = @projects.first
@@ -324,41 +370,12 @@ describe ProjectsController do
     end
 
     context "as a signed in user and project member" do
-      before { sign_in FactoryGirl.create(:user, projects: [@project]) }
-
-      context "project name" do
-        it "should redirect to the projects path" do
-          patch :update, id: @project, project: @new_project
-          expect(response).not_to be_success
-          expect(response).to redirect_to projects_path
-        end
-
-        it "should not change the project's attributes" do
-          expect{
-            patch :update, id: @project, project: @new_project
-          }.not_to change(@project, :name)
-        end
+      before do
+        sign_in FactoryGirl.create(:user, projects: [@project])
+        @track = FactoryGirl.create(:test_track, project: @project)
       end
 
-      context "project users" do
-        before { @user = FactoryGirl.create(:user) }
-
-        it "should redirect to the projects path" do
-          patch :update, id: @project, project: { user_ids: [@user.id] }
-          expect(response).not_to be_success
-          expect(response).to redirect_to projects_path
-        end
-
-        it "should not change the project's attributes" do
-          expect{
-            patch :update, id: @project, project: { user_ids: [@user.id] }
-          }.not_to change(@project, :users)
-        end
-      end
-
-      context "project tracks" do
-        before { @track = FactoryGirl.create(:test_track, project: @project) }
-
+      context 'with valid parameters' do
         it "should redirect to the updated show page" do
           patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
           expect(response).to redirect_to @project
@@ -372,16 +389,19 @@ describe ProjectsController do
         end
       end
 
-      context "track project" do
-        before do
-          @track = FactoryGirl.create(:test_track, project: @project)
-          @another_project = FactoryGirl.create(:project)
+      context "with invalid parameters" do
+        it "should render the edit template" do
+          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
+          expect(response).to be_success
+          expect(response).to render_template :edit
         end
 
-        it "should redirect to the projects path" do
-          patch :update, id: @project, project: {tracks_attributes: {"0" => {project_id: @another_project.id}}}
-          expect(response).not_to be_success
-          expect(response).to redirect_to projects_path
+        it "should not change the track's attributes" do
+          expect {
+            patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
+            @track.reload
+          }.not_to change(@track, :name)
+          expect(assigns(:project)).to eq @project
         end
       end
     end

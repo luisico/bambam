@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
 
   def update
     if params[:project]
-      authorize! :manage, @project if admin_project_params
+      authorize! :manage, @project if admin_attr
       if @project.update(project_params)
         redirect_to @project, notice: 'Project was successfully updated.'
       else
@@ -43,17 +43,11 @@ class ProjectsController < ApplicationController
   end
 
   private
-  def admin_project_params
-    if params[:project][:name]
-      true
-    elsif params[:project][:user_ids]
+  def admin_attr
+    if params[:project][:name] || params[:project][:user_ids]
       true
     elsif params[:project][:tracks_attributes]
-      if params[:project][:tracks_attributes].map {|k, v| v[:project_id]}.any?
-        true
-      else
-        false
-      end
+      params[:project][:tracks_attributes].map {|k, v| v[:project_id]}.any?
     end
   end
 
