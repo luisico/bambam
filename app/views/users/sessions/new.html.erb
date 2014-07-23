@@ -1,18 +1,28 @@
 <div class="row">
-  <div class="small-9 small-centered columns">
+  <div class="small-7 small-centered columns">
 
     <h1>Welcome to Bambam!</h1></br>
 
     <h3>Sign in</h3>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div>
+    <div class="row collapse">
+      <div class="small-2 large-1 columns">
+        <span class="prefix"><i class="fi-mail large"></i></span>
+      </div>
+      <div class="small-10 large-11 columns">
         <%= f.email_field :email, autofocus: true, placeholder: 'Email' %>
       </div>
+    </div>
 
-      <div>
+    <div class="row collapse">
+      <div class="small-2 large-1 columns">
+        <span class="prefix"><i class="fi-key large"></i></span>
+      </div>
+      <div class="small-10 large-11 columns">
         <%= f.password_field :password, placeholder: 'Password' %>
       </div>
+    </div>
 
       <% if devise_mapping.rememberable? -%>
         <label><%= f.check_box :remember_me %> Remember me</label>
