@@ -280,52 +280,6 @@ describe ProjectsController do
     end
   end
 
-  describe "#admin_attr" do
-    before do
-      @project = @projects.first
-    end
-
-    context "with project users parameters" do
-      before do
-        @user = FactoryGirl.create(:user)
-        @new_project = FactoryGirl.attributes_for(:project)
-      end
-
-      it "should equal true" do
-        patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
-        expect(controller.instance_eval{ admin_attr }).to eq true
-      end
-    end
-
-    context "with project name parameters" do
-      it "should equal true" do
-        patch :update, id: @project, project: { name: "new_name" }
-        expect(controller.instance_eval{ admin_attr }).to eq true
-      end
-    end
-
-    context "with track project parameters" do
-      before do
-        @track = FactoryGirl.create(:test_track, project: @project)
-        @another_project = FactoryGirl.create(:project)
-      end
-
-      it "should equal true" do
-        patch :update, id: @project, project: {tracks_attributes: {"0" => {project_id: @another_project.id}}}
-        expect(controller.instance_eval{ admin_attr }).to eq true
-      end
-    end
-
-    context "with project tracks parameters" do
-      before { @track = FactoryGirl.create(:test_track, project: @project) }
-
-      it "should redirect to the updated show page" do
-        patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-        expect(controller.instance_eval{ admin_attr }).to eq false
-      end
-    end
-  end
-
   describe "Patch 'update'" do
     before do
      @project = @projects.first
@@ -466,6 +420,37 @@ describe ProjectsController do
         expect{
           delete :destroy, id: @project
         }.not_to change(Project, :count)
+      end
+    end
+  end
+
+  describe "#has_admin_attr?" do
+    context "should be true with parameter" do
+      it "users" do
+        controller.params = {project: {user_ids: [9999]}}
+        expect(controller.send(:has_admin_attr?)).to be_true
+      end
+
+      it "name" do
+        controller.params = {project: {name: 'new_name'}}
+        expect(controller.send(:has_admin_attr?)).to be_true
+      end
+
+      it "tracks with project_id" do
+        controller.params = {project: {tracks_attributes: {'0' => {name: 'new_name', project_id: [9999]}}}}
+        expect(controller.send(:has_admin_attr?)).to be_true
+      end
+    end
+
+    context "it should be false with parameter" do
+      it "tracks without project_id" do
+        controller.params = {project: {tracks_attributes: {'0' => {name: 'new_name', id: 9999}}}}
+        expect(controller.send(:has_admin_attr?)).to be_false
+      end
+
+      it "empty" do
+        controller.params = {project: {}}
+        expect(controller.send(:has_admin_attr?)).to be_false
       end
     end
   end
