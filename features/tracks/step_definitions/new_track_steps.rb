@@ -15,6 +15,12 @@ def fill_track_form(track=nil)
   fill_in 'Path', with: track[:path]
 end
 
+def link_to_add_track
+  link = all('a', text: 'Add a track') || all('a', text: 'Add another track')
+  raise 'Link to add a/another track not found' if link.empty?
+  link.first
+end
+
 ### Given
 
 ### When
@@ -22,7 +28,7 @@ end
 When /^I create a track without a name$/ do
   expect{
     build_track
-    click_link 'Add Track'
+    click_link 'Add a track'
     within('.new-record') {
       fill_track_form @track.merge(name: '')
     }
@@ -33,7 +39,7 @@ end
 When /^I create a track without a path$/ do
   expect{
     build_track
-    click_link 'Add Track'
+    click_link 'Add a track'
     within('.new-record') {
       fill_track_form @track.merge(path: '')
     }
@@ -48,29 +54,32 @@ end
 When /^I delete a track before updating project$/ do
   build_track_with_path
   expect {
-    click_link 'Add Track'
+    click_link 'Add a track'
     expect(page).to have_link 'Add another track'
     within('.new-record') {
       fill_track_form
       find('.remove-track').trigger('click')
     }
-    expect(page).to have_link 'Add Track'
+    expect(page).to have_link 'Add a track'
     click_button 'Update Project'
     @project.reload
   }.not_to change(@project.tracks, :count)
 end
 
+When /^I add a track to the project$/ do
+  link_to_add_track.click
+end
+
+When /^I delete a track from the project$/ do
+  find('.remove-track').trigger('click')
+end
+
 ### Then
 
 Then /^I should be able to add a track to the project$/ do
-  if @project.tracks.any?
-    link = 'Add another track'
-  else
-    link = 'Add Track'
-  end
   build_track_with_path
   expect {
-    click_link link
+    link_to_add_track.click
     within('.new-record') {
       fill_track_form
     }

@@ -9,7 +9,7 @@ Feature: Create a project
     And I am on the new project page
     Then my checkbox should be disabled
     And I should see unchecked checkboxes for the other users
-    And I should see a link to "Add Track"
+    And I should see a link to "Add a track"
 
   @javascript
   Scenario: Admin creates a new project

@@ -13,9 +13,12 @@ Feature: Create a track
     Then I should be able to add a track to the project
 
   Scenario: Add Track button changes depending on track count
-    And there is a track in that project
     When I visit the edit project page
-    Then I should be able to add a track to the project
+    Then I should see a link to "Add a track"
+    When I add a track to the project
+    Then I should see a link to "Add another track"
+    When I delete a track from the project
+    Then I should see a link to "Add a track"
 
   Scenario: Cannot create a track without a name
     When I visit the edit project page
@@ -32,7 +35,7 @@ Feature: Create a track
   Scenario: Text explaining allowed paths uses the env variable ALLOWED_TRACK_PATHS
     Given environment variable ALLOWED_TRACK_PATHS is "/tmp/path1:/tmp/path2"
     When I visit the edit project page
-    And I click the "Add Track" link
+    And I click the "Add a track" link
     Then I should see instructions to use the allowed paths
 
   Scenario: Delete a track before updating project
