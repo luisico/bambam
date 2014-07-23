@@ -22,6 +22,10 @@ describe User do
       context "groups" do
         it { should be_able_to(:manage, Group) }
       end
+
+      context "projects" do
+        it { should be_able_to(:manage, Project) }
+      end
     end
 
     describe "as inviter" do
@@ -57,10 +61,6 @@ describe User do
         it { should be_able_to(:cancel, @user) }
       end
 
-      context "tracks" do
-        it { should be_able_to(:manage, Track) }
-      end
-
       context "groups" do
         before do
           @admin = FactoryGirl.create(:admin)
@@ -80,6 +80,29 @@ describe User do
           it { should_not be_able_to(:manage, @group) }
           it { should be_able_to(:read, @group) }
         end
+      end
+
+      context "projects" do
+        before do
+          @user_on_project = FactoryGirl.create(:project, users: [@user])
+          @other_user_project = FactoryGirl.create(:project, owner: @other_user)
+        end
+
+        it { should be_able_to(:user_access, @user_on_project) }
+        it { should_not be_able_to(:manage, @user_on_project) }
+
+        it { should_not be_able_to(:read, @other_user_project) }
+        it { should_not be_able_to(:manage, @other_user_project) }
+      end
+
+      context "tracks" do
+        before do
+          @track = FactoryGirl.create(:test_track, project: FactoryGirl.create(:project))
+        end
+
+        it { should be_able_to(:read, Track, :project => { :user_ids => @user.id }) }
+
+        it { should_not be_able_to(:read, @track) }
       end
     end
   end

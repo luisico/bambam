@@ -10,6 +10,7 @@ describe Track do
     it { should have_db_column(:name).with_options(null: false) }
     it { should have_db_index(:name).unique(false) }
     it { should have_db_column(:path).with_options(null:false) }
+    it { should have_db_column(:project_id).with_options(null: false) }
   end
 
   describe "name" do
@@ -65,6 +66,18 @@ describe Track do
           pending "Works, but don't know how to change ENV dynamically in rspec"
         end
       end
+    end
+  end
+
+  describe "project_id" do
+    it {should respond_to :project}
+  end
+
+  describe "association with project" do
+    it "should touch the project" do
+      expect {
+        @track.save
+      }.to change(@track.project, :updated_at)
     end
   end
 end

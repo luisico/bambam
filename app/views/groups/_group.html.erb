@@ -1,0 +1,9 @@
+<% if can? :read, group %>
+  <li id="group_<%= group.id %>">
+    <%= link_to group.name, group %>
+    <span class="text-color-grey">
+      <i class="fi-sheriff-badge small" title="owner"></i>
+      <%= group.owner.email %>
+    </span>
+  </li>
+<% end %>

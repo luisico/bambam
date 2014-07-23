@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="small-12 medium-10 medium-centered columns">
+    <% if can? :manage, Project %>
+      <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
+    <% end %>
+    <% if current_user.projects.any? || current_user.has_role?(:admin) %>
+      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+        <% @projects.each do |project| %>
+          <li id="project_<%= project.id %>">
+            <ul class="no-bullet panel">
+              <li class="headline">
+                <%= link_to project.name, project, class: "text-panel-overhang" %>
+              </li>
+              <li>
+                <i class="fi-paw small margin-right" title="tracks"></i>
+                <%= project.tracks.count %>
+                <i class="fi-torsos small left-buffer margin-right" title="users"></i>
+                <%= project.users.count %>
+              </li>
+              <% if can? :manage, User %>
+                <li class="sub-text text-panel-overhang">
+                  <i class="fi-sheriff-badge small margin-right" title="owner"></i>
+                  <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %>
+                </li>
+              <% else %>
+                <li class="sub-text text-panel-overhang">
+                  <i class="fi-star small margin-right" title="owner"></i>
+                  <%= project.owner.email %>
+                </li>
+              <% end %>
+              <li class="sub-text"><i class="fi-clock small margin-right" title="updated_at"></i>
+                <%= local_time_ago(project.updated_at) %>
+              </li>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="panel">
+        <h3>Projects</h3>
+        <% if current_user.invited_by %>
+          <p>Please contact <%= mail_to current_user.invited_by.email %> to be added to a project</p>
+        <% else %>
+          <p>Please contact your admin to be added to a project</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -40,7 +40,7 @@ describe GroupsController do
           sign_in FactoryGirl.create(:user)
           get :show, id: @group
           expect(response).not_to be_success
-          expect(response).to redirect_to tracks_path
+          expect(response).to redirect_to projects_path
         end
       end
     end
@@ -94,7 +94,7 @@ describe GroupsController do
         sign_in FactoryGirl.create(:user)
         get :new
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -139,7 +139,7 @@ describe GroupsController do
       it "should be denied" do
         get :edit, id: @group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -212,7 +212,7 @@ describe GroupsController do
       it "should be denied" do
         post :create, group: @group_attr
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
 
       it "should not create a new group" do
@@ -323,7 +323,7 @@ describe GroupsController do
       it "should be denied" do
         patch :update, id: @group, group: @new_group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -377,7 +377,7 @@ describe GroupsController do
       it "should be denied" do
         patch :destroy, id: @group
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
 
       it "should not delete the group" do

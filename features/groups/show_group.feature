@@ -11,8 +11,7 @@ Feature: Show a group
     Then I should see the group's name
     And I should see the group's owner
     And I should see the group's members
-    And I should see the group's creation date
-    And I should see the group's last update
+    And I should see the group's timestamps
 
   Scenario: Show member links for admins
     Given I am signed in as an admin

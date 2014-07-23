@@ -12,13 +12,26 @@
       <hr/>
 
       <div class="row">
-        <div class="small-12 medium-10 columns">
-          <h4>Groups</h4>
+        <div class="small-12 medium-6 columns">
+          <h4>My Groups</h4>
           <ul class="no-bullet">
-            <% @user.groups.each do |group| %>
-              <li><%= link_to group.name, group %> owned by <%= group.owner.email %></li>
+            <%= render @user.groups %>
+          </ul>
+        </div>
+        <div class="small-12 medium-6 columns">
+          <h4>My Projects</h4>
+          <ul class="no-bullet">
+            <% @user.projects.each do |project| %>
+              <li id="project_<%= project.id %>">
+                <%= link_to project.name, project %>
+                <span class="text-color-grey">
+                  <i class="fi-sheriff-badge small" title="owner"></i>
+                  <%= project.owner.email %>
+                </span>
+              </li>
             <% end %>
           </ul>
+          <h4><small> List all your <%= link_to "tracks", tracks_path %></small></h4>
         </div>
       </div>
     </div>
@@ -30,6 +43,6 @@
     <% if @user == current_user %>
       <%= link_to 'Edit', edit_user_registration_path, class: 'button tiny radius' %>
     <% end %>
-    <%= link_to 'Back', users_path, class: 'button tiny radius' %>
+    <%= link_to 'Back', :back, class: 'button tiny radius' %>
   </div>
 </div>

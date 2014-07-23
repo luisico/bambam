@@ -51,11 +51,7 @@
     <div class="panel">
       <h3>Groups</h3>
       <ul class="no-bullet">
-        <% @groups.each do |group| %>
-          <% if can? :read, group %>
-            <li><%= link_to group.name, group %> owned by <%= group.owner.email %></li>
-          <% end %>
-        <% end %>
+        <%= render @groups %>
       </ul>
       <div>
         <%= link_to 'New Group', new_group_path, class: "button tiny radius" %>

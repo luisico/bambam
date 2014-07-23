@@ -8,9 +8,9 @@ describe ApplicationController do
       end
     end
 
-    it "redirect to the tracks page" do
+    it "redirect to the projects page" do
       get :index
-      expect(response).to redirect_to(tracks_path)
+      expect(response).to redirect_to(projects_path)
     end
   end
 

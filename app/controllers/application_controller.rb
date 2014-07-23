@@ -9,13 +9,13 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.html {
-        redirect_to tracks_path, alert: exception.message
+        redirect_to projects_path, alert: exception.message
       }
     end
   end
 
   def after_sign_in_path_for(resource)
-    tracks_path
+    projects_path
   end
 
   protected

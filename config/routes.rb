@@ -9,7 +9,9 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index, :show]
 
-  resources :tracks
+  resources :tracks, only: [:index, :show]
+
+  resources :projects
 
   namespace :stream_services, path: 'stream', module: false do
     resources :track, only: :show, controller: 'stream_services', format: /[^\/]+/
@@ -17,5 +19,5 @@ Bambam::Application.routes.draw do
 
   resources :groups, except: :index
 
-  match 'user_root' => 'tracks#index', via: [:get]
+  match 'user_root' => 'projects#index', via: [:get]
 end

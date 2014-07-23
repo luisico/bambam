@@ -9,7 +9,7 @@ When /^environment variable (.*?) is "(.*?)"$/ do |name, value|
 end
 
 When /^I click on "(.*?)" in the top nav$/ do |link|
-  within(".top-bar-section") do
+  within(".top-bar") do
     click_on link
   end
 end
@@ -52,4 +52,10 @@ end
 
 Then /^I should( not)? see an? "(.*?)" button$/ do |negate, text|
   step %{I should#{negate} see a link to "#{text}"}
+end
+
+Then /^I should see the (.*?)'s timestamps$/ do |model|
+  object = eval "@#{model}"
+  expect(page).to have_selector(:xpath, "//span[contains(@class,'created-at') and contains(.,time[@data-local='time-ago' and @datetime='#{object.created_at.utc.iso8601}'])]")
+  expect(page).to have_selector(:xpath, "//span[contains(@class,'updated-at') and contains(.,time[@data-local='time-ago' and @datetime='#{object.updated_at.utc.iso8601}'])]")
 end

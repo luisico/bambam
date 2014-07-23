@@ -1,0 +1,53 @@
+<%= form_for(@project) do |f| %>
+  <% if @project.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@project.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="small-12 medium-5 columns">
+      <% if can? :manage, @project %>
+        <h4>Name</h4>
+        <div class="field">
+          <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
+        </div>
+
+        <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
+        <div class="field">
+          <% User.all.each do |user| %>
+            <% if !@project.owner && user == current_user %>
+              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+              <%= hidden_field_tag "project[user_ids][]", user.id %>
+              <%= hidden_field_tag "project[owner_id]", user.id %>
+            <% elsif user == @project.owner %>
+              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+              <%= hidden_field_tag "project[user_ids][]", user.id %>
+              <%= hidden_field_tag "project[owner_id]", user.id %>
+            <% else %>
+              <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
+              <%= label_tag dom_id(user), user.email %><br>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
+        <%= render @project.users %>
+      <% end %>
+    </div>
+    <div class="small-12 medium-offset-1 medium-6 columns">
+      <h4><i class="fi-paw large margin-right"></i>Tracks</h4>
+      <h4><small>Tracks are not updated until the project is saved</small></H4>
+      <%= f.fields_for :tracks do |builder| %>
+        <%= render 'track_fields', f: builder, k: nil %>
+      <% end %>
+      <%= link_to_add_fields "Add a track", f, :tracks %>
+    </div>
+  </div></br></br>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius update-project-tracks' %>
+  </div>
+<% end %>

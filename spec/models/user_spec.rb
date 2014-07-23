@@ -149,12 +149,24 @@ describe User do
       it { should respond_to :groups }
       it { should respond_to :group_ids }
     end
+
+    context "projects_users" do
+      it { should have_many :projects_users }
+      it { should respond_to :projects_users }
+      it { should respond_to :projects_user_ids }
+    end
+
+    context "projects" do
+      it { should have_many :projects }
+      it { should respond_to :projects }
+      it { should respond_to :project_ids }
+    end
   end
 
   describe "when user destroyed" do
     before do
-      group = FactoryGirl.create(:group)
-      group.members << @user
+      FactoryGirl.create(:group, members: [@user])
+      FactoryGirl.create(:project, users: [@user])
       @user.save!
     end
 
@@ -165,6 +177,10 @@ describe User do
 
     it "should destroy associated memberships" do
       expect { @user.destroy }.to change(Membership, :count).by(-1)
+    end
+
+    it "should destroy associated projects_users" do
+      expect { @user.destroy }.to change(ProjectsUser, :count).by(-1)
     end
   end
 end
