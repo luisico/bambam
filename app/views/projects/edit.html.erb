@@ -9,7 +9,9 @@
 
       <%= render 'form' %>
 
-      <%= link_to 'Cancel', @project, class: 'button tiny radius' %>
+      <%= link_to @project, class: 'button tiny radius' do %>
+        <i class="fi-x-circle large margin-right"></i>Cancel
+      <% end %>
     </div>
   </div>
 </div>

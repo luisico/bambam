@@ -1,7 +1,9 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <% if can? :manage, Project %>
-      <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
+      <%= link_to new_project_path, class: "button tiny radius" do %>
+        <i class="fi-burst-new margin-right"></i>New Project
+      <% end %>
     <% end %>
     <% if current_user.projects.any? || current_user.has_role?(:admin) %>
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
