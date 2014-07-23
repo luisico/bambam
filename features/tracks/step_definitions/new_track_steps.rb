@@ -28,7 +28,7 @@ end
 When /^I create a track without a name$/ do
   expect{
     build_track
-    click_link 'Add a track'
+    link_to_add_track.click
     within('.new-record') {
       fill_track_form @track.merge(name: '')
     }
@@ -39,7 +39,7 @@ end
 When /^I create a track without a path$/ do
   expect{
     build_track
-    click_link 'Add a track'
+    link_to_add_track.click
     within('.new-record') {
       fill_track_form @track.merge(path: '')
     }
@@ -54,13 +54,11 @@ end
 When /^I delete a track before updating project$/ do
   build_track_with_path
   expect {
-    click_link 'Add a track'
-    expect(page).to have_link 'Add another track'
+    link_to_add_track.click
     within('.new-record') {
       fill_track_form
       find('.remove-track').trigger('click')
     }
-    expect(page).to have_link 'Add a track'
     click_button 'Update Project'
     @project.reload
   }.not_to change(@project.tracks, :count)
