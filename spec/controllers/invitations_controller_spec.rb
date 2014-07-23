@@ -27,7 +27,7 @@ describe Users::InvitationsController do
         sign_in FactoryGirl.create(:user)
         get :new
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
 
@@ -35,7 +35,7 @@ describe Users::InvitationsController do
       it "should redirect to home page" do
         get :new
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
     end
   end
@@ -115,7 +115,7 @@ describe Users::InvitationsController do
       it "should be denied" do
         post :create, user: @new_user
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
 
       it "should not create a new user" do
@@ -129,7 +129,7 @@ describe Users::InvitationsController do
       it "should redirect to the tracks page" do
         post :create, user: @new_user
         expect(response).not_to be_success
-        expect(response).to redirect_to tracks_path
+        expect(response).to redirect_to projects_path
       end
 
       it "should not create a new user" do
