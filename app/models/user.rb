@@ -11,4 +11,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   scope :all_except, ->(user) { where.not(id: user) }
+
+  def handle
+    first_space_last = "#{self.first_name} #{self.last_name}"
+    (first_space_last).blank? ? self.email : first_space_last.strip
+  end
 end

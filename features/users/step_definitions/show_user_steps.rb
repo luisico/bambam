@@ -6,17 +6,28 @@ end
 
 ### Given
 
+Given /^I have not entered a first or last name$/ do
+  expect {
+    @user.update_attributes(first_name: "", last_name: "")
+    @user.reload
+  }.to change(@user, :handle)
+end
+
 ### When
 
 When /^I am on (my|the)? account profile page$/ do |foo|
   visit user_path(@user)
 end
 
-When /^I click on the user email$/ do
-  click_on @user.email
+When /^I click on the user handle$/ do
+  click_on @user.handle
 end
 
 ### Then
+
+Then /^I should see my user name$/ do
+  expect(page).to have_content @user.handle
+end
 
 Then /^I should see my email$/ do
   expect(page).to have_content @user.email
@@ -42,4 +53,10 @@ Then /^I should see my groups$/ do
       expect(page).to have_content group.owner.email
     end
   end
+end
+
+Then /^I should only see my email once$/ do
+  within(find("#name-and-email")) {
+    expect(page).to have_content(@user.email, count: 1)
+  }
 end
