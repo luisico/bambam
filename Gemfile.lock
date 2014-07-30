@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/plataformatec/devise.git
+  revision: 61c497d173889dd100b8f634ac263e22b3bea5c4
+  ref: 61c497d173
+  specs:
+    devise (3.2.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+
+GIT
   remote: git://github.com/scambra/devise_invitable.git
   revision: ab6464fbb7aa8b31b7aae6120932c35ecf5cc22c
   specs:
@@ -94,12 +106,6 @@ GEM
     daemons (1.1.9)
     database_cleaner (1.2.0)
     debug_inspector (0.0.2)
-    devise (3.2.4)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      thread_safe (~> 0.1)
-      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dotenv (0.10.0)
     dotenv-rails (0.10.0)
@@ -315,7 +321,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.1)
   cucumber-rails (~> 1.4.0)
   database_cleaner (~> 1.2.0)
-  devise (~> 3.2.3)
+  devise!
   devise_invitable!
   dotenv-rails (~> 0.10.0)
   email_spec (~> 1.5.0)

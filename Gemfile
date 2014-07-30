@@ -15,7 +15,7 @@ gem 'pg', '~> 0.17.1', group: [:production, :staging]
 gem 'factory_girl_rails', '~> 4.4.0'
 
 # Authentication / Authorization
-gem 'devise', '~> 3.2.3'
+gem 'devise', github: 'plataformatec/devise', ref: '61c497d173'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
 gem 'rolify', '~> 3.4.0'
 gem 'cancancan', '~> 1.7'
