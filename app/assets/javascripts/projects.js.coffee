@@ -5,6 +5,7 @@ jQuery ->
   $('form').on 'click', '.remove-track', (event) ->
     if $(this).closest('div.track-form-group').hasClass('new-record')
       $(this).closest('div.track-form-group').remove()
+      event.preventDefault()
     else
       $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('1')
       $(this).closest('li').siblings().first().css('textDecoration', 'line-through')
@@ -23,6 +24,7 @@ jQuery ->
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('div.track-form-group').children('div').show()
     $('.update-project-tracks').show()
+    event.preventDefault()
 
   $('form').on 'click', '.done-track', (event) ->
     $(this).hide()
@@ -33,6 +35,7 @@ jQuery ->
     $(this).parent().siblings().first().children().text(text)
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('div.track-form-group').children('div').hide()
+    event.preventDefault()
 
   $('form').on 'click', '.restore-track', (event) ->
     $(this).hide()
@@ -40,6 +43,7 @@ jQuery ->
     $(this).parent().siblings().find('.edit-track').show()
     $(this).parent().siblings().find('.remove-track').show()
     $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('0')
+    event.preventDefault()
 
   $('form').on 'click', '.add_fields', (event) ->
     time = new Date().getTime()
