@@ -26,7 +26,7 @@ describe StreamServicesController do
         end
 
         it "should respond not found when file is empty" do
-          track = FactoryGirl.create(:test_track, path: 'tmp/emptytrack.bam')
+          track = FactoryGirl.create(:test_track)
           Pathname.new(track.path).truncate(0)
           get :show, id: track
           File.unlink(track.path)
