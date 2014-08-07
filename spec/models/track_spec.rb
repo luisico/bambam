@@ -70,6 +70,7 @@ describe Track do
   end
 
   describe "project_id" do
+    it {should belong_to :project}
     it {should respond_to :project}
   end
 
