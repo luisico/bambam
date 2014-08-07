@@ -1,0 +1,6 @@
+<% if share_link.expires_at > Time.now %>
+  <p class="clipboard-box">
+    <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
+    <span id="clip_track_ucsc_line"><%= ucsc_track_line(@track, share_link) %></span>
+  </p>
+<% end %>

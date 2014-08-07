@@ -15,6 +15,10 @@ class TracksController < ApplicationController
   def show
   end
 
+  def share
+    ShareLink.build_share_link(@track)
+  end
+
   private
   def track_params
     params.require(:track).permit(:name, :path, :project_id)

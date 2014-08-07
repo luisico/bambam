@@ -9,7 +9,11 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index, :show]
 
-  resources :tracks, only: [:index, :show]
+  resources :tracks, only: [:index, :show] do
+    member do
+      patch :share
+    end
+  end
 
   resources :projects
 
