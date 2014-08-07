@@ -16,8 +16,7 @@ Feature: Show a track
     And I should see button to copy the track path to the clipboard
     And I should see the track's timestamps
     And I should see a link to open the track in IGV
-    And I should see a text with the track line for UCSC
-    And I should see button to copy the track ucsc line to the clipboard
+    And I should see a link to create a track line for UCSC
 
    Examples:
     | type | status     |

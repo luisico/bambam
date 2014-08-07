@@ -101,6 +101,7 @@ describe User do
         end
 
         it { should be_able_to(:read, Track, :project => { :user_ids => @user.id }) }
+        it { should be_able_to(:share, Track, :project => { :user_ids => @user.id }) }
 
         it { should_not be_able_to(:read, @track) }
       end

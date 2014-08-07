@@ -54,8 +54,8 @@ Then /^I should see a link to open the track in IGV$/ do
   expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='Open in IGV']")
 end
 
-Then /^I should see a text with the track line for UCSC$/ do
-  expect(page).to have_content "bigDataUrl="
+Then /^I should see a link to create a track line for UCSC$/ do
+  expect(page).to have_link "Create track line link"
 end
 
 Then /^I should see a link to download a (bam|bw) file$/ do |type|

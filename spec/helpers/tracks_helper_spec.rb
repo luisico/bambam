@@ -68,28 +68,25 @@ describe TracksHelper do
   end
 
   describe "#ucsc_url" do
-    before { @track = FactoryGirl.create(:test_track) }
+    before do
+      @track = FactoryGirl.create(:test_track)
+      @share_link = FactoryGirl.create(:share_link, track: @track)
+    end
 
-    it "needs a track as argument" do
+    it "needs a track and a share_link as arguments" do
       expect{helper.ucsc_url}.to raise_error(ArgumentError)
     end
 
     it "points to the track's stream service" do
-      url = helper.ucsc_url(@track)
-      userinfo = URI(url).userinfo
-      expect(url.sub("#{userinfo}@",'')).to eq stream_services_track_url(@track)
+      url = helper.ucsc_url(@track, @share_link)
+      url_with_access_token = url.sub("?access_token=#{@share_link.access_token}",'')
+      expect(url_with_access_token).to eq stream_services_track_url(@track)
     end
 
-    context "user credentials" do
-      it "are encoded when present" do
-        user = FactoryGirl.build(:user)
-        uri = URI(helper.ucsc_url(@track))
-        credentials =  "#{ERB::Util.url_encode(ENV['UCSC_USER_EMAIL'])}:#{ENV['UCSC_USER_PASSWORD']}"
-        expect(uri.userinfo).to eq credentials
-      end
-
-      it "are not included when missing" do
-        pending
+    context "access_token" do
+      it "is encoded" do
+        uri = URI(helper.ucsc_url(@track, @share_link))
+        expect(uri.query).to eq "access_token=#{@share_link.access_token}"
       end
     end
   end
@@ -97,6 +94,7 @@ describe TracksHelper do
   describe "#ucsc_track_line" do
     before do
       @track = FactoryGirl.build(:test_track, path: File.join("tmp", "tests", "mytrack"))
+      @share_link = FactoryGirl.create(:share_link, track: @track)
       allow(helper).to receive(:ucsc_url).and_return('myurl')
     end
 
@@ -105,51 +103,51 @@ describe TracksHelper do
     end
 
     it "starts with the word 'track'" do
-      expect(helper.ucsc_track_line(@track)).to match /^track /
+      expect(helper.ucsc_track_line(@track, @share_link)).to match /^track /
     end
 
     context "track type" do
       it "for bam files" do
         @track.path << '.bam'
-        expect(helper.ucsc_track_line(@track)).to match /type=bam/
+        expect(helper.ucsc_track_line(@track, @share_link)).to match /type=bam/
       end
 
       it "for bigwig files" do
         @track.path << '.bw'
-        expect(helper.ucsc_track_line(@track)).to match /type=bigWig/
+        expect(helper.ucsc_track_line(@track, @share_link)).to match /type=bigWig/
       end
 
       it "is not included when unkown" do
         @track.path << '.unk'
-        expect(helper.ucsc_track_line(@track)).not_to include 'type='
+        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'type='
       end
     end
 
     context "track name" do
       it "is included when known" do
-        expect(helper.ucsc_track_line(@track)).to match /name="#{@track.name}"/
+        expect(helper.ucsc_track_line(@track, @share_link)).to match /name="#{@track.name}"/
       end
 
       it "is not included when empty" do
         @track.name = ''
-        expect(helper.ucsc_track_line(@track)).not_to include 'name='
+        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'name='
       end
 
       it "is not included when nil" do
         @track.name = nil
-        expect(helper.ucsc_track_line(@track)).not_to include 'name='
+        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'name='
       end
     end
 
     context "track url" do
       it "points the track's stream service" do
-        expect(helper.ucsc_track_line(@track)).to match /bigDataUrl=myurl/
+        expect(helper.ucsc_track_line(@track, @share_link)).to match /bigDataUrl=myurl/
       end
 
       it "include credentials when requested" do
         user = FactoryGirl.build(:user)
-        expect(helper).to receive(:ucsc_url).with(@track).once
-        helper.ucsc_track_line(@track)
+        expect(helper).to receive(:ucsc_url).with(@track, @share_link).once
+        helper.ucsc_track_line(@track, @share_link)
       end
     end
   end

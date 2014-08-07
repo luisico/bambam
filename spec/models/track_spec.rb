@@ -73,6 +73,12 @@ describe Track do
     it {should respond_to :project}
   end
 
+  describe "share_links" do
+    it { should have_many :share_links }
+    it { should respond_to :share_links }
+    it { should respond_to :share_link_ids }
+  end
+
   describe "association with project" do
     it "should touch the project" do
       expect {

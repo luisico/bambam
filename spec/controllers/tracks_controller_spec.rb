@@ -112,4 +112,46 @@ describe TracksController do
       end
     end
   end
+
+  describe "Patch 'share'" do
+    before do
+      @project = FactoryGirl.create(:project)
+      @track = FactoryGirl.create(:test_track, project: @project)
+    end
+
+    context "as a user and project member" do
+      before do
+        sign_in user = FactoryGirl.create(:user)
+        @project.users << user
+      end
+
+      context "with valid parameters" do
+        it "should update show page" do
+          patch :share, id: @track, format: 'js'
+          expect(response).to be_success
+          expect(assigns(:track)).to eq @track
+        end
+
+        it "should create new, associated ShareLink record" do
+          expect{
+            patch :share, id: @track, format: 'js'
+          }.to change(ShareLink, :count).by(1)
+          expect(ShareLink.last.track).to eq @track
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should not be a success" do
+        patch :share, id: @track, format: 'js'
+        expect(response).not_to be_success
+      end
+
+      it "should not create a new ShareLink record" do
+        expect{
+          patch :share, id: @track, format: 'js'
+        }.not_to change(ShareLink, :count)
+      end
+    end
+  end
 end

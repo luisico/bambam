@@ -151,12 +151,187 @@ describe StreamServicesController do
       end
     end
 
+    context "as a visitor with valid access_token" do
+      context "with invalid record or file" do
+        before do
+          @track = FactoryGirl.create(:test_track)
+          @access_token = FactoryGirl.create(:share_link, track_id: @track.id).access_token
+        end
+
+        it "should respond not found when record is not found" do
+          track_id = @track.id
+          @track.destroy
+          get :show, id: track_id, access_token: @access_token
+          expect(response).to be_not_found
+        end
+
+        it "should respond not found when file is not found" do
+          File.unlink @track.path
+          get :show, id: @track, access_token: @access_token
+          expect(response).to be_not_found
+        end
+
+        it "should respond forbidden when the format is non-standard" do
+          get :show, id: @track, access_token: @access_token, format: 'non'
+          expect(response).to be_forbidden
+          File.unlink @track.path
+        end
+
+        it "should respond not found when file is empty" do
+          Pathname.new(@track.path).truncate(0)
+          get :show, id: @track, access_token: @access_token
+          File.unlink(@track.path)
+
+          expect(response).to be_not_found
+        end
+      end
+
+      context "with invalid access token" do
+        before { @track = FactoryGirl.create(:test_track)
+        }
+        it "should redirect to the sign in page" do
+          get :show, id: @track, access_token: SecureRandom.hex
+          expect(response).not_to be_success
+          expect(response).to redirect_to new_user_session_url
+        end
+      end
+
+      context "with valid record or file and valid access token" do
+        before(:all) do
+          @path = 'tmp/mytrack.bam'
+          @text = ['word1', 'word2', 'word3', 'word4']
+          File.open(@path, 'wb') { |f| f.write @text.pack('A*A*A*A*') }
+        end
+
+        after(:all) { File.unlink(@path) if File.exist?(@path) }
+
+        before do
+          @track = FactoryGirl.create(:test_track, path: @path)
+          @access_token = FactoryGirl.create(:share_link, track_id: @track.id).access_token
+          headers = {
+            'Accept' => 'text/plain',
+            'User-Agent' => 'IGV Version 2.3.32 (37)03/17/2014 08:51 PM',
+            'Cache-Control' => 'no-cache',
+            'Pragma' => 'no-cache',
+            'Connection' => 'keep-alive'
+            # 'Host' => 'localhost:3000'
+          }
+          @request.headers.merge! headers
+        end
+
+        context "GET" do
+          context "without range request" do
+            it "should be successful" do
+              get :show, id: @track, access_token: @access_token
+              expect(response.status).to eq 200
+            end
+
+            it "should return right headers" do
+              get :show, id: @track, access_token: @access_token
+              expect(response.headers['Content-Type']).to match 'text/plain'
+              expect(response.headers['Content-Length']).to be_nil
+              expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"#{File.basename(@path)}\""
+              expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
+            end
+
+            it "should return return the file" do
+              get :show, id: @track, access_token: @access_token
+              expect(response.body).to eq @text.pack('A*A*A*A*')
+            end
+          end
+
+          context "with range request" do
+            before { @request.headers.merge!({'Range' => 'bytes=0-4'}) }
+
+            it "should be successful" do
+              get :show, id: @track, access_token: @access_token
+              expect(response.status).to eq 206
+            end
+
+            it "should return right headers" do
+              get :show, id: @track, access_token: @access_token
+              expect(response.headers['Content-Type']).to match 'text/plain'
+              expect(response.headers['Content-Length']).to eq 5
+              expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"#{File.basename(@path)}\""
+              expect(response.headers['Accept-Ranges']).to eq 'bytes'
+              expect(response.headers['Content-Range']).to eq "bytes 0-4/20"
+              expect(response.headers['Content-Transfer-Encoding']).to eq 'binary'
+            end
+
+            it "should return the partial file" do
+              ranges = ['0-4', '5-9', '10-14', '15-19']
+              ranges.each_index do |idx|
+                @request.headers.merge!({'Range' => "bytes=#{ranges[idx]}"})
+                get :show, id: @track, access_token: @access_token
+                expect(response.body).to eq @text[idx]
+              end
+            end
+
+            context "not satisfiable" do
+              before { @request.headers.merge!({'Range' => 'bytes=1000-2000'}) }
+
+              [
+                'bytes=1000-2000',
+                'bytes=',
+                ''
+              ].each do |range|
+                context "range '#{range}'" do
+                  it "should return 416" do
+                    get :show, id: @track, access_token: @access_token
+                    expect(response.status).to eq 416
+                  end
+
+                  it "should return a file" do
+                    get :show, id: @track, access_token: @access_token
+                    expect(response.body).to be_blank
+                    expect(response).to render_template nil
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         get :show, id: 1
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
+    end
+  end
+
+  describe "#has_access_token?" do
+    before do
+      @track = FactoryGirl.create(:test_track)
+      @access_token = FactoryGirl.create(:share_link, track_id: @track.id).access_token
+    end
+
+    it "should be true with valid access token" do
+      controller.params = {access_token: @access_token, id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_true
+    end
+
+    it "should be false with invalid access token" do
+      controller.params = {access_token: SecureRandom.hex, id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with no access token" do
+      controller.params = { id: "#{@track.id}" }
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with non-existant track" do
+      controller.params = {access_token: @access_token, id: "9999"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with different track" do
+      controller.params = {access_token: @access_token, id: "#{FactoryGirl.create(:test_track).id}"}
+      expect(controller.send(:has_access_token?)).to be_false
     end
   end
 
