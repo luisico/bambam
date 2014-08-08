@@ -38,3 +38,31 @@ Feature: Edit track information
     And there is a track in that project
     When I visit the edit project page
     Then I should not be able to change the track's project
+
+  Scenario: User can change the track name on the track show page
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I am on the track page
+    Then I should be able to edit the track name in place
+
+  Scenario: User cannot leave track name blank on the track show page
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I am on the track page
+    Then I should not be able to leave track name blank
+
+  Scenario: User can change the track path on the track show page
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I am on the track page
+    Then I should be able to edit the track path in place
+
+  Scenario: User cannot submit an invalid track path on the track show page
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I am on the track page
+    Then I should not be able to submit an invalid track path

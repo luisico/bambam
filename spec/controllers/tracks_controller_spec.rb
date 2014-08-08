@@ -112,4 +112,62 @@ describe TracksController do
       end
     end
   end
+
+  describe "Patch 'update'" do
+    before { @track = FactoryGirl.create(:test_track) }
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      context 'with valid parameters' do
+        before do
+          @new_track = FactoryGirl.attributes_for(:test_track)
+          cp_track @new_track[:path]
+        end
+
+        it "should redirect to the updated show page" do
+          patch :update, id: @track, track: @new_track[:path]
+          json = JSON.parse(response.body)
+          expect(json['track']['path']).to eq(@new_track[:path])
+          expect(response).to be_success
+        end
+
+        it "should update the track" do
+          patch :update, id: @track, track: @new_track
+          @track.reload
+          expect(@track.attributes.except('id', 'created_at', 'updated_at', 'project_id')).to eq @new_track.stringify_keys
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render the edit template" do
+          patch :update, id: @track, track: {name: ''}
+          expect(response).to be_success
+          expect(response).to render_template :edit
+        end
+
+        it "should not change the track's attributes" do
+          expect {
+            patch :update, id: @track, track: {name: ''}
+            @track.reload
+          }.not_to change(@track, :name)
+          expect(assigns(:track)).to eq @track
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        patch :update, id: @track, track: {name: ''}
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not change the track's attributes" do
+        expect{
+          patch :update, id: @track, track: {name: ''}
+        }.not_to change(@track, :name)
+      end
+    end
+  end
 end

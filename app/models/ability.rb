@@ -30,6 +30,10 @@ class Ability
       can :read, Track do |track|
         track.project.users.include?(user)
       end
+
+      can :update, Track do |track|
+        track.project.users.include?(user)
+      end
     end
   end
 end

@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require best_in_place
+//= require best_in_place.purr
 //= require foundation
 //= require local_time
 //= require_tree .

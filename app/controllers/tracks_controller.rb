@@ -2,7 +2,7 @@ class TracksController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
 
-  respond_to :html
+  respond_to :html, :json
 
   def index
     if can? :manage, Track
@@ -13,6 +13,16 @@ class TracksController < ApplicationController
   end
 
   def show
+  end
+
+  def update
+    respond_to do |format|
+      if @track.update(track_params)
+        format.json { respond_with_bip(@track) }
+      else
+        format.json { respond_with_bip(@track) }
+      end
+    end
   end
 
   private

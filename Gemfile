@@ -29,6 +29,7 @@ gem 'turbolinks', '~> 2.2.1 '
 gem 'foundation-rails', '~> 5.2.2'
 gem 'local_time'
 gem 'foundation-icons-sass-rails'
+gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
 
 # JSON APIs
 gem 'jbuilder', '~> 1.5.2'

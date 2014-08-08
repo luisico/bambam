@@ -59,3 +59,37 @@ Then /^I should( not)? be able to change the track's project$/ do |negate|
     expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
   end
 end
+
+Then /^I should be able to edit the track name in place$/ do
+  bip_text(@track, :name, 'new_name')
+  sleep 1
+  @track.reload
+  expect(@track.name).to eq 'new_name'
+end
+
+Then /^I should not be able to leave track name blank$/ do
+  expect {
+    bip_text(@track, :name, '')
+    sleep 1
+    @track.reload
+  }.not_to change(@track, :name)
+  expect(page).to have_css('#purr-container', text: "Name can't be blank")
+end
+
+Then /^I should be able to edit the track path in place$/ do
+  new_track = FactoryGirl.attributes_for(:test_track)
+  cp_track new_track[:path]
+  bip_text(@track, :path, new_track[:path])
+  sleep 1
+  @track.reload
+  expect(@track.path).to eq new_track[:path]
+end
+
+Then /^I should not be able to submit an invalid track path$/ do
+  expect {
+    bip_text(@track, :path, 'invalid/path')
+    sleep 1
+    @track.reload
+  }.not_to change(@track, :path)
+  expect(page).to have_css('#purr-container', text: "Path is not included in the list")
+end

@@ -5,6 +5,7 @@ describe "Tracks" do
     it "a complete set of restful actions" do
       assert_routing({ path: '/tracks', method: :get },       { controller: 'tracks', action: 'index' })
       assert_routing({ path: '/tracks/1', method: :get },     { controller: 'tracks', action: 'show', id: '1' })
+      assert_routing({ path: '/tracks/1', method: :patch},    { controller: 'tracks', action: 'update', id: '1'})
     end
   end
 end

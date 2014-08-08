@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="clearfix">
         <h3 class="left">
-          <%= @track.name %>
+          <%= best_in_place @track, :name %>
           <small>
             <% if @track.project %>
               (<%= link_to @track.project.name, @track.project %>)
@@ -38,7 +38,7 @@
         <h5>Server path</h5>
         <p class="clipboard-box">
           <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_path"></i>
-          <span id="clip_track_path"><%= @track.path %></span>
+          <span id="clip_track_path"><%= best_in_place @track, :path %></span>
         </p>
       </div>
 
