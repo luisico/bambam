@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/jhilden/jquery-ui-sass-rails.git
+  revision: cf60db48d8724e4c2ed5d690c16c6ef9d4f6005e
+  specs:
+    jquery-ui-sass-rails (4.0.3.0)
+      jquery-rails
+      jquery-ui-rails (~> 4.0.3)
+      railties (>= 3.1.0)
+
+GIT
   remote: git://github.com/plataformatec/devise.git
   revision: 61c497d173889dd100b8f634ac263e22b3bea5c4
   ref: 61c497d173
@@ -159,6 +168,8 @@ GEM
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (4.0.5)
+      railties (>= 3.1.0)
     json (1.8.1)
     launchy (2.4.2)
       addressable (~> 2.3)
@@ -334,6 +345,7 @@ DEPENDENCIES
   guard-rspec (~> 4.2.7)
   jbuilder (~> 1.5.2)
   jquery-rails (~> 3.1.0)
+  jquery-ui-sass-rails!
   launchy (~> 2.4.2)
   local_time
   mailcatcher!

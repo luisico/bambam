@@ -43,8 +43,18 @@
       </div>
 
       <div>
-        <h5>UCSC track line</h5>
-        <%= link_to 'Create track line link', share_track_path(@track), method: :patch, remote: true %>
+        <h5>Track share links</h5>
+        <div class="share-track">
+          <p><%= link_to 'Create track share link', '#', class: "share-track-link" %></p>
+
+          <%= form_tag share_track_path(@track), :method => :patch, class: "share-track-form", remote: true do %>
+            <p>choose expiration date for share link</p>
+            <div class="small-12 medium-6 large-2">
+              <%= text_field_tag(:expires_at) %>
+            </div>
+            <%= submit_tag "Create link", class: 'button tiny radius share-track-submit' %>
+          <% end %>
+        </div>
 
         <h5><small>Copy and paste the track line(s) below into the UCSC Genome Browser</small></h5>
         <div id="share-links">
