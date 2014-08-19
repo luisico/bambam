@@ -16,7 +16,7 @@ class TracksController < ApplicationController
   end
 
   def share
-    ShareLink.build_share_link(@track, params[:expires_at])
+    ShareLink.build_share_link(@track, params[:expires_at], params[:notes])
   end
 
   private

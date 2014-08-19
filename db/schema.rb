@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20140805172516) do
     t.string   "access_token"
     t.datetime "expires_at"
     t.integer  "track_id"
+    t.string   "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

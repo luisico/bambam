@@ -8,3 +8,12 @@ jQuery ->
 
   $(document).ready ->
     $('#expires_at').datepicker()
+
+  $('#share-links').on 'click', '.show-track-link', (event) ->
+    $(this).parent().parent().next().toggle()
+    event.preventDefault()
+
+  $('#share-links').on 'click', '.show-ucsc-link', (event) ->
+    console.log($(this))
+    $(this).parent().parent().next().next().toggle()
+    event.preventDefault()

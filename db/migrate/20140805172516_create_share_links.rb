@@ -4,6 +4,7 @@ class CreateShareLinks < ActiveRecord::Migration
       t.string :access_token
       t.datetime :expires_at
       t.integer :track_id
+      t.string :notes
 
       t.timestamps
     end
