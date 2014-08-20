@@ -1,12 +1,4 @@
 class ShareLink < ActiveRecord::Base
   belongs_to :track
-
-  def self.build_share_link(track, expiration_date, notes)
-    ShareLink.create(
-      access_token: SecureRandom.hex,
-      track_id:     track.id,
-      expires_at:   Date.strptime(expiration_date, "%m/%d/%Y").strftime("%d/%m/%Y"),
-      notes: notes
-    )
-  end
+  validates_presence_of :access_token, :track_id, :expires_at
 end

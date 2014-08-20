@@ -44,34 +44,9 @@
 
       <div class="share-track">
         <h5>Track share links</h5>
-        <p><%= link_to 'Create new track share link', '#', class: "share-track-link" %></p>
-
-        <%= form_tag share_track_path(@track), :method => :patch, class: "share-track-form", remote: true do %>
-          <fieldset>
-            <div class="row">
-              <div class="large-4 columns">
-                <div class="row collapse">
-                  <div class="small-3 large-2 columns">
-                    <span class="prefix"><i class="fi-calendar large"></i></span>
-                  </div>
-                  <div class="small-9 large-10 columns">
-                    <%= text_field_tag :expires_at, nil, placeholder: "Choose expiration date" %>
-                  </div>
-                </div>
-              </div>
-
-              <div class="large-6 columns">
-                <%= text_field_tag :notes, nil, placeholder: "Enter notes here" %>
-              </div>
-
-              <div class="large-2 columns">
-                <%= submit_tag "Create", class: 'button tiny radius share-track-submit' %>
-              </div>
-            </div>
-          </fieldset>
-        <% end %>
-
-
+        <p>
+          <%= link_to "Create new track share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", remote: true %>
+        </p>
 
         <div id="share-links">
           <% if @track.share_links.any? %>

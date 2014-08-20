@@ -12,6 +12,7 @@ class Ability
       can :manage, Track
       can :manage, Group
       can :manage, Project
+      can :manage, ShareLink
     else
       if user.has_role? :inviter
         can :invite, User
@@ -31,8 +32,8 @@ class Ability
         track.project.users.include?(user)
       end
 
-      can :share, Track do |track|
-        track.project.users.include?(user)
+      can :manage, ShareLink do |share_link|
+        share_link.track.project.users.include?(user)
       end
     end
   end

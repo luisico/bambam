@@ -1,0 +1,26 @@
+<%= form_for @share_link, remote: true do  |f| %>
+  <fieldset>
+    <div class="row">
+      <div class="large-4 columns">
+        <div class="row collapse">
+          <div class="small-3 large-2 columns">
+            <span class="prefix"><i class="fi-calendar large"></i></span>
+          </div>
+          <div class="small-9 large-10 columns">
+            <%= f.text_field :expires_at, placeholder: "Choose expiration date" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="large-5 columns">
+        <%= f.text_field :notes, placeholder: "Enter notes here" %>
+      </div>
+
+       <%= f.hidden_field :track_id %>
+
+      <div class="large-3 columns">
+        <%= f.submit class: 'button tiny radius share-track-submit' %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
