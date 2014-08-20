@@ -19,7 +19,7 @@ class ShareLinksController < ApplicationController
   end
 
   def destroy
-    @share_link.destroy
+    @share_link = ShareLink.destroy(params[:id])
   end
 
   private

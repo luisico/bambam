@@ -1,22 +1,22 @@
-<ul class="inline-list">
-  <li>
-    <%=link_to '#' do %>
-      <i class="fi-trash remove-share-link", title="delete share link"></i>
-    <% end %>
-  </li>
-  <li><a href="#" class="fi-link show-track-link"> Link</a></li>
-  <li><a href="#" class="show-ucsc-link">UCSC track line</a></li>
-  <li>Expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
-  <li><i><%= share_link.notes %></i></li>
-</ul>
+<div id="share_link_<%= share_link.id %>" >
+  <ul class="inline-list">
+    <li><a href="#" class="fi-link show-track-link"> Link</a></li>
+    <li><a href="#" class="show-ucsc-link">UCSC track line</a></li>
+    <li>Expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
+    <li><i><%= share_link.notes %></i></li>
+    <li>
+      <%= link_to "", share_link, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "fi-trash" %>
+    </li>
+  </ul>
 
-<p class="clipboard-box track-share-link">
-  <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
-  <span id="clip_track_ucsc_line"><%= ucsc_url(share_link) %></span>
-</p>
+  <p class="clipboard-box track-share-link">
+    <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
+    <span id="clip_track_ucsc_line"><%= ucsc_url(share_link) %></span>
+  </p>
 
-<p class="clipboard-box ucsc-track-line">
-  <small>Copy and paste the track line below into the UCSC Genome Browser</small></br>
-  <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
-  <span id="clip_track_ucsc_line"><%= ucsc_track_line(share_link) %></span>
-</p>
+  <p class="clipboard-box ucsc-track-line">
+    <small>Copy and paste the track line below into the UCSC Genome Browser</small></br>
+    <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
+    <span id="clip_track_ucsc_line"><%= ucsc_track_line(share_link) %></span>
+  </p>
+</div>
