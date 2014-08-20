@@ -1,0 +1,3 @@
+$('#edit_link_<%= @share_link.id %>').hide()
+$('#share_link_<%= @share_link.id %>').append('<%= j render("form") %>');
+$('#share_link_expires_at').datepicker({ dateFormat: 'dd-mm-yy' })

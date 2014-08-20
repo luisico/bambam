@@ -8,6 +8,10 @@ class ShareLinksController < ApplicationController
     @share_link = ShareLink.new(share_link_params)
   end
 
+  def edit
+    @share_link = ShareLink.find(params[:id])
+  end
+
   def create
     @share_link = ShareLink.new(share_link_params)
     @share_link.access_token = SecureRandom.hex
@@ -15,6 +19,7 @@ class ShareLinksController < ApplicationController
   end
 
   def update
+    @share_link = ShareLink.find(params[:id])
     @share_link.update(share_link_params)
   end
 

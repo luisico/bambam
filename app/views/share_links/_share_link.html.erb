@@ -4,6 +4,7 @@
     <li><a href="#" class="show-ucsc-link">UCSC track line</a></li>
     <li>Expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
     <li><i><%= share_link.notes %></i></li>
+    <li><%= link_to "renew", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true %></li>
     <li>
       <%= link_to "", share_link, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "fi-trash" %>
     </li>

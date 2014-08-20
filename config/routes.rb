@@ -11,7 +11,7 @@ Bambam::Application.routes.draw do
 
   resources :tracks, only: [:index, :show]
 
-  resources :share_links, only: [:new, :create, :update, :destroy]
+  resources :share_links, except: [:index, :show]
 
   resources :projects
 
