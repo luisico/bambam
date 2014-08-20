@@ -78,14 +78,14 @@ describe TracksHelper do
     end
 
     it "points to the track's stream service" do
-      url = helper.ucsc_url(@track, @share_link)
+      url = helper.ucsc_url(@share_link)
       url_with_access_token = url.sub("?access_token=#{@share_link.access_token}",'')
       expect(url_with_access_token).to eq stream_services_track_url(@track)
     end
 
     context "access_token" do
       it "is encoded" do
-        uri = URI(helper.ucsc_url(@track, @share_link))
+        uri = URI(helper.ucsc_url(@share_link))
         expect(uri.query).to eq "access_token=#{@share_link.access_token}"
       end
     end
@@ -93,7 +93,7 @@ describe TracksHelper do
 
   describe "#ucsc_track_line" do
     before do
-      @track = FactoryGirl.build(:test_track, path: File.join("tmp", "tests", "mytrack"))
+      @track = FactoryGirl.create(:test_track)
       @share_link = FactoryGirl.create(:share_link, track: @track)
       allow(helper).to receive(:ucsc_url).and_return('myurl')
     end
@@ -103,51 +103,51 @@ describe TracksHelper do
     end
 
     it "starts with the word 'track'" do
-      expect(helper.ucsc_track_line(@track, @share_link)).to match /^track /
+      expect(helper.ucsc_track_line(@share_link)).to match /^track /
     end
 
     context "track type" do
       it "for bam files" do
         @track.path << '.bam'
-        expect(helper.ucsc_track_line(@track, @share_link)).to match /type=bam/
+        expect(helper.ucsc_track_line(@share_link)).to match /type=bam/
       end
 
       it "for bigwig files" do
         @track.path << '.bw'
-        expect(helper.ucsc_track_line(@track, @share_link)).to match /type=bigWig/
+        expect(helper.ucsc_track_line(@share_link)).to match /type=bigWig/
       end
 
       it "is not included when unkown" do
         @track.path << '.unk'
-        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'type='
+        expect(helper.ucsc_track_line(@share_link)).not_to include 'type='
       end
     end
 
     context "track name" do
       it "is included when known" do
-        expect(helper.ucsc_track_line(@track, @share_link)).to match /name="#{@track.name}"/
+        expect(helper.ucsc_track_line(@share_link)).to match /name="#{@track.name}"/
       end
 
       it "is not included when empty" do
         @track.name = ''
-        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'name='
+        expect(helper.ucsc_track_line(@share_link)).not_to include 'name='
       end
 
       it "is not included when nil" do
         @track.name = nil
-        expect(helper.ucsc_track_line(@track, @share_link)).not_to include 'name='
+        expect(helper.ucsc_track_line(@share_link)).not_to include 'name='
       end
     end
 
     context "track url" do
       it "points the track's stream service" do
-        expect(helper.ucsc_track_line(@track, @share_link)).to match /bigDataUrl=myurl/
+        expect(helper.ucsc_track_line(@share_link)).to match /bigDataUrl=myurl/
       end
 
       it "include credentials when requested" do
         user = FactoryGirl.build(:user)
-        expect(helper).to receive(:ucsc_url).with(@track, @share_link).once
-        helper.ucsc_track_line(@track, @share_link)
+        expect(helper).to receive(:ucsc_url).with(@share_link).once
+        helper.ucsc_track_line(@share_link)
       end
     end
   end
