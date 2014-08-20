@@ -26,6 +26,10 @@ describe User do
       context "projects" do
         it { should be_able_to(:manage, Project) }
       end
+
+      context "share_links" do
+        it { should be_able_to(:manage, ShareLink) }
+      end
     end
 
     describe "as inviter" do
@@ -101,9 +105,21 @@ describe User do
         end
 
         it { should be_able_to(:read, Track, :project => { :user_ids => @user.id }) }
-        it { should be_able_to(:share, Track, :project => { :user_ids => @user.id }) }
 
         it { should_not be_able_to(:read, @track) }
+      end
+
+      context "share_links" do
+        before do
+          @user_on_project = FactoryGirl.create(:project, users: [@user])
+          @track = FactoryGirl.create(:test_track, project: @user_on_project)
+          @share_link = FactoryGirl.create(:share_link, track: @track)
+          @other_share_link = FactoryGirl.create(:share_link)
+        end
+
+        it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
+
+        it { should_not be_able_to(:manage, @other_share_link) }
       end
     end
   end
