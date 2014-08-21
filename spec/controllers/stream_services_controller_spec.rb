@@ -306,7 +306,8 @@ describe StreamServicesController do
   describe "#has_access_token?" do
     before do
       @track = FactoryGirl.create(:test_track)
-      @access_token = FactoryGirl.create(:share_link, track_id: @track.id).access_token
+      @share_link = FactoryGirl.create(:share_link, track_id: @track.id)
+      @access_token = @share_link.access_token
     end
 
     it "should be true with valid access token" do
@@ -315,7 +316,14 @@ describe StreamServicesController do
     end
 
     it "should be false with invalid access token" do
-      controller.params = {access_token: SecureRandom.hex, id: "#{@track.id}"}
+      controller.params = {access_token: "invalid_token", id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with expired access token" do
+      @share_link.expires_at = DateTime.yesterday
+      @share_link.save
+      controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
       expect(controller.send(:has_access_token?)).to be_false
     end
 
