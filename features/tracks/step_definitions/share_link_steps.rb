@@ -2,8 +2,21 @@
 
 ### Given
 
-Given /^that track has a share link$/ do
-  @share_link = FactoryGirl.create(:share_link, track: @track)
+Given /^that track has (\d+|a|an) share links?$/ do |n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+  expect {
+    FactoryGirl.create_list(:share_link, n, track: @track)
+  }.to change(ShareLink, :count).by(n)
+  @share_link = ShareLink.last
+end
+
+Given /^that track has (\d+|a|an) expired share links?$/ do |n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+
+  expect {
+    FactoryGirl.create_list(:share_link, n, track: @track, expires_at: DateTime.yesterday)
+  }.to change(ShareLink, :count).by(n)
+  @expired_share_link = ShareLink.last
 end
 
 ### When
@@ -49,4 +62,27 @@ Then /^I should be able to renew the share link$/ do
     }
     @share_link.reload
   }.to change(@share_link, :expires_at)
+end
+
+Then /^I should be able to show and hide the expired share links$/ do
+  find(".show-expired-share-links").click
+  within(".expired") {
+    expect(page).to have_content "Expired"
+  }
+  find(".hide-expired-share-links").click
+  expect(page).not_to have_css ".expired"
+end
+
+Then /^I should be able to delete the expired share link$/ do
+  find(".show-expired-share-links").click
+  expect{
+    click_link "delete_share_link_#{@expired_share_link.id}"
+    page.evaluate_script('window.confirm = function() { return true; }')
+    sleep 1
+  }.to change(ShareLink, :count).by(-1)
+end
+
+Then /^the hide\/show link should not be visable$/ do
+  expect(page).not_to have_css ".show-expired-share-links"
+  expect(page).not_to have_css ".hide-expired-share-links"
 end

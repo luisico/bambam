@@ -1,1 +1,4 @@
 $('#share_link_<%= @share_link.id %>').remove();
+if ($('#share-links').find('.expired').length == 0) {
+  $('.share-track').find('.hide-expired-share-links').hide();
+}

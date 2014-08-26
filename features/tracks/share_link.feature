@@ -44,3 +44,22 @@ Feature: Create link to share track
     And that track has a share link
     When I am on the track page
     Then I should be able to renew the share link
+
+  Scenario: Show/hide expired links
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has a share link
+    And that track has an expired share link
+    When I am on the track page
+    Then I should be able to show and hide the expired share links
+
+  Scenario: Delete last expired share link
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has a share link
+    And that track has an expired share link
+    When I am on the track page
+    Then I should be able to delete the expired share link
+    And the hide/show link should not be visable

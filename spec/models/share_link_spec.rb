@@ -23,4 +23,17 @@ describe ShareLink do
     it { should respond_to :track }
     it { should validate_presence_of(:track_id) }
   end
+
+  describe "#expired?" do
+    before { @share_link = FactoryGirl.create(:share_link) }
+
+    it "returns false when not expired" do
+      expect(@share_link.expired?).to eq false
+    end
+
+    it "returns true when expired" do
+      @share_link.update_attribute(:expires_at, DateTime.yesterday)
+      expect(@share_link.expired?).to eq true
+    end
+  end
 end
