@@ -44,7 +44,7 @@
 
       <div class="share-track">
         <h5>Track share links</h5>
-        <p>
+        <p class="track-share-links">
           <%= link_to "Create new track share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", remote: true %>
           <% if @track.share_links.any? {|f| f.expired?} %>
             <%= link_to "| show expired links", "#", class: "show-expired-share-links" %>

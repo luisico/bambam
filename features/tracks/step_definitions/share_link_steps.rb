@@ -14,7 +14,10 @@ Given /^that track has (\d+|a|an) expired share links?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
-    FactoryGirl.create_list(:share_link, n, track: @track, expires_at: DateTime.yesterday)
+    n.times {
+      sl = FactoryGirl.build(:share_link, track: @track, expires_at: DateTime.yesterday)
+      sl.save(validate: false)
+    }
   }.to change(ShareLink, :count).by(n)
   @expired_share_link = ShareLink.last
 end
@@ -32,6 +35,18 @@ Then /^I should be able to create a shareable link$/ do
       click_button 'Create Share link'
     }
   }.to change(ShareLink, :count).by(1)
+end
+
+Then /^I should not be able to create a shareable link with expired date$/ do
+  expect{
+    click_link "Create new track share link"
+    expect(page).not_to have_content "Create new track share link"
+    within('.new_share_link') {
+      fill_in 'share_link[expires_at]', with: DateTime.yesterday
+      click_button 'Create Share link'
+    }
+  }.not_to change(ShareLink, :count)
+  expect(page).to have_content("can't be in the past")
 end
 
 Then /^I should be able to view the share link$/ do
@@ -62,6 +77,19 @@ Then /^I should be able to renew the share link$/ do
     }
     @share_link.reload
   }.to change(@share_link, :expires_at)
+end
+
+Then /^I should not be able to renew the share link with expired date$/ do
+  expect{
+    click_link "edit_link_#{@share_link.id}"
+    within(".edit_share_link") {
+      fill_in 'share_link[expires_at]', with: DateTime.yesterday
+      click_button 'Update Share link'
+      sleep 1
+    }
+    @share_link.reload
+  }.not_to change(@share_link, :expires_at)
+  expect(page).to have_content "can't be in the past"
 end
 
 Then /^I should be able to show and hide the expired share links$/ do

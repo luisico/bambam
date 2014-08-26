@@ -1,5 +1,11 @@
 <%= form_for @share_link, remote: true do  |f| %>
   <fieldset>
+    <% if @share_link.errors.any? %>
+      <div class="field">
+        <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@share_link.errors.count) %> below:</p>
+      </div>
+    <% end %>
+
     <div class="row">
       <div class="large-4 columns">
         <div class="row collapse">

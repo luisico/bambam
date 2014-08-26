@@ -321,8 +321,7 @@ describe StreamServicesController do
     end
 
     it "should be false with expired access token" do
-      @share_link.expires_at = DateTime.yesterday
-      @share_link.save
+      @share_link.update_attribute(:expires_at, DateTime.yesterday)
       controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
       expect(controller.send(:has_access_token?)).to be_false
     end
