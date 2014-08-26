@@ -11,6 +11,13 @@ Feature: Create link to share track
     When I am on the track page
     Then I should be able to create a shareable link
 
+  Scenario: Cancel the creation of a shareable link
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    When I am on the track page
+    Then I should be able to cancel the creation a shareable link
+
   Scenario: Cannot create shareable link with expired date
     Given I am signed in
     And I belong to a project
@@ -51,6 +58,14 @@ Feature: Create link to share track
     And that track has a share link
     When I am on the track page
     Then I should be able to renew the share link
+
+  Scenario: Cancel the renewal of a shareable link
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has a share link
+    When I am on the track page
+    Then I should be able to cancel the renewal the share link
 
   Scenario: Cannot renew a share link with expired date
     Given I am signed in

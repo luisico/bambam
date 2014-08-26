@@ -18,14 +18,17 @@
         </div>
       </div>
 
-      <div class="large-5 columns">
+      <div class="large-8 columns">
         <%= f.text_field :notes, placeholder: "Enter notes here" %>
       </div>
 
        <%= f.hidden_field :track_id %>
+    </div>
 
-      <div class="large-3 columns">
+    <div class="row">
+      <div class="small-12 columns">
         <%= f.submit class: 'button tiny radius share-track-submit' %>
+        <%= link_to "Cancel", "#", class: 'button tiny radius share-track-cancel' %>
       </div>
     </div>
   </fieldset>

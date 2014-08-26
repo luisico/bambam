@@ -37,6 +37,18 @@ Then /^I should be able to create a shareable link$/ do
   }.to change(ShareLink, :count).by(1)
 end
 
+Then /^I should be able to cancel the creation a shareable link$/ do
+  expect{
+    click_link "Create new track share link"
+    expect(page).not_to have_content "Create new track share link"
+    within('.new_share_link') {
+      fill_in 'share_link[expires_at]', with: Time.now + 3.days
+      click_link 'Cancel'
+    }
+  }.not_to change(ShareLink, :count)
+  expect(page).not_to have_css('.new_share_link')
+end
+
 Then /^I should not be able to create a shareable link with expired date$/ do
   expect{
     click_link "Create new track share link"
@@ -77,6 +89,17 @@ Then /^I should be able to renew the share link$/ do
     }
     @share_link.reload
   }.to change(@share_link, :expires_at)
+end
+
+Then /^I should be able to cancel the renewal the share link$/ do
+  expect{
+    click_link "edit_link_#{@share_link.id}"
+    within(".edit_share_link") {
+      fill_in 'share_link[expires_at]', with: Time.now + 5.days
+      click_link 'Cancel'
+    }
+    @share_link.reload
+  }.not_to change(@share_link, :expires_at)
 end
 
 Then /^I should not be able to renew the share link with expired date$/ do

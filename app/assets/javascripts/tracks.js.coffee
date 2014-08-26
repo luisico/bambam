@@ -21,3 +21,13 @@ jQuery ->
     $(this).text('| show expired links')
     $(this).addClass('show-expired-share-links').removeClass('hide-expired-share-links')
     event.preventDefault()
+
+  $('.share-track').on 'click', '.share-track-cancel', (event) ->
+    if $(this).closest('form').hasClass('edit_share_link')
+      $(this).closest('form').siblings().first().children().find('.edit-share-link-link').show()
+      $(this).closest('form').remove()
+      event.preventDefault()
+    else
+      $(this).closest('form').remove()
+      $('#new_link').show()
+      event.preventDefault()
