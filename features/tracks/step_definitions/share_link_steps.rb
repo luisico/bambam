@@ -37,6 +37,13 @@ Then /^I should be able to create a shareable link$/ do
   }.to change(ShareLink, :count).by(1)
 end
 
+Then /^I should see "(.*?)" in the notes field$/ do |arg1|
+  share_link_line = find("#share_link_#{ShareLink.last.id}")
+  within(share_link_line) {
+    expect(page).to have_content arg1
+  }
+end
+
 Then /^I should be able to cancel the creation a shareable link$/ do
   expect{
     click_link "Create new track share link"

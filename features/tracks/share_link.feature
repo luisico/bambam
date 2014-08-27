@@ -10,6 +10,7 @@ Feature: Create link to share track
     And there is a bam track in that project
     When I am on the track page
     Then I should be able to create a shareable link
+    And I should see "No notes" in the notes field
 
   Scenario: Cancel the creation of a shareable link
     Given I am signed in
