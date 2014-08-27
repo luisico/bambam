@@ -6,4 +6,9 @@
   $('.new_share_link').remove();
   $('#new_link').show();
   $('#share-links').append('<%= j render(@share_link) %>');
+  $('#share-links').children().last().find('i.copy-to-clipboard').bind("click", function(){
+    id = "#" + $(this).data('clipboard-id');
+    text = $(this).siblings(id).text();
+    window.prompt("Press Ctrl-C or Cmd-C to copy to clipboard", text);
+  });
 <% end %>
