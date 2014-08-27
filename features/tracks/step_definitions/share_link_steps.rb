@@ -44,6 +44,13 @@ Then /^I should see "(.*?)" in the notes field$/ do |arg1|
   }
 end
 
+Then /^I should see a link to "(.*?)" the share link$/ do |arg1|
+  share_link_line = find("#share_link_#{ShareLink.last.id}")
+  within(share_link_line) {
+    expect(page).to have_content arg1
+  }
+end
+
 Then /^I should be able to cancel the creation a shareable link$/ do
   expect{
     click_link "Create new track share link"
@@ -124,8 +131,9 @@ end
 
 Then /^I should be able to show and hide the expired share links$/ do
   find(".show-expired-share-links").click
-  within(".expired") {
+  within("#share_link_#{ShareLink.last.id}") {
     expect(page).to have_content "Expired"
+    expect(page).to have_content "renew"
   }
   find(".hide-expired-share-links").click
   expect(page).not_to have_css ".expired"

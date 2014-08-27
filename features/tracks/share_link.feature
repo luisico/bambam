@@ -11,6 +11,7 @@ Feature: Create link to share track
     When I am on the track page
     Then I should be able to create a shareable link
     And I should see "No notes" in the notes field
+    And I should see a link to "edit" the share link
 
   Scenario: Cancel the creation of a shareable link
     Given I am signed in

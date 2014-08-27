@@ -13,7 +13,7 @@
     <% end %>
     <li><i><%= share_link.notes %></i></li>
     <li>
-      <%= link_to "renew", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true, class: "edit-share-link-link" %>
+      <%= link_to "edit", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true, class: "edit-share-link-link" %>
     </li>
     <li>
       <%= link_to "", share_link, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "fi-trash", id: "delete_share_link_#{share_link.id}" %>

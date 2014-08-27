@@ -8,6 +8,7 @@ jQuery ->
     event.preventDefault()
 
   $(document).ready ->
+    $('#share-links').find('.expired').siblings().find('a.edit-share-link-link').text('renew')
     $('#share-links').find('.expired').parent().hide()
 
   $('.share-track').on 'click', '.show-expired-share-links', (event) ->
