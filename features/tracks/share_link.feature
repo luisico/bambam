@@ -13,6 +13,14 @@ Feature: Create link to share track
     And I should see "No notes" in the notes field
     And I should see a link to "edit" the share link
 
+  Scenario: Shareable link expireation date defaults to 2 weeks
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    When I am on the track page
+    Then I should be able to create a shareable link without entering date
+    And I should see an expiration date of "14 days"
+
   Scenario: Cancel the creation of a shareable link
     Given I am signed in
     And I belong to a project

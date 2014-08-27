@@ -15,7 +15,6 @@ describe ShareLink do
 
   describe "expires_at" do
     it { should respond_to :expires_at }
-    it { should validate_presence_of(:expires_at) }
   end
 
   describe "track_id" do
@@ -47,6 +46,22 @@ describe ShareLink do
     it "should add expires_at errors to error messages" do
       @share_link.valid?
       expect(@share_link.errors[:expires_at]).to be_present
+    end
+  end
+
+  describe "#default_values" do
+    before { @share_link = FactoryGirl.build(:share_link) }
+
+    it "sets notes equal to 'No notes'" do
+      @share_link.notes = ""
+      @share_link.save
+      expect(@share_link.notes).to eq 'No notes'
+    end
+
+    it "sets expires_at equal to in 2 weeks" do
+      @share_link.expires_at = ""
+      @share_link.save
+      expect(@share_link.expires_at.strftime('%d, %B %Y')).to eq (DateTime.now + 2.weeks).strftime('%d, %B %Y')
     end
   end
 end

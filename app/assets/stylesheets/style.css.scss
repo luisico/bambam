@@ -86,12 +86,23 @@ i.left-buffer {
 span.text-color-grey {
   color: #A8A8A8;
 }
+
 span.small-text {
   font-size: rem-calc(10);
   margin-top: 0;
 }
 
+span.medium-text {
+  font-size: rem-calc(12);
+  margin-top: 0;
+  margin-bottom: rem-calc(10);
+}
+
 input.with-instructions {
   margin-top: rem-calc(5);
   margin-bottom: rem-calc(5)
+}
+
+div.margin-bottom {
+  margin-bottom: 0 !important;
 }

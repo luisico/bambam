@@ -8,7 +8,7 @@
 
     <div class="row">
       <div class="large-5 columns">
-        <div class="row collapse">
+        <div class="row collapse margin-bottom">
           <div class="small-3 large-2 columns">
             <span class="prefix"><i class="fi-calendar large"></i></span>
           </div>
@@ -16,6 +16,9 @@
             <%= f.datetime_field :expires_at, placeholder: "Choose expiration date", value: (@share_link.expires_at.blank? ? '' : @share_link.expires_at.strftime('Expires on %d, %B %Y')) %>
           </div>
         </div>
+        <span class="text-color-grey medium-text">
+          Expiration date defaults to two weeks from today
+        </span>
       </div>
 
       <div class="large-7 columns">
