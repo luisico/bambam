@@ -13,6 +13,19 @@ Feature: Create link to share track
     And I should see "No notes" in the notes field
     And I should see a link to "edit" the share link
 
+  Scenario Outline: Create shareable link with date short link
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    When I am on the track page
+    Then I should be able to create a link that expires in "<time>"
+
+    Examples:
+      | time    |
+      | 1 week  |
+      | 1 month |
+      | 1 year  |
+
   Scenario: Shareable link expireation date defaults to 2 weeks
     Given I am signed in
     And I belong to a project
@@ -84,6 +97,20 @@ Feature: Create link to share track
     And that track has a share link
     When I am on the track page
     Then I should not be able to renew the share link with expired date
+
+  Scenario Outline: Renew a share link with date short link
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has a share link
+    When I am on the track page
+    Then I should be able to renew the link with date that expires in "<time>"
+
+    Examples:
+      | time    |
+      | 1 week  |
+      | 1 month |
+      | 1 year  |
 
   Scenario: Show/hide expired links
     Given I am signed in

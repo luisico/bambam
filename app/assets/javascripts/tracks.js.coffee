@@ -32,3 +32,32 @@ jQuery ->
       $(this).closest('form').remove()
       $('#new_link').show()
       event.preventDefault()
+
+  $('.share-track').on 'click', '.one-week', (event) ->
+    now = new Date()
+    now.setDate(now.getDate() + 7)
+    time = format_date(now)
+    $(this).closest('form').find('#share_link_expires_at').val(time)
+    event.preventDefault()
+
+  $('.share-track').on 'click', '.one-month', (event) ->
+    now = new Date()
+    now.setMonth(now.getMonth() + 1)
+    time = format_date(now)
+    $(this).closest('form').find('#share_link_expires_at').val(time)
+    event.preventDefault()
+
+  $('.share-track').on 'click', '.one-year', (event) ->
+    now = new Date()
+    now.setFullYear(now.getFullYear() + 1)
+    time = format_date(now)
+    $(this).closest('form').find('#share_link_expires_at').val(time)
+    event.preventDefault()
+
+  format_date = (time) ->
+    m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+    curr_date = time.getDate();
+    curr_month = time.getMonth();
+    curr_year = time.getFullYear();
+    return ("Expires on " + curr_date + ", " + m_names[curr_month] + " " + curr_year);

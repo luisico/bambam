@@ -1,5 +1,15 @@
 ### Methods
 
+def expiration_date(time)
+  if time == "1 week"
+    Date.today + 1.week
+  elsif time == "1 month"
+    Date.today + 1.month
+  elsif time == "1 year"
+    Date.today + 1.year
+  end
+end
+
 ### Given
 
 Given /^that track has (\d+|a|an) share links?$/ do |n|
@@ -35,6 +45,19 @@ Then /^I should be able to create a shareable link$/ do
       click_button 'Create Share link'
     }
   }.to change(ShareLink, :count).by(1)
+end
+
+Then /^I should be able to create a link that expires in "(.*?)"$/ do |time|
+  expiration = expiration_date(time)
+  expect{
+    click_link "Create new track share link"
+    expect(page).not_to have_content "Create new track share link"
+    within('.new_share_link') {
+      click_link time
+      click_button 'Create Share link'
+    }
+  }.to change(ShareLink, :count).by(1)
+  expect(ShareLink.last.expires_at.to_s[0..9]).to eq expiration.to_s
 end
 
 Then /^I should be able to create a shareable link without entering date$/ do
@@ -119,6 +142,20 @@ Then /^I should be able to renew the share link$/ do
     }
     @share_link.reload
   }.to change(@share_link, :expires_at)
+end
+
+Then /^I should be able to renew the link with date that expires in "(.*?)"$/ do |time|
+  expiration = expiration_date(time)
+  expect{
+    click_link "edit_link_#{@share_link.id}"
+    within(".edit_share_link") {
+      click_link time
+      click_button 'Update Share link'
+      sleep 1
+    }
+    @share_link.reload
+  }.to change(@share_link, :expires_at)
+  expect(@share_link.expires_at.to_s[0..9]).to eq expiration.to_s
 end
 
 Then /^I should be able to cancel the renewal the share link$/ do
