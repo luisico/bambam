@@ -54,6 +54,10 @@ i.margin-right {
   margin-right: rem-calc(5);
 }
 
+.big-margin-right {
+  margin-right: rem-calc(20) !important;
+}
+
 i.left-buffer {
   margin-left: rem-calc(15);
 }

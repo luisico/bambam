@@ -48,9 +48,9 @@
           Create and manage links for UCSC browser & sharing with outside collaborators
         </span class="">
         <p class="track-share-links medium-margin-top">
-          <%= link_to "Create new track share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", remote: true %>
+          <%= link_to "Create new share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", class: "big-margin-right", remote: true %>
           <% if @track.share_links.any? {|f| f.expired?} %>
-            <%= link_to "| show expired links", "#", class: "show-expired-share-links" %>
+            <%= link_to "show expired links", "#", class: "show-expired-share-links" %>
           <% end %>
         </p>
 

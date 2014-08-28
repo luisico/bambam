@@ -16,7 +16,7 @@ Feature: Show a track
     And I should see button to copy the track path to the clipboard
     And I should see the track's timestamps
     And I should see a link to open the track in IGV
-    And I should see a link to "Create new track share link"
+    And I should see a link to "Create new share link"
 
    Examples:
     | type | status     |
