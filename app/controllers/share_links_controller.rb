@@ -29,10 +29,6 @@ class ShareLinksController < ApplicationController
 
   private
 
-  def convert_datepicker_time(time)
-    Date.strptime(time, "%m/%d/%Y").strftime("%d/%m/%Y")
-  end
-
   def share_link_params
     params.require(:share_link).permit(:access_token, :expires_at, :track_id, :notes)
   end
