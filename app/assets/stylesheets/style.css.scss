@@ -83,6 +83,10 @@ div.margin-bottom {
   margin-bottom: 0 !important;
 }
 
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
 li.headline {
   font-size: rem-calc(20)
 }
@@ -96,11 +100,22 @@ span.small-text {
   margin-top: 0;
 }
 
-.medium-text {
-  font-size: rem-calc(12) !important;
-  margin-top: 0 !important;
+.medium-margin-bottom {
   margin-bottom: rem-calc(10) !important;
 }
+
+.large-margin-bottom {
+  margin-bottom: rem-calc(15) !important;
+}
+
+.medium-margin-top {
+  margin-top: rem-calc(10) !important;
+}
+
+.medium-text {
+  font-size: rem-calc(12) !important;
+}
+
 
 input.with-instructions {
   margin-top: rem-calc(5);
