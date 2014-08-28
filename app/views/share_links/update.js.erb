@@ -5,9 +5,7 @@
 <% else %>
   $('#share-links').html("<%= escape_javascript(render(@share_link.track.share_links)) %>");
   $('#share-links').children().find('i.copy-to-clipboard').bind("click", function(){
-    id = "#" + $(this).data('clipboard-id');
-    text = $(this).siblings(id).text();
-    window.prompt("Press Ctrl-C or Cmd-C to copy to clipboard", text);
+    copy_to_clipboard(this);
   });
   $('.expired').parent().hide()
 <% end %>
