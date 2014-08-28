@@ -79,7 +79,7 @@ div.margin-bottom {
   margin-bottom: 0 !important;
 }
 
-ul.margin-bottom {
+.no-margin-bottom {
   margin-bottom: 0 !important;
 }
 
@@ -91,19 +91,15 @@ li.sub-text {
   font-size: rem-calc(15)
 }
 
-span.text-color-grey {
-  color: #A8A8A8;
-}
-
 span.small-text {
   font-size: rem-calc(10);
   margin-top: 0;
 }
 
-span.medium-text {
-  font-size: rem-calc(12);
-  margin-top: 0;
-  margin-bottom: rem-calc(10);
+.medium-text {
+  font-size: rem-calc(12) !important;
+  margin-top: 0 !important;
+  margin-bottom: rem-calc(10) !important;
 }
 
 input.with-instructions {
@@ -111,11 +107,6 @@ input.with-instructions {
   margin-bottom: rem-calc(5)
 }
 
-p.text-color-grey {
-  color: #A8A8A8;
-}
-
-p.medium-text {
-  font-size: rem-calc(12);
-  margin-top: 0;
+.text-color-grey {
+  color: #A8A8A8 !important;
 }

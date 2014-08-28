@@ -13,17 +13,17 @@
             <span class="prefix"><i class="fi-calendar large-calendar"></i></span>
           </div>
           <div class="small-9 large-10 columns">
-            <%= f.datetime_field :expires_at, placeholder: "Choose expiration date", value: (@share_link.expires_at.blank? ? '' : @share_link.expires_at.strftime('Expires on %d, %B %Y')) %>
+            <%= f.datetime_field :expires_at, placeholder: "Choose expiration date", class: "no-margin-bottom", value: (@share_link.expires_at.blank? ? '' : @share_link.expires_at.strftime('Expires on %d, %B %Y')) %>
           </div>
         </div>
-        <ul class="inline-list margin-bottom">
-          <li><%= link_to "1 week", "#", class: "one-week" %></li>
-          <li><%= link_to "1 month", "#", class: "one-month" %></li>
-          <li><%= link_to "1 year", "#", class: "one-year" %></li>
-        </ul>
-        <p class="text-color-grey medium-text">
+        <span class="text-color-grey medium-text">
           Expiration date defaults to two weeks from today
-        </p>
+        </span>
+        <ul class="inline-list no-margin-bottom">
+          <li><%= link_to "1 week", "#", class: "one-week medium-text" %></li>
+          <li><%= link_to "1 month", "#", class: "one-month medium-text" %></li>
+          <li><%= link_to "1 year", "#", class: "one-year medium-text" %></li>
+        </ul>
       </div>
 
       <div class="large-7 columns">
@@ -35,8 +35,8 @@
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.submit class: 'button tiny radius share-track-submit' %>
-        <%= link_to "Cancel", "#", class: 'button tiny radius share-track-cancel' %>
+        <%= f.submit class: 'button tiny radius share-track-submit no-margin-bottom' %>
+        <%= link_to "Cancel", "#", class: 'button tiny radius share-track-cancel no-margin-bottom' %>
       </div>
     </div>
   </fieldset>
