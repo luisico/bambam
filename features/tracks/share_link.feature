@@ -10,7 +10,7 @@ Feature: Create link to share track
     And there is a bam track in that project
     When I am on the track page
     Then I should be able to create a shareable link
-    And I should see "No notes" in the notes field
+    And I should see "no notes" in the notes field
     And I should see a link to "edit" the share link
 
   Scenario Outline: Create shareable link with date short link

@@ -52,10 +52,10 @@ describe ShareLink do
   describe "#default_values" do
     before { @share_link = FactoryGirl.build(:share_link) }
 
-    it "sets notes equal to 'No notes'" do
+    it "sets notes equal to 'no notes'" do
       @share_link.notes = ""
       @share_link.save
-      expect(@share_link.notes).to eq 'No notes'
+      expect(@share_link.notes).to eq 'no notes'
     end
 
     it "sets expires_at equal to in 2 weeks" do

@@ -185,7 +185,7 @@ end
 Then /^I should be able to show and hide the expired share links$/ do
   find(".show-expired-share-links").click
   within("#share_link_#{ShareLink.last.id}") {
-    expect(page).to have_content "Expired"
+    expect(page).to have_content "expired"
     expect(page).to have_content "renew"
   }
   find(".hide-expired-share-links").click

@@ -7,11 +7,11 @@
       <a href="#" class="show-ucsc-link" id="show_ucsc_link_<%= share_link.id %>">UCSC track line</a>
     </li>
     <% if share_link.expired? %>
-      <li class="expired">Expired</li>
+      <li class="expired">expired</li>
     <% else %>
-      <li>Expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
+      <li>expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
     <% end %>
-    <li><i><%= share_link.notes %></i></li>
+    <li><i class="text-color-grey"><%= share_link.notes %></i></li>
     <li>
       <%= link_to "edit", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true, class: "edit-share-link-link" %>
     </li>

@@ -11,7 +11,7 @@ class ShareLink < ActiveRecord::Base
   end
 
   def default_values
-    self.notes = "No notes" if self.notes.blank?
+    self.notes = "no notes" if self.notes.blank?
     self.expires_at = Time.now + 2.weeks if self.expires_at.blank?
   end
 
