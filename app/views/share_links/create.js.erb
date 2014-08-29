@@ -6,6 +6,7 @@
   $('.new_share_link').remove();
   $('#new_link').show();
   $('#share-links').append('<%= j render(@share_link) %>');
+  $('#share-links').children().last().effect("highlight", {}, 1500);;
   $('#share-links').children().last().find('i.copy-to-clipboard').bind("click", function() {
     copy_to_clipboard(this);
   });
