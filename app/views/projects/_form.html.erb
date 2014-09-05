@@ -13,7 +13,7 @@
           <%= f.text_field :name, size: 60, placeholder: 'Project name' %>
         </div>
 
-        <h4><i class="fi-torsos large margin-rigth"></i>Users</h4>
+        <h4 id="project-users"><i class="fi-torsos large margin-rigth"></i>Users</h4>
         <div class="field">
           <% User.all.each do |user| %>
             <% if !@project.owner && user == current_user %>
