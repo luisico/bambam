@@ -2,16 +2,68 @@ require 'spec_helper'
 
 describe ShareLinksController do
   before do
-    @admin = FactoryGirl.create(:admin)
     @project = FactoryGirl.create(:project)
     @track = FactoryGirl.create(:test_track, project: @project)
+    @user = FactoryGirl.create(:user, projects: [@project])
+  end
+
+  describe "GET 'new'" do
+    context "as a signed in user and project member" do
+      before { sign_in @user }
+
+      it "should be successful" do
+        get :new, share_link: {track_id: @track.id}, format: 'js'
+        expect(response).to be_success
+        expect(response).to render_template :new
+      end
+
+      it "should build a new share link" do
+        get :new, share_link: {track_id: @track.id}, format: 'js'
+        expect(assigns(:share_link)).to be_new_record
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        get :new, share_link: {track_id: @track.id}, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+    end
+  end
+
+  describe "GET 'edit'" do
+    before { @share_link = FactoryGirl.create(:share_link, track: @track) }
+
+    context "as a signed in user and project member" do
+      before { sign_in @user }
+
+      it "should be successful" do
+        get :edit, id: @share_link, format: 'js'
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it "should return the share link" do
+        get :edit, id: @share_link, format: 'js'
+        expect(assigns(:share_link)).to eq @share_link
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        get :edit, id: @share_link, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+    end
   end
 
   describe "Post 'create'" do
     before { @share_link_attr = FactoryGirl.attributes_for(:share_link).merge(track_id: @track.id) }
 
-    context "as an admin" do
-      before { sign_in @admin }
+    context "as a signed in user and project member" do
+      before { sign_in @user }
 
       context "with valid parameters" do
         it "should be a success" do
@@ -19,7 +71,7 @@ describe ShareLinksController do
           expect(response).to be_success
         end
 
-        it "should create a new project" do
+        it "should create a new share link" do
           expect{
             post :create, share_link: @share_link_attr, :format => 'js'
           }.to change(ShareLink, :count).by(1)
@@ -27,7 +79,7 @@ describe ShareLinksController do
       end
 
       context "with invalid parameters" do
-        it "should not create a new share_link" do
+        it "should not create a new share link" do
           expect{
             post :create, share_link: @share_link_attr.merge(track_id: ""), :format => 'js'
           }.not_to change(ShareLink, :count)
@@ -35,30 +87,14 @@ describe ShareLinksController do
       end
     end
 
-    # context "as a signed in user" do
-    #   before { sign_in FactoryGirl.create(:user) }
-
-    #   it "should redirect to the projects page" do
-    #     post :create, share_link: @share_link_attr, :format => 'js'
-    #     expect(response).not_to be_success
-    #     expect(response).to redirect_to projects_path
-    #   end
-
-    #   it "should not create a new project" do
-    #     expect {
-    #       post :create, share_link: @share_link_attr, :format => 'js'
-    #     }.not_to change(ShareLink, :count)
-    #   end
-    # end
-
     context "as a visitor" do
-      # it "should redirect to the sign in page" do
-      #   post :create, share_link: @share_link_attr, :format => 'js'
-      #   expect(response).not_to be_success
-      #   expect(response).to redirect_to new_user_session_url
-      # end
+      it "should return unauthorized response" do
+        post :create, share_link: @share_link_attr, :format => 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
 
-      it "should not create a new project" do
+      it "should not create a new share link" do
         expect{
           post :create, share_link: @share_link_attr, :format => 'js'
         }.not_to change(ShareLink, :count)
@@ -66,147 +102,92 @@ describe ShareLinksController do
     end
   end
 
-  # describe "Patch 'update'" do
-  #   before do
-  #    @project = @projects.first
-  #    @new_project = FactoryGirl.attributes_for(:project)
-  #   end
+  describe "Patch 'update'" do
+    before do
+     @share_link = FactoryGirl.create(:share_link, track: @track)
+     @new_share_link = FactoryGirl.attributes_for(:share_link)
+    end
 
-  #   context "as an admin" do
-  #     before { sign_in @admin }
+    context "as a signed in user and project member" do
+      before { sign_in @user }
 
-  #     context 'with valid parameters' do
-  #       before { @user = FactoryGirl.create(:user) }
+      context 'with valid parameters' do
+        it "should redirect to the updated show page" do
+          patch :update, id: @share_link, share_link: @new_share_link.merge(track_id: [@track.id]), :format => 'js'
+          expect(response).to be_success
+        end
 
-  #       it "should redirect to the updated show page" do
-  #         patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
-  #         expect(response).to redirect_to @project
-  #       end
+        it "should update the share link" do
+          patch :update, id: @share_link, share_link: @new_share_link.merge(track_id: [@track.id]), :format => 'js'
+          @share_link.reload
+          expect(assigns(:share_link)).to eq @share_link
+          expect(@share_link.expires_at).to eq @new_share_link[:expires_at]
+          expect(@share_link.track).to eq @track
+        end
+      end
 
-  #       it "should update the project" do
-  #         patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
-  #         @project.reload
-  #         expect(assigns(:project)).to eq @project
-  #         expect(@project.name).to eq @new_project[:name]
-  #         expect(@project.users).to include @user
-  #       end
-  #     end
+      context "with invalid parameters" do
+        it "should render the update template" do
+          patch :update, id: @share_link, share_link: {expires_at: "#{Date.yesterday}"}, :format => 'js'
+          expect(response).to be_success
+          expect(response).to render_template :update
+        end
 
-  #     context "with invalid parameters" do
-  #       it "should render the edit template" do
-  #         patch :update, id: @project, project: {name: ''}
-  #         expect(response).to be_success
-  #         expect(response).to render_template :edit
-  #       end
+        it "should not change the share link's attributes" do
+          expect {
+            patch :update, id: @share_link, share_link: {expires_at: "#{Date.yesterday}"}, :format => 'js'
+            @share_link.reload
+          }.not_to change(@share_link, :expires_at)
+          expect(assigns(:share_link)).to eq @share_link
+        end
+      end
+    end
 
-  #       it "should not change the project's attributes" do
-  #         expect {
-  #           patch :update, id: @project, project: {name: ''}
-  #           @project.reload
-  #         }.not_to change(@project, :name)
-  #         expect(assigns(:project)).to eq @project
-  #       end
-  #     end
-  #   end
+    context "as a visitor" do
+      it "should return unauthorized" do
+        patch :update, id: @share_link, share_link: @new_share_link.merge(track_id: [@track.id]), :format => 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
 
-  #   context "as a signed in user and project member" do
-  #     before do
-  #       sign_in FactoryGirl.create(:user, projects: [@project])
-  #       @track = FactoryGirl.create(:test_track, project: @project)
-  #     end
+      it "should not change the share link's attributes" do
+        expect{
+          patch :update, id: @share_link, share_link: @new_share_link.merge(track_id: [@track.id]), :format => 'js'
+        }.not_to change(@share_link, :expires_at)
+      end
+    end
+  end
 
-  #     context 'with valid parameters' do
-  #       it "should redirect to the updated show page" do
-  #         patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-  #         expect(response).to redirect_to @project
-  #       end
+  describe "Delete 'destroy'" do
+    before { @share_link = FactoryGirl.create(:share_link, track: @track) }
+    context "as a signed in user and project member" do
+      before { sign_in @user }
 
-  #       it "should update the project" do
-  #         patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-  #         @track.reload
-  #         expect(assigns(:project)).to eq @project
-  #         expect(@track.name).to eq('new_name')
-  #       end
-  #     end
+      it "should be a success" do
+        delete :destroy, id: @share_link, :format => 'js'
+        expect(response).to be_success
+      end
 
-  #     context "with invalid parameters" do
-  #       it "should render the edit template" do
-  #         patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
-  #         expect(response).to be_success
-  #         expect(response).to render_template :edit
-  #       end
+      it "should delete the share link" do
+        expect{
+          delete :destroy, id: @share_link, :format => 'js'
+        }.to change(ShareLink, :count).by(-1)
+        expect(assigns(:share_link)).to eq @share_link
+      end
+    end
 
-  #       it "should not change the track's attributes" do
-  #         expect {
-  #           patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
-  #           @track.reload
-  #         }.not_to change(@track, :name)
-  #         expect(assigns(:project)).to eq @project
-  #       end
-  #     end
-  #   end
+    context "as a visitor" do
+      it "should return unauthorized" do
+        delete :destroy, id: @share_link, :format => 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
 
-  #   context "as a visitor" do
-  #     it "should redirect to the sign in page" do
-  #       patch :update, id: @project, project: @new_project
-  #       expect(response).not_to be_success
-  #       expect(response).to redirect_to new_user_session_url
-  #     end
-
-  #     it "should not change the project's attributes" do
-  #       expect{
-  #         patch :update, id: @project, project: @new_project
-  #       }.not_to change(@project, :name)
-  #     end
-  #   end
-  # end
-
-  # describe "Delete 'destroy'" do
-  #   before { @project = FactoryGirl.create(:project, owner: @admin) }
-
-  #   context "as an admin" do
-  #     before { sign_in @admin }
-
-  #     it "should redirect to project#index" do
-  #       delete :destroy, id: @project
-  #       expect(response).to redirect_to projects_url
-  #     end
-
-  #     it "should delete the project" do
-  #       expect{
-  #         delete :destroy, id: @project
-  #       }.to change(Project, :count).by(-1)
-  #       expect(assigns(:project)).to eq @project
-  #     end
-  #   end
-
-  #   context "as a signed in user" do
-  #     before { sign_in FactoryGirl.create(:user) }
-  #     it "should redirect to the projects page" do
-  #       delete :destroy, id: @project
-  #       expect(response).not_to be_success
-  #       expect(response).to redirect_to projects_path
-  #     end
-
-  #     it "should not delete the project" do
-  #       expect{
-  #         delete :destroy, id: @project
-  #       }.not_to change(Project, :count)
-  #     end
-  #   end
-
-  #   context "as a visitor" do
-  #     it "should redirect to the sign in page" do
-  #       delete :destroy, id: @project
-  #       expect(response).not_to be_success
-  #       expect(response).to redirect_to new_user_session_url
-  #     end
-
-  #     it "should not delete the project" do
-  #       expect{
-  #         delete :destroy, id: @project
-  #       }.not_to change(Project, :count)
-  #     end
-  #   end
-  # end
+      it "should not delete the share link" do
+        expect{
+          delete :destroy, id: @share_link, :format => 'js'
+        }.not_to change(ShareLink, :count)
+      end
+    end
+  end
 end
