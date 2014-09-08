@@ -23,6 +23,20 @@ def create_shareable_link(opts={})
   expect(page).not_to have_css('.new_share_link') unless opts[:keep]
 end
 
+def renew_shared_link(shared_link, opts={})
+  click_link "edit_link_#{shared_link.id}"
+  within(".edit_share_link") {
+    yield if block_given?
+    if opts[:cancel]
+      click_link 'Cancel'
+    else
+      click_button 'Update Share link'
+    end
+  }
+  expect(page).not_to have_css(".edit_share_link") unless opts[:keep]
+  shared_link.reload
+end
+
 ### Given
 
 Given /^that track has (\d+|a|an) share links?$/ do |n|
@@ -129,50 +143,35 @@ end
 
 Then /^I should be able to renew the share link$/ do
   expect{
-    click_link "edit_link_#{@share_link.id}"
-    within(".edit_share_link") {
+    renew_shared_link @share_link do
       fill_in 'share_link[expires_at]', with: Time.now + 5.days
-      click_button 'Update Share link'
-    }
-    expect(page).not_to have_css ".edit_share_link"
-    @share_link.reload
+    end
   }.to change(@share_link, :expires_at)
 end
 
 Then /^I should be able to renew the link with date that expires in "(.*?)"$/ do |time|
   expiration = expiration_date(time)
   expect{
-    click_link "edit_link_#{@share_link.id}"
-    within(".edit_share_link") {
+    renew_shared_link @share_link do
       click_link time
-      click_button 'Update Share link'
-    }
-    expect(page).not_to have_css ".edit_share_link"
-    @share_link.reload
+    end
   }.to change(@share_link, :expires_at)
   expect(@share_link.expires_at.to_s[0..9]).to eq expiration.to_s
 end
 
-Then /^I should be able to cancel the renewal the share link$/ do
-  expect{
-    click_link "edit_link_#{@share_link.id}"
-    within(".edit_share_link") {
-      click_link 'Cancel'
-    }
-    @share_link.reload
-  }.not_to change(@share_link, :expires_at)
-end
-
 Then /^I should not be able to renew the share link with expired date$/ do
   expect{
-    click_link "edit_link_#{@share_link.id}"
-    within(".edit_share_link") {
+    renew_shared_link @share_link, keep: true do
       fill_in 'share_link[expires_at]', with: DateTime.yesterday
-      click_button 'Update Share link'
-    }
-    @share_link.reload
+    end
   }.not_to change(@share_link, :expires_at)
   expect(page).to have_content "can't be in the past"
+end
+
+Then /^I should be able to cancel the renewal the share link$/ do
+  expect{
+    renew_shared_link @share_link, cancel: true
+  }.not_to change(@share_link, :expires_at)
 end
 
 Then /^I should be able to show and hide the expired share links$/ do
