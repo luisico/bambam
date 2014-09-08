@@ -24,6 +24,12 @@ def renew_shared_link(shared_link, opts={})
   shared_link.reload
 end
 
+def delete_shared_link(shared_link)
+  click_link "delete_share_link_#{shared_link.id}"
+  page.evaluate_script('window.confirm = function() { return true; }')
+  expect(page).not_to have_link "delete_share_link_#{shared_link.id}"
+end
+
 ### Given
 
 Given /^that track has (\d+|a|an) share links?$/ do |n|
@@ -121,9 +127,14 @@ end
 
 Then /^I should be able to delete the share link$/ do
   expect{
-    page.evaluate_script('window.confirm = function() { return true; }')
-    click_link "delete_share_link_#{@share_link.id}"
-    expect(page).not_to have_link "delete_share_link_#{@share_link.id}"
+    delete_shared_link @share_link
+  }.to change(ShareLink, :count).by(-1)
+end
+
+Then /^I should be able to delete the expired share link$/ do
+  find(".show-expired-share-links").click
+  expect{
+    delete_shared_link @expired_share_link
   }.to change(ShareLink, :count).by(-1)
 end
 
@@ -167,15 +178,6 @@ Then /^I should be able to show and hide the expired share links$/ do
   }
   find(".hide-expired-share-links").click
   expect(page).not_to have_css ".expired"
-end
-
-Then /^I should be able to delete the expired share link$/ do
-  find(".show-expired-share-links").click
-  expect{
-    click_link "delete_share_link_#{@expired_share_link.id}"
-    page.evaluate_script('window.confirm = function() { return true; }')
-    expect(page).not_to have_link "delete_share_link_#{@expired_share_link.id}"
-  }.to change(ShareLink, :count).by(-1)
 end
 
 Then /^the hide\/show link should not be visable$/ do
