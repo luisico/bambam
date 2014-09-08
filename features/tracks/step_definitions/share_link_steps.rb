@@ -10,6 +10,19 @@ def expiration_date(time)
   end
 end
 
+def create_shareable_link(opts={})
+  click_link "Create new share link"
+  within('.new_share_link') {
+    yield if block_given?
+    if opts[:cancel]
+      click_link 'Cancel'
+    else
+      click_button 'Create Share link'
+    end
+  }
+  expect(page).not_to have_css('.new_share_link') unless opts[:keep]
+end
+
 ### Given
 
 Given /^that track has (\d+|a|an) share links?$/ do |n|
@@ -38,39 +51,42 @@ end
 
 Then /^I should be able to create a shareable link$/ do
   expect{
-    click_link "Create new share link"
-    expect(page).not_to have_link "Create new share link"
-    within('.new_share_link') {
-      fill_in 'share_link[expires_at]', with: Time.now + 3.days
-      click_button 'Create Share link'
-    }
-    expect(page).to have_link "Create new share link"
+    create_shareable_link
   }.to change(ShareLink, :count).by(1)
 end
 
 Then /^I should be able to create a link that expires in "(.*?)"$/ do |time|
   expiration = expiration_date(time)
   expect{
-    click_link "Create new share link"
-    expect(page).not_to have_link "Create new share link"
-    within('.new_share_link') {
+    create_shareable_link do
       click_link time
-      click_button 'Create Share link'
-    }
-    expect(page).to have_link "Create new share link"
+    end
   }.to change(ShareLink, :count).by(1)
   expect(ShareLink.last.expires_at.to_s[0..9]).to eq expiration.to_s
 end
 
-Then /^I should be able to create a shareable link without entering date$/ do
+Then /^I should be able to create a shareable link with (\d+) days expiration date$/ do |n|
   expect{
-    click_link "Create new share link"
-    expect(page).not_to have_link "Create new share link"
-    within('.new_share_link') {
-      click_button 'Create Share link'
-    }
-    expect(page).to have_link "Create new share link"
+    create_shareable_link do
+      fill_in 'share_link[expires_at]', with: Time.now + n.to_i.days
+    end
   }.to change(ShareLink, :count).by(1)
+end
+
+Then /^I should not be able to create a shareable link with expired date$/ do
+  expect{
+    create_shareable_link(keep: true) do
+      fill_in 'share_link[expires_at]', with: DateTime.yesterday
+    end
+  }.not_to change(ShareLink, :count)
+  expect(page).to have_content("can't be in the past")
+end
+
+Then /^I should be able to cancel the creation a shareable link$/ do
+  expect{
+    create_shareable_link(cancel: true)
+  }.not_to change(ShareLink, :count)
+  expect(page).not_to have_css('.new_share_link')
 end
 
 Then /^I should see an expiration date of "(.*?)"$/ do |arg1|
@@ -91,30 +107,6 @@ Then /^I should see a link to "(.*?)" the share link$/ do |arg1|
   within(share_link_line) {
     expect(page).to have_content arg1
   }
-end
-
-Then /^I should be able to cancel the creation a shareable link$/ do
-  expect{
-    click_link "Create new share link"
-    expect(page).not_to have_link "Create new share link"
-    within('.new_share_link') {
-      click_link 'Cancel'
-    }
-    expect(page).to have_link "Create new share link"
-  }.not_to change(ShareLink, :count)
-  expect(page).not_to have_css('.new_share_link')
-end
-
-Then /^I should not be able to create a shareable link with expired date$/ do
-  expect{
-    click_link "Create new share link"
-    expect(page).not_to have_link "Create new share link"
-    within('.new_share_link') {
-      fill_in 'share_link[expires_at]', with: DateTime.yesterday
-      click_button 'Create Share link'
-    }
-  }.not_to change(ShareLink, :count)
-  expect(page).to have_content("can't be in the past")
 end
 
 Then /^I should be able to view the share link$/ do
