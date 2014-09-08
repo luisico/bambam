@@ -1,24 +1,15 @@
 ### Methods
 
 def expiration_date(time)
-  if time == "1 week"
-    Date.today + 1.week
-  elsif time == "1 month"
-    Date.today + 1.month
-  elsif time == "1 year"
-    Date.today + 1.year
-  end
+  args = time.split(/\s+/)
+  Date.today + args[0].to_i.send(args[1])
 end
 
 def create_shareable_link(opts={})
   click_link "Create new share link"
   within('.new_share_link') {
     yield if block_given?
-    if opts[:cancel]
-      click_link 'Cancel'
-    else
-      click_button 'Create Share link'
-    end
+    opts[:cancel] ? click_link('Cancel') : click_button('Create Share link')
   }
   expect(page).not_to have_css('.new_share_link') unless opts[:keep]
 end
@@ -27,11 +18,7 @@ def renew_shared_link(shared_link, opts={})
   click_link "edit_link_#{shared_link.id}"
   within(".edit_share_link") {
     yield if block_given?
-    if opts[:cancel]
-      click_link 'Cancel'
-    else
-      click_button 'Update Share link'
-    end
+    opts[:cancel] ? click_link('Cancel') : click_button('Update Share link')
   }
   expect(page).not_to have_css(".edit_share_link") unless opts[:keep]
   shared_link.reload
@@ -70,13 +57,12 @@ Then /^I should be able to create a shareable link$/ do
 end
 
 Then /^I should be able to create a link that expires in "(.*?)"$/ do |time|
-  expiration = expiration_date(time)
   expect{
     create_shareable_link do
       click_link time
     end
   }.to change(ShareLink, :count).by(1)
-  expect(ShareLink.last.expires_at.to_s[0..9]).to eq expiration.to_s
+  expect(ShareLink.last.expires_at.to_date).to eq expiration_date(time)
 end
 
 Then /^I should be able to create a shareable link with (\d+) days expiration date$/ do |n|
@@ -150,13 +136,12 @@ Then /^I should be able to renew the share link$/ do
 end
 
 Then /^I should be able to renew the link with date that expires in "(.*?)"$/ do |time|
-  expiration = expiration_date(time)
   expect{
     renew_shared_link @share_link do
       click_link time
     end
   }.to change(@share_link, :expires_at)
-  expect(@share_link.expires_at.to_s[0..9]).to eq expiration.to_s
+  expect(@share_link.expires_at.to_date).to eq expiration_date(time)
 end
 
 Then /^I should not be able to renew the share link with expired date$/ do
