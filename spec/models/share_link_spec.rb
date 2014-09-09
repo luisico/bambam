@@ -6,6 +6,7 @@ describe ShareLink do
     it { should have_db_column(:access_token) }
     it { should have_db_column(:expires_at) }
     it { should have_db_column(:track_id) }
+    it { should have_db_column(:notes) }
   end
 
   describe "access_token" do
@@ -21,6 +22,10 @@ describe ShareLink do
     it { should belong_to :track }
     it { should respond_to :track }
     it { should validate_presence_of(:track_id) }
+  end
+
+  describe "notes" do
+    it { should respond_to :notes }
   end
 
   describe "#expired?" do
