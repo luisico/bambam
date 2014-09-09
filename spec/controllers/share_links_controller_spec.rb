@@ -21,6 +21,12 @@ describe ShareLinksController do
         get :new, share_link: {track_id: @track.id}, format: 'js'
         expect(assigns(:share_link)).to be_new_record
       end
+
+      it "should not respond html" do
+        expect {
+          get :new, share_link: {track_id: 1}, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
+      end
     end
 
     context "as a visitor" do
@@ -47,6 +53,12 @@ describe ShareLinksController do
       it "should return the share link" do
         get :edit, id: @share_link, format: 'js'
         expect(assigns(:share_link)).to eq @share_link
+      end
+
+      it "should not respond html" do
+        expect {
+          get :edit, id: 1, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
       end
     end
 
@@ -91,6 +103,12 @@ describe ShareLinksController do
           }.to change(ShareLink, :count).by(1)
           expect(assigns(:share_link).access_token).not_to eq "my_token"
         end
+      end
+
+      it "should not respond html" do
+        expect {
+          post :create, share_link: @share_link_attr, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
       end
     end
 
@@ -154,6 +172,12 @@ describe ShareLinksController do
             @share_link.reload
           }.not_to change(@share_link, :access_token)
         end
+      end
+
+      it "should not respond html" do
+        expect {
+          patch :update, id: 1, share_link: @new_share_link, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
       end
     end
 
