@@ -84,6 +84,13 @@ describe ShareLinksController do
             post :create, share_link: @share_link_attr.merge(track_id: ""), :format => 'js'
           }.not_to change(ShareLink, :count)
         end
+
+        it "should not allow custom access_token" do
+          expect{
+            post :create, share_link: @share_link_attr.merge(access_token: "my_token"), :format => 'js'
+          }.to change(ShareLink, :count).by(1)
+          expect(assigns(:share_link).access_token).not_to eq "my_token"
+        end
       end
     end
 
@@ -139,6 +146,13 @@ describe ShareLinksController do
             @share_link.reload
           }.not_to change(@share_link, :expires_at)
           expect(assigns(:share_link)).to eq @share_link
+        end
+
+        it "should not allow custom access_token" do
+          expect{
+            patch :update, id: @share_link, share_link: {access_token: "my_token"}, :format => 'js'
+            @share_link.reload
+          }.not_to change(@share_link, :access_token)
         end
       end
     end
