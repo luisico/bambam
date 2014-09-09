@@ -16,6 +16,12 @@ describe ShareLink do
 
   describe "expires_at" do
     it { should respond_to :expires_at }
+
+    it "should validate expiration date is not in the past" do
+      share_link = FactoryGirl.build(:share_link)
+      expect(share_link).to receive(:expires_at_cannot_be_in_the_past)
+      share_link.valid?
+    end
   end
 
   describe "track_id" do
@@ -57,16 +63,45 @@ describe ShareLink do
   describe "#default_values" do
     before { @share_link = FactoryGirl.build(:share_link) }
 
-    it "sets notes equal to 'no notes'" do
-      @share_link.notes = ""
-      @share_link.save
-      expect(@share_link.notes).to eq 'no notes'
+    context "notes" do
+      it "are set to a default value when blank" do
+        ['', nil].each do |val|
+          @share_link.notes = val
+          expect {
+            @share_link.save
+            @share_link.reload
+          }.to change(@share_link, :notes).to('no notes')
+        end
+      end
+
+      it "don't use a default value when present" do
+        @share_link.notes = "my notes"
+        expect {
+          @share_link.save
+          @share_link.reload
+        }.not_to change(@share_link, :notes)
+      end
     end
 
-    it "sets expires_at equal to in 2 weeks" do
-      @share_link.expires_at = ""
-      @share_link.save
-      expect(@share_link.expires_at.strftime('%d, %B %Y')).to eq (DateTime.now + 2.weeks).strftime('%d, %B %Y')
+    context "expires_at" do
+      it "is set to a default value when blank" do
+        ['', nil].each do |val|
+          @share_link.expires_at = val
+          expect {
+            @share_link.save
+            @share_link.reload
+          }.to change(@share_link, :expires_at)
+          expect(@share_link.expires_at.to_date).to eq (Date.today + 2.weeks)
+        end
+      end
+
+      it "doesn't use a default value when present" do
+        @share_link.expires_at = Date.tomorrow
+        expect {
+          @share_link.save
+          @share_link.reload
+        }.not_to change(@share_link, :expires_at)
+      end
     end
   end
 end
