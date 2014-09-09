@@ -73,7 +73,7 @@ describe TracksHelper do
       @share_link = FactoryGirl.create(:share_link, track: @track)
     end
 
-    it "needs a track and a share_link as arguments" do
+    it "needs a share_link as argument" do
       expect{helper.ucsc_url}.to raise_error(ArgumentError)
     end
 
@@ -83,11 +83,9 @@ describe TracksHelper do
       expect(url_with_access_token).to eq stream_services_track_url(@track)
     end
 
-    context "access_token" do
-      it "is encoded" do
-        uri = URI(helper.ucsc_url(@share_link))
-        expect(uri.query).to eq "access_token=#{@share_link.access_token}"
-      end
+    it "access_token is encoded" do
+      uri = URI(helper.ucsc_url(@share_link))
+      expect(uri.query).to eq "access_token=#{@share_link.access_token}"
     end
   end
 
@@ -142,12 +140,6 @@ describe TracksHelper do
     context "track url" do
       it "points the track's stream service" do
         expect(helper.ucsc_track_line(@share_link)).to match /bigDataUrl=myurl/
-      end
-
-      it "include credentials when requested" do
-        user = FactoryGirl.build(:user)
-        expect(helper).to receive(:ucsc_url).with(@share_link).once
-        helper.ucsc_track_line(@share_link)
       end
     end
   end
