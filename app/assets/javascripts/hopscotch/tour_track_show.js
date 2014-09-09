@@ -42,6 +42,12 @@ var tour_track_show = {
       showCTAButton: true,
       showNextButton: false,
       nextOnTargetClick: true,
+      onShow: function() {
+        var ary_length = $('#new_share_link').length
+        if (ary_length == 1) {
+          hopscotch.showStep(hopscotch.getCurrStepNum() + 1);
+        }
+      },
       onCTA: function() {
         hopscotch.showStep(hopscotch.getCurrStepNum() + 2);
       }
