@@ -71,7 +71,7 @@ var tour_track_show = {
     {
       title: "Share links",
       content: "List of existing share links. View and copy links, edit expiration date and notes, or delete share link.",
-      target: "#share-links",
+      target: "#share-links-list",
       placement: 'top',
       arrowOffset: 'center'
     }

@@ -3,8 +3,8 @@
   $('#share_link_<%= @share_link.id %>').append('<%= j render("form") %>');
   $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
 <% else %>
-  $('#share-links').html("<%= escape_javascript(render(@share_link.track.share_links)) %>");
-  $('#share-links').children().find('i.copy-to-clipboard').bind("click", function(){
+  $('#share-links-list').html("<%= escape_javascript(render(@share_link.track.share_links)) %>");
+  $('#share-links-list').children().find('i.copy-to-clipboard').bind("click", function(){
     copy_to_clipboard(this);
   });
   $('.expired').parent().hide()
