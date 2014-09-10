@@ -4,7 +4,7 @@ var tour_project_show = {
   steps: [
     {
       title: "Tour: Project page",
-      content: "Name of project.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Name of project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#project-name",
       placement: 'bottom'
     },

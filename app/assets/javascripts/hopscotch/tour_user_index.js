@@ -4,7 +4,7 @@ var tour_user_index = {
   steps: [
     {
       title: "Tour: Users page",
-      content: "Invite new users and see existing users and groups.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Invite new users and see existing users and groups.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#invite-user",
       placement: 'right'
     },

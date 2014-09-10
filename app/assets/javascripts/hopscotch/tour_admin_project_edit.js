@@ -4,7 +4,7 @@ var tour_admin_project_edit = {
   steps: [
     {
       title: "Tour: Edit an existing project",
-      content: "Change name, add/remove users, and add/remomve/edit tracks.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Change name, add/remove users, and add/remomve/edit tracks.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#edit-project-headline",
       placement: 'bottom'
     },

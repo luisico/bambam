@@ -4,7 +4,7 @@ var tour_admin_project_index = {
   steps: [
     {
       title: "Tour: Project index page",
-      content: "List of all the projects and their summary information.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "List of all the projects and their summary information.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: ".project-tile",
       placement: "right"
     },
