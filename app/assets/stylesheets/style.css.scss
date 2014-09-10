@@ -133,3 +133,18 @@ input.with-instructions {
 .text-color-grey {
   color: #A8A8A8 !important;
 }
+
+.tour-link {
+  margin-bottom: 5px;
+  a {
+    @extend .right;
+    @extend .fi-info;
+    font-size: rem-calc(10);
+    margin-right: 10px;
+    &:before {
+      font-size: rem-calc(20);
+      margin-right: 5px;
+      vertical-middle: middle;
+    }
+  }
+}
