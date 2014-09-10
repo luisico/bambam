@@ -1,8 +1,4 @@
-<% if can? :manage, @project %>
-  <div class="hide" data-tour="tour_admin_project_show"></div>
-<% else %>
-  <div class="hide" data-tour="tour_project_show"></div>
-<% end %>
+<div class="hide" data-tour="tour_project_show"></div>
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
@@ -29,7 +25,7 @@
         </div>
         <div class="small-12 medium-6 columns">
           <h4 id="project-tracks"><i class="fi-paw large margin-right"></i>Tracks
-            <small>view all your <%= link_to 'tracks', tracks_path %></small>
+            <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
           </h4>
           <ul class="no-bullet" id="project-tracks-list">
             <%= render @project.tracks %>
