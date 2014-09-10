@@ -77,3 +77,7 @@ Then /^I should be able to add myself to the project$/ do
   expect(current_path).to eq project_path(@project)
   expect(page).to have_content @admin.email
 end
+
+Then /^I should see a button to "(.*?)" project$/ do |text|
+  expect(page).to have_link text
+end

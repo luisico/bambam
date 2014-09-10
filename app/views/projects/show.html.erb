@@ -38,8 +38,10 @@
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <% if can? :edit, @project %>
-      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius', id: "edit-project" %>
+    <% if can? :manage, @project %>
+      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
+    <% elsif can? :edit, @project %>
+      <%= link_to 'Add or edit tracks', edit_project_path(@project), class: 'button tiny radius' %>
     <% end %>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>
