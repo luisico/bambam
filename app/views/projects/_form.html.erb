@@ -39,7 +39,7 @@
     </div>
     <div class="small-12 medium-offset-1 medium-6 columns">
       <h4><i class="fi-paw large margin-right"></i>Tracks</h4>
-      <h4><small>Tracks are not updated until the project is saved</small></H4>
+      <h4><small>Changes to tracks saved when project is created/updated</small></H4>
       <%= f.fields_for :tracks do |builder| %>
         <%= render 'track_fields', f: builder, k: nil %>
       <% end %>
