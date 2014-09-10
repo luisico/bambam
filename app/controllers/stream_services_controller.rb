@@ -1,5 +1,4 @@
 class StreamServicesController < ApplicationController
-  # before_filter :authenticate_user!
   before_action :authenticate_user!, unless: :has_access_token?
 
   def has_access_token?

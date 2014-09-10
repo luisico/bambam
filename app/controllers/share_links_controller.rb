@@ -5,7 +5,7 @@ class ShareLinksController < ApplicationController
   respond_to :js
 
   def new
-    @share_link = ShareLink.new(share_link_params)
+    @share_link = ShareLink.new(share_link_params.slice(:track_id))
   end
 
   def edit
@@ -20,7 +20,7 @@ class ShareLinksController < ApplicationController
 
   def update
     @share_link = ShareLink.find(params[:id])
-    @share_link.update(share_link_params)
+    @share_link.update(share_link_params.slice(:expires_at, :notes))
   end
 
   def destroy
@@ -30,6 +30,6 @@ class ShareLinksController < ApplicationController
   private
 
   def share_link_params
-    params.require(:share_link).permit(:access_token, :expires_at, :track_id, :notes)
+    params.require(:share_link).permit(:expires_at, :track_id, :notes)
   end
 end
