@@ -59,7 +59,7 @@
           <% if @track.share_links.any? %>
             <%= render @track.share_links %>
           <% else %>
-            <p>There are no track line links for this track</p>
+            <p id="no-share-link">There are no track line links for this track</p>
           <% end %>
         </div>
       </div>

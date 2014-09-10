@@ -56,6 +56,16 @@ end
 
 ### Then
 
+Then /^I should( not)? see the text "(.*?)" within the share links section$/ do |negate, text|
+  within("#share-links-list") {
+    if negate
+      expect(page).not_to have_content text
+    else
+      expect(page).to have_content text
+    end
+  }
+end
+
 Then /^I should be able to create a shareable link$/ do
   expect{
     create_shareable_link

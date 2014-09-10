@@ -2,3 +2,6 @@ $('#share_link_<%= @share_link.id %>').remove();
 if ($('#share-links-list').find('.expired').length == 0) {
   $('.share-track').find('.hide-expired-share-links').hide();
 }
+if ($('#share-links-list').find('.share-link').length == 0) {
+  $('#share-links-list').append('<p id="no-share-link">There are no track line links for this track</p>');
+}

@@ -9,10 +9,12 @@ Feature: Create link to share track
     And I belong to a project
     And there is a bam track in that project
     When I am on the track page
+    Then I should see the text "no track line links" within the share links section
     Then I should be able to create a shareable link
     And I should see an expiration date of "14 days"
     And I should see "no notes" in the notes field
     And I should see a link to "edit" the share link
+    Then I should not see the text "no track line links" within the share links section
 
   Scenario Outline: Create shareable link with date short link
     Given I am signed in
@@ -71,9 +73,19 @@ Feature: Create link to share track
     Given I am signed in
     And I belong to a project
     And there is a track in that project
+    And that track has 2 share links
+    When I am on the track page
+    Then I should be able to delete the share link
+    Then I should not see the text "no track line links" within the share links section
+
+  Scenario: Delete a share link
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to delete the share link
+    Then I should see the text "no track line links" within the share links section
 
   Scenario: Renew a share link
     Given I am signed in
