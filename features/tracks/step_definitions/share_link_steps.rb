@@ -156,6 +156,22 @@ Then /^I should be able to renew the share link$/ do
   }.to change(@share_link, :expires_at)
 end
 
+Then /^I should be able to renew two share links at once$/ do
+  share_links = [ShareLink.all[0], ShareLink.all[1]]
+  click_link "edit_link_#{share_links[0].id}"
+  click_link "edit_link_#{share_links[1].id}"
+  edit_forms = page.all(".edit_share_link")
+  edit_forms.each_with_index do |form, index|
+    expect {
+      within(form) {
+        click_link '1 month'
+        click_button('Update Share link')
+      }
+      share_links[index].reload
+    }.to change(share_links[index], :expires_at)
+  end
+end
+
 Then /^I should be able to renew the link with date that expires in "(.*?)"$/ do |time|
   expect{
     renew_shared_link @share_link do

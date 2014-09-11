@@ -95,6 +95,14 @@ Feature: Create link to share track
     When I am on the track page
     Then I should be able to renew the share link
 
+  Scenario: Renew two share links at once
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has 2 share links
+    When I am on the track page
+    Then I should be able to renew two share links at once
+
   Scenario: Cancel the renewal of a shareable link
     Given I am signed in
     And I belong to a project
