@@ -13,6 +13,15 @@
   word-wrap: break-word;
 }
 
+.share-link-box {
+  border-style: solid;
+  border-width: thin;
+  border-color: #A8A8A8;
+  padding: rem-calc(15);
+  word-wrap: break-word;
+  margin-bottom: rem-calc(20);
+}
+
 .service.button {
   padding: rem-calc(5 10);
   &.fi-eye:before {

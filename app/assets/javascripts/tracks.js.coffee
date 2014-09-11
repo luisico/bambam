@@ -26,6 +26,7 @@ jQuery ->
   $('.share-track').on 'click', '.share-track-cancel', (event) ->
     if $(this).closest('form').hasClass('edit_share_link')
       $(this).closest('form').siblings().first().children().find('.edit-share-link-link').show()
+      $(this).closest('.share-link').removeClass('share-link-box')
       $(this).closest('form').remove()
       event.preventDefault()
     else

@@ -1,3 +1,4 @@
 $('#edit_link_<%= @share_link.id %>').hide()
 $('#share_link_<%= @share_link.id %>').append('<%= j render("form") %>');
+$('#share_link_<%= @share_link.id %>').addClass('share-link-box')
 $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
