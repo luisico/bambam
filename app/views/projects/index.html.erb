@@ -1,13 +1,18 @@
+<% if current_user.has_role? :admin %>
+  <div class="hide" data-tour="tour_admin_project_index"></div>
+<% else %>
+  <div class="hide" data-tour="tour_project_index"></div>
+<% end %>
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <% if can? :manage, Project %>
-      <%= link_to 'New Project', new_project_path, class: "button tiny radius" %>
+      <%= link_to 'New Project', new_project_path, class: "button tiny radius", id: "new-project" %>
     <% end %>
     <% if current_user.projects.any? || current_user.has_role?(:admin) %>
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         <% @projects.each do |project| %>
           <li id="project_<%= project.id %>">
-            <ul class="no-bullet panel">
+            <ul class="no-bullet panel project-tile">
               <li class="headline">
                 <%= link_to project.name, project, class: "text-panel-overhang" %>
               </li>

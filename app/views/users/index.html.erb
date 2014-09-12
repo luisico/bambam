@@ -1,7 +1,8 @@
+<div class="hide" data-tour="tour_user_index"></div>
 <div class="row">
   <div class="medium-6 columns">
     <div class="panel">
-      <h3>Invite a new user</h3>
+      <h3 id="invite-user">Invite a new user</h3>
       <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
         <div>
           <%= f.text_field :email, placeholder: 'Email' %>
@@ -14,13 +15,13 @@
           </div>
         <% end %>
         <div>
-          <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius' %>
+          <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius', id: "invite-email" %>
         </div>
       <% end %>
     </div>
 
     <div class="panel">
-      <h3>Current users</h3>
+      <h3 id="current-users">Current users</h3>
       <ul class="inline-list">
         <li><i class="fi-ticket medium icon_key"> Invite outstanding</i></li>
         <li><i class="fi-crown medium icon_key"> Admin</i></li>
@@ -28,7 +29,7 @@
       </ul>
 
       <% @users.each do |user| %>
-        <p>
+        <p class="current-user">
           <%= link_to user do %>
             <%= image_tag avatar_url(user) %>
             <%= user.email %>
@@ -49,8 +50,8 @@
 
   <div class="medium-6 columns">
     <div class="panel">
-      <h3>Groups</h3>
-      <ul class="no-bullet">
+      <h3 id="groups-headline">Groups</h3>
+      <ul class="no-bullet" id="group-list">
         <%= render @groups %>
       </ul>
       <div>
