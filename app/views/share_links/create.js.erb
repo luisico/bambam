@@ -1,7 +1,6 @@
 <% if @share_link.errors.any? %>
   $('.new_share_link').remove();
-  $('#create-share-links').append('<%= j render("form") %>');
-  $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
+  ShareLink.showForm('<%= j render("form") %>');
 <% else %>
   $('.new_share_link').remove();
   $('#new_link').show();

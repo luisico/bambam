@@ -1,7 +1,6 @@
 <% if @share_link.errors.any? %>
   $('#edit_share_link_<%= @share_link.id %>').remove();
-  $('#share_link_<%= @share_link.id %>').append('<%= j render("form") %>');
-  $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
+  ShareLink.showForm('<%= j render("form") %>', <%= @share_link.id %>);
 <% else %>
   $('#share_link_<%= @share_link.id %>').replaceWith('<%= j render(@share_link) %>');
   $('#share_link_<%= @share_link.id %>').effect("highlight", {}, 1500);
