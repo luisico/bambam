@@ -157,18 +157,21 @@ Then /^I should be able to renew the share link$/ do
 end
 
 Then /^I should be able to renew two share links at once$/ do
-  share_links = [ShareLink.all[0], ShareLink.all[1]]
-  click_link "edit_link_#{share_links[0].id}"
-  click_link "edit_link_#{share_links[1].id}"
-  edit_forms = page.all(".edit_share_link")
-  edit_forms.each_with_index do |form, index|
+  share_links = ShareLink.all
+
+  share_links.each { |s| click_link "edit_link_#{s.id}" }
+  expect(page).to have_css(".edit_share_link", count: 2)
+
+  share_links.each do |share_link|
+    note = "new notes for share #{share_link.id}"
     expect {
-      within(form) {
-        click_link '1 month'
+      within("#edit_share_link_#{share_link.id}") {
+        fill_in 'share_link[notes]', with: note
         click_button('Update Share link')
       }
-      share_links[index].reload
-    }.to change(share_links[index], :expires_at)
+      expect(page).not_to have_css("#edit_share_link_#{share_link.id}")
+      share_link.reload
+    }.to change(share_link, :notes).to(note)
   end
 end
 

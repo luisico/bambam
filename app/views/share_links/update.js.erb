@@ -3,9 +3,8 @@
   $('#share_link_<%= @share_link.id %>').append('<%= j render("form") %>');
   $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
 <% else %>
-  $('#share_link_<%= @share_link.id %>').remove();
-  $('#share-links-list').append('<%= j render(@share_link) %>');
-  $('#share-links-list').children().last().effect("highlight", {}, 1500);
+  $('#share_link_<%= @share_link.id %>').replaceWith('<%= j render(@share_link) %>');
+  $('#share_link_<%= @share_link.id %>').effect("highlight", {}, 1500);
   $('#share-links-list').children().find('i.copy-to-clipboard').bind("click", function(){
     copy_to_clipboard(this);
   });
