@@ -1,0 +1,13 @@
+<% if @share_link.errors.any? %>
+  $('.new_share_link').remove();
+  $('.track-share-links').append('<%= j render("form") %>');
+  $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
+<% else %>
+  $('.new_share_link').remove();
+  $('#new_link').show();
+  $('#share-links').append('<%= j render(@share_link) %>');
+  $('#share-links').children().last().effect("highlight", {}, 1500);;
+  $('#share-links').children().last().find('i.copy-to-clipboard').bind("click", function() {
+    copy_to_clipboard(this);
+  });
+<% end %>

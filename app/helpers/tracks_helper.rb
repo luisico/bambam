@@ -23,23 +23,20 @@ module TracksHelper
     ).to_s
   end
 
-  def ucsc_track_line(track)
+  def ucsc_track_line(share_link)
     types = {'.bam' => 'bam', '.bw' => 'bigWig'}
 
     track_line = {
-      'type'       => types[Pathname.new(track.path).extname],
-      'name'       => track.name.blank? ? nil : "\"#{track.name}\"",
-      'bigDataUrl' => ucsc_url(track)
+      'type'       => types[Pathname.new(share_link.track.path).extname],
+      'name'       => share_link.track.name.blank? ? nil : "\"#{share_link.track.name}\"",
+      'bigDataUrl' => ucsc_url(share_link)
     }
 
     'track ' << track_line.map{|k,v| "#{k}=#{v}" unless v.blank?}.join(' ')
   end
 
-  def ucsc_url(track)
-    url = URI(stream_services_track_url(track))
-    if ENV['UCSC_USER_EMAIL'] && ENV['UCSC_USER_PASSWORD']
-      url.userinfo = "#{ERB::Util.url_encode(ENV['UCSC_USER_EMAIL'])}:#{ENV['UCSC_USER_PASSWORD']}"
-    end
-    url.to_s
+  def ucsc_url(share_link)
+    url = stream_services_track_url(share_link.track)
+    url.to_s + "?access_token=#{share_link.access_token}"
   end
 end

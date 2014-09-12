@@ -70,7 +70,14 @@ describe Track do
   end
 
   describe "project_id" do
+    it {should belong_to :project}
     it {should respond_to :project}
+  end
+
+  describe "share_links" do
+    it { should have_many :share_links }
+    it { should respond_to :share_links }
+    it { should respond_to :share_link_ids }
   end
 
   describe "association with project" do

@@ -1,5 +1,6 @@
 class Track < ActiveRecord::Base
   belongs_to :project, :touch => true
+  has_many :share_links
   validates_presence_of :name
   #TODO adding presence validation on project_id breaks nested updated.
   validates :path, format: { with: /\A.*\.(bw|bam)\z/,

@@ -26,7 +26,7 @@ describe StreamServicesController do
         end
 
         it "should respond not found when file is empty" do
-          track = FactoryGirl.create(:test_track, path: 'tmp/emptytrack.bam')
+          track = FactoryGirl.create(:test_track)
           Pathname.new(track.path).truncate(0)
           get :show, id: track
           File.unlink(track.path)
@@ -151,12 +151,66 @@ describe StreamServicesController do
       end
     end
 
+    context "as a visitor with valid access_token" do
+      it "should be successful" do
+        expect(controller).to receive(:has_access_token?).and_return(true)
+        expect(controller).not_to receive(:authenticate_user!)
+
+        track = FactoryGirl.create(:test_track)
+        share_link = FactoryGirl.create(:share_link, track_id: track.id)
+
+        get :show, id: track.id, access_token: share_link.access_token
+        expect(response.status).to eq 200
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
+        expect(controller).to receive(:has_access_token?).and_return(false)
+        expect(controller).to receive(:authenticate_user!).and_call_original
+
         get :show, id: 1
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
+    end
+  end
+
+  describe "#has_access_token?" do
+    before do
+      @track = FactoryGirl.create(:test_track)
+      @share_link = FactoryGirl.create(:share_link, track_id: @track.id)
+    end
+
+    it "should be true with valid access token" do
+      controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_true
+    end
+
+    it "should be false with invalid access token" do
+      controller.params = {access_token: "invalid_token", id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with expired access token" do
+      @share_link.update_attribute(:expires_at, DateTime.yesterday)
+      controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with no access token" do
+      controller.params = { id: "#{@track.id}" }
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with non-existant track" do
+      controller.params = {access_token: @share_link.access_token, id: "9999"}
+      expect(controller.send(:has_access_token?)).to be_false
+    end
+
+    it "should be false with different track" do
+      controller.params = {access_token: @share_link.access_token, id: "#{FactoryGirl.create(:test_track).id}"}
+      expect(controller.send(:has_access_token?)).to be_false
     end
   end
 

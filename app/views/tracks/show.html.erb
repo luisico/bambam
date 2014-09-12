@@ -42,13 +42,25 @@
         </p>
       </div>
 
-      <div>
-        <h5>UCSC track line</h5>
-        <h5><small>Copy and paste the track line below into the UCSC Genome Browser</h5>
-        <p class="clipboard-box">
-          <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_ucsc_line"></i>
-          <span id="clip_track_ucsc_line"><%= ucsc_track_line(@track) %></span>
+      <div class="share-track">
+        <h5 class="no-margin-bottom">Track share links</h5>
+        <span class="text-color-grey medium-text large-margin-bottom">
+          Create and manage links for UCSC browser & sharing with outside collaborators
+        </span class="">
+        <p class="track-share-links medium-margin-top">
+          <%= link_to "Create new share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", class: "big-margin-right", remote: true %>
+          <% if @track.share_links.any? {|f| f.expired?} %>
+            <%= link_to "show expired links", "#", class: "show-expired-share-links" %>
+          <% end %>
         </p>
+
+        <div id="share-links">
+          <% if @track.share_links.any? %>
+            <%= render @track.share_links %>
+          <% else %>
+            <p>There are no track line links for this track</p>
+          <% end %>
+        </div>
       </div>
     </div>
 

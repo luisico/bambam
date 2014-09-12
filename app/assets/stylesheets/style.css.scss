@@ -46,12 +46,24 @@ a.restore-track {
   display: none;
 }
 
-div.track-form-fields {
-  display: none;
-}
-
 i.fi-plus {
   color: $primary-color;
+}
+
+i.margin-right {
+  margin-right: rem-calc(5);
+}
+
+.big-margin-right {
+  margin-right: rem-calc(20) !important;
+}
+
+i.left-buffer {
+  margin-left: rem-calc(15);
+}
+
+div.track-form-fields {
+  display: none;
 }
 
 div.new-record {
@@ -67,6 +79,18 @@ div.edit-record {
   @extend div.new-record;
 }
 
+div.margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
 li.headline {
   font-size: rem-calc(20)
 }
@@ -75,23 +99,33 @@ li.sub-text {
   font-size: rem-calc(15)
 }
 
-i.margin-right {
-  margin-right: rem-calc(5);
-}
-
-i.left-buffer {
-  margin-left: rem-calc(15);
-}
-
-span.text-color-grey {
-  color: #A8A8A8;
-}
 span.small-text {
   font-size: rem-calc(10);
   margin-top: 0;
 }
 
+.medium-margin-bottom {
+  margin-bottom: rem-calc(10) !important;
+}
+
+.large-margin-bottom {
+  margin-bottom: rem-calc(15) !important;
+}
+
+.medium-margin-top {
+  margin-top: rem-calc(10) !important;
+}
+
+.medium-text {
+  font-size: rem-calc(12) !important;
+}
+
+
 input.with-instructions {
   margin-top: rem-calc(5);
   margin-bottom: rem-calc(5)
+}
+
+.text-color-grey {
+  color: #A8A8A8 !important;
 }

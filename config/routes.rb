@@ -11,6 +11,8 @@ Bambam::Application.routes.draw do
 
   resources :tracks, only: [:index, :show]
 
+  resources :share_links, except: [:index, :show]
+
   resources :projects
 
   namespace :stream_services, path: 'stream', module: false do

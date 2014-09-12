@@ -19,3 +19,23 @@
     line-height: 1;
   }
 }
+
+.share-track-form {
+    display: none;
+}
+
+.track-share-link {
+    display: none;
+}
+
+.ucsc-track-line {
+    display: none;
+}
+
+i.large-calendar {
+  font-size: rem-calc(25);
+}
+
+.expired {
+  color: red;
+}
