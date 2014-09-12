@@ -14,12 +14,13 @@ Feature: Show a project
     And I should see the project's users <privilege> profile links
     And I should see the project's owner
     And I should see the project's timestamps
+    And I should see a button to "<button>" project
     And I <privilege2> see a "Delete" button
 
     Examples:
-      | role     | privilege | privilege2 |
-      | an admin | with      | should     |
-      | a user   | without   | should not |
+      | role     | privilege | privilege2 | button             |
+      | an admin | with      | should     | Edit               |
+      | a user   | without   | should not | Add or edit tracks |
 
   Scenario: User can access the tracks page
     Given I am signed in
@@ -41,7 +42,7 @@ Feature: Show a project
     Given I am signed in
     And I belong to a project
     When I am on the project page
-    And I click "Edit"
+    And I click "Add or edit tracks"
     Then I should be on the edit project page
 
   Scenario Outline: Back button

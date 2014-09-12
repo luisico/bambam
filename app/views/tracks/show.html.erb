@@ -25,7 +25,12 @@
 
       <div>
         <ul class="inline-list" id="track-download-links">
-          <li><%= link_to_igv(@track, 'Open in IGV') %></li>
+          <li>
+            <%= link_to_igv(@track, 'Open in IGV') %>
+            <span class="text-color-grey medium-text">
+              IGV must be open
+            </span>
+          </li>
           <% if Pathname.new(@track.path).extname == ".bam" %>
             <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download' %></li>
             <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download' %></li>
@@ -34,6 +39,7 @@
           <% end %>
         </ul>
       </div>
+
 
       <div>
         <h5>Server path</h5>
@@ -46,7 +52,7 @@
       <div class="share-track">
         <h5 class="no-margin-bottom" id="track-share-links">Track share links</h5>
         <span class="text-color-grey medium-text large-margin-bottom">
-          Create and manage links for UCSC browser & sharing with outside collaborators
+          Manage shared passwordless access to tracks for outside collaborators and the UCSC browser
         </span>
         <p class="medium-margin-top" id="create-share-links">
           <%= link_to "Create new share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", class: "big-margin-right", remote: true %>
@@ -55,11 +61,11 @@
           <% end %>
         </p>
 
-        <div id="share-links">
+        <div id="share-links-list">
           <% if @track.share_links.any? %>
             <%= render @track.share_links %>
           <% else %>
-            <p>There are no track line links for this track</p>
+            <p id="no-share-link">There are no track line links for this track</p>
           <% end %>
         </div>
       </div>

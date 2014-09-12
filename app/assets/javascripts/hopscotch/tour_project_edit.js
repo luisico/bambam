@@ -4,7 +4,7 @@ var tour_project_edit = {
   steps: [
     {
       title: "Tour: Edit an existing track",
-      content: "Try it yourself!<br/>Click track name to edit track or trash can to delete track.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Try it yourself!<br/>Click track name to edit track or trash can to delete track.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: ".track-name",
       placement: 'bottom',
       ctaLabel: "Skip",

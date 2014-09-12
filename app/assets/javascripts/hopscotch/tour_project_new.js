@@ -4,7 +4,7 @@ var tour_project_new = {
   steps: [
     {
       title: "Tour: Making a new project",
-      content: "Get started on making a new project.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Get started on making a new project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#new-project-headline",
       placement: 'bottom'
     },

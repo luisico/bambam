@@ -1,8 +1,4 @@
-<% if can? :manage, @project %>
-  <div class="hide" data-tour="tour_admin_project_show"></div>
-<% else %>
-  <div class="hide" data-tour="tour_project_show"></div>
-<% end %>
+<div class="hide" data-tour="tour_project_show"></div>
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
@@ -27,9 +23,9 @@
           <h4><i class="fi-torsos large margin-right" id="project-users"></i>Users</h4>
           <%= render @project.users %>
         </div>
-        <div class="small-12 medium-6 columns">
+        <div class="small-12 medium-6 columns tracks-list">
           <h4 id="project-tracks"><i class="fi-paw large margin-right"></i>Tracks
-            <small>view all your <%= link_to 'tracks', tracks_path %></small>
+            <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
           </h4>
           <ul class="no-bullet" id="project-tracks-list">
             <%= render @project.tracks %>
@@ -42,8 +38,10 @@
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <% if can? :edit, @project %>
-      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius', id: "edit-project" %>
+    <% if can? :manage, @project %>
+      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
+    <% elsif can? :edit, @project %>
+      <%= link_to 'Add or edit tracks', edit_project_path(@project), class: 'button tiny radius' %>
     <% end %>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>

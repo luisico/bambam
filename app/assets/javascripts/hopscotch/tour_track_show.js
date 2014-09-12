@@ -4,7 +4,7 @@ var tour_track_show = {
   steps: [
     {
       title: "Tour: Track page",
-      content: "Info about a track, starting with name and associated project.<br/><br/>Click 'x' to exit tour at any time.",
+      content: "Name of track and link to associated project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#track-name",
       placement: 'bottom'
     },
@@ -16,7 +16,7 @@ var tour_track_show = {
     },
     {
       title: "IGV and download links",
-      content: "Click to open track in IVG or download track file(s).",
+      content: "Click to open track in IGV or download track file(s). For link to work, IGV must already be open on your computer.",
       target: "#track-download-links",
       placement: 'bottom',
       arrowOffset: 'center'
@@ -42,13 +42,19 @@ var tour_track_show = {
       showCTAButton: true,
       showNextButton: false,
       nextOnTargetClick: true,
+      onShow: function() {
+        var ary_length = $('#new_share_link').length
+        if (ary_length == 1) {
+          hopscotch.showStep(hopscotch.getCurrStepNum() + 1);
+        }
+      },
       onCTA: function() {
         hopscotch.showStep(hopscotch.getCurrStepNum() + 2);
       }
     },
     {
       title: "New share link form",
-      content: "Set expiration date using pop up calendar or one of the blue short links. Notes are optional, but could be useful for tracking where links have been shared.",
+      content: "Set expiration date using pop up calendar or one of the blue shortcut links. Notes are optional, but could be useful for tracking where and with whom links have been shared.",
       target: "#new_share_link",
       placement: 'top',
       arrowOffset: 'center',
@@ -64,8 +70,8 @@ var tour_track_show = {
     },
     {
       title: "Share links",
-      content: "List of existing share links. Click to view and copy links, edit expiration date and notes or delete share link.",
-      target: "#share-links",
+      content: "List of existing share links. View and copy links, edit expiration date and notes, or delete share link.",
+      target: "#share-links-list",
       placement: 'top',
       arrowOffset: 'center'
     }

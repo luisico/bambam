@@ -56,6 +56,16 @@ end
 
 ### Then
 
+Then /^I should( not)? see the text "(.*?)" within the share links section$/ do |negate, text|
+  within("#share-links-list") {
+    if negate
+      expect(page).not_to have_content text
+    else
+      expect(page).to have_content text
+    end
+  }
+end
+
 Then /^I should be able to create a shareable link$/ do
   expect{
     create_shareable_link
@@ -144,6 +154,25 @@ Then /^I should be able to renew the share link$/ do
       fill_in 'share_link[expires_at]', with: Time.now + 5.days
     end
   }.to change(@share_link, :expires_at)
+end
+
+Then /^I should be able to renew two share links at once$/ do
+  share_links = ShareLink.all
+
+  share_links.each { |s| click_link "edit_link_#{s.id}" }
+  expect(page).to have_css(".edit_share_link", count: 2)
+
+  share_links.each do |share_link|
+    note = "new notes for share #{share_link.id}"
+    expect {
+      within("#edit_share_link_#{share_link.id}") {
+        fill_in 'share_link[notes]', with: note
+        click_button('Update Share link')
+      }
+      expect(page).not_to have_css("#edit_share_link_#{share_link.id}")
+      share_link.reload
+    }.to change(share_link, :notes).to(note)
+  end
 end
 
 Then /^I should be able to renew the link with date that expires in "(.*?)"$/ do |time|

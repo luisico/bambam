@@ -1,5 +1,5 @@
 <%= form_for @share_link, remote: true do  |f| %>
-  <fieldset>
+  <div class="share-link-form">
     <% if @share_link.errors.any? %>
       <div class="field">
         <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@share_link.errors.count) %> below:</p>
@@ -39,5 +39,5 @@
         <%= link_to "Cancel", "#", class: 'button tiny radius share-track-cancel no-margin-bottom' %>
       </div>
     </div>
-  </fieldset>
+  </div>
 <% end %>

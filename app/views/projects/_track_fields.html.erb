@@ -20,7 +20,7 @@
       <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
         <ul class="no-bullet allowed-track-paths">
           <% ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path| %>
-            <li><%= path %></li>
+            <li class="default-cursor"><%= path %></li>
           <% end %>
         </ul>
       </span>
