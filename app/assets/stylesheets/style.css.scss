@@ -31,6 +31,20 @@
   }
 }
 
+.width-limited-inline-list {
+  @include inline-list;
+  i {
+    max-width: rem-calc(250);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    &:hover {
+      overflow: auto;
+      text-overflow: initial;
+    }
+  }
+}
+
 .fi-download:before {
   margin-right: rem-calc(5);
 }
