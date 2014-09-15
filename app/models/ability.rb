@@ -22,13 +22,11 @@ class Ability
         can :cancel, User, id: user.id
       end
 
-      can :read, Group do |group|
-        group.members.include?(user)
-      end
+      can :read, Group, :memberships => { :user_id => user.id }
 
       can :user_access, Project, :projects_users => { :user_id => user.id }
 
-      can :read, Track do |track|
+      can :read, Track, Track.user_tracks(user) do |track|
         track.project.users.include?(user)
       end
 
