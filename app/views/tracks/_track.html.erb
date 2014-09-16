@@ -1,10 +1,8 @@
-<% if can? :read, track %>
-  <li>
-    <%= link_to_igv(track) %>
-    <%= link_to track.name, track, class: "track" %>
-    <% unless @project %>
-      (<%= link_to track.project.name, track.project %>)
-    <% end %>
-  </li>
-<% end %>
+<li>
+  <%= link_to_igv(track) %>
+  <%= link_to track.name, track, class: "track" %>
+  <% unless @project %>
+    (<%= link_to track.project.name, track.project %>)
+  <% end %>
+</li>
 

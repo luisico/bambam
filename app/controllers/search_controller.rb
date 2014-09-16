@@ -3,10 +3,10 @@ class SearchController < ApplicationController
 
   def search
     @q = params[:q]
-    @groups   = Group.search(name_cont: @q).result
-    @tracks   = Track.search(name_cont: @q).result
-    @projects = Project.search(name_cont: @q).result
-    @users    = User.search(email_cont: @q).result
+    @groups   = Group.accessible_by(current_ability).search(name_cont: @q).result
+    @tracks   = Track.accessible_by(current_ability).search(name_cont: @q).result
+    @projects = Project.accessible_by(current_ability).search(name_cont: @q).result
+    @users    = User.accessible_by(current_ability).search(email_cont: @q).result
   end
 
 end
