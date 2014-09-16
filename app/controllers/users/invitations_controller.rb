@@ -13,6 +13,9 @@ class Users::InvitationsController < Devise::InvitationsController
       yield resource if block_given?
       set_flash_message :notice, :send_instructions, :email => self.resource.email if self.resource.invitation_sent_at
       respond_with resource, :location => after_invite_path_for(resource)
+      if params["project_id"].present? && (project = Project.where(id: params["project_id"]).first)
+        project.users << resource
+      end
     else
       @users = User.order('created_at DESC')
       @groups = Group.all
