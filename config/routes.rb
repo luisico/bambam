@@ -21,5 +21,7 @@ Bambam::Application.routes.draw do
 
   resources :groups, except: :index
 
+  post 'search', to: 'search#search'
+
   match 'user_root' => 'projects#index', via: [:get]
 end

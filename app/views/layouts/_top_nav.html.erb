@@ -18,6 +18,21 @@
         <li><%= link_to 'Users', users_url %></li>
       <% end %>
       <li><%= link_to 'Projects', projects_path %></li>
+      <!-- Search bar -->
+      <% if user_signed_in? %>
+        <li class="has-form">
+          <div class="row collapse">
+            <%= form_tag('/search') do %>
+              <div class="large-8 small-9 columns">
+                <%= text_field_tag :q, nil , placeholder: "Search", id: "nav_search_box" %>
+              </div>
+              <div class="large-4 small-3 columns">
+                <%= submit_tag 'Search', class: "button expand", id: "nav_search_btn" %>
+              </div>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
     </ul>
 
     <!-- Right Nav Section -->

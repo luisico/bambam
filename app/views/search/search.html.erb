@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="small-12 medium-10 medium-centered columns">
+    <div class="panel">
+      <% if @projects.any? || @tracks.any? || @groups.any? || @users.any? %>
+        <% if @projects.any? %>
+          <h3>Projects:</h3>
+          <ul class="no-bullet" id="project-list">
+            <%= render @projects %>
+          </ul>
+        <% end %>
+
+        <% if @tracks.any? %>
+          <h3>Tracks:</h3>
+          <ul class="no-bullet tracks-list" id="track-list">
+            <%= render @tracks %>
+          </ul>
+        <% end %>
+
+        <% if @groups.any? %>
+          <h3>Groups:</h3>
+          <ul class="no-bullet" id="group-list">
+            <%= render @groups %>
+          </ul>
+        <% end %>
+
+        <% if @users.any? %>
+          <h3>Users:</h3>
+          <%= render @users %>
+        <% end %>
+      <% else %>
+        <p>Your search - <b><%= @q %></b> - did not return any results.</p>
+        <p>Suggestions:</p>
+        <ul>
+          <li>Make sure all words are spelled correctly.</li>
+          <li>Try different keywords.</li>
+          <li>Try more general keywords.</li>
+          <li>Try fewer keywords.</li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+
