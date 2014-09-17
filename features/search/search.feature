@@ -14,7 +14,7 @@ Feature: Search the application
     And there is another user in the system with email "best_user@example.com"
     When I search for "best"
     Then I should see a list of all objects that contain the name "best"
-    Then I should not see a list of all objects that contain the name "ok"
+    And I should not see a list of all objects that contain the name "ok"
 
   Scenario: Show special message when no results are returned
     Given I am signed in
