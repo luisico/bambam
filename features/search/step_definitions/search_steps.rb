@@ -64,3 +64,8 @@ end
 Then /^I should be on the user show page$/ do
   expect(current_path).to eq user_path(@another_user)
 end
+
+Then /^I should not see a search box and button$/ do
+  expect(page).not_to have_css "#nav_search_box"
+  expect(page).not_to have_css "#nav_search_btn"
+end

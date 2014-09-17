@@ -41,3 +41,8 @@ Feature: Search the application
       |track   |
       |group   |
       |user    |
+
+  Scenario: Visitors cannot search
+    Given I do not exist as a user
+    When I visit the sign in page
+    Then I should not see a search box and button
