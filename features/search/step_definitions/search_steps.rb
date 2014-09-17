@@ -16,6 +16,7 @@ Given /^there is a track in that project called "(.*?)"$/ do |name|
 end
 
 Given /^I belong to a group called "(.*?)"$/ do |name|
+  @user ||= User.last
   expect {
     @group = FactoryGirl.create(:group, name: name, members: [@user])
   }.to change(Group, :count).by(1)
@@ -35,6 +36,12 @@ When /^I search for "(.*?)"$/ do |search_term|
   @search_term = search_term
 end
 
+When /^I click on the "(.*?)" named "(.*?)"$/ do |object_type, name|
+  within("##{object_type}-list") {
+    click_link name + "_" + object_type
+  }
+end
+
 ### Then
 
 Then /^I should( not)? see a list of all objects that contain the name "(.*?)"$/ do |negate, name|
@@ -52,4 +59,8 @@ end
 
 Then /^I should see a message that no search results were returned$/ do
   expect(page).to have_content "Your search - #{@search_term} - did not return any results."
+end
+
+Then /^I should be on the user show page$/ do
+  expect(current_path).to eq user_path(@another_user)
 end

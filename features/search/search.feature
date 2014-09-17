@@ -20,3 +20,24 @@ Feature: Search the application
     Given I am signed in
     When I search for "best"
     Then I should see a message that no search results were returned
+
+  Scenario Outline: Return to search page after clicking result
+    Given I am signed in as an admin
+    And I belong to a project a project called "best_project"
+    And there is a track in that project called "best_track"
+    And I belong to a group called "best_group"
+    And there is another user in the system with email "best_user@example.com"
+    When I search for "best"
+    Then I should see a list of all objects that contain the name "best"
+
+    When I click on the "<model>" named "best"
+    Then I should be on the <model> show page
+    When I click "Back"
+    Then I should see a list of all objects that contain the name "best"
+
+    Examples:
+      |model   |
+      |project |
+      |track   |
+      |group   |
+      |user    |
