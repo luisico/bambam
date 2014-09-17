@@ -38,7 +38,7 @@ end
 ### Then
 
 Then /^I should( not)? see a list of all objects that contain the name "(.*?)"$/ do |negate, name|
-  object_array = ["_project", "_track", "_group"]
+  object_array = ["_project", "_track", "_group", "_user@example.com"]
   if negate
     object_array.each do |object|
       expect(page).not_to have_content name + object
