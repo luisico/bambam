@@ -25,7 +25,9 @@
 
         <% if @users.any? %>
           <h3>Users:</h3>
-          <%= render @users %>
+          <div id="user-list">
+            <%= render @users %>
+          </div>
         <% end %>
       <% else %>
         <p>Your search - <b><%= @q %></b> - did not return any results.</p>
