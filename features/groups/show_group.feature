@@ -34,14 +34,15 @@ Feature: Show a group
      | an admin | should     | I own a group                  |
      | a user   | should not | I belong to a group            |
 
-  Scenario Outline: Back link
+  Scenario Outline: Back button
     Given I am signed in as <role>
     And <group exists>
-    And I am on the group page
-    When I click "Back"
-    Then I should be on the <page> page
+    When I am on the <source> page
+    And I click on the group name
+    And I click "Back"
+    Then I should be on the <source> page
 
     Examples:
-     | role     | page            | group exists                   |
-     | an admin | users           | there is a group in the system |
-     | a user   | account profile | I belong to a group            |
+     | role     | group exists                   | source          |
+     | an admin | there is a group in the system | users           |
+     | a user   | I belong to a group            | account profile |
