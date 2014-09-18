@@ -17,7 +17,7 @@
         <% if can? :manage, Project %>
           <div>
             <%= label_tag :project_id, 'Add invitee to an existing project:', class: "medium-margin-bottom" %>
-            <%= select_tag :project_id, options_from_collection_for_select(Project.all, "id", "name"), include_blank: true %>
+            <%= select_tag :project_ids, options_from_collection_for_select(Project.all, "id", "name"), include_blank: true, multiple: true %>
           </div>
         <% end %>
         <div>

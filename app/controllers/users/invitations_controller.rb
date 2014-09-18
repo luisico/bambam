@@ -8,13 +8,15 @@ class Users::InvitationsController < Devise::InvitationsController
   # POST /resource/invitation
   def create
     self.resource = invite_resource
-
     if resource.errors.empty?
       yield resource if block_given?
       set_flash_message :notice, :send_instructions, :email => self.resource.email if self.resource.invitation_sent_at
       respond_with resource, :location => after_invite_path_for(resource)
-      if params["project_id"].present? && (project = Project.where(id: params["project_id"]).first)
-        project.users << resource
+      if params["project_ids"].present?
+        params["project_ids"].each do |project_id|
+          project = Project.where(id: project_id).first
+          project.users << resource if project
+        end
       end
     else
       @users = User.order('created_at DESC')
