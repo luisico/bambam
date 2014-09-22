@@ -4,9 +4,12 @@ describe SearchController do
   describe "Get 'search'" do
     context "as a signed in user" do
       before do
-        @projects = [FactoryGirl.create(:project, name: "best_project")]
-        @tracks = [FactoryGirl.create(:test_track, name: "best_track", project: @projects.first)]
-        @groups = [FactoryGirl.create(:group, name: "best_group")]
+        @projects = [FactoryGirl.create(:project, name: "best_project"),
+                    FactoryGirl.create(:project, name: "good_project")]
+        @tracks = [FactoryGirl.create(:test_track, name: "best_track", project: @projects.first),
+                  FactoryGirl.create(:test_track, name: "second_best_track", project: @projects.last)]
+        @groups = [FactoryGirl.create(:group, name: "best_group"),
+                  FactoryGirl.create(:group, name: "good_group")]
         @users = [FactoryGirl.create(:user, email: "best_user@example.com", projects: @projects, groups: @groups)]
         sign_in @users.first
       end
