@@ -1,33 +1,53 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <% if @projects.any? || @tracks.any? || @groups.any? || @users.any? %>
+      <% if @projects.any? || @groups.any? %>
         <% if @projects.any? %>
-          <h3>Projects:</h3>
+          <h3>Projects and Tracks</h3>
           <ul class="no-bullet" id="project-list">
-            <%= render @projects %>
+            <% @projects.each do |project| %>
+              <li class="medium-margin-bottom text-color-grey"><%= link_to project.name, project_path(project) %> (owner: <%= project.owner.email %>) [<%= pluralize(project.tracks.count, 'track') %>]</li>
+                <div class="tracks-list">
+                  <li>
+                    <ul>
+                      <% project.tracks.each do |track| %>
+                        <% if @tracks.include? track %>
+                          <li class="text-color-grey">
+                            <%= link_to_igv(track) %>
+                            <%= link_to track.name, track_path(track) %>
+                            <i class="fi-calendar medium margin-right" title="created"></i>
+                            <%= local_time_ago(track.created_at) %>
+                            <i class="fi-clock medium margin-right" title="updated"></i>
+                            <%= local_time_ago(track.updated_at) %>
+                          </li>
+                        <% end %>
+                      <% end %>
+                    </ul>
+                  </li>
+                </div>
+            <% end %>
           </ul>
         <% end %>
-
-        <% if @tracks.any? %>
-          <h3>Tracks:</h3>
-          <ul class="no-bullet tracks-list" id="track-list">
-            <%= render @tracks %>
-          </ul>
-        <% end %>
-
         <% if @groups.any? %>
-          <h3>Groups:</h3>
+          <h3>Groups and Users</h3>
           <ul class="no-bullet" id="group-list">
-            <%= render @groups %>
+            <% @groups.each do |group| %>
+              <li class="medium-margin-bottom text-color-grey"><%= link_to group.name, group_path(group) %> (owner: <%= group.owner.email %>) [<%= pluralize(group.members.count, 'user') %>]</li>
+                <div class="users-list">
+                  <li>
+                    <ul>
+                      <% group.members.each do |member| %>
+                        <% if @users.include? member %>
+                          <li class="text-color-grey">
+                            <%= link_to member.email, user_path(member) %>
+                          </li>
+                        <% end %>
+                      <% end %>
+                    </ul>
+                  </li>
+                </div>
+            <% end %>
           </ul>
-        <% end %>
-
-        <% if @users.any? %>
-          <h3>Users:</h3>
-          <div id="user-list">
-            <%= render @users %>
-          </div>
         <% end %>
       <% else %>
         <p>Your search - <b><%= @q %></b> - did not return any results.</p>
