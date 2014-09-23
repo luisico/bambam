@@ -1,47 +1,47 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <% if @projects.any? || @groups.any? %>
-        <% if @projects.any? %>
+      <% if @projects_and_tracks.any? || @groups_and_users.any? %>
+        <% if @projects_and_tracks.any? %>
           <h3>Projects and Tracks</h3>
           <ul class="no-bullet" id="project-list">
-            <% @projects.each do |project| %>
-              <li class="medium-margin-bottom text-color-grey"><%= link_to project.name, project_path(project) %> (owner: <%= project.owner.email %>) [<%= pluralize(project.tracks.count, 'track') %>]</li>
-                <div class="tracks-list">
-                  <li>
-                    <ul>
-                      <% project.tracks.each do |track| %>
-                        <% if @tracks.include? track %>
-                          <li class="text-color-grey">
-                            <%= link_to_igv(track) %>
-                            <%= link_to track.name, track_path(track) %>
-                            <i class="fi-calendar medium margin-right" title="created"></i>
-                            <%= local_time_ago(track.created_at) %>
-                            <i class="fi-clock medium margin-right" title="updated"></i>
-                            <%= local_time_ago(track.updated_at) %>
-                          </li>
-                        <% end %>
-                      <% end %>
-                    </ul>
-                  </li>
-                </div>
+            <% @projects_and_tracks.each do |project, tracks_array| %>
+              <li class="medium-margin-bottom text-color-grey">
+                <%= link_to project.name, project_path(project) %>
+                (owner: <%= project.owner.email %>)
+                [<%= pluralize(project.tracks.count, 'track') %>]
+              </li>
+              <div class="tracks-list">
+                <li>
+                  <ul>
+                    <% tracks_array.each do |track| %>
+                      <li class="text-color-grey">
+                        <%= link_to_igv(track) %>
+                        <%= link_to track.name, track_path(track) %>
+                        <i class="fi-calendar medium margin-right" title="created"></i>
+                        <%= local_time_ago(track.created_at) %>
+                        <i class="fi-clock medium margin-right" title="updated"></i>
+                        <%= local_time_ago(track.updated_at) %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </li>
+              </div>
             <% end %>
           </ul>
         <% end %>
-        <% if @groups.any? %>
+        <% if @groups_and_users.any? %>
           <h3>Groups and Users</h3>
           <ul class="no-bullet" id="group-list">
-            <% @groups.each do |group| %>
+            <% @groups_and_users.each do |group, members_array| %>
               <li class="medium-margin-bottom text-color-grey"><%= link_to group.name, group_path(group) %> (owner: <%= group.owner.email %>) [<%= pluralize(group.members.count, 'user') %>]</li>
                 <div class="users-list">
                   <li>
                     <ul>
-                      <% group.members.each do |member| %>
-                        <% if @users.include? member %>
-                          <li class="text-color-grey">
-                            <%= link_to member.email, user_path(member) %>
-                          </li>
-                        <% end %>
+                      <% members_array.each do |member| %>
+                        <li class="text-color-grey">
+                          <%= link_to member.email, user_path(member) %>
+                        </li>
                       <% end %>
                     </ul>
                   </li>

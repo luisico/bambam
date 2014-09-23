@@ -4,14 +4,19 @@ describe SearchController do
   describe "Get 'search'" do
     context "as a signed in user" do
       before do
-        @projects = [FactoryGirl.create(:project, name: "best_project"),
-                    FactoryGirl.create(:project, name: "good_project")]
-        @tracks = [FactoryGirl.create(:test_track, name: "best_track", project: @projects.first),
-                  FactoryGirl.create(:test_track, name: "second_best_track", project: @projects.last)]
-        @groups = [FactoryGirl.create(:group, name: "best_group"),
-                  FactoryGirl.create(:group, name: "good_group")]
-        @users = [FactoryGirl.create(:user, email: "best_user@example.com", projects: @projects, groups: @groups)]
-        sign_in @users.first
+        @projects_and_tracks = {FactoryGirl.create(:project, name: "best_project") => [
+                                FactoryGirl.create(:test_track, name: "best_track", project: Project.last)
+                                ],
+                                FactoryGirl.create(:project, name: "good_project") => [
+                                FactoryGirl.create(:test_track, name: "second_best_track", project: Project.last)]
+                                }
+        @groups_and_users = {FactoryGirl.create(:group, name: "best_group") => [
+                            FactoryGirl.create(:user,
+                                                email: "best_user@example.com",
+                                                projects: @projects_and_tracks.keys[0..1],
+                                                groups: Group.where(name: 'best_group'))]
+                            }
+        sign_in User.where(email: "best_user@example.com").first
       end
 
       context "with valid parameters" do
