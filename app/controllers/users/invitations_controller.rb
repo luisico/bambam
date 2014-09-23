@@ -12,12 +12,6 @@ class Users::InvitationsController < Devise::InvitationsController
       yield resource if block_given?
       set_flash_message :notice, :send_instructions, :email => self.resource.email if self.resource.invitation_sent_at
       respond_with resource, :location => after_invite_path_for(resource)
-      if params["project_ids"].present?
-        params["project_ids"].each do |project_id|
-          project = Project.where(id: project_id).first
-          project.users << resource if project
-        end
-      end
     else
       @users = User.order('created_at DESC')
       @groups = Group.all
@@ -26,9 +20,17 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   private
+  def add_invitee_to_projects(user)
+    params[:project_ids].each do |project_id|
+      project = Project.where(id: project_id).first
+      project.users << user if project.present?
+    end
+  end
+
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |u|
       u.add_role(:inviter) if params[:inviter]
+      add_invitee_to_projects(u) if (params[:project_ids] && params[:project_ids].kind_of?(Array))
     end
   end
 end
