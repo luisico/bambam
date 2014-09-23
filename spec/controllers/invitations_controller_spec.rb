@@ -139,4 +139,31 @@ describe Users::InvitationsController do
       end
     end
   end
+
+  describe "#add_invitee_to_projects" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @projects = FactoryGirl.create_list(:project, 3)
+    end
+
+    context "with valid project_id parameter" do
+      it "adds invitee to projects" do
+        controller.params = {project_ids: [@projects.first.id.to_s, @projects.last.id.to_s]}
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.to change(@user.projects, :count).by 2
+        expect(@projects.first.reload.users).to include @user
+        expect(@projects.last.reload.users).to include @user
+      end
+    end
+
+    context "with invalid parameters" do
+      it "does not add invitee to a project" do
+        controller.params = {project_ids: [999, 9999]}
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.not_to change(@user.projects, :count)
+      end
+    end
+  end
 end
