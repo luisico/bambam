@@ -52,7 +52,7 @@
     <div class="panel">
       <h3 id="groups-headline">Groups</h3>
       <ul class="no-bullet" id="group-list">
-        <%= render @groups %>
+        <%= render partial: "groups/group", collection: @groups %>
       </ul>
       <div>
         <%= link_to 'New Group', new_group_path, class: "button tiny radius" %>
