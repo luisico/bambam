@@ -21,7 +21,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
   private
   def add_invitee_to_projects(user)
-    params[:project_ids].each do |project_id|
+    [params[:project_ids]].flatten.each do |project_id|
       project = Project.where(id: project_id).first
       project.users << user if project.present?
     end
@@ -30,7 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |u|
       u.add_role(:inviter) if params[:inviter]
-      add_invitee_to_projects(u) if (params[:project_ids] && params[:project_ids].kind_of?(Array))
+      add_invitee_to_projects(u) if params[:project_ids]
     end
   end
 end

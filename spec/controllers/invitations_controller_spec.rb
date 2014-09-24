@@ -141,28 +141,44 @@ describe Users::InvitationsController do
   end
 
   describe "#add_invitee_to_projects" do
-    before do
-      @user = FactoryGirl.create(:user)
-      @projects = FactoryGirl.create_list(:project, 3)
-    end
+    before { @user = FactoryGirl.create(:user) }
 
     context "with valid project_id parameter" do
-      it "adds invitee to projects" do
-        controller.params = {project_ids: [@projects.first.id.to_s, @projects.last.id.to_s]}
+      it "adds right projects" do
+        projects = FactoryGirl.create_list(:project, 3)
+        controller.params = {project_ids: [projects.first.id, projects.last.id]}
+
         expect {
           controller.send(:add_invitee_to_projects, @user)
         }.to change(@user.projects, :count).by 2
-        expect(@projects.first.reload.users).to include @user
-        expect(@projects.last.reload.users).to include @user
+        expect(@user.projects).to eq [projects.first, projects.last]
+      end
+
+      it "adds a single project" do
+        project = FactoryGirl.create(:project)
+        controller.params = {project_ids: project}
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.to change(@user.projects, :count).by(1)
+        expect(@user.projects).to eq [project]
       end
     end
 
     context "with invalid parameters" do
-      it "does not add invitee to a project" do
+      it "does not add non existant projects" do
         controller.params = {project_ids: [999, 9999]}
         expect {
           controller.send(:add_invitee_to_projects, @user)
         }.not_to change(@user.projects, :count)
+      end
+
+      it "does not add empty or blank list of projects" do
+        ['', nil, []].each do |ids|
+          controller.params = {project_ids: ids}
+          expect {
+            controller.send(:add_invitee_to_projects, @user)
+          }.not_to change(@user.projects, :count)
+        end
       end
     end
   end
