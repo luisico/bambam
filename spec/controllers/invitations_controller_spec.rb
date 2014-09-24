@@ -182,4 +182,46 @@ describe Users::InvitationsController do
       end
     end
   end
+
+  describe "#invite_resource" do
+    before { sign_in FactoryGirl.create(:admin) }
+
+    context "inviter parameter" do
+      it "adds role when requested" do
+        controller.params = {user: {email: "test@example.com"}, inviter: "1"}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.has_role? :inviter).to be_true
+      end
+
+      it "doesn't add role when not requested" do
+        controller.params = {user: {email: "test@example.com"}}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.has_role? :inviter).to be_false
+      end
+    end
+
+    context "project-ids parameter" do
+      before { @project = FactoryGirl.create(:project) }
+
+      it "adds project when requested" do
+        controller.params = {user: {email: "test@example.com"}, project_ids: "#{@project.id}"}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.projects).to eq [@project]
+      end
+
+      it "doesn't add project when not requested" do
+        controller.params = {user: {email: "test@example.com"}}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.projects).to eq []
+      end
+    end
+  end
 end
