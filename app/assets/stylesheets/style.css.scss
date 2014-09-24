@@ -127,9 +127,20 @@ li.sub-text {
   font-size: rem-calc(15)
 }
 
+li.search-result {
+  @extend .medium-margin-bottom;
+  @extend .text-color-grey;
+  font-size: rem-calc(20);
+}
+
 span.small-text {
   font-size: rem-calc(10);
   margin-top: 0;
+}
+
+span.inline-timestamps {
+  color: #A8A8A8 !important;
+  margin-left: rem-calc(15);
 }
 
 .medium-margin-bottom {

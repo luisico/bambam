@@ -1,8 +1,15 @@
 <li>
   <%= link_to_igv(track) %>
   <%= link_to track.name, track, class: "track" %>
-  <% unless @project %>
+  <% unless (@project || @projects_and_tracks) %>
     (<%= link_to track.project.name, track.project %>)
   <% end %>
+  <% if @projects_and_tracks %>
+    <span class="inline-timestamps">
+      <i class="fi-calendar medium margin-right" title="created"></i>
+        <%= local_time_ago(track.created_at) %>
+      <i class="fi-clock medium margin-right" title="updated"></i>
+        <%= local_time_ago(track.updated_at) %>
+    </span>
+  <% end %>
 </li>
-
