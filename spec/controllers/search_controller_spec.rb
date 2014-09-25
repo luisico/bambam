@@ -25,12 +25,9 @@ describe SearchController do
           expect(response).to be_success
         end
 
-        it "should return only valid search results" do
-          [:project, :test_track, :group, :user].each do |model|
-            FactoryGirl.create(model)
-          end
+        it "should return the valid search results" do
           get :search, q: 'best'
-          [:projects, :tracks, :groups, :users].each do |col|
+          [:projects_and_tracks, :groups_and_users].each do |col|
             expect(assigns(col)).to eq instance_variable_get("@#{col.to_s}")
           end
         end
