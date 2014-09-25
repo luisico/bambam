@@ -205,14 +205,17 @@ describe Users::InvitationsController do
     end
 
     context "project-ids parameter" do
-      before { @project = FactoryGirl.create(:project) }
+      before { @projects = FactoryGirl.create_list(:project, 2) }
 
       it "adds project when requested" do
-        controller.params = {user: {email: "test@example.com"}, project_ids: "#{@project.id}"}
+        controller.params = {
+          user: {email: "test@example.com"},
+          project_ids: ["#{@projects.first.id}", "#{@projects.last.id}"]
+        }
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by 1
-        expect(User.last.projects).to eq [@project]
+        expect(User.last.projects).to eq @projects
       end
 
       it "doesn't add project when not requested" do
