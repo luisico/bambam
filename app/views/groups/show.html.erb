@@ -3,9 +3,7 @@
     <div class="panel">
       <div class="clearfix">
         <h3 class="left"><%= @group.name %></h3>
-        <h4 class="right">
-          <%= render partial: 'application/timestamps', locals: { record: @group } %>
-        </h4>
+        <%= render partial: 'timestamps', locals: { record: @group } %>
       </div>
 
       <div id="members">

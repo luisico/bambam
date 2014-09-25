@@ -11,7 +11,7 @@ var tour_project_show = {
     {
       title: "Timestamps",
       content: "Project creation date <i class='fi-calendar'></i> and date of last update <i class='fi-clock'></i>.",
-      target: "#project-timestamps",
+      target: "#timestamps",
       placement: 'left'
     },
     {

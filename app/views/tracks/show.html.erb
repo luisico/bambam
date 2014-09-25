@@ -11,9 +11,7 @@
             <% end %>
           </small>
         </h3>
-        <h4 class="right" id="track-timestamps">
-          <%= render partial: 'application/timestamps', locals: { record: @track } %>
-        </h4>
+        <%= render partial: 'timestamps', locals: { record: @track } %>
       </div>
 
       <div>
