@@ -3,59 +3,58 @@ require 'spec_helper'
 describe SearchController do
   describe "Get 'search'" do
     context "as a signed in user" do
-      before {
-        sign_in @user = FactoryGirl.create(:user, email: "best_user@example.com")
-        @project = FactoryGirl.create(:project, name: "best_project", users: [@user])
-        @track = FactoryGirl.create(:test_track, name: "best_track", project: @project)
-        @group = FactoryGirl.create(:group, name: "good_project", members: [@user])
-      }
+      before do
+        @user = FactoryGirl.create(:user, email: "best_user@example.com")
+        sign_in @user
+      end
 
       it "should be a success" do
         get :search, q: 'best'
         expect(response).to be_success
       end
 
-      it "should return two hashes of hashes" do
-        get :search, q: 'best'
-        expect(assigns(:projects_and_tracks)).to eq @project =>[@track]
-        expect(assigns(:groups_and_users)).to eq @group =>[@user]
-      end
+      context "projects and tracks" do
+        before do
+          @project1 = FactoryGirl.create(:project, name: "best project", users: [@user])
+          @track11 = FactoryGirl.create(:test_track, name: "a track", project: @project1)
 
-      it "should return valid search results" do
-        projects_and_tracks = {
-          @project => [@track],
-          FactoryGirl.create(:project, name: "good_project", users: [@user]) => [
-            FactoryGirl.create(:test_track, name: "second_best_track", project: Project.last)
-          ]
-        }
-        groups_and_users = {
-          @group => [@user],
-          FactoryGirl.create(:group, name: "ok_group", members: [@user]) => [@user]
-        }
+          @project2 = FactoryGirl.create(:project, name: "another best project", users: [@user])
+          @track21 = FactoryGirl.create(:test_track, name: "best track", project: @project2)
+          @track22 = FactoryGirl.create(:test_track, name: "a track", project: @project2)
+          @track23 = FactoryGirl.create(:test_track, name: "second best track", project: @project2)
 
-        get :search, q: 'best'
-        [:projects_and_tracks, :groups_and_users].each do |col|
-          expect(assigns(col)).to eq eval("#{col.to_s}")
+          @project3 = FactoryGirl.create(:project, name: "ok project", users: [@user])
+          @track31 = FactoryGirl.create(:test_track, name: "a track", project: @project3)
+          @track32 = FactoryGirl.create(:test_track, name: "third best track", project: @project3)
+
+          @project4 = FactoryGirl.create(:project, name: "bad project", users: [@user])
+          @track41 = FactoryGirl.create(:test_track, name: "a track", project: @project4)
         end
-      end
 
-      it "should not return invalid search results" do
-        @user.update_attributes(email: "good_user@example.com")
-        projects_and_tracks = {
-          FactoryGirl.create(:project, name: "good_project", users: [@user]) => [
-            FactoryGirl.create(:test_track, name: "good_track", project: Project.last)
-          ]
-        }
-        groups_and_users = {
-          FactoryGirl.create(:group, name: "ok_group", members: [@user]) => [@user]
-        }
+        it "should be correctly returned and sorted" do
+          result = {
+            @project1 => [],
+            @project2 => [@track21, @track23],
+            @project3 => [@track32]
+          }
+          get :search, q: 'best'
+          expect(assigns(:projects_and_tracks)).to eq result
+        end
 
-        get :search, q: 'best'
-        [:projects_and_tracks, :groups_and_users].each do |col|
-          expect(assigns(col)).not_to eq eval("#{col.to_s}")
+        it "should not return projects or tracks user doesn't have access to" do
+          pending
         end
       end
     end
+
+    # context "groups and users" do
+    #   it "should be correctly returned and sorted" do
+    #     groups_and_users = {
+    #       @group => [@user],
+    #       FactoryGirl.create(:group, name: "ok_group", members: [@user]) => [@user]
+    #     }
+    #   end
+    # end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
