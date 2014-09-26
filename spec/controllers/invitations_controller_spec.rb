@@ -208,10 +208,7 @@ describe Users::InvitationsController do
       before { @projects = FactoryGirl.create_list(:project, 2) }
 
       it "adds project when requested" do
-        controller.params = {
-          user: {email: "test@example.com"},
-          project_ids: ["#{@projects.first.id}", "#{@projects.last.id}"]
-        }
+        controller.params = {user: {email: "test@example.com"}, project_ids: @projects.map(&:id)}
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by 1
