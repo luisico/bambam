@@ -139,4 +139,92 @@ describe Users::InvitationsController do
       end
     end
   end
+
+  describe "#add_invitee_to_projects" do
+    before { @user = FactoryGirl.create(:user) }
+
+    context "with valid project_id parameter" do
+      it "adds right projects" do
+        projects = FactoryGirl.create_list(:project, 3)
+        controller.params = {project_ids: [projects.first.id, projects.last.id]}
+
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.to change(@user.projects, :count).by 2
+        expect(@user.projects).to eq [projects.first, projects.last]
+      end
+
+      it "adds a single project" do
+        project = FactoryGirl.create(:project)
+        controller.params = {project_ids: project}
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.to change(@user.projects, :count).by(1)
+        expect(@user.projects).to eq [project]
+      end
+    end
+
+    context "with invalid parameters" do
+      it "does not add non existant projects" do
+        controller.params = {project_ids: [999, 9999]}
+        expect {
+          controller.send(:add_invitee_to_projects, @user)
+        }.not_to change(@user.projects, :count)
+      end
+
+      it "does not add empty or blank list of projects" do
+        ['', nil, []].each do |ids|
+          controller.params = {project_ids: ids}
+          expect {
+            controller.send(:add_invitee_to_projects, @user)
+          }.not_to change(@user.projects, :count)
+        end
+      end
+    end
+  end
+
+  describe "#invite_resource" do
+    before { sign_in FactoryGirl.create(:admin) }
+
+    context "inviter parameter" do
+      it "adds role when requested" do
+        controller.params = {user: {email: "test@example.com"}, inviter: "1"}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.has_role? :inviter).to be_true
+      end
+
+      it "doesn't add role when not requested" do
+        controller.params = {user: {email: "test@example.com"}}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.has_role? :inviter).to be_false
+      end
+    end
+
+    context "project-ids parameter" do
+      before { @projects = FactoryGirl.create_list(:project, 2) }
+
+      it "adds project when requested" do
+        controller.params = {
+          user: {email: "test@example.com"},
+          project_ids: ["#{@projects.first.id}", "#{@projects.last.id}"]
+        }
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.projects).to eq @projects
+      end
+
+      it "doesn't add project when not requested" do
+        controller.params = {user: {email: "test@example.com"}}
+        expect {
+          controller.send(:invite_resource)
+        }.to change(User, :count).by 1
+        expect(User.last.projects).to eq []
+      end
+    end
+  end
 end
