@@ -4,12 +4,15 @@ class SearchController < ApplicationController
   def search
     @q = params[:q]
 
-    projects        = Project.accessible_by(current_ability).search(name_cont: @q).result
-    tracks_projects = Project.accessible_by(current_ability).search(tracks_name_cont: @q).result
-    projects        = projects | tracks_projects
-    tracks          = Track.accessible_by(current_ability).search(name_cont: @q).result
     @projects_and_tracks = {}
-    projects.each {|project| @projects_and_tracks.merge!(project => project.tracks.select {|track| track if tracks.include? track})}
+    projects = Project.accessible_by(current_ability).search(name_or_tracks_name_cont: @q).
+      result(distinct: true).order('projects.id ASC')
+    projects.each { |project| @projects_and_tracks[project] = [] }
+
+    tracks = Track.accessible_by(current_ability).search(name_cont: @q).
+      result.order('tracks.project_id ASC')
+    tracks.each { |track| @projects_and_tracks[track.project] << track }
+
 
     groups          = Group.accessible_by(current_ability).search(name_cont: @q).result
     users_groups    = Group.accessible_by(current_ability).search(members_email_cont: @q).result.includes(:members)
