@@ -11,16 +11,7 @@
             <% end %>
           </small>
         </h3>
-        <h4 class="right">
-          <small id="track-timestamps">
-            <span class="created-at"><i class="fi-calendar medium margin-right" title="created"></i>
-              <%= local_time_ago(@track.created_at) %>
-            </span><br/>
-            <span class="updated-at"><i class="fi-clock medium margin-right" title="updated"></i>
-              <%= local_time_ago(@track.updated_at) %>
-            </span>
-          </small>
-        </h4>
+        <%= render partial: 'timestamps', locals: { record: @track } %>
       </div>
 
       <div>
@@ -39,7 +30,6 @@
           <% end %>
         </ul>
       </div>
-
 
       <div>
         <h5>Server path</h5>
