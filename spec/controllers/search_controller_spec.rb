@@ -42,19 +42,42 @@ describe SearchController do
         end
 
         it "should not return projects or tracks user doesn't have access to" do
-          pending
+          [@project1, @project3].each {|p| p.users.delete(@user)}
+          result = {
+            @project2 => [@track21, @track23]
+          }
+          get :search, q: 'best'
+          expect(assigns(:projects_and_tracks)).to eq result
+        end
+      end
+
+      context "groups and users" do
+        before do
+          @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
+          @group1 = FactoryGirl.create(:group, name: "best project", members: [@user, @user2])
+          @group2 = FactoryGirl.create(:group, name: "good project", members: [@user])
+          @group3 = FactoryGirl.create(:group, name: "bad project")
+        end
+
+        it "should be correctly returned and sorted" do
+          result = {
+            @group1 => [@user, @user2],
+            @group2 => [@user]
+          }
+          get :search, q: 'best'
+          expect(assigns(:groups_and_users)).to eq result
+        end
+
+        it "should not return groups user doesn't have access to" do
+          @group1.members.delete(@user)
+          result = {
+            @group2 => [@user]
+          }
+          get :search, q: 'best'
+          expect(assigns(:groups_and_users)).to eq result
         end
       end
     end
-
-    # context "groups and users" do
-    #   it "should be correctly returned and sorted" do
-    #     groups_and_users = {
-    #       @group => [@user],
-    #       FactoryGirl.create(:group, name: "ok_group", members: [@user]) => [@user]
-    #     }
-    #   end
-    # end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
