@@ -150,7 +150,7 @@ describe Users::InvitationsController do
 
         expect {
           controller.send(:add_invitee_to_projects, @user)
-        }.to change(@user.projects, :count).by 2
+        }.to change(@user.projects, :count).by(2)
         expect(@user.projects).to eq [projects.first, projects.last]
       end
 
@@ -191,7 +191,7 @@ describe Users::InvitationsController do
         controller.params = {user: {email: "test@example.com"}, inviter: "1"}
         expect {
           controller.send(:invite_resource)
-        }.to change(User, :count).by 1
+        }.to change(User, :count).by(1)
         expect(User.last.has_role? :inviter).to be_true
       end
 
@@ -199,7 +199,7 @@ describe Users::InvitationsController do
         controller.params = {user: {email: "test@example.com"}}
         expect {
           controller.send(:invite_resource)
-        }.to change(User, :count).by 1
+        }.to change(User, :count).by(1)
         expect(User.last.has_role? :inviter).to be_false
       end
     end
@@ -211,7 +211,7 @@ describe Users::InvitationsController do
         controller.params = {user: {email: "test@example.com"}, project_ids: @projects.map(&:id)}
         expect {
           controller.send(:invite_resource)
-        }.to change(User, :count).by 1
+        }.to change(User, :count).by(1)
         expect(User.last.projects).to eq @projects
       end
 
@@ -219,7 +219,7 @@ describe Users::InvitationsController do
         controller.params = {user: {email: "test@example.com"}}
         expect {
           controller.send(:invite_resource)
-        }.to change(User, :count).by 1
+        }.to change(User, :count).by(1)
         expect(User.last.projects).to eq []
       end
     end
