@@ -1,8 +1,9 @@
 <% if current_user.has_role? :admin %>
-  <div class="hide" data-tour="tour_admin_project_index"></div>
+  <%= render partial: "tour_link", locals: {tour_name: "tour_admin_project_index"} %>
 <% else %>
-  <div class="hide" data-tour="tour_project_index"></div>
+  <%= render partial: "tour_link", locals: {tour_name: "tour_project_index"} %>
 <% end %>
+
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <% if can? :manage, Project %>
