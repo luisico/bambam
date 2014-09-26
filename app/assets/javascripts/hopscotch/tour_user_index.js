@@ -10,7 +10,19 @@ var tour_user_index = {
     },
     {
       title: "Invitation form",
-      content: "Enter an email and click send to invite new users to the system.",
+      content: "Enter an email above and check box to give invitee ability to invite others.",
+      target: "#inviter",
+      placement: 'bottom'
+    },
+    {
+      title: "Add invitee to existing projects",
+      content: "Type in name of project or select from dropdown menu. Add as many projects as you want.",
+      target: "#s2id_project_ids",
+      placement: 'top'
+    },
+    {
+      title: "Send invitation",
+      content: "Click button to send invitation. Invitee will be added to projects you selected.",
       target: "#invite-email",
       placement: 'bottom'
     },
