@@ -2,30 +2,22 @@
 
 ### Given
 
-Given /^I belong to a project a project called "(.*?)"$/ do |name|
+Given /^I belong to a project named "(.*?)" with track "(.*?)"$/ do |project, track|
   user = @user || @admin
   expect {
-    @project = FactoryGirl.create(:project, name: name, users: [user])
+    @project = FactoryGirl.create(:project, name: project, users: [user])
+    @track = FactoryGirl.create(:test_track, name: track, project: @project)
   }.to change(Project, :count).by(1)
+  expect(@track.project).to eq @project
 end
 
-Given /^there is a track in that project called "(.*?)"$/ do |name|
-  @project ||= @projects.last
-  FactoryGirl.create(:test_track, name: name, :project => @project)
-  @track = @project.tracks.last
-end
-
-Given /^I belong to a group called "(.*?)"$/ do |name|
-  @user ||= User.last
+Given /^I belong to a group named "(.*?)" with member "(.*?)"$/ do |group, member|
+  user = @user || @admin
   expect {
-    @group = FactoryGirl.create(:group, name: name, members: [@user])
+    @another_user = FactoryGirl.create(:user, email: member)
+    @group = FactoryGirl.create(:group, name: group, members: [user, @another_user])
   }.to change(Group, :count).by(1)
-end
-
-Given /^there is another user in that group with email "(.*?)"$/ do |email|
-  expect {
-    @another_user = FactoryGirl.create(:user, email: email, groups: [@group])
-  }.to change(User, :count).by(1)
+  expect(@group.members).to include user, @another_user
 end
 
 ### When
@@ -42,7 +34,7 @@ end
 
 ### Then
 
-Then /^I should only see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, term|
+Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, term|
   col_list = page.find("##{col.gsub(" ", "-")}")
   if col == "projects and tracks"
     [Project, Track].each do |object_type|
