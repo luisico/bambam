@@ -18,6 +18,33 @@ Feature: Sign up by invitation only
       | admin   | should     | without |
       | inviter | should not | with    |
 
+  @javascript
+  Scenario Outline: Admin can invite a user and add them to an existing project
+    Given I am signed in as an <role>
+    And there are 3 projects in the system
+    And I am on the users page
+    Then I <priviledge> be able to invite a user and add them to an existing project
+    And I should see a message confirming that an invitation email has been sent
+    And I should be on the users page
+    And I should see the invitee email with invitation pending icon
+    And the invitee should receive an invitation
+
+    Examples:
+      | role    | priviledge |
+      | admin   | should     |
+      | inviter | should not |
+
+  @javascript
+  Scenario: Admin can invite a user and add them to multiple existing projects
+    Given I am signed in as an admin
+    And there are 3 projects in the system
+    And I am on the users page
+    Then I should be able to invite a user and add them to multiple existing projects
+    And I should see a message confirming that an invitation email has been sent
+    And I should be on the users page
+    And I should see the invitee email with invitation pending icon
+    And the invitee should receive an invitation
+
   Scenario Outline: Cannot invite already registered users
     Given I am signed in as an <role>
     And I am on the users page

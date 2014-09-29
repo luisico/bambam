@@ -15,6 +15,12 @@
             <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
           </div>
         <% end %>
+        <% if can? :manage, Project %>
+          <div>
+            <%= label_tag :project_id, 'Add invitee to existing projects:', class: "medium-margin-bottom" %>
+            <%= select_tag :project_ids, options_from_collection_for_select(Project.all, "id", "name"), include_blank: true, multiple: true %>
+          </div>
+        <% end %>
         <div>
           <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius', id: "invite-email" %>
         </div>

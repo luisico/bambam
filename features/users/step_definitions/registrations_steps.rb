@@ -19,6 +19,12 @@ def sign_up(invitee=nil)
   click_button I18n.t('devise.invitations.edit.submit_button')
 end
 
+def fill_in_select2(selector, options={})
+  page.find(:css, "#s2id_#{selector}").click
+  page.find(:css, ".select2-search-field input.select2-input").set options[:with]
+  page.find(:css, ".select2-result-label").click
+end
+
 ### Given
 
 ### When
@@ -82,15 +88,6 @@ When /^I visit the cancel account page$/ do
   visit '/users/cancel'
 end
 
-### Then
-
-Then /^I should be able to invite a user$/ do
-  expect{
-    build_invitee
-    fill_invitation_form
-  }.to change(User, :count).by(1)
-end
-
 Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/ do |_not, out|
   build_invitee
   if out
@@ -113,6 +110,38 @@ Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/
     }.to change(User, :count).by(1)
     expect(User.last.has_role?(:inviter)).to eq true
   end
+end
+
+Then /^I should( not)? be able to invite a user and add them to an existing project$/ do |_not|
+  if _not
+    expect {
+      build_invitee
+      fill_invitation_form do
+        expect(page).not_to have_content('Add invitee to an existing project')
+      end
+    }.to change(User, :count).by(1)
+    expect(@project.users).not_to include User.last
+  else
+    expect{
+      build_invitee
+      fill_invitation_form do
+        fill_in_select2("project_ids", with: @project.name)
+      end
+    }.to change(User, :count).by(1)
+    expect(@project.users).to include User.last
+  end
+end
+
+Then /^I should be able to invite a user and add them to multiple existing projects$/ do
+  expect {
+    build_invitee
+    fill_invitation_form do
+      fill_in_select2("project_ids", with: Project.first.name)
+      fill_in_select2("project_ids", with: Project.last.name)
+    end
+  }.to change(User, :count).by(1)
+  expect(Project.first.users).to include User.last
+  expect(Project.last.users).to include User.last
 end
 
 Then /^I should see a message confirming that an invitation email has been sent$/ do
