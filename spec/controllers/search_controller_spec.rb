@@ -54,9 +54,10 @@ describe SearchController do
       context "groups and users" do
         before do
           @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
+          @user3 = FactoryGirl.create(:user, email: "good_user@example.com")
           @group1 = FactoryGirl.create(:group, name: "best project", members: [@user, @user2])
-          @group2 = FactoryGirl.create(:group, name: "good project", members: [@user])
-          @group3 = FactoryGirl.create(:group, name: "bad project")
+          @group2 = FactoryGirl.create(:group, name: "good project", members: [@user, @user3])
+          @group3 = FactoryGirl.create(:group, name: "bad project", members: [@user3])
         end
 
         it "should be correctly returned and sorted" do
