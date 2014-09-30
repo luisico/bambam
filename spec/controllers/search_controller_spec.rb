@@ -66,22 +66,25 @@ describe SearchController do
           @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
           @user3 = FactoryGirl.create(:user, email: "good_user@example.com")
           @group1 = FactoryGirl.create(:group, name: "best project", members: [@user, @user2])
-          @group2 = FactoryGirl.create(:group, name: "good project", members: [@user, @user3])
-          @group3 = FactoryGirl.create(:group, name: "bad project", members: [@user3])
+          @group2 = FactoryGirl.create(:group, name: "second best project", members: [@user, @user3])
+          @group3 = FactoryGirl.create(:group, name: "ok project", members: [@user, @user2])
+          @group4 = FactoryGirl.create(:group, name: "bad project", members: [@user3])
         end
 
         it "should be correctly returned and sorted" do
           result = {
-            @group1 => [@user2]
+            @group1 => [@user2],
+            @group2 => [],
+            @group3 => [@user2]
           }
           get :search, q: 'best'
           expect(assigns(:groups_and_users)).to eq result
         end
 
         it "should not return groups user doesn't have access to" do
-          @group2.members.delete(@user)
+          [@group1, @group3].each {|group| group.members.delete(@user)}
           result = {
-            @group1 => [@user2]
+            @group2 => []
           }
           get :search, q: 'best'
           expect(assigns(:groups_and_users)).to eq result

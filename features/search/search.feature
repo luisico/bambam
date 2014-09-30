@@ -4,7 +4,7 @@ Feature: Search the application
   I want to be able to access a page with results of my search query
 
   Scenario: Show a list of search results
-    Given I am signed in as an admin
+    Given I am signed in
     And I belong to a project named "best_project" with track "best_track"
     And I belong to a project named "ok_project" with track "second_best_track"
     And I belong to a project named "blah_project" with track "blah_track" and path "tmp/tracks/best.bam"
