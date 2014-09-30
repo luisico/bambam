@@ -29,20 +29,24 @@ describe SearchController do
 
           @project4 = FactoryGirl.create(:project, name: "bad project", users: [@user])
           @track41 = FactoryGirl.create(:test_track, name: "a track", project: @project4)
+
+          @project5 = FactoryGirl.create(:project, name: "so so project", users: [@user])
+          @track51 = FactoryGirl.create(:test_track, name: "b track", project: @project5, path: "tmp/tests/best.bam")
         end
 
         it "should be correctly returned and sorted" do
           result = {
             @project1 => [],
             @project2 => [@track21, @track23],
-            @project3 => [@track32]
+            @project3 => [@track32],
+            @project5 => [@track51]
           }
           get :search, q: 'best'
           expect(assigns(:projects_and_tracks)).to eq result
         end
 
         it "should not return projects or tracks user doesn't have access to" do
-          [@project1, @project3].each {|p| p.users.delete(@user)}
+          [@project1, @project3, @project5].each {|p| p.users.delete(@user)}
           result = {
             @project2 => [@track21, @track23]
           }

@@ -7,6 +7,7 @@ Feature: Search the application
     Given I am signed in as an admin
     And I belong to a project named "best_project" with track "best_track"
     And I belong to a project named "ok_project" with track "second_best_track"
+    And I belong to a project named "blah_project" with track "blah_track" and path "tmp/tracks/best.bam"
     And I belong to a project named "so_so_project" with track "so_so_track"
     And I belong to a group named "best_group" with member "best_user@example.com"
     And I belong to a group named "ok_group" with member "second_best_user@example.com"
@@ -48,3 +49,10 @@ Feature: Search the application
     Given I do not exist as a user
     When I visit the sign in page
     Then I should not see a search box and button
+
+  @javascript
+  Scenario: Track path changes from truncated to full on click
+    Given I am signed in as an admin
+    And I belong to a project named "best_project" with track "best_track" and path "tmp/tracks/54321best12345.bam"
+    When I search for "best"
+    Then I should be able to toggle track path from truncated to full

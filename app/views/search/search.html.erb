@@ -11,11 +11,9 @@
                 (owner: <%= project.owner.email %>)
                 [<%= pluralize(project.tracks.count, 'track') %>]
               </li>
-              <li class="tracks-list">
                 <ul>
                   <%= render tracks_array %>
                 </ul>
-              </li>
             <% end %>
           </ul>
         <% end %>

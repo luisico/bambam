@@ -5,11 +5,12 @@ class SearchController < ApplicationController
     @q = params[:q]
 
     @projects_and_tracks = {}
-    projects = Project.accessible_by(current_ability).search(name_or_tracks_name_cont: @q).
+    projects = Project.accessible_by(current_ability).
+      search(name_or_tracks_name_or_tracks_path_cont: @q).
       result(distinct: true).order('projects.id ASC')
     projects.each { |project| @projects_and_tracks[project] = [] }
 
-    tracks = Track.accessible_by(current_ability).search(name_cont: @q).
+    tracks = Track.accessible_by(current_ability).search(name_or_path_cont: @q).
       result.order('tracks.project_id ASC')
     tracks.each { |track| @projects_and_tracks[track.project] << track }
 

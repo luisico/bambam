@@ -2,11 +2,15 @@
 
 ### Given
 
-Given /^I belong to a project named "(.*?)" with track "(.*?)"$/ do |project, track|
+Given /^I belong to a project named "(.*?)" with track "(.*?)"( and path "(.*?)")?$/ do |project, track, w_p, path|
   user = @user || @admin
   expect {
     @project = FactoryGirl.create(:project, name: project, users: [user])
-    @track = FactoryGirl.create(:test_track, name: track, project: @project)
+    if w_p
+      @track = FactoryGirl.create(:test_track, name: track, path: path, project: @project)
+    else
+      @track = FactoryGirl.create(:test_track, name: track, project: @project)
+    end
   }.to change(Project, :count).by(1)
   expect(@track.project).to eq @project
 end
@@ -82,4 +86,13 @@ end
 Then /^I should not see a search box and button$/ do
   expect(page).not_to have_css "#nav_search_box"
   expect(page).not_to have_css "#nav_search_btn"
+end
+
+Then /^I should be able to toggle track path from truncated to full$/ do
+  find('.truncated').trigger('click')
+  expect(page).to have_content @track.path
+  expect(page).not_to have_content "...54321best12345..."
+  find('.truncated').trigger('click')
+  expect(page).not_to have_content @track.path
+  expect(page).to have_content "...54321best12345..."
 end

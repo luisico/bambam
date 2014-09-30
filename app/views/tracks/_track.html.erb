@@ -1,15 +1,18 @@
-<li>
-  <%= link_to_igv(track) %>
-  <%= link_to track.name, track, class: "track" %>
+<ul class="width-limited-inline-list">
+  <li><%= link_to_igv(track) %></li>
+  <li><%= link_to track.name, track %></li>
   <% unless (@project || @projects_and_tracks) %>
-    (<%= link_to track.project.name, track.project %>)
+    <li><%= link_to "(#{track.project.name})", track.project %></li>
   <% end %>
   <% if @projects_and_tracks %>
-    <span class="inline-timestamps">
-      <i class="fi-calendar medium margin-right" title="created"></i>
-        <%= local_time_ago(track.created_at) %>
-      <i class="fi-clock medium margin-right" title="updated"></i>
+    <li class="text-color-grey pointer">
+      <i class="truncated" data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, :radius => 5) %> data-truncated=true>
+        <%= excerpt(track.path, @q, :radius => 5) %>
+      </i>
+    <li>
+      <i class="fi-clock medium margin-right text-color-grey" title="updated">
         <%= local_time_ago(track.updated_at) %>
-    </span>
+      </i>
+    </li>
   <% end %>
-</li>
+</ul>
