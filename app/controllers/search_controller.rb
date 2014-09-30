@@ -30,10 +30,20 @@ class SearchController < ApplicationController
     tracks.each { |track| @projects_and_tracks[track.project][:tracks] << track }
 
     @groups_and_users = {}
-    groups = Group.accessible_by(current_ability).search(name_or_members_email_cont: @q).
-      result(distinct: true).order('groups.id ASC')
-
-    users = User.search(email_cont: @q).result
+    groups = Group.accessible_by(current_ability).search(name_cont: @q).result
+    users_groups = []
+    Group.accessible_by(current_ability).each do |group|
+      group.members.each do |member|
+        users_groups << group if member.email.include? @q
+      end
+    end
+    groups = groups | users_groups.uniq
+    users = []
+    groups.each do |group|
+      group.members.each do |member|
+        users << member if member.email.include? @q
+      end
+    end
     groups.each {|group| @groups_and_users.merge!(group => group.members.select {|member| member if users.include? member})}
   end
 end
