@@ -34,6 +34,11 @@ end
 
 ### Then
 
+Then /^I should see my search term in the results page$/ do
+  search_box = page.find('#nav_search_box')
+  expect(search_box.value).to eq @search_term
+end
+
 Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, term|
   col_list = page.find("##{col.gsub(" ", "-")}")
   if col == "projects and tracks"

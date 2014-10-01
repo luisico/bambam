@@ -12,6 +12,7 @@ Feature: Search the application
     And I belong to a group named "ok_group" with member "second_best_user@example.com"
     And I belong to a group named "bad_group" with member "bad_user@example.com"
     When I search for "best"
+    Then I should see my search term in the results page
     Then I should see a list of "projects and tracks" that contain the name "best"
     And I should see a list of "groups and users" that contain the name "best"
 
