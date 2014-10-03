@@ -31,19 +31,12 @@ class SearchController < ApplicationController
 
     @groups_and_users = {}
     groups = Group.accessible_by(current_ability).search(name_cont: @q).result
+    users = User.search(email_cont: @q).result
     users_groups = []
-    Group.accessible_by(current_ability).each do |group|
-      group.members.each do |member|
-        users_groups << group if member.email.include? @q
-      end
+    users.each do |user|
+      users_groups << user.groups.select {|group| can? :read, group}
     end
-    groups = groups | users_groups.uniq
-    users = []
-    groups.each do |group|
-      group.members.each do |member|
-        users << member if member.email.include? @q
-      end
-    end
+    groups = groups | users_groups.flatten.uniq
     groups.each {|group| @groups_and_users.merge!(group => group.members.select {|member| member if users.include? member})}
   end
 end
