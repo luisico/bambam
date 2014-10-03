@@ -17,9 +17,8 @@ class SearchController < ApplicationController
 
     projects = projects | users_projects.flatten.uniq
 
-    projects.each { |project| @projects_and_tracks[project] = { users: [], tracks: [] } }
-
     projects.each do |project|
+      @projects_and_tracks[project] = { users: [], tracks: [] }
       project.users.each do |user|
         @projects_and_tracks[project][:users] << user if user.email.include? @q
       end
@@ -31,7 +30,6 @@ class SearchController < ApplicationController
 
     @groups_and_users = {}
     groups = Group.accessible_by(current_ability).search(name_cont: @q).result
-    users = User.search(email_cont: @q).result
     users_groups = []
     users.each do |user|
       users_groups << user.groups.select {|group| can? :read, group}

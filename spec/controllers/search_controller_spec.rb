@@ -5,6 +5,7 @@ describe SearchController do
     context "as a signed in user" do
       before do
         @user = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
         sign_in @user
       end
 
@@ -15,8 +16,6 @@ describe SearchController do
 
       context "projects and tracks" do
         before do
-          @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
-
           @project1 = FactoryGirl.create(:project, name: "best project", users: [@user])
           @track11 = FactoryGirl.create(:test_track, name: "a track", project: @project1)
 
@@ -63,7 +62,6 @@ describe SearchController do
 
       context "groups and users" do
         before do
-          @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
           @user3 = FactoryGirl.create(:user, email: "good_user@example.com")
           @group1 = FactoryGirl.create(:group, name: "best project", members: [@user, @user2])
           @group2 = FactoryGirl.create(:group, name: "second best project", members: [@user, @user3])
