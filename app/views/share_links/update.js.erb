@@ -2,9 +2,5 @@
   $('#edit_share_link_<%= @share_link.id %>').remove();
   ShareLink.showForm('<%= j render("form") %>', <%= @share_link.id %>);
 <% else %>
-  $('#share_link_<%= @share_link.id %>').replaceWith('<%= j render(@share_link) %>');
-  $('#share_link_<%= @share_link.id %>').effect("highlight", {}, 1500);
-  $('#share-links-list').children().find('i.copy-to-clipboard').bind("click", function(){
-    copy_to_clipboard(this);
-  });
+  ShareLink.update('#share_link_<%= @share_link.id %>', '<%= j render(@share_link) %>' )
 <% end %>

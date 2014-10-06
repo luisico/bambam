@@ -21,10 +21,15 @@ class @ShareLink
     $(element).append(code)
     $(element).children().last().effect("highlight", {}, 1500)
     ShareLink.clipboard($(element).children().last())
+    $('#no-share-link').remove()
+
+  @update: (element, code) ->
+    $(element).replaceWith(code)
+    $(element).effect("highlight", {}, 1500)
+    ShareLink.clipboard($(element))
 
   @clipboard: (element) ->
     element = element.find('i.copy-to-clipboard')
     element.bind "click", ->
       copy_to_clipboard this
       return
-    $('#no-share-link').remove()
