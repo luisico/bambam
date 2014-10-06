@@ -60,8 +60,14 @@ Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, t
         expect(col_list).to have_content group.name
       end
       expect(col_list).not_to have_content users.last.email
-      users[0...-1].each do |user|
-        expect(col_list).to have_content user.email
+      if @admin
+        users[0...-1].each do |user|
+          expect(col_list).to have_content user.email
+        end
+      else
+        users[1...-1].each do |user|
+          expect(col_list).to have_content user.email
+        end
       end
     }
   end

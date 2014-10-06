@@ -4,7 +4,8 @@ describe SearchController do
   describe "Get 'search'" do
     context "as a signed in user" do
       before do
-        @user = FactoryGirl.create(:user, email: "best_user@example.com")
+        @user = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
         sign_in @user
       end
 
@@ -32,23 +33,27 @@ describe SearchController do
 
           @project5 = FactoryGirl.create(:project, name: "so so project", users: [@user])
           @track51 = FactoryGirl.create(:test_track, name: "b track", project: @project5, path: "tmp/tests/best.bam")
+
+          @project6 = FactoryGirl.create(:project, name: "so so project", users: [@user, @user2])
+          @track61 = FactoryGirl.create(:test_track, name: "a track", project: @project6)
         end
 
         it "should be correctly returned and sorted" do
           result = {
-            @project1 => [],
-            @project2 => [@track21, @track23],
-            @project3 => [@track32],
-            @project5 => [@track51]
+            @project1 => { users: [], tracks: [] },
+            @project2 => { users: [], tracks: [@track21, @track23] },
+            @project3 => { users: [], tracks: [@track32] },
+            @project5 => { users: [], tracks: [@track51] },
+            @project6 => { users: [@user2], tracks: [] }
           }
           get :search, q: 'best'
           expect(assigns(:projects_and_tracks)).to eq result
         end
 
         it "should not return projects or tracks user doesn't have access to" do
-          [@project1, @project3, @project5].each {|p| p.users.delete(@user)}
+          [@project1, @project3, @project5, @project6].each {|p| p.users.delete(@user)}
           result = {
-            @project2 => [@track21, @track23]
+            @project2 => { users: [], tracks:[@track21, @track23] },
           }
           get :search, q: 'best'
           expect(assigns(:projects_and_tracks)).to eq result
@@ -57,26 +62,27 @@ describe SearchController do
 
       context "groups and users" do
         before do
-          @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
           @user3 = FactoryGirl.create(:user, email: "good_user@example.com")
           @group1 = FactoryGirl.create(:group, name: "best project", members: [@user, @user2])
-          @group2 = FactoryGirl.create(:group, name: "good project", members: [@user, @user3])
-          @group3 = FactoryGirl.create(:group, name: "bad project", members: [@user3])
+          @group2 = FactoryGirl.create(:group, name: "second best project", members: [@user, @user3])
+          @group3 = FactoryGirl.create(:group, name: "ok project", members: [@user, @user2])
+          @group4 = FactoryGirl.create(:group, name: "bad project", members: [@user3])
         end
 
         it "should be correctly returned and sorted" do
           result = {
-            @group1 => [@user, @user2],
-            @group2 => [@user]
+            @group1 => [@user2],
+            @group2 => [],
+            @group3 => [@user2]
           }
           get :search, q: 'best'
           expect(assigns(:groups_and_users)).to eq result
         end
 
         it "should not return groups user doesn't have access to" do
-          @group1.members.delete(@user)
+          [@group1, @group3].each {|group| group.members.delete(@user)}
           result = {
-            @group2 => [@user]
+            @group2 => []
           }
           get :search, q: 'best'
           expect(assigns(:groups_and_users)).to eq result

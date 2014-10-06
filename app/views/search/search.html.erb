@@ -5,15 +5,24 @@
         <% if @projects_and_tracks.any? %>
           <h3>Projects and Tracks</h3>
           <ul class="no-bullet" id="projects-and-tracks">
-            <% @projects_and_tracks.each do |project, tracks_array| %>
+            <% @projects_and_tracks.each do |project, hash| %>
               <li class="search-result">
                 <%= link_to project.name, project_path(project) %>
                 (owner: <%= project.owner.email %>)
                 [<%= pluralize(project.tracks.count, 'track') %>]
               </li>
+              <% if hash[:users].any? %>
                 <ul>
-                  <%= render tracks_array %>
+                  <ul class="inline-list">
+                  <% hash[:users].each do |user| %>
+                    <li><span class="radius secondary label"><%= user.email %></span></li>
+                  <% end %>
+                  </ul>
                 </ul>
+              <% end %>
+              <ul>
+                <%= render hash[:tracks] %>
+              </ul>
             <% end %>
           </ul>
         <% end %>
