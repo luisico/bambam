@@ -2,5 +2,5 @@
   $('#edit_share_link_<%= @share_link.id %>').remove();
   ShareLink.showForm('<%= j render("form") %>', <%= @share_link.id %>);
 <% else %>
-  ShareLink.update('#share_link_<%= @share_link.id %>', '<%= j render(@share_link) %>' )
+  ShareLink.update('#share_link_<%= @share_link.id %>', '<%= j render(@share_link) %>' );
 <% end %>

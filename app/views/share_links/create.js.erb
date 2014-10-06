@@ -3,5 +3,5 @@ $('.new_share_link').remove();
   ShareLink.showForm('<%= j render("form") %>');
 <% else %>
   $('#new_link').show();
-  ShareLink.create('#share-links-list','<%= j render(@share_link) %>')
+  ShareLink.create('#share-links-list','<%= j render(@share_link) %>');
 <% end %>
