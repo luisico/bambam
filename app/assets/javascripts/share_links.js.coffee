@@ -16,3 +16,15 @@ class @ShareLink
 
   @addBox: (selector) ->
     $(selector).addClass('share-link-box')
+
+  @create: (element, code) ->
+    $(element).append(code)
+    $(element).children().last().effect("highlight", {}, 1500)
+    ShareLink.clipboard($(element).children().last())
+
+  @clipboard: (element) ->
+    element = element.find('i.copy-to-clipboard')
+    element.bind "click", ->
+      copy_to_clipboard this
+      return
+    $('#no-share-link').remove()
