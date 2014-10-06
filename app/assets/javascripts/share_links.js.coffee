@@ -8,11 +8,11 @@ class @ShareLink
       box_selector = selector
 
     $(selector).append(code)
-    ShareLink.datepicker()
+    ShareLink.datepicker(box_selector)
     ShareLink.addBox(box_selector)
 
-  @datepicker: ->
-    $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
+  @datepicker: (selector) ->
+    $(selector).find('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
 
   @addBox: (selector) ->
     $(selector).addClass('share-link-box')
