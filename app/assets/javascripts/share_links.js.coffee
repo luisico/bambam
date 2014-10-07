@@ -23,11 +23,13 @@ class @ShareLink
     ShareLink.highlight(new_element)
     ShareLink.clipboard(new_element)
     $('#no-share-link').remove()
+    ShareLink.orderLinks()
 
   @update: (element, code) ->
     $(element).replaceWith(code)
     ShareLink.highlight(element)
     ShareLink.clipboard(element)
+    ShareLink.orderLinks()
 
   @clipboard: (element) ->
     $(element).find('i.copy-to-clipboard').bind "click", ->
@@ -36,3 +38,13 @@ class @ShareLink
 
   @highlight: (element) ->
     $(element).effect("highlight", {}, 1500)
+
+  @orderLinks: ->
+    share_links = $('#share-links-list')
+    share_links_divs = share_links.children('div.share-link')
+
+    share_links_divs.sort((a, b) ->
+      new Date($(a).attr("data-expires_at")) < new Date($(b).attr("data-expires_at"))
+      ).each ->
+        share_links.prepend this
+        return
