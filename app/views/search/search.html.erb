@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="small-12 medium-10 medium-centered columns">
+    <div class="panel">
+      <% if @projects_and_tracks.any? || @groups_and_users.any? %>
+        <% if @projects_and_tracks.any? %>
+          <h3>Projects and Tracks</h3>
+          <ul class="no-bullet" id="projects-and-tracks">
+            <% @projects_and_tracks.each do |project, hash| %>
+              <li class="search-result">
+                <%= link_to project.name, project_path(project) %>
+                (owner: <%= project.owner.email %>)
+                [<%= pluralize(project.tracks.count, 'track') %>]
+              </li>
+              <% if hash[:users].any? %>
+                <ul>
+                  <ul class="inline-list">
+                  <% hash[:users].each do |user| %>
+                    <li><span class="radius secondary label"><%= user.email %></span></li>
+                  <% end %>
+                  </ul>
+                </ul>
+              <% end %>
+              <ul>
+                <%= render hash[:tracks] %>
+              </ul>
+            <% end %>
+          </ul>
+        <% end %>
+        <% if @groups_and_users.any? %>
+          <h3>Groups and Users</h3>
+          <ul class="no-bullet" id="groups-and-users">
+            <% @groups_and_users.each do |group, members_array| %>
+              <li class="search-result">
+                <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.email %>) [<%= pluralize(group.members.count, 'user') %>]
+              </li>
+              <li>
+                <ul class="users-list">
+                  <%= render members_array %>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% else %>
+        <p>Your search - <b><%= @q %></b> - did not return any results.</p>
+        <p>Suggestions:</p>
+        <ul>
+          <li>Make sure all words are spelled correctly.</li>
+          <li>Try different keywords.</li>
+          <li>Try more general keywords.</li>
+          <li>Try fewer keywords.</li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+

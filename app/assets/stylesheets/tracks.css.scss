@@ -1,16 +1,3 @@
-.tracks-list {
-  h3 {
-    margin-bottom: rem-calc(16);
-  }
-  .track {
-    font-size: rem-calc(20);
-    margin: rem-calc(0 0 0 20);
-  }
-  ul li {
-    margin-bottom: rem-calc(20);
-  }
-}
-
 .allowed-track-paths {
   @extend label;
   font-size: .8rem;

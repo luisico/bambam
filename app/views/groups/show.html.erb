@@ -26,10 +26,10 @@
 
     <% if can? :manage, @group %>
       <%= link_to 'Edit', edit_group_path(@group), class: 'button tiny radius' %>
-      <%= link_to 'Back', users_path, class: 'button tiny radius' %>
+      <%= link_to 'Back', :back, class: 'button tiny radius' %>
       <%= link_to 'Delete', @group, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny radius [secondary alert success] right' %>
     <% else %>
-      <%= link_to 'Back', user_path(current_user), class: 'button tiny radius' %>
+      <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% end %>
   </div>
 </div>

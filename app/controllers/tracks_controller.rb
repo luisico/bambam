@@ -5,11 +5,6 @@ class TracksController < ApplicationController
   respond_to :html
 
   def index
-    if can? :manage, Track
-      @tracks = Track.all
-    else
-      @tracks = Track.includes(project: :projects_users).where(projects_users: {user_id: @current_user}).references(:projects_users)
-    end
   end
 
   def show
