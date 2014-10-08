@@ -57,16 +57,16 @@ end
 
 Then /^my name should be listed as group owner$/ do
   within('#group-owner') {
-    expect(page).to have_content @admin.email
+    expect(page).to have_content @admin.handle
   }
 end
 
 Then /^I should see a list of potential members$/ do
   find("#s2id_group_member_ids").click
   within(".select2-results") {
-    expect(page).not_to have_content @admin.email
+    expect(page).not_to have_content @admin.handle
     @users.each do |user|
-      expect(page).to have_content user.email
+      expect(page).to have_content user.handle
     end
   }
 end

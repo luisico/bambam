@@ -38,8 +38,8 @@ Then /^I should( not)? be able to change users in the project$/ do |negate|
     expect(page).to have_css "#project_user_ids"
     deleted = []
     expect {
-      @project.users[-2..-1].each{ |u| remove_from_select2(u.email); deleted << u }
-      @users.each{ |u| fill_in_select2("project_user_ids", with: u.email)}
+      @project.users[-2..-1].each{ |u| remove_from_select2(u.handle); deleted << u }
+      @users.each{ |u| fill_in_select2("project_user_ids", with: u.handle)}
       click_button 'Update'
       @project.reload
     }.to change(@project.users, :count).by(1)
@@ -71,11 +71,11 @@ end
 
 Then /^I should be able to add myself to the project$/ do
   expect {
-    fill_in_select2("project_user_ids", with: @admin.email)
+    fill_in_select2("project_user_ids", with: @admin.handle)
     click_button 'Update'
   }.to change(@project.users, :count).by(1)
   expect(current_path).to eq project_path(@project)
-  expect(page).to have_content @admin.email
+  expect(page).to have_content @admin.handle
 end
 
 Then /^I should see a button to "(.*?)" project$/ do |text|

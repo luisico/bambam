@@ -8,7 +8,7 @@ end
 def fill_project_form(project=nil)
   project ||= @project_attrs
   fill_in 'Project name', with: project[:name]
-  fill_in_select2("project_user_ids", with: User.last.email)
+  fill_in_select2("project_user_ids", with: User.last.handle)
   yield if block_given?
   click_button 'Create Project'
 end
@@ -49,7 +49,7 @@ When /^I create a project with multiple users$/ do
   expect {
     build_project
     fill_project_form do
-      fill_in_select2("project_user_ids", with: User.all[-2].email)
+      fill_in_select2("project_user_ids", with: User.all[-2].handle)
     end
   }.to change(Project, :count).by(1)
 end
@@ -86,11 +86,11 @@ end
 Then /^I should( not)? see myself listed as project owner$/ do |negate|
   if negate
     within('#project-owner') {
-      expect(page).not_to have_content @admin.email
+      expect(page).not_to have_content @admin.handle
     }
   else
     within('#project-owner') {
-      expect(page).to have_content @admin.email
+      expect(page).to have_content @admin.handle
     }
   end
 end
@@ -98,9 +98,9 @@ end
 Then /^I should see a list of potential users$/ do
   find("#s2id_project_user_ids").click
   within(".select2-results") {
-    expect(page).not_to have_content @admin.email
+    expect(page).not_to have_content @admin.handle
     @users.each do |user|
-      expect(page).to have_content user.email
+      expect(page).to have_content user.handle
     end
   }
 end
@@ -113,8 +113,8 @@ Then /^I should see a message that the project was created successfully$/ do
   expect(page).to have_content('Project was successfully created')
 end
 
-Then /^I should see my email among the list of project member emails$/ do
-  expect(page).to have_content User.first.email
+Then /^I should see my handle among the list of project member handles$/ do
+  expect(page).to have_content User.first.handle
 end
 
 Then /^I should be the project's owner$/ do
@@ -122,9 +122,9 @@ Then /^I should be the project's owner$/ do
 end
 
 Then /^I should see all project members$/ do
-  expect(page).to have_content Project.last.owner.email
-  expect(page).to have_content User.last.email
-  expect(page).to have_content User.all[-2].email
+  expect(page).to have_content Project.last.owner.handle
+  expect(page).to have_content User.last.handle
+  expect(page).to have_content User.all[-2].handle
 end
 
 Then /^I should be able to cancel new project$/ do
