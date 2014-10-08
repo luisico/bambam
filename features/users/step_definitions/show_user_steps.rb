@@ -50,7 +50,7 @@ Then /^I should see my groups$/ do
   @user.groups.each do |group|
     within("#group_#{group.id}") do
       expect(page).to have_link group.name
-      expect(page).to have_content group.owner.email
+      expect(page).to have_content group.owner.handle
     end
   end
 end
