@@ -23,7 +23,7 @@ Then /^I should see the group's name$/ do
 end
 
 Then /^I should see the group's owner$/ do
-  expect(page).to have_content "#{@group.owner.email} (owner)"
+  expect(page).to have_content "#{@group.owner.handle} (owner)"
 end
 
 Then /^I should see the group's members( with links)?$/ do |links|
@@ -32,10 +32,10 @@ Then /^I should see the group's members( with links)?$/ do |links|
     @group.members.each do |member|
       expect(page).to have_xpath("//img[@alt='#{gravatar_hexdigest(member)}']")
       if links || @user == member
-        expect(page).to have_link member.email
+        expect(page).to have_link member.handle
       else
-        expect(page).to have_content member.email
-        expect(page).not_to have_link member.email
+        expect(page).to have_content member.handle
+        expect(page).not_to have_link member.handle
       end
     end
   end

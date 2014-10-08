@@ -1,5 +1,5 @@
 <p id="project-user-<%= user.id %>">
-  <% if can? :manage, User %>
+  <% if (can? :manage, User) || (user == current_user) %>
     <%= link_to user do %>
       <%= image_tag avatar_url(user) %>
       <%= user.handle %>
@@ -10,5 +10,8 @@
   <% end %>
   <% if @project && (user == @project.owner) %>
     <i class="admin-icon small" title="owner"></i>
+  <% end %>
+  <% if @group && (user == @group.owner) %>
+    <%= "(owner)" %>
   <% end %>
 </p>

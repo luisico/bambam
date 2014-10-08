@@ -27,10 +27,10 @@ Then /^I should see the project's tracks$/ do
 end
 
 Then /^I should see the project's users with(out)? profile links$/ do |negate|
-  project = @project || Project.last
-  project.users.each do |user|
+  @project ||= Project.last
+  @project.users.each do |user|
     within("#project-user-#{user.id}") do
-      if negate
+      if negate && user != @user
         expect(page).to have_content user.handle
         expect(page).not_to have_link user.handle
       else
