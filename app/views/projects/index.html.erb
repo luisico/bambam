@@ -26,12 +26,12 @@
               <% if can? :manage, User %>
                 <li class="sub-text text-panel-overhang">
                   <i class="admin-icon small margin-right" title="owner"></i>
-                  <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %>
+                  <%= link_to project.owner.handle, project.owner, class: "text-panel-overhang" %>
                 </li>
               <% else %>
                 <li class="sub-text text-panel-overhang">
                   <i class="fi-star small margin-right" title="owner"></i>
-                  <%= project.owner.email %>
+                  <%= project.owner.handle %>
                 </li>
               <% end %>
               <li class="sub-text"><i class="fi-clock small margin-right" title="updated_at"></i>

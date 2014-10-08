@@ -5,9 +5,9 @@ def project_details(project, user_link)
     expect(page).to have_content project.name
     expect(page).to have_content project.tracks.count
     if user_link
-      expect(page).to have_link project.owner.email
+      expect(page).to have_link project.owner.handle
     else
-      expect(page).not_to have_link project.owner.email
+      expect(page).not_to have_link project.owner.handle
     end
     expect(page).to have_selector "time[data-local='time-ago'][datetime='#{project.updated_at.utc.iso8601}']"
   end
