@@ -9,9 +9,9 @@ Feature: Search the application
     And I belong to a project named "ok_project" with track "second_best_track"
     And I belong to a project named "blah_project" with track "blah_track" and path "tmp/tracks/best.bam"
     And I belong to a project named "so_so_project" with track "so_so_track"
-    And I belong to a group named "best_group" with member "best_user@example.com"
-    And I belong to a group named "ok_group" with member "second_best_user@example.com"
-    And I belong to a group named "bad_group" with member "bad_user@example.com"
+    And I belong to a group named "best_group" with member "best_user"
+    And I belong to a group named "ok_group" with member "second_best_user"
+    And I belong to a group named "bad_group" with member "bad_user"
     When I search for "best"
     Then I should see my search term in the results page
     Then I should see a list of "projects and tracks" that contain the name "best"
@@ -26,8 +26,8 @@ Feature: Search the application
     Given I am signed in as an admin
     And I belong to a project named "best_project" with track "best_track"
     And I belong to a project named "so_so_project" with track "so_so_track"
-    And I belong to a group named "best_group" with member "best_user@example.com"
-    And I belong to a group named "ok_group" with member "ok_user@example.com"
+    And I belong to a group named "best_group" with member "best_user"
+    And I belong to a group named "ok_group" with member "ok_user""
     When I search for "best"
     Then I should see a list of "projects and tracks" that contain the name "best"
     And I should see a list of "groups and users" that contain the name "best"

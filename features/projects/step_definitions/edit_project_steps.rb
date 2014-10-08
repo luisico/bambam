@@ -46,11 +46,11 @@ Then /^I should( not)? be able to change users in the project$/ do |negate|
     expect(current_path).to eq project_path(@project)
     deleted.each do |u|
       expect(@project.users).not_to include(u)
-      expect(page).not_to have_content(u.email)
+      expect(page).not_to have_content(u.handle)
     end
     @users.each do |u|
       expect(@project.users).to include(u)
-      expect(page).to have_content(u.email)
+      expect(page).to have_content(u.handle)
     end
   end
 end

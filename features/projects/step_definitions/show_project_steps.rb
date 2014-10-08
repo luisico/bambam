@@ -31,10 +31,10 @@ Then /^I should see the project's users with(out)? profile links$/ do |negate|
   project.users.each do |user|
     within("#project-user-#{user.id}") do
       if negate
-        expect(page).to have_content user.email
-        expect(page).not_to have_link user.email
+        expect(page).to have_content user.handle
+        expect(page).not_to have_link user.handle
       else
-        expect(page).to have_link user.email
+        expect(page).to have_link user.handle
       end
     end
   end

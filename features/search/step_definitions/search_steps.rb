@@ -18,7 +18,7 @@ end
 Given /^I belong to a group named "(.*?)" with member "(.*?)"$/ do |group, member|
   user = @user || @admin
   expect {
-    @another_user = FactoryGirl.create(:user, email: member)
+    @another_user = FactoryGirl.create(:user, email: member + "@example.com", last_name: member)
     @group = FactoryGirl.create(:group, name: group, members: [user, @another_user])
   }.to change(Group, :count).by(1)
   expect(@group.members).to include user, @another_user
@@ -59,14 +59,14 @@ Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, t
       Group.all[0...-1].each do |group|
         expect(col_list).to have_content group.name
       end
-      expect(col_list).not_to have_content users.last.email
+      expect(col_list).not_to have_content users.last.handle
       if @admin
         users[0...-1].each do |user|
-          expect(col_list).to have_content user.email
+          expect(col_list).to have_content user.handle
         end
       else
         users[1...-1].each do |user|
-          expect(col_list).to have_content user.email
+          expect(col_list).to have_content user.handle
         end
       end
     }
