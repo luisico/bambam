@@ -14,6 +14,9 @@ Things you may want to cover:
 * Database creation
 
 * Database initialization
+  All environments use *Postgres*. It needs to be installed on the system.
+  File ".env" (template found at ".env.sample") contains environment variables for the DB user and password. You can create the application user in the database with the following command (run as the _postgres_ user):
+    createuser -e -S -d -R -P -E bambam"
 
 * How to run the test suite
 

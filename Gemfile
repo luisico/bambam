@@ -8,8 +8,7 @@ gem 'rails', '~> 4.0.5'
 gem 'dotenv-rails', '~> 0.10.0', group: [:development, :test]
 
 # Database
-gem 'sqlite3', '~> 1.3.9', group: [:development, :test]
-gem 'pg', '~> 0.17.1', group: [:production, :staging]
+gem 'pg', '~> 0.17.1'
 gem 'ransack'
 
 # Factories
