@@ -94,6 +94,10 @@ Then /^I should not see a search box and button$/ do
   expect(page).not_to have_css "#nav_search_btn"
 end
 
+Then /^I should see the full track path on mouseover$/ do
+  expect(page).to have_xpath("//i[@title='#{@track.path}']")
+end
+
 Then /^I should be able to toggle track path from truncated to full$/ do
   find('.truncated').trigger('click')
   expect(page).to have_content @track.path
