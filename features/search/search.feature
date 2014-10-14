@@ -55,4 +55,5 @@ Feature: Search the application
     Given I am signed in as an admin
     And I belong to a project named "best_project" with track "best_track" and path "tmp/tracks/54321best12345.bam"
     When I search for "best"
-    Then I should be able to toggle track path from truncated to full
+    Then I should see the full track path on mouseover
+    And I should be able to toggle track path from truncated to full
