@@ -18,3 +18,8 @@ Feature: Top navigation
     Given I am signed in
     When I click on "my email" in the top nav
     Then I should be on my account profile page
+
+  Scenario: User can access help page
+    Given I am signed in
+    When I click on "help" in the top nav
+    Then I should be on the help page
