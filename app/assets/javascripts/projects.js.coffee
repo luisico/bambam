@@ -3,14 +3,15 @@ jQuery ->
   $('.error').closest('div.track-form-fields').show()
 
   $('form').on 'click', '.remove-track', (event) ->
-    if $(this).closest('div.track-form-group').hasClass('new-record')
-      $(this).closest('div.track-form-group').remove()
+    trackFormGroup = $(this).closest('div.track-form-group')
+    if trackFormGroup.hasClass('new-record')
+      trackFormGroup.remove()
       event.preventDefault()
     else
-      $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('1')
+      trackFormGroup.find('input[type=hidden]').val('1')
       $(this).closest('li').siblings().first().css('textDecoration', 'line-through')
       $(this).closest('li').siblings().find('.done-track').hide()
-      $(this).closest('div.track-form-group').children('div.track-form-fields').hide()
+      trackFormGroup.children('div.track-form-fields').hide()
       $(this).hide()
       $(this).closest('li').siblings().find('.restore-track').show()
       $('.update-project-tracks').show()
