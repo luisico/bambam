@@ -14,7 +14,6 @@ jQuery ->
       trackFormGroup.children('div.track-form-fields').hide()
       $(this).hide()
       $(this).closest('li').siblings().find('.restore-track').show()
-      $('.update-project-tracks').show()
       event.preventDefault()
     change_track_add_text()
 
@@ -24,7 +23,6 @@ jQuery ->
     $(this).parent().siblings().find('.remove-track').hide()
     $(this).parent().siblings().find('.done-track').show()
     $(this).closest('div.track-form-group').children('div').show()
-    $('.update-project-tracks').show()
     event.preventDefault()
 
   $('form').on 'click', '.done-track', (event) ->
