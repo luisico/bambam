@@ -45,7 +45,9 @@ Then /^I should be able to restore a deleted track$/ do
     track_group = first('.track-form-group')
     within(track_group) {
       find('.remove-track').trigger('click')
+      expect(page).to have_css('.line-through')
       find('.restore-track').trigger('click')
+      expect(page).not_to have_css('.line-through')
     }
     click_button 'Update'
     @project.reload

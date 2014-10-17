@@ -9,7 +9,7 @@ jQuery ->
       event.preventDefault()
     else
       trackFormGroup.find('input[type=hidden]').val('1')
-      $(this).closest('li').siblings().find('.edit-track').css('textDecoration', 'line-through')
+      $(this).closest('li').siblings().find('.edit-track').addClass('line-through')
       $(this).closest('li').siblings().find('.done-track').hide()
       trackFormGroup.children('div.track-form-fields').hide()
       $(this).hide()
@@ -40,7 +40,7 @@ jQuery ->
 
   $('form').on 'click', '.restore-track', (event) ->
     $(this).hide()
-    $(this).parent().siblings().find('.edit-track').css('textDecoration', 'none')
+    $(this).parent().siblings().find('.edit-track').removeClass('line-through')
     $(this).parent().siblings().find('.edit-track').show()
     $(this).parent().siblings().find('.remove-track').show()
     $(this).closest('div.track-form-group').children('div.track-form-fields').children('input[type=hidden]').val('0')
