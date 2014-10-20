@@ -1,5 +1,19 @@
 ### Methods
 
+def delete_track(track_name)
+  expect {
+    track_group = first('.track-form-group')
+    within(track_group) {
+      yield if block_given?
+      find('.remove-track').trigger('click')
+    }
+    click_button 'Update'
+    @project.reload
+  }.to change(@project.tracks, :count).by(-1)
+  expect(current_path).to eq project_path(@project)
+  expect(page).not_to have_content(track_name)
+end
+
 ### Given
 
 ### When
@@ -7,18 +21,16 @@
 ### Then
 
 Then /^I should be able to delete a track from the project$/ do
-  deleted_track = Track.first.name
-  expect {
-    track_group = first('.track-form-group')
-    within(track_group) {
-      expect(track_group).to have_content deleted_track
-      find('.remove-track').trigger('click')
-    }
-    click_button 'Update'
-    @project.reload
-  }.to change(@project.tracks, :count).by(-1)
-  expect(current_path).to eq project_path(@project)
-  expect(page).not_to have_content(deleted_track)
+  deleted_track_name = Track.first.name
+  delete_track(deleted_track_name) do
+    expect(page).to have_content deleted_track_name
+  end
+end
+
+Then /^I should be able to delete a track from the track edit panel$/ do
+  deleted_track_name = Track.first.name
+  click_link deleted_track_name
+  delete_track(deleted_track_name)
 end
 
 Then /^I should be able to delete tracks from the project$/ do

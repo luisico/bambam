@@ -18,6 +18,13 @@ Feature: Delate a track
     When I visit the edit project page
     Then I should be able to delete a track from the project
 
+  Scenario: User can delete a track from the track edit panel
+    Given I am signed in
+    And I belong to a project
+    And there are 3 tracks in that project
+    When I visit the edit project page
+    Then I should be able to delete a track from the track edit panel
+
   Scenario: User can delete multiple tracks
     Given I am signed in as a user
     And I belong to a project
