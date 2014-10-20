@@ -38,7 +38,6 @@ class @TrackForm
     text = TrackForm.group(el).children('div.track-form-fields').find('input').first().val()
     TrackForm.links(el).find('.remove-track').show()
     TrackForm.links(el).find('.track-name').show().text(text)
-    TrackForm.links(el).find('.done-track').show()
     event.preventDefault()
 
   @restoreTrack: (el) ->
