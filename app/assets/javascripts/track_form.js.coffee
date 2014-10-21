@@ -35,7 +35,7 @@ class @TrackForm
     el.hide()
     TrackForm.group(el).removeClass('edit-record')
     TrackForm.group(el).find('.track-form-fields').hide()
-    text = TrackForm.group(el).find('.track-form-fields').find('input').first().val()
+    text = TrackForm.group(el).find("label:contains('Name')").next().val()
     TrackForm.links(el).find('.remove-track').show()
     TrackForm.links(el).find('.track-name').show().text(text)
     event.preventDefault()
