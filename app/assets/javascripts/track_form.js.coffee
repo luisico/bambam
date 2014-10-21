@@ -39,13 +39,13 @@ class @TrackForm
     TrackForm.group(el).removeClass('edit-record')
     TrackForm.fields(el).hide()
     text = TrackForm.group(el).find("label:contains('Name')").next().val()
-    TrackForm.links(el).find('.remove-track').show()
     TrackForm.links(el).find('.track-name').show().text(text)
+    TrackForm.links(el).find('.remove-track').show()
     event.preventDefault()
 
   @restoreTrack: (el) ->
     el.hide()
-    TrackForm.fields(el).children('input[type=hidden]').val('0')
+    TrackForm.fields(el).find('input[type=hidden]').val('0')
     TrackForm.links(el).find('.edit-track').show().removeClass('line-through')
     TrackForm.links(el).find('.remove-track').show()
     event.preventDefault()
