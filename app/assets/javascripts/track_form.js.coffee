@@ -2,6 +2,9 @@ class @TrackForm
   @group: (el) ->
     el.closest('div.track-form-group')
 
+  @fields: (el) ->
+    TrackForm.group(el).find('.track-form-fields')
+
   @links: (el) ->
     el.closest('li').siblings()
 
@@ -12,7 +15,7 @@ class @TrackForm
       el.hide()
       TrackForm.group(el).find('input[type=hidden]').val('1')
       TrackForm.group(el).removeClass('edit-record')
-      TrackForm.group(el).find('.track-form-fields').hide()
+      TrackForm.fields(el).hide()
       TrackForm.links(el).find('.edit-track').show().addClass('line-through')
       TrackForm.links(el).find('.done-track').hide()
       TrackForm.links(el).find('.restore-track').show()
@@ -27,14 +30,14 @@ class @TrackForm
   @editTrack: (el) ->
     el.hide()
     TrackForm.group(el).addClass('edit-record')
-    TrackForm.group(el).find('.track-form-fields').show()
+    TrackForm.fields(el).show()
     TrackForm.links(el).find('.done-track').show()
     event.preventDefault()
 
   @doneTrack: (el) ->
     el.hide()
     TrackForm.group(el).removeClass('edit-record')
-    TrackForm.group(el).find('.track-form-fields').hide()
+    TrackForm.fields(el).hide()
     text = TrackForm.group(el).find("label:contains('Name')").next().val()
     TrackForm.links(el).find('.remove-track').show()
     TrackForm.links(el).find('.track-name').show().text(text)
@@ -42,7 +45,7 @@ class @TrackForm
 
   @restoreTrack: (el) ->
     el.hide()
-    TrackForm.group(el).find('.track-form-fields').children('input[type=hidden]').val('0')
+    TrackForm.fields(el).children('input[type=hidden]').val('0')
     TrackForm.links(el).find('.edit-track').show().removeClass('line-through')
     TrackForm.links(el).find('.remove-track').show()
     event.preventDefault()
