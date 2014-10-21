@@ -46,6 +46,13 @@ Feature: Delate a track
     When I visit the edit project page
     Then I should be able to restore a deleted track
 
+  Scenario: User must restore track before editing
+    Given I am signed in as a user
+    And I belong to a project
+    And there are 3 tracks in that project
+    When I visit the edit project page
+    Then I should not be able to edit a deleted track
+
   Scenario: Admin can restore track after deletion
     Given I am signed in as a admin
     And I belong to a project

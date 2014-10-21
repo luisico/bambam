@@ -65,3 +65,11 @@ Then /^I should be able to restore a deleted track$/ do
     @project.reload
   }.not_to change(@project.tracks, :count)
 end
+
+Then /^I should not be able to edit a deleted track$/ do
+  track_group = first('.track-form-group')
+  within(track_group) {
+    find('.remove-track').trigger('click')
+    expect(page).not_to have_css('.edit-track')
+  }
+end

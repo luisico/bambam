@@ -16,13 +16,13 @@ class @TrackForm
       TrackForm.group(el).find('input[type=hidden]').val('1')
       TrackForm.group(el).removeClass('edit-record')
       TrackForm.fields(el).hide()
-      TrackForm.links(el).find('.edit-track').show().addClass('line-through')
+      TrackForm.links(el).find('.edit-track').show().toggleClass('line-through edit-track no-pointer')
       TrackForm.links(el).find('.done-track').hide()
       TrackForm.links(el).find('.restore-track').show()
     else
       el.hide()
       TrackForm.group(el).find('input[type=hidden]').val('1')
-      TrackForm.links(el).find('.edit-track').addClass('line-through')
+      TrackForm.links(el).find('.edit-track').toggleClass('line-through edit-track no-pointer')
       TrackForm.links(el).find('.restore-track').show()
     event.preventDefault()
     TrackForm.change_track_add_text()
@@ -46,7 +46,7 @@ class @TrackForm
   @restoreTrack: (el) ->
     el.hide()
     TrackForm.fields(el).find('input[type=hidden]').val('0')
-    TrackForm.links(el).find('.edit-track').show().removeClass('line-through')
+    TrackForm.links(el).find('.track-name').show().toggleClass('line-through edit-track no-pointer')
     TrackForm.links(el).find('.remove-track').show()
     event.preventDefault()
 
@@ -63,5 +63,3 @@ class @TrackForm
       $('.add_fields').text('Add another track')
     else
       $('.add_fields').text('Add a track')
-
-

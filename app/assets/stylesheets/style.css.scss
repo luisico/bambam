@@ -54,6 +54,10 @@
   cursor: pointer;
 }
 
+.no-pointer {
+  cursor: default !important;
+}
+
 .text-panel-overhang {
   word-wrap: break-word;
 }
