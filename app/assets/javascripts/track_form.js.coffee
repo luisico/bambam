@@ -15,26 +15,17 @@ class @TrackForm
     event.preventDefault() if event?
 
   restore: (event) ->
-    @toggleRestore()
-    @restoreTrack()
-    @toggleEditLink()
-    @toggleDelete()
+    @toggleDeleteRestore()
     event.preventDefault() if event?
 
   delete: (event) ->
     if @group.hasClass('new-record')
       @group.remove()
     else if @group.hasClass('edit-record')
-      @toggleDelete()
-      @deleteTrack()
+      @toggleDeleteRestore()
       @toggleEditBox()
-      @toggleEditLink()
-      @toggleRestore()
     else
-      @toggleDelete()
-      @deleteTrack()
-      @toggleEditLink()
-      @toggleRestore()
+      @toggleDeleteRestore()
     event.preventDefault() if event?
     TrackForm.change_track_add_text()
 
@@ -47,20 +38,18 @@ class @TrackForm
     @group.find('.track-form-fields').toggle()
     @actions().find('.done-track').toggle()
 
-  toggleDelete: ->
+  toggleDeleteRestore: ->
     @group.find('.remove-track').toggle()
-
-  toggleEditLink: ->
-    @findTrack().toggleClass('line-through edit-track no-pointer')
-
-  restoreTrack: ->
-    @group.find('input[type=hidden]').val('0')
-
-  deleteTrack: ->
-    @group.find('input[type=hidden]').val('1')
-
-  toggleRestore: ->
     @group.find('.restore-track').toggle()
+    @findTrack().toggleClass('line-through edit-track no-pointer')
+    @toggleHiddenValue()
+
+  toggleHiddenValue: ->
+    hiddenValueElement = @group.find('input[type=hidden]')
+    if hiddenValueElement.val() == '1'
+      hiddenValueElement.val('0')
+    else
+      hiddenValueElement.val('1')
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
