@@ -7,16 +7,10 @@ class @TrackForm
 
   edit: (event) ->
     @toggleEditBox()
-    @toggleName()
-    @toggleFields()
-    @toggleDone()
     event.preventDefault() if event?
 
   done: (event) ->
     @toggleEditBox()
-    @toggleName()
-    @toggleFields()
-    @toggleDone()
     @updateName()
     event.preventDefault() if event?
 
@@ -34,10 +28,7 @@ class @TrackForm
       @toggleDelete()
       @deleteTrack()
       @toggleEditBox()
-      @toggleFields()
       @toggleEditLink()
-      @toggleName()
-      @toggleDone()
       @toggleRestore()
     else
       @toggleDelete()
@@ -49,6 +40,12 @@ class @TrackForm
 
   findTrack: ->
     @group.find('.track-name')
+
+  toggleEditBox: ->
+    @group.toggleClass('edit-record')
+    @findTrack().toggle()
+    @group.find('.track-form-fields').toggle()
+    @actions().find('.done-track').toggle()
 
   toggleDelete: ->
     @group.find('.remove-track').toggle()
@@ -69,20 +66,8 @@ class @TrackForm
     text = @group.find("label:contains('Name')").next().val()
     @findTrack().text(text)
 
-  toggleName: ->
-    @findTrack().toggle()
-
-  toggleFields: ->
-    @group.find('.track-form-fields').toggle()
-
-  toggleDone: ->
-    @actions().find('.done-track').toggle()
-
   actions: ->
     @group.find('.inline-list')
-
-  toggleEditBox: ->
-    @group.toggleClass('edit-record')
 
 
 
