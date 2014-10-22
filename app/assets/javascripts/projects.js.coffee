@@ -14,7 +14,8 @@ jQuery ->
     tf.done(event)
 
   $('form').on 'click', '.restore-track', (event) ->
-    TrackForm.restoreTrack($(this))
+    tf = new TrackForm($(this))
+    tf.restore(event)
 
   $('form').on 'click', '.add_fields', (event) ->
     TrackForm.addTrack($(this))

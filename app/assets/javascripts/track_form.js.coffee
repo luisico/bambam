@@ -14,11 +14,30 @@ class @TrackForm
 
   done: (event) ->
     @toggleEditBox()
-    @toggleDone()
-    @toggleFields()
-    @updateName()
     @toggleName()
+    @toggleFields()
+    @toggleDone()
+    @updateName()
     event.preventDefault() if event?
+
+  restore: (event) ->
+    @toggleRestore()
+    @deleteTrack()
+    @enableEdit()
+    @toggleDelete()
+    event.preventDefault() if event?
+
+  toggleDelete: ->
+    @group.find('.remove-track').toggle()
+
+  enableEdit: ->
+    @group.find('.track-name').toggleClass('line-through edit-track no-pointer')
+
+  deleteTrack: ->
+    @group.find('input[type=hidden]').val('0')
+
+  toggleRestore: ->
+    @group.find('.restore-track').toggle()
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
@@ -65,13 +84,6 @@ class @TrackForm
       TrackForm.links(el).find('.restore-track').show()
     event.preventDefault()
     TrackForm.change_track_add_text()
-
-  @restoreTrack: (el) ->
-    el.hide()
-    TrackForm.fields(el).find('input[type=hidden]').val('0')
-    TrackForm.links(el).find('.track-name').show().toggleClass('line-through edit-track no-pointer')
-    TrackForm.links(el).find('.remove-track').show()
-    event.preventDefault()
 
   @addTrack: (el) ->
     time = new Date().getTime()
