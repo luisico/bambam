@@ -1,44 +1,61 @@
 class @TrackForm
-  @group: (el) ->
-    el.closest('div.track-form-group')
+  constructor: (el, event) ->
+    @group = TrackForm.findGroup(el)
+
+  @findGroup: (el) ->
+    $(el).closest('div.track-form-group')
+
+  edit: (event) ->
+    @group.addClass('edit-record')
+    @hideName()
+    @showFields()
+    @showDone()
+    event.preventDefault() if event?
+
+  hideName: ->
+    @group.find('.track-name').hide()
+
+  showFields: ->
+    @group.find('.track-form-fields').show()
+
+  showDone: ->
+    @actions().find('.done-track').show()
+
+  actions: ->
+    @group.find('.inline-list')
+
+
 
   @fields: (el) ->
-    TrackForm.group(el).find('.track-form-fields')
+    TrackForm.findGroup(el).find('.track-form-fields')
 
   @links: (el) ->
     el.closest('li').siblings()
 
   @removeTrack: (el) ->
-    if TrackForm.group(el).hasClass('new-record')
-      TrackForm.group(el).remove()
-    else if TrackForm.group(el).hasClass('edit-record')
+    if TrackForm.findGroup(el).hasClass('new-record')
+      TrackForm.findGroup(el).remove()
+    else if TrackForm.findGroup(el).hasClass('edit-record')
       el.hide()
-      TrackForm.group(el).find('input[type=hidden]').val('1')
-      TrackForm.group(el).removeClass('edit-record')
+      TrackForm.findGroup(el).find('input[type=hidden]').val('1')
+      TrackForm.findGroup(el).removeClass('edit-record')
       TrackForm.fields(el).hide()
       TrackForm.links(el).find('.edit-track').show().toggleClass('line-through edit-track no-pointer')
       TrackForm.links(el).find('.done-track').hide()
       TrackForm.links(el).find('.restore-track').show()
     else
       el.hide()
-      TrackForm.group(el).find('input[type=hidden]').val('1')
+      TrackForm.findGroup(el).find('input[type=hidden]').val('1')
       TrackForm.links(el).find('.edit-track').toggleClass('line-through edit-track no-pointer')
       TrackForm.links(el).find('.restore-track').show()
     event.preventDefault()
     TrackForm.change_track_add_text()
 
-  @editTrack: (el) ->
-    el.hide()
-    TrackForm.group(el).addClass('edit-record')
-    TrackForm.fields(el).show()
-    TrackForm.links(el).find('.done-track').show()
-    event.preventDefault()
-
   @doneTrack: (el) ->
     el.hide()
-    TrackForm.group(el).removeClass('edit-record')
+    TrackForm.findGroup(el).removeClass('edit-record')
     TrackForm.fields(el).hide()
-    text = TrackForm.group(el).find("label:contains('Name')").next().val()
+    text = TrackForm.findGroup(el).find("label:contains('Name')").next().val()
     TrackForm.links(el).find('.track-name').show().text(text)
     TrackForm.links(el).find('.remove-track').show()
     event.preventDefault()

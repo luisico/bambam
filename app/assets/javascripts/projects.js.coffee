@@ -6,7 +6,8 @@ jQuery ->
     TrackForm.removeTrack($(this))
 
   $('form').on 'click', '.edit-track', (event) ->
-    TrackForm.editTrack($(this))
+    tf = new TrackForm($(this))
+    tf.edit(event)
 
   $('form').on 'click', '.done-track', (event) ->
     TrackForm.doneTrack($(this))
