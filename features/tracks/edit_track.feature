@@ -38,3 +38,11 @@ Feature: Edit track information
     And there is a track in that project
     When I visit the edit project page
     Then I should not be able to change the track's project
+
+  Scenario: Border surrounds track fields during edit
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    When I visit the edit project page
+    Then I should see a border when I click "track name"
+    And I should not see a border when I click "done"

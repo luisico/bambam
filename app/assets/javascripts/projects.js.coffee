@@ -10,7 +10,8 @@ jQuery ->
     tf.edit(event)
 
   $('form').on 'click', '.done-track', (event) ->
-    TrackForm.doneTrack($(this))
+    tf = new TrackForm($(this))
+    tf.done(event)
 
   $('form').on 'click', '.restore-track', (event) ->
     TrackForm.restoreTrack($(this))

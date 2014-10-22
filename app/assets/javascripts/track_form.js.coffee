@@ -6,23 +6,38 @@ class @TrackForm
     $(el).closest('div.track-form-group')
 
   edit: (event) ->
-    @group.addClass('edit-record')
-    @hideName()
-    @showFields()
-    @showDone()
+    @toggleEditBox()
+    @toggleName()
+    @toggleFields()
+    @toggleDone()
     event.preventDefault() if event?
 
-  hideName: ->
-    @group.find('.track-name').hide()
+  done: (event) ->
+    @toggleEditBox()
+    @toggleDone()
+    @toggleFields()
+    @updateName()
+    @toggleName()
+    event.preventDefault() if event?
 
-  showFields: ->
-    @group.find('.track-form-fields').show()
+  updateName: ->
+    text = @group.find("label:contains('Name')").next().val()
+    @group.find('.track-name').text(text)
 
-  showDone: ->
-    @actions().find('.done-track').show()
+  toggleName: ->
+    @group.find('.track-name').toggle()
+
+  toggleFields: ->
+    @group.find('.track-form-fields').toggle()
+
+  toggleDone: ->
+    @actions().find('.done-track').toggle()
 
   actions: ->
     @group.find('.inline-list')
+
+  toggleEditBox: ->
+    @group.toggleClass('edit-record')
 
 
 
@@ -50,15 +65,6 @@ class @TrackForm
       TrackForm.links(el).find('.restore-track').show()
     event.preventDefault()
     TrackForm.change_track_add_text()
-
-  @doneTrack: (el) ->
-    el.hide()
-    TrackForm.findGroup(el).removeClass('edit-record')
-    TrackForm.fields(el).hide()
-    text = TrackForm.findGroup(el).find("label:contains('Name')").next().val()
-    TrackForm.links(el).find('.track-name').show().text(text)
-    TrackForm.links(el).find('.remove-track').show()
-    event.preventDefault()
 
   @restoreTrack: (el) ->
     el.hide()
