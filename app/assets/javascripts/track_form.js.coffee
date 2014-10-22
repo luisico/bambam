@@ -47,11 +47,14 @@ class @TrackForm
     event.preventDefault() if event?
     TrackForm.change_track_add_text()
 
+  findTrack: ->
+    @group.find('.track-name')
+
   toggleDelete: ->
     @group.find('.remove-track').toggle()
 
   toggleEditLink: ->
-    @group.find('.track-name').toggleClass('line-through edit-track no-pointer')
+    @findTrack().toggleClass('line-through edit-track no-pointer')
 
   restoreTrack: ->
     @group.find('input[type=hidden]').val('0')
@@ -64,10 +67,10 @@ class @TrackForm
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
-    @group.find('.track-name').text(text)
+    @findTrack().text(text)
 
   toggleName: ->
-    @group.find('.track-name').toggle()
+    @findTrack().toggle()
 
   toggleFields: ->
     @group.find('.track-form-fields').toggle()
