@@ -22,19 +22,42 @@ class @TrackForm
 
   restore: (event) ->
     @toggleRestore()
-    @deleteTrack()
-    @enableEdit()
+    @restoreTrack()
+    @toggleEditLink()
     @toggleDelete()
     event.preventDefault() if event?
+
+  delete: (event) ->
+    if @group.hasClass('new-record')
+      @group.remove()
+    else if @group.hasClass('edit-record')
+      @toggleDelete()
+      @deleteTrack()
+      @toggleEditBox()
+      @toggleFields()
+      @toggleEditLink()
+      @toggleName()
+      @toggleDone()
+      @toggleRestore()
+    else
+      @toggleDelete()
+      @deleteTrack()
+      @toggleEditLink()
+      @toggleRestore()
+    event.preventDefault() if event?
+    TrackForm.change_track_add_text()
 
   toggleDelete: ->
     @group.find('.remove-track').toggle()
 
-  enableEdit: ->
+  toggleEditLink: ->
     @group.find('.track-name').toggleClass('line-through edit-track no-pointer')
 
-  deleteTrack: ->
+  restoreTrack: ->
     @group.find('input[type=hidden]').val('0')
+
+  deleteTrack: ->
+    @group.find('input[type=hidden]').val('1')
 
   toggleRestore: ->
     @group.find('.restore-track').toggle()
@@ -59,31 +82,6 @@ class @TrackForm
     @group.toggleClass('edit-record')
 
 
-
-  @fields: (el) ->
-    TrackForm.findGroup(el).find('.track-form-fields')
-
-  @links: (el) ->
-    el.closest('li').siblings()
-
-  @removeTrack: (el) ->
-    if TrackForm.findGroup(el).hasClass('new-record')
-      TrackForm.findGroup(el).remove()
-    else if TrackForm.findGroup(el).hasClass('edit-record')
-      el.hide()
-      TrackForm.findGroup(el).find('input[type=hidden]').val('1')
-      TrackForm.findGroup(el).removeClass('edit-record')
-      TrackForm.fields(el).hide()
-      TrackForm.links(el).find('.edit-track').show().toggleClass('line-through edit-track no-pointer')
-      TrackForm.links(el).find('.done-track').hide()
-      TrackForm.links(el).find('.restore-track').show()
-    else
-      el.hide()
-      TrackForm.findGroup(el).find('input[type=hidden]').val('1')
-      TrackForm.links(el).find('.edit-track').toggleClass('line-through edit-track no-pointer')
-      TrackForm.links(el).find('.restore-track').show()
-    event.preventDefault()
-    TrackForm.change_track_add_text()
 
   @addTrack: (el) ->
     time = new Date().getTime()
