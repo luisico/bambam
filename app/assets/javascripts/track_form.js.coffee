@@ -1,16 +1,13 @@
 class @TrackForm
-  constructor: (el, event) ->
-    @group = TrackForm.findGroup(el)
-
-  @findGroup: (el) ->
-    $(el).closest('div.track-form-group')
+  constructor: (el) ->
+    @group = $(el).closest('div.track-form-group')
 
   edit: (event) ->
-    @toggleEditBox()
+    @toggleEditDone()
     event.preventDefault() if event?
 
   done: (event) ->
-    @toggleEditBox()
+    @toggleEditDone()
     @updateName()
     event.preventDefault() if event?
 
@@ -23,25 +20,25 @@ class @TrackForm
       @group.remove()
     else if @group.hasClass('edit-record')
       @toggleDeleteRestore()
-      @toggleEditBox()
+      @toggleEditDone()
     else
       @toggleDeleteRestore()
     event.preventDefault() if event?
     TrackForm.change_track_add_text()
 
-  findTrack: ->
+  findName: ->
     @group.find('.track-name')
 
-  toggleEditBox: ->
+  toggleEditDone: ->
     @group.toggleClass('edit-record')
-    @findTrack().toggle()
+    @findName().toggle()
     @group.find('.track-form-fields').toggle()
-    @actions().find('.done-track').toggle()
+    @group.find('.done-track').toggle()
 
   toggleDeleteRestore: ->
     @group.find('.remove-track').toggle()
     @group.find('.restore-track').toggle()
-    @findTrack().toggleClass('line-through edit-track no-pointer')
+    @findName().toggleClass('line-through edit-track no-pointer')
     @toggleHiddenValue()
 
   toggleHiddenValue: ->
@@ -53,12 +50,7 @@ class @TrackForm
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
-    @findTrack().text(text)
-
-  actions: ->
-    @group.find('.inline-list')
-
-
+    @findName().text(text)
 
   @addTrack: (el) ->
     time = new Date().getTime()
