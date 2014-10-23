@@ -1,56 +1,66 @@
 class @TrackForm
-  constructor: (el) ->
-    @group = $(el).closest('div.track-form-group')
-
-  edit: (event) ->
-    @toggleEditDone()
+  constructor: (event) ->
+    @group = $(event.target).closest('div.track-form-group')
+    @objects =
+      name:    @group.find('.track-name')
+      fields:  @group.find('.track-form-fields')
+      done:    @group.find('.done-track')
+      remove:  @group.find('.remove-track')
+      restore: @group.find('.restore-track')
+    @states =
+      new: 'new-record'
+      edit: 'edit-record'
     event.preventDefault() if event?
 
-  done: (event) ->
-    @toggleEditDone()
+  edit: ->
+    @toggleEditState()
+
+  done: ->
+    @toggleEditState()
     @updateName()
-    event.preventDefault() if event?
 
-  restore: (event) ->
-    @toggleDeleteRestore()
-    event.preventDefault() if event?
+  restore: ->
+    @toggleDeleteState()
 
-  delete: (event) ->
-    if @group.hasClass('new-record')
+  delete: ->
+    if @isState('new')
       @group.remove()
-    else if @group.hasClass('edit-record')
-      @toggleDeleteRestore()
-      @toggleEditDone()
     else
-      @toggleDeleteRestore()
-    event.preventDefault() if event?
+      @toggleDeleteState()
+      @toggleEditState() if @isState('edit')
     TrackForm.change_track_add_text()
 
-  findName: ->
-    @group.find('.track-name')
+  isState: (state) ->
+    @group.hasClass(@states[state])
 
-  toggleEditDone: ->
-    @group.toggleClass('edit-record')
-    @findName().toggle()
-    @group.find('.track-form-fields').toggle()
-    @group.find('.done-track').toggle()
+  toggleState: (state) ->
+    @group.toggleClass(@states[state])
 
-  toggleDeleteRestore: ->
-    @group.find('.remove-track').toggle()
-    @group.find('.restore-track').toggle()
-    @findName().toggleClass('line-through edit-track no-pointer')
-    @toggleHiddenValue()
+  toggle: (obj) ->
+    @objects[obj].toggle()
 
-  toggleHiddenValue: ->
-    hiddenValueElement = @group.find('input[type=hidden]')
-    if hiddenValueElement.val() == '1'
-      hiddenValueElement.val('0')
-    else
-      hiddenValueElement.val('1')
+  toggleEditState: ->
+    @toggleState('edit')
+    @toggle('name')
+    @toggle('fields')
+    @toggle('done')
+
+  toggleDeleteState: ->
+    @toggle('restore')
+    @toggle('remove')
+    @toggleEditLink()
+    @toggleRemoveValue()
+
+  toggleRemoveValue: ->
+    el = @group.find('input[type=hidden]')
+    el.val(if el.val() == '1' then '0' else '1')
+
+  toggleEditLink: ->
+    @objects['name'].toggleClass('line-through edit-track no-pointer')
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
-    @findName().text(text)
+    @objects['name'].text(text)
 
   @addTrack: (el) ->
     time = new Date().getTime()
