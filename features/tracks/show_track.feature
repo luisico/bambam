@@ -49,3 +49,11 @@ Feature: Show a track
       | source  |
       | tracks  |
       | project |
+
+  @javascript
+  Scenario: IGV info tooltip
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    When I am on the track page
+    Then I should be able to activate a tooltip on the IGV button

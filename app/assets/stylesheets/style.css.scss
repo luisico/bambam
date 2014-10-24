@@ -78,6 +78,12 @@ i.margin-right {
   margin-right: rem-calc(5);
 }
 
+span.has-tip {
+  margin-left: rem-calc(7);
+  color: $secondary-color;
+  border-bottom: none !important;
+}
+
 i.small-margin-left {
   margin-left: rem-calc(3);
 }
