@@ -8,7 +8,7 @@ end
 def fill_project_form(project=nil)
   project ||= @project_attrs
   fill_in 'Project name', with: project[:name]
-  check User.last.email
+  fill_in_select2("project_user_ids", with: User.last.email)
   yield if block_given?
   click_button 'Create Project'
 end
@@ -44,11 +44,11 @@ When /^I create a project without a name$/ do
   }.not_to change(Project, :count)
 end
 
-When /^I create a project with multiple members$/ do
+When /^I create a project with multiple users$/ do
   expect {
     build_project
     fill_project_form do
-      check User.all[-2].email
+      fill_in_select2("project_user_ids", with: User.all[-2].email)
     end
   }.to change(Project, :count).by(1)
 end
@@ -82,10 +82,26 @@ Then /^I should be on the new project page$/ do
   expect(page).to have_content 'New project'
 end
 
-Then /^I should see unchecked checkboxes for the other users$/ do
-  @users.each do |user|
-    expect(page).to have_unchecked_field user.email
+Then /^I should( not)? see myself listed as project owner$/ do |negate|
+  if negate
+    within('#project-owner') {
+      expect(page).not_to have_content @admin.email
+    }
+  else
+    within('#project-owner') {
+      expect(page).to have_content @admin.email
+    }
   end
+end
+
+Then /^I should see a list of potential users$/ do
+  find("#s2id_project_user_ids").click
+  within(".select2-results") {
+    expect(page).not_to have_content @admin.email
+    @users.each do |user|
+      expect(page).to have_content user.email
+    end
+  }
 end
 
 Then /^I should be on the project show page$/ do

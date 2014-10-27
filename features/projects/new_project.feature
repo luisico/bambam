@@ -3,12 +3,13 @@ Feature: Create a project
   As an admin
   I want to be able to access a page where I can add a new project
 
+  @javascript
   Scenario: Admin goes to new project page
     Given I am signed in as an admin
     And there are 3 other users in the system
     And I am on the new project page
-    Then my checkbox should be disabled
-    And I should see unchecked checkboxes for the other users
+    Then I should see myself listed as project owner
+    And I should see a list of potential users
     And I should see a link to "Add a track"
 
   @javascript
@@ -24,6 +25,7 @@ Feature: Create a project
     And I should be the project's owner
     And I should see the project's tracks
 
+  @javascript
   Scenario: Admin cannot create a project without a name
     Given I am signed in as an admin
     And there is another user in the system
@@ -32,11 +34,12 @@ Feature: Create a project
     Then the "Project name" field should have the error "can't be blank"
     And I should be on the new project page
 
+  @javascript
   Scenario: Admin can add multiple users to a project
     Given I am signed in as an admin
     And there are 3 other users in the system
     And I am on the new project page
-    When I create a project with multiple members
+    When I create a project with multiple users
     Then I should be on the project show page
     And I should see the project's users with profile links
     And I should see a message that the project was created successfully

@@ -31,15 +31,15 @@ Then /^I should( not)? be able to edit the project name$/ do |negate|
   end
 end
 
-Then /^I should( not)? be able to change memberships in the project$/ do |negate|
+Then /^I should( not)? be able to change users in the project$/ do |negate|
   if negate
-    expect(page).not_to have_selector(:xpath, "//input[@name='project[user_ids][]']")
+    expect(page).not_to have_css "#project_user_ids"
   else
-    expect(page).to have_selector(:xpath, "//input[@name='project[user_ids][]']")
+    expect(page).to have_css "#project_user_ids"
     deleted = []
     expect {
-      @project.users[-2..-1].each{ |u| uncheck u.email; deleted << u }
-      @users.each{ |u| check u.email}
+      @project.users[-2..-1].each{ |u| remove_from_select2(u.email); deleted << u }
+      @users.each{ |u| fill_in_select2("project_user_ids", with: u.email)}
       click_button 'Update'
       @project.reload
     }.to change(@project.users, :count).by(1)
@@ -71,7 +71,7 @@ end
 
 Then /^I should be able to add myself to the project$/ do
   expect {
-    check @admin.email
+    fill_in_select2("project_user_ids", with: @admin.email)
     click_button 'Update'
   }.to change(@project.users, :count).by(1)
   expect(current_path).to eq project_path(@project)

@@ -14,23 +14,16 @@
         </div>
 
         <h4 id="project-users"><i class="users-icon large margin-rigth"></i>Users</h4>
+
+        <div id="project-owner">
+          <% user = (@project.owner || current_user) %>
+          Project owner: <%= link_to user.email, user %>
+          <%= hidden_field_tag "project[user_ids][]", user.id %>
+          <%= hidden_field_tag "project[owner_id]", user.id %>
+        </div></br>
+
         <div class="field">
-          <% User.all.each do |user| %>
-            <% if !@project.owner && user == current_user %>
-              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-              <%= label_tag dom_id(user), user.email %><br>
-              <%= hidden_field_tag "project[user_ids][]", user.id %>
-              <%= hidden_field_tag "project[owner_id]", user.id %>
-            <% elsif user == @project.owner %>
-              <%= check_box_tag "project[user_ids][]", user.id, true, :disabled => true, id: dom_id(user) %>
-              <%= label_tag dom_id(user), user.email %><br>
-              <%= hidden_field_tag "project[user_ids][]", user.id %>
-              <%= hidden_field_tag "project[owner_id]", user.id %>
-            <% else %>
-              <%= check_box_tag "project[user_ids][]", user.id, @project.user_ids.include?(user.id), id: dom_id(user) %>
-              <%= label_tag dom_id(user), user.email %><br>
-            <% end %>
-          <% end %>
+          <%= f.collection_select :user_ids, User.order(:email).select {|u| u != user}, :id, :email, {}, {multiple:true} %>
         </div>
       <% else %>
         <h4><i class="users-icon large margin-rigth"></i>Users</h4>
