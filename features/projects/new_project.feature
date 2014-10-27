@@ -25,7 +25,6 @@ Feature: Create a project
     And I should be the project's owner
     And I should see the project's tracks
 
-  @javascript
   Scenario: Admin cannot create a project without a name
     Given I am signed in as an admin
     And there is another user in the system

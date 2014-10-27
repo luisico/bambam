@@ -40,7 +40,8 @@ end
 When /^I create a project without a name$/ do
   expect{
     build_project
-    fill_project_form @project_attrs.merge(name: '')
+    fill_in 'Project name', with: @project_attrs.merge(name: '')[:name]
+    click_button 'Create Project'
   }.not_to change(Project, :count)
 end
 
