@@ -24,7 +24,6 @@ Feature: Create a group
     And I should see my email among the list of group member emails
     And I should be the groups owner
 
-  @javascript
   Scenario: Cannot create a group without a name
     Given I am on the new group page
     When I create a group without a name

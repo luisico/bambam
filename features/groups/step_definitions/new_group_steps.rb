@@ -34,7 +34,8 @@ end
 When /^I create a group without a name$/ do
   expect{
     build_group
-    fill_group_form @group_attrs.merge(name: '')
+    fill_in 'Group name', with: @group_attrs.merge(name: '')[:name]
+    click_button 'Create Group'
   }.not_to change(Group, :count)
 end
 
