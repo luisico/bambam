@@ -12,11 +12,9 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new(owner: current_user, users: [current_user])
-    @potential_users = potential_users(@project)
   end
 
   def edit
-    @potential_users = potential_users(@project)
   end
 
   def create
@@ -25,7 +23,6 @@ class ProjectsController < ApplicationController
     if @project.save
       redirect_to @project, notice: 'Project was successfully created.'
     else
-      @potential_users = potential_users(@project)
       render action: 'new'
     end
   end
@@ -60,10 +57,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :owner_id, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
-  end
-
-  def potential_users(project)
-    User.where.not(id: project.owner)
+    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
   end
 end

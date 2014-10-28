@@ -147,12 +147,6 @@ describe ProjectsController do
         get :new
         expect(assigns(:project).users).to include @admin
       end
-
-      it "should assign potential users" do
-        FactoryGirl.create(:user)
-        get :new
-        expect(assigns(:potential_users)).not_to be_empty
-      end
     end
 
     context "as a signed in user" do
@@ -188,11 +182,6 @@ describe ProjectsController do
       it "should return the project" do
         get :edit, id: @project
         expect(assigns(:project)).to eq @project
-      end
-
-      it "should assign potential users" do
-        get :edit, id: @project
-        expect(assigns(:potential_users)).not_to be_empty
       end
     end
 
@@ -266,12 +255,6 @@ describe ProjectsController do
             post :create, project: @project_attr.merge(name: '')
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
-        end
-
-        it "should assign potential user" do
-          FactoryGirl.create_list(:user, 3)
-          post :create, project: @project_attr.merge(name: '')
-          expect(assigns(:potential_users)).not_to be_empty
         end
       end
     end
@@ -514,19 +497,6 @@ describe ProjectsController do
         controller.params = {project: {}}
         expect(controller.send(:has_admin_attr?)).to be_false
       end
-    end
-  end
-
-  describe "#potential_users" do
-    before do
-      @owner = FactoryGirl.create(:admin)
-      @users = FactoryGirl.create_list(:user, 2)
-      @other_users = FactoryGirl.create_list(:user, 2)
-      @project = FactoryGirl.create(:project, owner: @owner, users: @users)
-    end
-
-    it "should not include the owner" do
-      expect(controller.send(:potential_users, @project)).to eq @users + @other_users
     end
   end
 end

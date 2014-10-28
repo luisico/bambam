@@ -137,6 +137,16 @@ describe User do
     its(:encrypted_password) { should_not be_blank }
   end
 
+  describe "filter all users" do
+    context "by user" do
+      before { @users = FactoryGirl.create_list(:user, 3) }
+      it "returns all users except indicated user" do
+        expect(User.all_except(@user)).to eq @users
+        expect(User.all_except(@user)).not_to include @user
+      end
+    end
+  end
+
   describe "associations" do
     context "memberships" do
       it { should have_many :memberships }
