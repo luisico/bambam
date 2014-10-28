@@ -17,6 +17,7 @@ Feature: Edit other group's information
     When I visit the edit group page
     Then I should be able to edit the group name
 
+  @javascript
   Scenario: Admin can change the group members
     When I visit the edit group page
     Then I should be able to edit the group members
@@ -25,6 +26,7 @@ Feature: Edit other group's information
     When I visit the edit group page
     Then I should be able to update group without changing group owner
 
+  @javascript
   Scenario: Admin can add itself to group
     When I visit the edit group page
     Then I should be able to add myself to the group

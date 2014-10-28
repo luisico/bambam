@@ -17,6 +17,7 @@ Feature: Edit group information
     When I visit the edit group page
     Then I should be able to edit the group name
 
+  @javascript
   Scenario: Admin can change the group members
     When I visit the edit group page
     Then I should be able to edit the group members

@@ -10,11 +10,9 @@ class GroupsController < ApplicationController
 
   def new
     @group = Group.new(owner: current_user, members: [current_user])
-    @potential_members = potential_members(@group)
   end
 
   def edit
-    @potential_members = potential_members(@group)
   end
 
   def create
@@ -23,7 +21,6 @@ class GroupsController < ApplicationController
     if @group.save
       redirect_to @group, notice: 'Group was successfully created.'
     else
-      @potential_members = potential_members(@group)
       render action: 'new'
     end
   end
@@ -32,7 +29,6 @@ class GroupsController < ApplicationController
     if params['group'] && params['group']['member_ids']
       params['group']['member_ids'] << @group.owner.id unless params['group']['member_ids'].include?(@group.owner.id)
     end
-
     if @group.update(group_params)
       redirect_to @group, notice: 'Group was successfully updated.'
     else
@@ -48,9 +44,5 @@ class GroupsController < ApplicationController
   private
   def group_params
     params.require(:group).permit(:name, member_ids: [])
-  end
-
-  def potential_members(group)
-    [group.owner].concat(User.where.not(id: group.owner))
   end
 end
