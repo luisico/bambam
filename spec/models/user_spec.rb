@@ -218,6 +218,7 @@ RSpec.describe User do
       it { is_expected.to have_many :groups }
       it { is_expected.to respond_to :groups }
       it { is_expected.to respond_to :group_ids }
+      it { should validate_presence_of :groups }
     end
 
     context "projects_users" do

@@ -7,6 +7,7 @@ end
 def fill_invitation_form(invitee=nil)
   invitee ||= @invitee
   fill_in User.human_attribute_name(:email), with: invitee[:email]
+  fill_in_select2("group_ids", with: @group.name)
   yield if block_given?
   click_button I18n.t('devise.invitations.new.submit_button')
 end
@@ -80,6 +81,14 @@ end
 
 When /^I visit the cancel account page$/ do
   visit '/users/cancel'
+end
+
+When /^I invite a user without assigning a group$/ do
+  build_invitee
+  expect {
+    fill_in User.human_attribute_name(:email), with: @invitee[:email]
+    click_button I18n.t('devise.invitations.new.submit_button')
+  }.not_to change(User, :count)
 end
 
 ### Then

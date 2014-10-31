@@ -51,6 +51,21 @@ Feature: Sign up by invitation only
     And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
 
+  @javascript
+  Scenario Outline: Invitee must be placed in a group
+    Given I am signed in as an <role>
+    And there are 3 groups in the system
+    And I am on the users page
+    When I invite a user without assigning a group
+    Then the "Group" field should have the error "invitee must be assigned to a group"
+    And I should be on the invitation page
+    And no invitation should have been sent
+
+    Examples:
+      | role    |
+      | admin   |
+      | inviter |
+
   Scenario: Cannot invite already registered users
     Given I am signed in as a manager
     And I am on the users page

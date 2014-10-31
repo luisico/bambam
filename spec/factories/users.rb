@@ -16,7 +16,7 @@ FactoryGirl.define do
       sequence(:email) {|n| "admin#{n}@example.com"}
       sequence(:first_name) {|n| "Firstname#{n}"}
       sequence(:last_name) {|n| "Admin#{n}"}
-      after(:create) {|user| user.add_role(:admin)}
+      after(:build) {|user| user.add_role(:admin)}
     end
 
     factory :manager do
@@ -24,6 +24,30 @@ FactoryGirl.define do
       sequence(:first_name) {|n| "Firstname#{n}"}
       sequence(:last_name) {|n| "Manager#{n}"}
       after(:create) {|user| user.add_role(:manager)}
+    end
+
+    # after :build do |user|
+    #   user.groups << FactoryGirl.build(:group)
+    # end
+
+    # before(:create) do |user|
+    #   create(:group, members: [user])
+    # end
+
+    # after(:build) do |user, evaluator|
+    #   user.groups << FactoryGirl.build(:group, members: [user])
+    # end
+
+    # after(:create) do |user|
+    #   create(:group, members: [user])
+    # end
+
+    # after(:create) do |user, evaluator|
+    #   user.groups << create(:group, members: [user])
+    # end
+
+    after(:build) do |user|
+      create(:group, members: [user]) unless user.email.include? "admin"
     end
   end
 end
