@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :datapaths_users, dependent: :destroy
   has_many :datapaths, through: :datapaths_users
 
+  validates_presence_of :group_ids, unless: "has_role?(:admin)"
+
   # Authentication
   devise :database_authenticatable, :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable

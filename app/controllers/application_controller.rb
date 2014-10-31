@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
 
   # Extra fields for Devise
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:invite) << :manager
+    devise_parameter_sanitizer.for(:invite) << [:manager, group_ids: []}
     devise_parameter_sanitizer.for(:accept_invitation) << [:first_name, :last_name]
     devise_parameter_sanitizer.for(:account_update) << [:first_name, :last_name]
   end

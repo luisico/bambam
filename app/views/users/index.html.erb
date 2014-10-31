@@ -21,6 +21,12 @@
             <%= select_tag :project_ids, options_from_collection_for_select(@projects, "id", "name"), include_blank: true, multiple: true %>
           </div>
         <% end %>
+        <% if can? :manage, Group %>
+          <div>
+            <%= f.label :group_ids, 'Add invitee to existing groups:', class: "medium-margin-bottom" %>
+            <%= f.collection_select :group_ids, Group.order(:name), :id, :name, {}, {multiple:true} %>
+          </div>
+        <% end %>
         <div>
           <%= f.submit I18n.t('devise.invitations.new.submit_button'), class: 'button tiny radius', id: "invite-email" %>
         </div>

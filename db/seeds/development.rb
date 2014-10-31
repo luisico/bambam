@@ -1,13 +1,15 @@
-# Admin and users
+# Admin
 admin1 = FactoryGirl.create(:admin)
-manager1 = FactoryGirl.create(:manager)
-manager2 = FactoryGirl.create(:manager)
-users = FactoryGirl.create_list(:user, 3)
-users << FactoryGirl.create(:user, :unnamed)
 
 # Groups & membership
-FactoryGirl.create(:group, owner: manager1, members: [manager2, users[0], users[1]])
-FactoryGirl.create(:group, owner: manager2, members: [users[2], users[3]])
+group1 = FactoryGirl.create(:group, owner: manager1)
+group2 = FactoryGirl.create(:group, owner: manager2)
+
+# Managers and users
+manager1 = FactoryGirl.create(:manager, groups: [group1])
+manager2 = FactoryGirl.create(:manager, groups: [group2])
+users = FactoryGirl.create_list(:user, 3, groups: [group2])
+users << FactoryGirl.create(:user, :unnamed, groups: [group1])
 
 # Datapaths
 datapaths = FactoryGirl.create_list(:seeded_datapath, 3, users: [manager1, manager2])
