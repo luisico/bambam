@@ -79,15 +79,25 @@ i.margin-right {
 }
 
 .has-tip {
-  margin-left: rem-calc(7);
-  color: $secondary-color;
-  border-bottom: none !important;
+  @extend .radius;
+  font-weight: normal;
 }
 
-.igv-tip {
+.has-tip-icon {
   @extend .has-tip;
-  @extend .right;
+  @extend .fi-info;
+  color: $primary-color;
+  border-bottom: none !important;
   font-size: rem-calc(10);
+  vertical-align: top;
+}
+
+.button .has-tip-icon {
+  @extend .right;
+  color: $secondary-color;
+  position: relative;
+  right: -8px;
+  top: -5px;
 }
 
 i.small-margin-left {

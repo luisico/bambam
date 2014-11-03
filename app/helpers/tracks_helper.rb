@@ -6,7 +6,7 @@ module TracksHelper
       klass << ' fi-eye'
     end
     tip = "IGV must be open on your computer. For information on how to install and run IGV see the FAQ under the help menu."
-    text_and_tip = "#{text}<span data-tooltip aria-haspopup='true' class='igv-tip' title='#{tip}'>?</span>"
+    text_and_tip = "#{text}<span data-tooltip aria-haspopup='true' class='has-tip-icon' title='#{tip}'></span>"
 
     link_to igv_url(track), class: klass do
       text_and_tip.html_safe
