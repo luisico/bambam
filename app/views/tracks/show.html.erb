@@ -18,7 +18,7 @@
       <div>
         <ul class="inline-list" id="track-download-links">
           <li>
-            <%= link_to_igv(@track, 'Open in IGV') %>
+            <%= link_to_igv(@track) %>
           </li>
           <% if Pathname.new(@track.path).extname == ".bam" %>
             <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download' %></li>

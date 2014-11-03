@@ -51,7 +51,7 @@ end
 
 Then /^I should see a link to open the track in IGV$/ do
   encoded = ERB::Util.url_encode stream_services_track_url(@track)
-  expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='Open in IGV']")
+  expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
 end
 
 Then /^I should see a link to download a (bam|bw) file$/ do |type|
