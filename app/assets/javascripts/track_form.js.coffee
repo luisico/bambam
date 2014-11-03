@@ -13,10 +13,15 @@ class @TrackForm
     event.preventDefault() if event?
 
   edit: ->
-    @toggleEditState()
+    @group.addClass(@states['edit'])
+    for object in ['fields', 'done' ]
+      @show(object)
+    @hide('name')
 
   done: ->
-    @toggleEditState()
+    @group.removeClass(@states['edit'])
+    for object in ['fields', 'done' ]
+      @hide(object)
     @updateName()
 
   restore: ->
@@ -35,6 +40,12 @@ class @TrackForm
 
   toggleState: (state) ->
     @group.toggleClass(@states[state])
+
+  show: (obj) ->
+    @objects[obj].show()
+
+  hide: (obj) ->
+    @objects[obj].hide()
 
   toggle: (obj) ->
     @objects[obj].toggle()
@@ -60,7 +71,7 @@ class @TrackForm
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
-    @objects['name'].text(text)
+    @objects['name'].text(text).show()
 
   @addTrack: (el) ->
     time = new Date().getTime()
