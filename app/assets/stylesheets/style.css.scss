@@ -78,10 +78,16 @@ i.margin-right {
   margin-right: rem-calc(5);
 }
 
-span.has-tip {
+.has-tip {
   margin-left: rem-calc(7);
   color: $secondary-color;
   border-bottom: none !important;
+}
+
+.igv-tip {
+  @extend .has-tip;
+  @extend .right;
+  font-size: rem-calc(10);
 }
 
 i.small-margin-left {
