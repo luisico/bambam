@@ -151,3 +151,32 @@ Feature: Create link to share track
     When I am on the track page
     Then I should be able to delete the expired share link
     And the hide/show link should not be visable
+
+  Scenario: Share links are rendered in ascending order
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has 5 share links
+    And that track has an expired share link
+    When I am on the track page
+    Then share links should be in ascending order
+
+  Scenario: Updated share link gets placed in correct order
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has 3 share links
+    And that track has an expired share link
+    When I am on the track page
+    Then the expired link should be the first on the list
+    And I should be able to renew the expired share link
+    And that link should be the "last" in the list of share links
+
+  Scenario: New share link gets placed in correct order
+    Given I am signed in
+    And I belong to a project
+    And there is a track in that project
+    And that track has 2 share links
+    When I am on the track page
+    Then I should be able to create a shareable link with 2 days expiration date
+    And that link should be the "first" in the list of share links

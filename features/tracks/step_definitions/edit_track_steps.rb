@@ -26,6 +26,8 @@ Then /^I should be able to update the track name$/ do
   expect {
     click_link @track.name
     fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
+    click_link 'done'
+    expect(page).to have_content 'new_track_name'
     click_button 'Update'
     track.reload
   }.to change(track, :name)
@@ -57,5 +59,15 @@ Then /^I should( not)? be able to change the track's project$/ do |negate|
       track.reload
     }.to change(track, :project_id)
     expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  end
+end
+
+Then /^I should( not)? see a border when I click "(.*?)"$/ do |negate, link|
+  if negate
+    click_link link
+    expect(first('.track-form-group')[:class]).to eq "track-form-group"
+  else
+    click_link @track.name
+    expect(first('.track-form-group')[:class]).to eq "track-form-group  edit-record"
   end
 end

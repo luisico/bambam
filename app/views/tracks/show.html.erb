@@ -51,7 +51,7 @@
 
         <div id="share-links-list">
           <% if @track.share_links.any? %>
-            <%= render @track.share_links %>
+            <%= render @track.share_links.order(:expires_at) %>
           <% else %>
             <p id="no-share-link">There are no track line links for this track</p>
           <% end %>

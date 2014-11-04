@@ -35,7 +35,7 @@ end
 Given /^that track has (\d+|a|an) share links?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   expect {
-    FactoryGirl.create_list(:share_link, n, track: @track)
+    @share_links = FactoryGirl.create_list(:share_link, n, track: @track)
   }.to change(ShareLink, :count).by(n)
   @share_link = ShareLink.last
 end
@@ -212,4 +212,33 @@ end
 Then /^the hide\/show link should not be visable$/ do
   expect(page).not_to have_css ".show-expired-share-links"
   expect(page).not_to have_css ".hide-expired-share-links"
+end
+
+Then /^share links should be in ascending order$/ do
+  find(".show-expired-share-links").click
+  share_links = page.all('.share-link')
+  expect(share_links.first[:id]).to eq "share_link_#{@expired_share_link.id}"
+  expect(share_links.last[:id]).to eq "share_link_#{@share_links.last.id}"
+end
+
+Then /^the expired link should be the first on the list$/ do
+  find(".show-expired-share-links").click
+  expect(page.all('.share-link').first[:id]).to eq "share_link_#{@expired_share_link.id}"
+end
+
+Then /^I should be able to renew the expired share link$/ do
+  expect{
+    renew_shared_link @expired_share_link do
+      fill_in 'share_link[expires_at]', with: Time.now + 5.days
+    end
+  }.to change(@expired_share_link, :expires_at)
+end
+
+Then /^that link should be the "(.*?)" in the list of share links$/ do |place|
+  share_links = page.all('.share-link')
+  if place == "last"
+    expect(share_links.last[:id]).to eq "share_link_#{@expired_share_link.id}"
+  elsif place == "first"
+    expect(share_links.first[:id]).to eq "share_link_#{ShareLink.last.id}"
+  end
 end

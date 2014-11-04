@@ -4,8 +4,8 @@ $(function(){
   });
 });
 
-  var copy_to_clipboard = function(el) {
-    id = "#" + $(el).data('clipboard-id');
-    text = $(el).siblings(id).text();
-    window.prompt("Press Ctrl-C or Cmd-C to copy to clipboard", text);
-  }
+var copy_to_clipboard = function(el) {
+  id = "#" + $(el).data('clipboard-id');
+  text = $(el).siblings(id).text();
+  window.prompt("Press Ctrl-C or Cmd-C to copy to clipboard", text);
+}

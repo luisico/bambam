@@ -1,14 +1,7 @@
+$('.new_share_link').remove();
 <% if @share_link.errors.any? %>
-  $('.new_share_link').remove();
-  $('#create-share-links').append('<%= j render("form") %>');
-  $('#share_link_expires_at').datepicker({ dateFormat: "'Expires:' d, M yy" })
+  ShareLink.showForm('<%= j render("form") %>');
 <% else %>
-  $('.new_share_link').remove();
   $('#new_link').show();
-  $('#share-links-list').append('<%= j render(@share_link) %>');
-  $('#share-links-list').children().last().effect("highlight", {}, 1500);
-  $('#share-links-list').children().last().find('i.copy-to-clipboard').bind("click", function() {
-    copy_to_clipboard(this);
-  });
-  $('#no-share-link').remove();
+  ShareLink.create('#share-links-list','<%= j render(@share_link) %>');
 <% end %>
