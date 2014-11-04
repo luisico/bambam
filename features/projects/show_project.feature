@@ -57,3 +57,11 @@ Feature: Show a project
       | source          |
       | account profile |
       | projects        |
+
+  @javascript
+  Scenario: IGV info tooltip
+    Given I am signed in as a user
+    And I belong to a project
+    And there are 3 tracks in that project
+    When I am on the project page
+    Then I should be able to activate a tooltip on the IGV buttons
