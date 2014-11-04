@@ -59,11 +59,15 @@ describe TracksHelper do
     end
 
     it "default text is 'IGV'" do
-      expect(helper.link_to_igv(@track)).to match '>igv</a>'
+      expect(helper.link_to_igv(@track)).to match '>igv<span'
     end
 
     it "accepts an optional text for the link" do
-      expect(helper.link_to_igv(@track, 'mytext')).to match ">mytext</a>"
+      expect(helper.link_to_igv(@track, 'mytext')).to match ">mytext<span"
+    end
+
+    it "contains a zurb foundation tooltip" do
+      expect(helper.link_to_igv(@track)).to match "<span data-tooltip"
     end
   end
 

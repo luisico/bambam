@@ -57,3 +57,11 @@ Feature: Search the application
     When I search for "best"
     Then I should see the full track path on mouseover
     And I should be able to toggle track path from truncated to full
+
+  @javascript
+  Scenario: IGV info tooltip
+    Given I am signed in as a user
+    And I belong to a project named "best_project" with track "best_track"
+    And I belong to a project named "ok_project" with track "second_best_track"
+    When I search for "best"
+    Then I should be able to activate a tooltip on the IGV buttons

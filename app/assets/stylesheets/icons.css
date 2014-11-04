@@ -1,0 +1,25 @@
+.tour-icon {
+  @extend .fi-info;
+  color: $primary-color;
+}
+
+.trash-icon {
+  @extend .fi-trash;
+  color: $primary-color;
+}
+
+.track-icon {
+  @extend .fi-paw;
+}
+
+.admin-icon {
+  @extend .fi-sheriff-badge;
+}
+
+.users-icon {
+  @extend .fi-torsos;
+}
+
+.icon_key {
+  padding-right: 1em;
+}

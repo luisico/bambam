@@ -22,3 +22,11 @@ Feature: List of tracks
     And I belong to a project
     When I am on the tracks page
     Then I should see instuctions on how to add tracks
+
+  @javascript
+  Scenario: IGV info tooltip
+    Given I am signed in
+    And I belong to a project
+    And there are 3 tracks in that project
+    When I am on the tracks page
+    Then I should be able to activate a tooltip on the IGV buttons

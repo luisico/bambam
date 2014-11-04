@@ -78,6 +78,28 @@ i.margin-right {
   margin-right: rem-calc(5);
 }
 
+.has-tip {
+  @extend .radius;
+  font-weight: normal;
+}
+
+.has-tip-icon {
+  @extend .has-tip;
+  @extend .fi-info;
+  color: $primary-color;
+  border-bottom: none !important;
+  font-size: rem-calc(10);
+  vertical-align: top;
+}
+
+.button .has-tip-icon {
+  @extend .right;
+  color: $secondary-color;
+  position: relative;
+  right: -8px;
+  top: -5px;
+}
+
 i.small-margin-left {
   margin-left: rem-calc(3);
 }
@@ -173,7 +195,7 @@ input.with-instructions {
   margin-bottom: 5px;
   a {
     @extend .right;
-    @extend .fi-info;
+    @extend .tour-icon;
     font-size: rem-calc(10);
     margin-right: 10px;
     &:before {

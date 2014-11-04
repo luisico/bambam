@@ -18,14 +18,14 @@
                 <%= link_to project.name, project, class: "text-panel-overhang" %>
               </li>
               <li>
-                <i class="fi-paw small margin-right" title="tracks"></i>
+                <i class="track-icon small margin-right" title="tracks"></i>
                 <%= project.tracks.count %>
-                <i class="fi-torsos small left-buffer margin-right" title="users"></i>
+                <i class="users-icon small left-buffer margin-right" title="users"></i>
                 <%= project.users.count %>
               </li>
               <% if can? :manage, User %>
                 <li class="sub-text text-panel-overhang">
-                  <i class="fi-sheriff-badge small margin-right" title="owner"></i>
+                  <i class="admin-icon small margin-right" title="owner"></i>
                   <%= link_to project.owner.email, project.owner, class: "text-panel-overhang" %>
                 </li>
               <% else %>

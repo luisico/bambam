@@ -23,3 +23,7 @@ end
 Then /^I should be on (my|the)? account profile page$/ do |foo|
   expect(current_path).to eq user_path(@user)
 end
+
+Then /^I should be on the help page$/ do
+  expect(current_path).to eq help_path
+end
