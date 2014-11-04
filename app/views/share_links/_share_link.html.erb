@@ -16,7 +16,7 @@
       <%= link_to "edit", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true, class: "edit-share-link-link" %>
     </li>
     <li>
-      <%= link_to "", share_link, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "fi-trash", id: "delete_share_link_#{share_link.id}" %>
+      <%= link_to "", share_link, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "trash-icon", id: "delete_share_link_#{share_link.id}" %>
     </li>
   </ul>
 

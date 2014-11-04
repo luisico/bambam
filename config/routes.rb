@@ -23,5 +23,7 @@ Bambam::Application.routes.draw do
 
   get 'search', to: 'search#search'
 
+  get 'help', to: 'static_pages#help'
+
   match 'user_root' => 'projects#index', via: [:get]
 end

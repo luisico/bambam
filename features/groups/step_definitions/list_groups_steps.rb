@@ -11,7 +11,7 @@ Then /^I should see a list of all groups$/ do
   Group.all.each do |group|
     within("#group_#{group.id}") do
       expect(page).to have_content group.name
-      expect(page).to have_css('.fi-sheriff-badge')
+      expect(page).to have_css('.admin-icon')
       expect(page).to have_content group.owner.email
     end
   end
@@ -24,7 +24,7 @@ Then /^I should only see a list of groups I am a member of$/ do
     if group.members.include?(@user)
       within("#group_#{group.id}") do
         expect(page).to have_content group.name
-        expect(page).to have_css('.fi-sheriff-badge')
+        expect(page).to have_css('.admin-icon')
         expect(page).to have_content group.owner.email
       end
     else

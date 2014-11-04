@@ -43,7 +43,7 @@ end
 Then /^I should see the project's owner$/ do
   project = @project || Project.last
   within("#project-user-#{project.owner.id}") do
-    expect(page).to have_css('.fi-sheriff-badge')
+    expect(page).to have_css('.admin-icon')
   end
 end
 
