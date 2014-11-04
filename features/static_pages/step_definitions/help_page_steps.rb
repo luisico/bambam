@@ -10,14 +10,14 @@ end
 
 ### Then
 
-Then /^I should see information about the application$/ do
-  expect(page).to have_content "Application info"
+Then /^I should see a section about what is bambam$/ do
+  expect(page).to have_content "What is Bambam?"
 end
 
-Then /^I should see a FAQ section$/ do
-  expect(page).to have_content "FAQ"
+Then /^I should see a section about using bambam$/ do
+  expect(page).to have_content "Using Bambam"
 end
 
-Then /^I should see information about ABC$/ do
-  expect(page).to have_content "About the ABC"
+Then /^I should see a section about ABC$/ do
+  expect(page).to have_content "About the Applied Bioinformatics Core"
 end

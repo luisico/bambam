@@ -1,14 +1,73 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <h3>Application info</h3>
-      <p>Bambam is a web service for organizing, sharing and streaming gene sequencing data.</p>
+      <h2>What is Bambam?</h2>
+      <p>Bambam is a web service for organizing, streaming and sharing gene sequencing data developed by the <%= link_to "Applied Bioinformatics Core (ABC)", "https://abc.med.cornell.edu" %>.</p>
 
-      <h3>FAQ</h3>
-      <p>The Integrative Genomics Viewer (IGV) is a high-performance visualization tool for interactive exploration of large, integrated genomic datasets developed by the <%= link_to "Broad Institute", "http://www.broadinstitute.org/" %>. For instructions on how to download and install IGV, click <%= link_to "here", "http://www.broadinstitute.org/software/igv/download" %>.</p>
+    </div>
 
-      <h3>About the ABC</h3>
-      <p>Weill Cornell Medical College Applied Bioinformatics Core offering computational resources, full data lifecycle management and bioinformatics consulting for research and translational applications. Learn more about the ABC <%= link_to "here", "https://abc.med.cornell.edu/" %>.</p>
+    <div class="panel">
+      <h2>Using Bambam</h2>
+      <p>Most of the pages on the site have interactive tours that can be accessed from a tour icon <i class="tour-icon"></i> on the right side of the browser window. These tours walk users through the various features of a given page.</p>
+
+      <h3>Organizing tracks</h3>
+
+      <h4>Tracks <i class="track-icon"></i></h4>
+      <p>Tracks are organized within projects. To add, edit or remove a track, first go to the project for the track and click <span class="label radius">Add or edit tracks</span>:</p>
+      <ul>
+        <li><strong>Add a track</strong> by clicking on the <span class="label radius">Add track</span> button from the edit project page and fill in the required information.</li>
+        <li><strong>Edit a track</strong> by clicking on the tracks name and modify the name and/or path in the form.</li>
+        <li><strong>Remove a track</strong> by clicking on the trash can icon <i class="trash-icon"></i> next to the track name.</li>
+      </ul>
+      <p>Any of the above changes to tracks are only saved after the <span class="label radius">Update project</span> button has been clicked.</p>
+
+      <h4>Projects</h4>
+      <p>Projects consist of a set of tracks shared among a group of users <i class="users-icon"></i> and is managed by an admin user <i class="admin-icon"></i>.</p>
+      <p>The admin for a project has some special privileges:</p>
+      <ul>
+        <li>Manages the users that have access to the project. When inviting a user, the admin can select the projects the user will have access to.</li>
+        <li>Creates projects. When creating a project, an admin selects a name for the project and the desired users, as well as adding any tracks that should be in the project.</li>
+        <li>Move tracks between projects.</li>
+      </ul>
+
+      <p>Project members can:</p>
+      <ul>
+        <li>Add and remove tracks, which will be visible by all project members.</li>
+        <li>Edit track's name and path, but not move tracks between projects.</li>
+      </ul>
+
+      <h4>Groups</h4>
+      <p>Groups are intended as a way of organizing users from different labs or different working groups. Admins can manage Groups from the Users page.</p>
+
+      <h4>Search</h4>
+      <p>The search box, located in the top navigation bar, can be accessed from any page within the application. Searches return matching project names or users, track names or paths, user emails and group names. For non-admin users, searches only return projects and groups in the which that given user is a user/member.</p>
+
+      <h4>Profile</h4>
+      <p>Users can view a list of all their projects and groups from an account profile that can be accessed by clicking on the user email on the top navigation bar. From this account profile page, users can also edit their account email and password.</p>
+      <p>Users have an avatar (or user icon) using the third-party service <%= link_to "Gravatar", "http://gravatar.com" %>. This avatar is used through Bambam to identify the users. For users that don't have a Gravatar will get a mathmatically generated pattern based on the given user's email. Instructions for customizing the avatar can be found at <%= link_to "Gravatar", "http://gravatar.com" %>.</p>
+
+      <h3>Vieving and downloading tracks</h3>
+      <p>A complete card for each track is available from each track's page. It contains basic information like the name, project, path,... as well as download links, sharing mechanism and efficient streaming to third-party services.</p>
+      <p>Third-party services include IGV and the UCSC Genome Browser.</p>
+
+      <h4>Open your track in IGV</h4>
+      <p>The <%= link_to "Integrative Genomics Viewer (IGV)", "http://www.broadinstitute.org/igv" %> is a high-performance visualization tool for interactive exploration of large, integrated genomic datasets developed by the Broad Institute.</p>
+      <p>In order to open your tracks in IGV you first have to open IGV locally on your computer. See the <%= link_to "IGV website", "http://www.broadinstitute.org/software/igv" %> for registration and installation instructions.</p>
+      <p>Then click the <span class="label radius">IGV</span> button for the tracks you want to stream. There might be a small delay before it gets loaded in your local IGV instance. You can open multiple tracks this way to analyze them concurrently. In order to remove a tracks from IGV you will need to use the standard IGV features; see the <%= link_to "user guide", "http://www.broadinstitute.org/software/igv/UserGuide"%>.</p>
+      <p>Bambam uses the standard IGV <kbd>port 60151</kbd> to connect to IGV.</p>
+
+      <h4>Open your track in UCSC Genome Browser</h4>
+      <p>A special track line to use in UCSC Genome Browser is provided with each share link (see below). Copy this line and paste it in your custom tracks at UCSC Genome Browser.</p>
+
+      <h3>Sharing tracks</h3>
+      <p>Users can share their tracks with collaborators and third-party services that do not have access to bambam by creating track share links. A track share link will allow anyone (including third-party services like UCSC Genome Browser) to download or stream the track.</p>
+      <p>Track share links can be set to expire after a period of time set by the user, for as little as a day or as long as several years, with a default of 2 weeks. Track share links can also be deleted at anytime which will also prevent further access to a track using that link.</p>
+      <p>Users can share any track they have access to through their project's membership by creating a share link from the track's page. There is no limit in the number of share links a track can have.</p>
+    </div>
+
+    <div class="panel">
+      <h2>About the Applied Bioinformatics Core</h2>
+      <p><%= link_to "Weill Cornell Medical College", "http://weill.cornell.edu" %>"s <%= link_to "Applied Bioinformatics Core", "https://abc.med.cornell.edu" %>, or ABC, offers computational resources, full data lifecycle management and bioinformatics consulting for research and translational applications.</p>
     </div>
   </div>
 </div>

@@ -173,7 +173,7 @@ input.with-instructions {
   margin-bottom: 5px;
   a {
     @extend .right;
-    @extend .fi-info;
+    @extend .tour-icon;
     font-size: rem-calc(10);
     margin-right: 10px;
     &:before {

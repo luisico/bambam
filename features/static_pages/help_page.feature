@@ -6,6 +6,6 @@ Feature: Application help page
   Scenario: Show help
     Given I am signed in
     When I am on the help page
-    Then I should see information about the application
-    And I should see a FAQ section
-    And I should see information about ABC
+    Then I should see a section about what is bambam
+    And I should see a section about using bambam
+    And I should see a section about ABC
