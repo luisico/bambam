@@ -7,6 +7,7 @@ class @TrackForm
       done:    @group.find('.done-track')
       remove:  @group.find('.remove-track')
       restore: @group.find('.restore-track')
+      hidden:  @group.find('input[type=hidden]')
     @states =
       new: 'new-record'
       edit: 'edit-record'
@@ -25,21 +26,24 @@ class @TrackForm
     @updateName()
 
   restore: ->
-    @toggleDeleteState()
+    @show('remove')
+    @hide('restore')
+    @objects['name'].addClass('edit-track').removeClass('line-through no-pointer')
+    @deleteTrack('no')
 
   delete: ->
     if @isState('new')
       @group.remove()
     else
-      @toggleDeleteState()
-      @toggleEditState() if @isState('edit')
+      @show('restore')
+      @hide('remove')
+      @objects['name'].addClass('line-through no-pointer').removeClass('edit-track')
+      @deleteTrack('yes')
+      @done() if @isState('edit')
     TrackForm.change_track_add_text()
 
   isState: (state) ->
     @group.hasClass(@states[state])
-
-  toggleState: (state) ->
-    @group.toggleClass(@states[state])
 
   show: (obj) ->
     @objects[obj].show()
@@ -47,27 +51,11 @@ class @TrackForm
   hide: (obj) ->
     @objects[obj].hide()
 
-  toggle: (obj) ->
-    @objects[obj].toggle()
-
-  toggleEditState: ->
-    @toggleState('edit')
-    @toggle('name')
-    @toggle('fields')
-    @toggle('done')
-
-  toggleDeleteState: ->
-    @toggle('restore')
-    @toggle('remove')
-    @toggleEditLink()
-    @toggleRemoveValue()
-
-  toggleRemoveValue: ->
-    el = @group.find('input[type=hidden]')
-    el.val(if el.val() == '1' then '0' else '1')
-
-  toggleEditLink: ->
-    @objects['name'].toggleClass('line-through edit-track no-pointer')
+  deleteTrack: (answer) ->
+    if answer == 'yes'
+      @objects['hidden'].val('1')
+    else if answer == 'no'
+      @objects['hidden'].val('0')
 
   updateName: ->
     text = @group.find("label:contains('Name')").next().val()
