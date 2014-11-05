@@ -53,7 +53,7 @@ Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, t
       end
     end
   else
-    users = User.where.not(id: User.with_role(:admin))
+    users = User.where.not(id: User.with_role(:admin)).order(:id)
     within(col_list) {
       expect(col_list).not_to have_content Group.last.name
       Group.all[0...-1].each do |group|

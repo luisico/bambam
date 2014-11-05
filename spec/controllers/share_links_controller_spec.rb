@@ -177,7 +177,7 @@ describe ShareLinksController do
       it "should not respond html" do
         expect {
           patch :update, id: 1, share_link: @new_share_link, format: 'html'
-        }.to raise_error ActiveRecord::RecordNotFound
+        }.to raise_error
       end
     end
 
