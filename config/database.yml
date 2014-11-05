@@ -15,11 +15,11 @@ test: &test
 
 production: &production
   <<: *default
-  database: bambam_production
+  database: <%= ENV['DB_USERNAME'] %>_bambam_production
 
 staging:
   <<: *production
-  database: bambam_staging
+  database: <%= ENV['DB_USERNAME'] %>_bambam_staging
 
 cucumber:
   <<: *test
