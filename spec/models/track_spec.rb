@@ -35,6 +35,14 @@ describe Track do
         File.unlink track.path
       end
 
+      it "stips leading and trailing whitespace from path" do
+        track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.bam'))
+        cp_track track.path
+        track.path = File.join(' tmp', 'mytrack.bam ')
+        expect(track).to be_valid
+        File.unlink track.path
+      end
+
       context "should not be valid" do
         it "when it does not exist" do
           File.unlink(@track.path)
