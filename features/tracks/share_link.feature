@@ -95,6 +95,7 @@ Feature: Create link to share track
     When I am on the track page
     Then I should be able to renew the share link
 
+  @wip
   Scenario: Renew two share links at once
     Given I am signed in
     And I belong to a project
