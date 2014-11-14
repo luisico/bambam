@@ -21,7 +21,7 @@ Feature: Create a group
     When I create a new group
     Then I should be on the group show page
     And I should see a message that the group was created successfully
-    And I should see my email among the list of group member emails
+    And I should see my handle among the list of group member handles
     And I should be the groups owner
 
   Scenario: Cannot create a group without a name

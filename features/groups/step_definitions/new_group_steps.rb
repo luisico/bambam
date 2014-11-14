@@ -7,7 +7,7 @@ end
 def fill_group_form(group_attrs=nil)
   group_attrs ||= @group_attrs
   fill_in 'Group name', with: group_attrs[:name]
-  fill_in_select2("group_member_ids", with: User.last.email)
+  fill_in_select2("group_member_ids", with: User.last.handle)
   yield if block_given?
   click_button 'Create Group'
 end
@@ -43,7 +43,7 @@ When /^I create a group with multiple members$/ do
   expect {
     build_group
     fill_group_form do
-      fill_in_select2("group_member_ids", with: User.all[-2].email)
+      fill_in_select2("group_member_ids", with: User.all[-2].handle)
     end
   }.to change(Group, :count).by(1)
   Group.last.members.count.should == 3
@@ -79,8 +79,8 @@ Then /^I should see a message that the group was created successfully$/ do
   expect(page).to have_content('Group was successfully created')
 end
 
-Then /^I should see my email among the list of group member emails$/ do
-  expect(page).to have_content User.first.email
+Then /^I should see my handle among the list of group member handles$/ do
+  expect(page).to have_content User.first.handle
 end
 
 Then /^I should be the groups owner$/ do

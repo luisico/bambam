@@ -29,11 +29,11 @@ end
 
 Then /^I should be able to edit the group members$/ do
   expect {
-    remove_from_select2(User.last.email)
+    remove_from_select2(User.last.handle)
     click_button 'Update'
   }.to change(@group.members, :count).by(-1)
   expect(current_path).to eq group_path(@group)
-  expect(page).not_to have_content(User.last.email)
+  expect(page).not_to have_content(User.last.handle)
 end
 
 Then /^I should be able to update group without changing group owner$/ do
@@ -45,9 +45,9 @@ end
 
 Then /^I should be able to add myself to the group$/ do
   expect {
-    fill_in_select2("group_member_ids", with: @admin.email)
+    fill_in_select2("group_member_ids", with: @admin.handle)
     click_button 'Update'
   }.to change(@group.members, :count).by(1)
   expect(current_path).to eq group_path(@group)
-  expect(page).to have_content @admin.email
+  expect(page).to have_content @admin.handle
 end
