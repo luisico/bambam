@@ -9,10 +9,12 @@
     <%= f.text_field :name, size: 60, placeholder: 'Group name' %>
   </div>
 
+  <div id="group-owner">
+    Group owner: <%= link_to @group.owner.email, @group.owner %>
+  </div></br>
+
   <div class="field">
-    <% @potential_members.each do |user| %>
-      <p><%= member_check_box(@group, user) %></p>
-    <% end %>
+    <%= f.collection_select :member_ids, User.all_except(@group.owner), :id, :email, {}, {multiple:true} %>
   </div>
 
   <div class="actions">

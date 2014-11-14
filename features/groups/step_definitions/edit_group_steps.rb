@@ -29,7 +29,7 @@ end
 
 Then /^I should be able to edit the group members$/ do
   expect {
-    uncheck User.last.email
+    remove_from_select2(User.last.email)
     click_button 'Update'
   }.to change(@group.members, :count).by(-1)
   expect(current_path).to eq group_path(@group)
@@ -45,7 +45,7 @@ end
 
 Then /^I should be able to add myself to the group$/ do
   expect {
-    check @admin.email
+    fill_in_select2("group_member_ids", with: @admin.email)
     click_button 'Update'
   }.to change(@group.members, :count).by(1)
   expect(current_path).to eq group_path(@group)

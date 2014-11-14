@@ -82,11 +82,6 @@ describe GroupsController do
         get :new
         expect(assigns(:group).members).to include @admin
       end
-
-      it "should assign potential members" do
-        get :new
-        expect(assigns(:potential_members)).not_to be_empty
-      end
     end
 
     context "as a user" do
@@ -125,11 +120,6 @@ describe GroupsController do
       it "should return the group" do
         get :edit, id: @group
         expect(assigns(:group)).to eq @group
-      end
-
-      it "should assign potential members" do
-        get :edit, id: @group
-        expect(assigns(:potential_members)).not_to be_empty
       end
     end
 
@@ -197,11 +187,6 @@ describe GroupsController do
             post :create, group: @group_attr.merge(name: '')
           }.not_to change(Group, :count)
           expect(assigns(:group)).to be_new_record
-        end
-
-        it "should assign potential members" do
-          post :create, group: @group_attr.merge(name: '')
-          expect(assigns(:potential_members)).not_to be_empty
         end
       end
     end
@@ -399,24 +384,6 @@ describe GroupsController do
           delete :destroy, id: @group
         }.not_to change(Group, :count)
       end
-    end
-  end
-
-  describe "#potential_members" do
-    before do
-      @owner = FactoryGirl.create(:user)
-      @members = FactoryGirl.create_list(:user, 2)
-      @users = FactoryGirl.create_list(:user, 2)
-      @group = FactoryGirl.create(:group, owner: @owner, members: @members)
-    end
-
-    it "should return the owner first" do
-      expect(controller.send(:potential_members, @group).first).to eq @owner
-    end
-
-    it "should return the owner only once" do
-      selected = controller.send(:potential_members, @group).select{|m| m == @owner}
-      expect(selected.count).to eq 1
     end
   end
 end

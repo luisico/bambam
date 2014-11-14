@@ -7,7 +7,7 @@ end
 def fill_group_form(group_attrs=nil)
   group_attrs ||= @group_attrs
   fill_in 'Group name', with: group_attrs[:name]
-  check User.last.email
+  fill_in_select2("group_member_ids", with: User.last.email)
   yield if block_given?
   click_button 'Create Group'
 end
@@ -34,7 +34,8 @@ end
 When /^I create a group without a name$/ do
   expect{
     build_group
-    fill_group_form @group_attrs.merge(name: '')
+    fill_in 'Group name', with: @group_attrs.merge(name: '')[:name]
+    click_button 'Create Group'
   }.not_to change(Group, :count)
 end
 
@@ -42,7 +43,7 @@ When /^I create a group with multiple members$/ do
   expect {
     build_group
     fill_group_form do
-      check User.all[-2].email
+      fill_in_select2("group_member_ids", with: User.all[-2].email)
     end
   }.to change(Group, :count).by(1)
   Group.last.members.count.should == 3
@@ -54,8 +55,20 @@ Then /^I should be on the new group page$/ do
   expect(page).to have_content 'New group'
 end
 
-Then /^my checkbox should be disabled$/ do
-  field_labeled(User.first.email, disabled: true)
+Then /^my name should be listed as group owner$/ do
+  within('#group-owner') {
+    expect(page).to have_content @admin.email
+  }
+end
+
+Then /^I should see a list of potential members$/ do
+  find("#s2id_group_member_ids").click
+  within(".select2-results") {
+    expect(page).not_to have_content @admin.email
+    @users.each do |user|
+      expect(page).to have_content user.email
+    end
+  }
 end
 
 Then /^I should be on the group show page$/ do

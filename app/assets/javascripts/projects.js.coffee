@@ -20,3 +20,6 @@ jQuery ->
   $(document).ready ->
     TrackForm.change_track_add_text()
 
+  $("#project_user_ids").select2({
+    placeholder: "Add a user"
+  });

@@ -11,12 +11,15 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    @project = Project.new(owner: current_user, users: [current_user])
   end
 
   def edit
   end
 
   def create
+    @project.owner ||= current_user
+    @project.users << @project.owner unless @project.users.include?(@project.owner)
     if @project.save
       redirect_to @project, notice: 'Project was successfully created.'
     else
@@ -27,6 +30,9 @@ class ProjectsController < ApplicationController
   def update
     if params[:project]
       authorize! :manage, @project if has_admin_attr?
+      if params['project']['user_ids']
+        params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
+      end
       if @project.update(project_params)
         redirect_to @project, notice: 'Project was successfully updated.'
       else
@@ -51,6 +57,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :owner_id, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
+    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
   end
 end

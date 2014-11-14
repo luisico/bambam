@@ -9,4 +9,6 @@ class User < ActiveRecord::Base
   # Authentication
   devise :database_authenticatable, :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  scope :all_except, ->(user) { where.not(id: user) }
 end

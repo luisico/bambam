@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe ProjectsController do
-  before do
-    @admin = FactoryGirl.create(:admin)
-    @projects = FactoryGirl.create_list(:project, 3)
-  end
-
   describe "GET 'index'" do
+    before { @projects = FactoryGirl.create_list(:project, 3) }
+
     context "as admin" do
-      before { sign_in @admin }
+      before { sign_in FactoryGirl.create(:admin) }
 
       it "should be successful" do
         get :index
@@ -22,11 +19,11 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user and project member" do
+    context "as a signed in user and project user" do
       before do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-        @user_projects = FactoryGirl.create_list(:project, 3, users: [@user])
+        user = FactoryGirl.create(:user)
+        sign_in user
+        @user_projects = FactoryGirl.create_list(:project, 3, users: [user])
       end
 
       it "should be successful" do
@@ -66,10 +63,10 @@ describe ProjectsController do
   end
 
   describe "GET 'show'" do
-    before { @project = @projects.first }
+    before { @project = FactoryGirl.create(:project) }
 
     context "as an admin" do
-      before { sign_in @admin }
+      before { sign_in FactoryGirl.create(:admin) }
 
       it "should be successful" do
         get :show, id: @project
@@ -89,7 +86,7 @@ describe ProjectsController do
         sign_in @user
       end
 
-      context "and project member" do
+      context "and project user" do
         before { @project.users << @user }
 
         it "should be successful" do
@@ -104,9 +101,9 @@ describe ProjectsController do
         end
       end
 
-      context "not project member" do
+      context "not project user" do
         it "should redirect to projects page" do
-          get :show, id: @projects.last
+          get :show, id: FactoryGirl.create(:project)
           expect(response).not_to be_success
           expect(response).to redirect_to projects_path
         end
@@ -124,7 +121,10 @@ describe ProjectsController do
 
   describe "GET 'new'" do
     context "as an admin" do
-      before { sign_in @admin }
+      before do
+        @admin = FactoryGirl.create(:admin)
+        sign_in @admin
+     end
 
       it "should be successful" do
         get :new
@@ -135,13 +135,23 @@ describe ProjectsController do
       it "should build a new project" do
         get :new
         expect(assigns(:project)).to be_new_record
+        expect(assigns(:project)).to be_kind_of Project
+      end
+
+      it "should assign ownership to signed in user" do
+        get :new
+        expect(assigns(:project).owner).to eq @admin
+      end
+
+      it "should add signed in user to users" do
+        get :new
+        expect(assigns(:project).users).to include @admin
       end
     end
 
     context "as a signed in user" do
-      before { sign_in FactoryGirl.create(:user) }
-
-      it "should redirect to the projects page" do
+      it "should be denied" do
+        sign_in FactoryGirl.create(:user)
         get :new
         expect(response).not_to be_success
         expect(response).to redirect_to projects_path
@@ -158,10 +168,10 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = @projects.first }
+    before { @project = FactoryGirl.create(:project) }
 
     context "as an admin" do
-      before { sign_in @admin }
+      before { sign_in FactoryGirl.create(:admin) }
 
       it "should be successful" do
         get :edit, id: @project
@@ -175,7 +185,7 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user and project member" do
+    context "as a signed in user and project user" do
       before do
         user = FactoryGirl.create(:user)
         @project.users << user
@@ -194,11 +204,11 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user but not project member" do
+    context "as a signed in user but not project user" do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
-        get :edit, id: @projects.last
+        get :edit, id: FactoryGirl.create(:project)
         expect(response).not_to be_success
         expect(response).to redirect_to projects_path
       end
@@ -217,7 +227,7 @@ describe ProjectsController do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
     context "as an admin" do
-      before { sign_in @admin }
+      before { sign_in FactoryGirl.create(:admin) }
 
       context "with valid parameters" do
         it "should be a redirect to the new project show page" do
@@ -282,11 +292,12 @@ describe ProjectsController do
 
   describe "Patch 'update'" do
     before do
-     @project = @projects.first
-     @new_project = FactoryGirl.attributes_for(:project)
+      @admin = FactoryGirl.create(:admin)
+      @project = FactoryGirl.create(:project,  owner: @admin)
+      @new_project = FactoryGirl.attributes_for(:project)
     end
 
-    context "as an admin" do
+    context "as an admin and owner of project" do
       before { sign_in @admin }
 
       context 'with valid parameters' do
@@ -303,6 +314,17 @@ describe ProjectsController do
           expect(assigns(:project)).to eq @project
           expect(@project.name).to eq @new_project[:name]
           expect(@project.users).to include @user
+        end
+
+        it "should not change ownership" do
+          expect {
+            patch :update, id: @project, project: @new_project
+          }.not_to change(@project, :owner)
+        end
+
+         it "should add owner to users if not present" do
+          patch :update, id: @project, project: @new_project.merge(user_ids: [])
+          expect(assigns(:project).users).to include @project.owner
         end
       end
 
@@ -323,7 +345,30 @@ describe ProjectsController do
       end
     end
 
-    context "as a signed in user and project member" do
+    context "as an admin" do
+      before do
+       @other_admin = FactoryGirl.create(:admin)
+       sign_in @other_admin
+     end
+
+      it "should not change ownership" do
+        expect {
+          patch :update, id: @project, project: @new_project
+        }.not_to change(@project, :owner)
+      end
+
+      it "should add owner to users if not present" do
+        patch :update, id: @project, project: @new_project.merge(user_ids: [])
+        expect(assigns(:project).users).to include @project.owner
+      end
+
+      it "should not add other admin to users" do
+        patch :update, id: @project, project: @new_project.merge(user_ids: [])
+        expect(assigns(:project).users).not_to include @other_admin
+      end
+    end
+
+    context "as a signed in user and project user" do
       before do
         sign_in FactoryGirl.create(:user, projects: [@project])
         @track = FactoryGirl.create(:test_track, project: @project)
@@ -376,10 +421,10 @@ describe ProjectsController do
   end
 
   describe "Delete 'destroy'" do
-    before { @project = FactoryGirl.create(:project, owner: @admin) }
+    before { @project = FactoryGirl.create(:project) }
 
     context "as an admin" do
-      before { sign_in @admin }
+      before { sign_in FactoryGirl.create(:admin) }
 
       it "should redirect to project#index" do
         delete :destroy, id: @project

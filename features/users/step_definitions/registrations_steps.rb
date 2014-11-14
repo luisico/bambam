@@ -19,12 +19,6 @@ def sign_up(invitee=nil)
   click_button I18n.t('devise.invitations.edit.submit_button')
 end
 
-def fill_in_select2(selector, options={})
-  page.find(:css, "#s2id_#{selector}").click
-  page.find(:css, ".select2-search-field input.select2-input").set options[:with]
-  page.find(:css, ".select2-result-label").click
-end
-
 ### Given
 
 ### When
