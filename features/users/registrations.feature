@@ -83,6 +83,7 @@ Feature: Sign up by invitation only
     Then I should receive an invitation
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
+    And I should not have a first or last name assigned
     And I should be signed in
     And I should be on the projects page
 
@@ -90,6 +91,16 @@ Feature: Sign up by invitation only
       | role    |
       | admin   |
       | inviter |
+
+  Scenario: Invitee signs up with a first and last name
+    Given I do not exist as a user
+    When an inviter user invites me
+    Then I should receive an invitation
+    When I click in the accept invitation email link
+    Then I should be able to activate my invitation and add first and last names
+    And I should have a first or last name assigned
+    And I should be signed in
+    And I should be on the projects page
 
   Scenario: Invitee signs up with invalid password
     When I am invited
