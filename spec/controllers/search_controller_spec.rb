@@ -5,9 +5,9 @@ describe SearchController do
     context "as a signed in user" do
       before do
         @user = FactoryGirl.create(:user)
-        @user2 = FactoryGirl.create(:user, email: "second_best@example.com")
-        @user3 = FactoryGirl.create(:user, first_name: "best_first_name")
-        @user4 = FactoryGirl.create(:user, last_name: "best_last_name")
+        @user2 = FactoryGirl.create(:user, email: "besty_name@example.com")
+        @user3 = FactoryGirl.create(:user, first_name: "besty_first_name")
+        @user4 = FactoryGirl.create(:user, last_name: "besty_last_name")
         sign_in @user
       end
 
@@ -60,6 +60,16 @@ describe SearchController do
           expect(assigns(:projects_and_tracks)).to eq result
         end
 
+        it "should be correctly returned and sorted regardless of case" do
+          result = {
+            @project6 => { users: [@user2], tracks: [] },
+            @project7 => { users: [@user3], tracks: [] },
+            @project8 => { users: [@user4], tracks: [] }
+          }
+          get :search, q: 'BESTY'
+          expect(assigns(:projects_and_tracks)).to eq result
+        end
+
         it "should not return projects or tracks user doesn't have access to" do
           [@project1, @project3, @project5, @project6, @project7, @project8].each {|p| p.users.delete(@user)}
           result = {
@@ -109,6 +119,49 @@ describe SearchController do
         get :search, q: 'best'
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
+      end
+    end
+  end
+
+  describe "#matches_term?" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+      controller.instance_variable_set(:@q, "best")
+    end
+
+    context "email" do
+      it "returns not nil for email that includes the matched term" do
+        user = FactoryGirl.create(:user, email: "best@example.com")
+        expect(controller.send(:matches_term?, user)).not_to eq nil
+      end
+
+      it "returns nil for email that doesn't include the term" do
+        user = FactoryGirl.create(:user, email: "ok@example.com")
+        expect(controller.send(:matches_term?, user)).to eq nil
+      end
+    end
+
+    context "first_name" do
+      it "returns not nil for first name that includes the matched term" do
+        user = FactoryGirl.create(:user, first_name: "best_name")
+        expect(controller.send(:matches_term?, user)).not_to eq nil
+      end
+
+      it "returns nil for first name that doesn't include the term" do
+        user = FactoryGirl.create(:user, first_name: "ok_name")
+        expect(controller.send(:matches_term?, user)).to eq nil
+      end
+    end
+
+    context "last_name" do
+      it "returns not nil for first name that includes the matched term" do
+        user = FactoryGirl.create(:user, last_name: "best_name")
+        expect(controller.send(:matches_term?, user)).not_to eq nil
+      end
+
+      it "returns nil for first name that doesn't include the term" do
+        user = FactoryGirl.create(:user, last_name: "ok_name")
+        expect(controller.send(:matches_term?, user)).to eq nil
       end
     end
   end

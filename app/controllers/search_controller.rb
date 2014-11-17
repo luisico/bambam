@@ -20,7 +20,7 @@ class SearchController < ApplicationController
     projects.each do |project|
       @projects_and_tracks[project] = { users: [], tracks: [] }
       project.users.each do |user|
-        @projects_and_tracks[project][:users] << user if (user.email.include?(@q) || user.handle.include?(@q))
+        @projects_and_tracks[project][:users] << user if matches_term?(user)
       end
     end
 
@@ -36,5 +36,11 @@ class SearchController < ApplicationController
     end
     groups = groups | users_groups.flatten.uniq
     groups.each {|group| @groups_and_users.merge!(group => group.members.select {|member| member if users.include? member})}
+  end
+
+  private
+
+  def matches_term?(user)
+    [user.email, user.first_name, user.last_name].join('@@').match(/#{@q}/i)
   end
 end
