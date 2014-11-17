@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   scope :all_except, ->(user) { where.not(id: user) }
 
   def handle
-    first_space_last = "#{self.first_name} #{self.last_name}"
-    (first_space_last).blank? ? self.email : first_space_last.strip
+    first_space_last = "#{self.first_name} #{self.last_name}".strip
+    (first_space_last).blank? ? self.email : first_space_last
   end
 end
