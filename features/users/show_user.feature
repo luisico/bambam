@@ -17,7 +17,7 @@ Feature: Show a user profile
 
   Scenario: Email appears once for user with no first or last name
     Given I am signed in
-    And I have not entered a first or last name
+    And my first and last names are blank
     And I belong to a project
     And I belong to a group
     When I am on my account profile page

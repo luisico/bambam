@@ -6,7 +6,7 @@ end
 
 ### Given
 
-Given /^I have not entered a first or last name$/ do
+Given /^my first and last names are blank$/ do
   expect {
     @user.update_attributes(first_name: "", last_name: "")
     @user.reload
