@@ -1,4 +1,4 @@
-<p id="project-user-<%= user.id %>">
+<p id="user-<%= user.id %>">
   <% if (can? :manage, User) || (user == current_user) %>
     <%= link_to user do %>
       <%= image_tag avatar_url(user) %>
