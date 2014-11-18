@@ -11,7 +11,7 @@ var tour_user_index = {
     {
       title: "Invitation form",
       content: "Enter an email above and check box to give invitee ability to invite others.",
-      target: "#inviter",
+      target: "#manager",
       placement: 'bottom'
     },
     {

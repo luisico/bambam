@@ -14,7 +14,7 @@ class Ability
       can :manage, Project
       can :manage, ShareLink
     else
-      if user.has_role? :inviter
+      if user.has_role? :manager
         can :invite, User
         can :cancel, User, id: user.id
       else

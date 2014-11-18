@@ -15,7 +15,7 @@ Feature: List of users
   Examples:
     | role    |
     | admin   |
-    | inviter |
+    | manager |
 
   Scenario: List of groups
     Given I am signed in as an admin

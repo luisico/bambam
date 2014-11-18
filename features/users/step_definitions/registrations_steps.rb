@@ -38,16 +38,16 @@ When /^I invite a user with a blank email$/ do
   }.not_to change(User, :count)
 end
 
-When /^an (admin|inviter) user invites me$/ do |role|
+When /^an (admin|manager) user invites me$/ do |role|
   if role == 'admin'
-    @inviter = FactoryGirl.create(:admin)
+    @manager = FactoryGirl.create(:admin)
   else
-    @inviter = FactoryGirl.create(:inviter)
+    @manager = FactoryGirl.create(:manager)
   end
     @invitee = @visitor
 
   expect {
-    @user = User.invite!({email: @invitee[:email]}, @inviter)
+    @user = User.invite!({email: @invitee[:email]}, @manager)
   }.to change(User, :count).by(1)
 end
 
@@ -82,27 +82,27 @@ When /^I visit the cancel account page$/ do
   visit '/users/cancel'
 end
 
-Then /^I should( not)? be able to invite a user with(out)? inviter priviledges$/ do |_not, out|
+Then /^I should( not)? be able to invite a user with(out)? manager priviledges$/ do |_not, out|
   build_invitee
   if out
     expect {
       fill_invitation_form
     }.to change(User, :count).by(1)
-    expect(User.last.has_role?(:inviter)).to eq false
+    expect(User.last.has_role?(:manager)).to eq false
   elsif _not
     expect {
       fill_invitation_form do
-        expect(page).not_to have_content('Check to grant inviter priviledges to this user')
+        expect(page).not_to have_content('Check to grant manager priviledges to this user')
       end
     }.to change(User, :count).by(1)
-    expect(User.last.has_role?(:inviter)).to eq false
+    expect(User.last.has_role?(:manager)).to eq false
   else
     expect{
       fill_invitation_form do
-        check('Check to grant inviter priviledges to this user')
+        check('Check to grant manager priviledges to this user')
       end
     }.to change(User, :count).by(1)
-    expect(User.last.has_role?(:inviter)).to eq true
+    expect(User.last.has_role?(:manager)).to eq true
   end
 end
 

@@ -42,7 +42,7 @@ Feature: List of projects
 
   Scenario Outline: User with no projects will get special message
     Given I am signed in as a user
-    And I <status> have an inviter
+    And I <status> have an manager
     When I am on the projects page
     Then I should see a special message
 

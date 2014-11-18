@@ -11,8 +11,8 @@
 
         <% if can? :manage, User %>
           <div>
-            <%= check_box_tag(:inviter) %>
-            <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
+            <%= check_box_tag(:manager) %>
+            <%= label_tag(:manager, "Check to grant manager priviledges to this user") %>
           </div>
         <% end %>
         <% if can? :manage, Project %>
@@ -32,7 +32,7 @@
       <ul class="inline-list">
         <li><i class="fi-ticket medium icon_key"> Invite outstanding</i></li>
         <li><i class="fi-crown medium icon_key"> Admin</i></li>
-        <li><i class="fi-key medium icon_key"> Inviter</i></li>
+        <li><i class="fi-key medium icon_key"> Manager</i></li>
       </ul>
 
       <% @users.each do |user| %>
@@ -47,7 +47,7 @@
           <% if user.has_role? :admin %>
             <i class="fi-crown medium"></i>
           <% end %>
-          <% if user.has_role? :inviter %>
+          <% if user.has_role? :manager %>
             <i class="fi-key medium"></i>
           <% end %>
         </p>

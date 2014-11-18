@@ -1,12 +1,12 @@
 Feature: Sign up by invitation only
   In order to get access to protected sections of the site
   As a user
-  I can sign up by invitation from an admin or inviter
+  I can sign up by invitation from an admin or manager
 
   Scenario Outline: Invite a user
     Given I am signed in as an <role>
     And I am on the users page
-    Then I <priviledge> be able to invite a user <status> inviter priviledges
+    Then I <priviledge> be able to invite a user <status> manager priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
     And I should see the invitee email with invitation pending icon
@@ -16,7 +16,7 @@ Feature: Sign up by invitation only
       | role    | priviledge | status  |
       | admin   | should     | with    |
       | admin   | should     | without |
-      | inviter | should not | with    |
+      | manager | should not | with    |
 
   @javascript
   Scenario Outline: Admin can invite a user and add them to an existing project
@@ -32,7 +32,7 @@ Feature: Sign up by invitation only
     Examples:
       | role    | priviledge |
       | admin   | should     |
-      | inviter | should not |
+      | manager | should not |
 
   @javascript
   Scenario: Admin can invite a user and add them to multiple existing projects
@@ -56,7 +56,7 @@ Feature: Sign up by invitation only
     Examples:
       | role    |
       | admin   |
-      | inviter |
+      | manager |
 
   Scenario Outline: Cannot invite if email is blank
     Given I am signed in as an <role>
@@ -69,7 +69,7 @@ Feature: Sign up by invitation only
     Examples:
       | role    |
       | admin   |
-      | inviter |
+      | manager |
 
   Scenario: Regular users cannot invite another user
     Given I am signed in
@@ -90,7 +90,7 @@ Feature: Sign up by invitation only
     Examples:
       | role    |
       | admin   |
-      | inviter |
+      | manager |
 
   Scenario: Invitee signs up with a first and last name
     Given I do not exist as a user
