@@ -29,7 +29,7 @@ end
 
 Then /^I should be able to edit the group members$/ do
   expect {
-    remove_from_select2(User.last.handle)
+    remove_from_select2(User.last.handle_with_email)
     click_button 'Update'
   }.to change(@group.members, :count).by(-1)
   expect(current_path).to eq group_path(@group)

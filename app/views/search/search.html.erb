@@ -15,7 +15,7 @@
                 <ul>
                   <ul class="inline-list cloud-tag">
                   <% hash[:users].each do |user| %>
-                    <li><span><%= user.handle %></span></li>
+                    <li><span><%= user.handle_with_email %></span></li>
                   <% end %>
                   </ul>
                 </ul>

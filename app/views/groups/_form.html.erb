@@ -14,7 +14,7 @@
   </div></br>
 
   <div class="field">
-    <%= f.collection_select :member_ids, User.all_except(@group.owner), :id, :handle, {}, {multiple:true} %>
+    <%= f.collection_select :member_ids, User.all_except(@group.owner), :id, :handle_with_email, {}, {multiple:true} %>
   </div>
 
   <div class="actions">

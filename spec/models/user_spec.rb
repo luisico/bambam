@@ -110,6 +110,18 @@ describe User do
         expect(user.handle).to eq user.email
       end
     end
+
+    describe "#handle_with_email" do
+      it "returns just email when no name is present" do
+        user = FactoryGirl.create(:user, first_name: "", last_name: "")
+        expect(user.handle_with_email).to eq user.email
+      end
+
+      it "returns name followed by email in braces when name is present" do
+        user = FactoryGirl.create(:user, first_name: "Foo", last_name: "Bar")
+        expect(user.handle_with_email).to eq "Foo Bar [#{user.email}]"
+      end
+    end
   end
 
   it { should be_valid }

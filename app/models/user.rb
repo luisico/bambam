@@ -16,4 +16,8 @@ class User < ActiveRecord::Base
     first_space_last = "#{self.first_name} #{self.last_name}".strip
     (first_space_last).blank? ? self.email : first_space_last
   end
+
+  def handle_with_email
+   self.handle.eql?(self.email) ? self.email : "#{self.handle} [#{self.email}]"
+  end
 end

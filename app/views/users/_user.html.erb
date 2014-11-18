@@ -2,11 +2,11 @@
   <% if can? :show, user %>
     <%= link_to user do %>
       <%= image_tag avatar_url(user) %>
-      <%= user.handle %>
+      <%= @groups_and_users ? user.handle_with_email : user.handle %>
     <% end %>
   <% else %>
     <%= image_tag avatar_url(user) %>
-    <%= user.handle %>
+    <%= @groups_and_users ? user.handle_with_email : user.handle %>
   <% end %>
   <% if @project && (user == @project.owner) %>
     <i class="admin-icon small" title="owner"></i>

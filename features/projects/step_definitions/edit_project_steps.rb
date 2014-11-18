@@ -38,7 +38,7 @@ Then /^I should( not)? be able to change users in the project$/ do |negate|
     expect(page).to have_css "#project_user_ids"
     deleted = []
     expect {
-      @project.users[-2..-1].each{ |u| remove_from_select2(u.handle); deleted << u }
+      @project.users[-2..-1].each{ |u| remove_from_select2(u.handle_with_email); deleted << u }
       @users.each{ |u| fill_in_select2("project_user_ids", with: u.handle)}
       click_button 'Update'
       @project.reload
