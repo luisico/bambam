@@ -15,10 +15,15 @@ Given /^I belong to a project named "(.*?)" with track "(.*?)"( and path "(.*?)"
   expect(@track.project).to eq @project
 end
 
-Given /^I belong to a group named "(.*?)" with member "(.*?)"$/ do |group, member|
+Given /^that project has a user "(.*?)"$/ do |user_email|
+  @project.users << FactoryGirl.create(:user, email: user_email)
+  @project.reload
+end
+
+Given /^I belong to a group named "(.*?)" with member "(.*?)"$/ do |group, member_email|
   user = @user || @admin
   expect {
-    @another_user = FactoryGirl.create(:user, email: member + "@example.com", last_name: member)
+    @another_user = FactoryGirl.create(:user, email: member_email, last_name: member_email.gsub("@example", ""))
     @group = FactoryGirl.create(:group, name: group, members: [user, @another_user])
   }.to change(Group, :count).by(1)
   expect(@group.members).to include user, @another_user
@@ -43,34 +48,19 @@ Then /^I should see my search term in the results page$/ do
   expect(search_box.value).to eq @search_term
 end
 
-Then /^I should see a list of "(.*?)" that contain the name "(.*?)"$/ do |col, term|
-  col_list = page.find("##{col.gsub(" ", "-")}")
-  if col == "projects and tracks"
-    [Project, Track].each do |object_type|
-      expect(col_list).not_to have_content object_type.last.name
-      object_type.all[0...-1].each do |object|
-        expect(col_list).to have_content object.name
-      end
-    end
-  else
-    users = User.where.not(id: User.with_role(:admin)).order(:id)
-    within(col_list) {
-      expect(col_list).not_to have_content Group.last.name
-      Group.all[0...-1].each do |group|
-        expect(col_list).to have_content group.name
-      end
-      expect(col_list).not_to have_content users.last.handle
-      if @admin
-        users[0...-1].each do |user|
-          expect(col_list).to have_content user.handle
-        end
-      else
-        users[1...-1].each do |user|
-          expect(col_list).to have_content user.handle
-        end
-      end
-    }
-  end
+Then /^I should see a section for projects and tracks$/ do
+  within("#projects-and-tracks") {
+    expect(page).to have_css ".search-result"
+    expect(page).to have_css ".cloud-tag"
+    expect(page).to have_css ".width-limited-inline-list"
+  }
+end
+
+Then /^I should see a section for groups and users$/ do
+  within("#groups-and-users") {
+    expect(page).to have_css ".search-result"
+    expect(page).to have_css ".users-list"
+  }
 end
 
 Then /^I should see a message that no search results were returned$/ do
