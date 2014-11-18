@@ -1,4 +1,3 @@
-@now
 Feature: Search the application
   In order to search the application
   As a user/admin
