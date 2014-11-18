@@ -6,8 +6,8 @@ def fill_in_select2(selector, options={})
   page.find(:css, ".select2-result-label").click
 end
 
-def remove_from_select2(member)
-  page.find(:xpath, "//li[div/text()='#{member}']/a").click
+def remove_from_select2(element_text)
+  page.find(:xpath, "//li[div/text()='#{element_text}']/a").click
 end
 
 ### Given
