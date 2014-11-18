@@ -56,7 +56,7 @@ Then /^I should see my groups$/ do
 end
 
 Then /^I should only see my email once$/ do
-  within(find("#name-and-email")) {
+  within(find("#handle")) {
     expect(page).to have_content(@user.email, count: 1)
   }
 end
