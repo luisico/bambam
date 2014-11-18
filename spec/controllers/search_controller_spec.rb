@@ -130,38 +130,38 @@ describe SearchController do
     end
 
     context "email" do
-      it "returns not nil for email that includes the matched term" do
+      it "returns true for email that includes the matched term" do
         user = FactoryGirl.create(:user, email: "best@example.com")
-        expect(controller.send(:matches_term?, user)).not_to eq nil
+        expect(controller.send(:matches_term?, user)).to eq true
       end
 
-      it "returns nil for email that doesn't include the term" do
+      it "returns false for email that doesn't include the term" do
         user = FactoryGirl.create(:user, email: "ok@example.com")
-        expect(controller.send(:matches_term?, user)).to eq nil
+        expect(controller.send(:matches_term?, user)).to eq false
       end
     end
 
     context "first_name" do
-      it "returns not nil for first name that includes the matched term" do
+      it "returns true for first name that includes the matched term" do
         user = FactoryGirl.create(:user, first_name: "best_name")
-        expect(controller.send(:matches_term?, user)).not_to eq nil
+        expect(controller.send(:matches_term?, user)).to eq true
       end
 
-      it "returns nil for first name that doesn't include the term" do
+      it "returns false for first name that doesn't include the term" do
         user = FactoryGirl.create(:user, first_name: "ok_name")
-        expect(controller.send(:matches_term?, user)).to eq nil
+        expect(controller.send(:matches_term?, user)).to eq false
       end
     end
 
     context "last_name" do
-      it "returns not nil for first name that includes the matched term" do
+      it "returns true for first name that includes the matched term" do
         user = FactoryGirl.create(:user, last_name: "best_name")
-        expect(controller.send(:matches_term?, user)).not_to eq nil
+        expect(controller.send(:matches_term?, user)).to eq true
       end
 
-      it "returns nil for first name that doesn't include the term" do
+      it "returns false for first name that doesn't include the term" do
         user = FactoryGirl.create(:user, last_name: "ok_name")
-        expect(controller.send(:matches_term?, user)).to eq nil
+        expect(controller.send(:matches_term?, user)).to eq false
       end
     end
   end

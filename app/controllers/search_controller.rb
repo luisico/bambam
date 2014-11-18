@@ -41,6 +41,6 @@ class SearchController < ApplicationController
   private
 
   def matches_term?(user)
-    [user.email, user.first_name, user.last_name].join('@@').match(/#{@q}/i)
+    [user.email, user.first_name, user.last_name].join('@@').match(/#{@q}/i).present?
   end
 end
