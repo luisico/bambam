@@ -41,7 +41,7 @@ Then /^I should see my projects$/ do
   @user.projects.each do |project|
     within("#project_#{project.id}") do
       expect(page).to have_link project.name
-      expect(page).to have_content project.owner.email
+      expect(page).to have_content project.owner.handle
     end
   end
 end
