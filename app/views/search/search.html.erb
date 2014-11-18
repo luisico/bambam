@@ -8,14 +8,14 @@
             <% @projects_and_tracks.each do |project, hash| %>
               <li class="search-result">
                 <%= link_to project.name, project_path(project) %>
-                (owner: <%= project.owner.email %>)
+                (owner: <%= project.owner.handle %>)
                 [<%= pluralize(project.tracks.count, 'track') %>]
               </li>
               <% if hash[:users].any? %>
                 <ul>
                   <ul class="inline-list cloud-tag">
                   <% hash[:users].each do |user| %>
-                    <li><span><%= user.email %></span></li>
+                    <li><span><%= user.handle %></span></li>
                   <% end %>
                   </ul>
                 </ul>
@@ -31,7 +31,7 @@
           <ul class="no-bullet" id="groups-and-users">
             <% @groups_and_users.each do |group, members_array| %>
               <li class="search-result">
-                <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.email %>) [<%= pluralize(group.members.count, 'user') %>]
+                <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
               </li>
               <li>
                 <ul class="users-list">
