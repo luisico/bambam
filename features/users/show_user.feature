@@ -8,11 +8,20 @@ Feature: Show a user profile
     And I belong to a project
     And I belong to a group
     When I am on my account profile page
-    Then I should see my email
+    Then I should see my user name
+    And I should see my email
     And I should see my avatar
     And I should see my projects
     And I should see my groups
     And I should see a link to "Edit"
+
+  Scenario: Email appears once for user with no first or last name
+    Given I am signed in
+    And my first and last names are blank
+    And I belong to a project
+    And I belong to a group
+    When I am on my account profile page
+    Then I should only see my email once
 
   Scenario: Users can only see groups they are members of
     Given I am signed in
@@ -32,7 +41,7 @@ Feature: Show a user profile
     Given I am signed in as an <role>
     And there is another user in the system
     And I am on the users page
-    When I click on the user email
+    When I click on the user handle
     Then I should be on the account profile page
     And I should not see a link to "Edit"
 

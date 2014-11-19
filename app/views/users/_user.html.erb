@@ -1,14 +1,17 @@
-<p id="project-user-<%= user.id %>">
-  <% if can? :manage, User %>
+<p id="user-<%= user.id %>">
+  <% if can? :show, user %>
     <%= link_to user do %>
       <%= image_tag avatar_url(user) %>
-      <%= user.email %>
+      <%= @groups_and_users ? user.handle_with_email : user.handle %>
     <% end %>
   <% else %>
     <%= image_tag avatar_url(user) %>
-    <%= user.email %>
+    <%= @groups_and_users ? user.handle_with_email : user.handle %>
   <% end %>
   <% if @project && (user == @project.owner) %>
     <i class="admin-icon small" title="owner"></i>
+  <% end %>
+  <% if @group && (user == @group.owner) %>
+    <%= "(owner)" %>
   <% end %>
 </p>

@@ -76,13 +76,13 @@ end
 Then /^I should see a list of users$/ do
   expect(User.count).to be > 0
   User.all.each do |user|
-    expect(page).to have_link user.email
+    expect(page).to have_link user.handle
     if user.has_role? :admin
-      within('p', text: user.email) do
+      within('p', text: user.handle) do
         expect(page).to have_css('.fi-crown')
       end
     elsif user.has_role? :inviter
-      within('p', text: user.email) do
+      within('p', text: user.handle) do
         expect(page).to have_css('.fi-key')
       end
     end
@@ -96,7 +96,7 @@ Then /^I should see their avatars$/ do
 end
 
 Then /^my (admin|inviter) email should not have outstanding invite icon$/ do |role|
-  within('p', text: instance_variable_get("@#{role}").email) do
+  within('p', text: instance_variable_get("@#{role}").handle) do
     expect(page).not_to have_css('.fi-ticket')
   end
 end

@@ -5,8 +5,11 @@
         <div class="small-4 medium-2 columns">
           <%= image_tag avatar_url(@user, 100) %>
         </div>
-        <div class="small-8 medium-8 columns left">
-          <h3 class="text-panel-overhang"><%= @user.email %></h3>
+        <div id="handle" class="small-8 medium-8 columns left">
+          <% unless @user.handle == @user.email %>
+            <h3 class="text-panel-overhang"><%= @user.handle %></h3>
+          <% end %>
+          <h4 class="text-panel-overhang"><%= @user.email %></h4>
         </div>
       </div>
       <hr/>
@@ -26,7 +29,7 @@
                 <%= link_to project.name, project %>
                 <span class="text-color-grey">
                   <i class="admin-icon small" title="owner"></i>
-                  <%= project.owner.email %>
+                  <%= project.owner.handle %>
                 </span>
               </li>
             <% end %>

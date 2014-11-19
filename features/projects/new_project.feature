@@ -21,7 +21,7 @@ Feature: Create a project
     When I create a new project with a user and a track
     Then I should be on the project show page
     And I should see a message that the project was created successfully
-    And I should see my email among the list of project member emails
+    And I should see my handle among the list of project member handles
     And I should be the project's owner
     And I should see the project's tracks
 

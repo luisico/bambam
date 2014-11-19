@@ -16,11 +16,11 @@
         <h4 id="project-users"><i class="users-icon large margin-rigth"></i>Users</h4>
 
         <div id="project-owner">
-          Project owner: <%= link_to @project.owner.email, @project.owner %>
+          Project owner: <%= link_to @project.owner.handle, @project.owner %>
         </div></br>
 
         <div class="field">
-          <%= f.collection_select :user_ids, User.all_except(@project.owner), :id, :email, {}, {multiple:true} %>
+          <%= f.collection_select :user_ids, User.all_except(@project.owner), :id, :handle_with_email, {}, {multiple:true, title: :email} %>
         </div>
       <% else %>
         <h4><i class="users-icon large margin-rigth"></i>Users</h4>

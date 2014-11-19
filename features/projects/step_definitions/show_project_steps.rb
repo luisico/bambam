@@ -27,14 +27,22 @@ Then /^I should see the project's tracks$/ do
 end
 
 Then /^I should see the project's users with(out)? profile links$/ do |negate|
-  project = @project || Project.last
-  project.users.each do |user|
-    within("#project-user-#{user.id}") do
-      if negate
-        expect(page).to have_content user.email
-        expect(page).not_to have_link user.email
-      else
-        expect(page).to have_link user.email
+  @project ||= Project.last
+  if negate
+    @project.users.each do |user|
+      within("#user-#{user.id}") do
+        if user != @user
+          expect(page).to have_content user.handle
+          expect(page).not_to have_link user.handle
+        else
+          expect(page).to have_link user.handle
+        end
+      end
+    end
+  else
+    @project.users.each do |user|
+      within("#user-#{user.id}") do
+        expect(page).to have_link user.handle
       end
     end
   end
@@ -42,7 +50,7 @@ end
 
 Then /^I should see the project's owner$/ do
   project = @project || Project.last
-  within("#project-user-#{project.owner.id}") do
+  within("#user-#{project.owner.id}") do
     expect(page).to have_css('.admin-icon')
   end
 end

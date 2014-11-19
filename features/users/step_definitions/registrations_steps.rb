@@ -15,7 +15,7 @@ def sign_up(invitee=nil)
   invitee ||= @invitee
   fill_in 'user_password', with: invitee[:password]
   fill_in 'user_password_confirmation', with: invitee[:password_confirmation]
-  yield if block_given?
+  yield invitee if block_given?
   click_button I18n.t('devise.invitations.edit.submit_button')
 end
 
@@ -162,6 +162,27 @@ Then /^I should be able to activate my invitation$/ do
     sign_up
     @user.reload
   }.to change(@user, :accepted_or_not_invited?)
+end
+
+Then /^I should be able to activate my invitation and add first and last names$/ do
+  find_user
+  expect{
+    sign_up do |invitee|
+      fill_in 'user_first_name', with: invitee[:first_name]
+      fill_in 'user_last_name', with: invitee[:last_name]
+    end
+    @user.reload
+  }.to change(@user, :accepted_or_not_invited?)
+end
+
+Then /^I should( not)? have a first or last name assigned$/ do |negate|
+  if negate
+    expect(@user.first_name).to be_empty
+    expect(@user.last_name).to be_empty
+  else
+    expect(@user.first_name).not_to be_empty
+    expect(@user.last_name).not_to be_empty
+  end
 end
 
 Then /^I should not be able to sign up with an empty password$/ do

@@ -21,7 +21,7 @@ Feature: Create a group
     When I create a new group
     Then I should be on the group show page
     And I should see a message that the group was created successfully
-    And I should see my email among the list of group member emails
+    And I should see my handle among the list of group member handles
     And I should be the groups owner
 
   Scenario: Cannot create a group without a name
@@ -35,7 +35,7 @@ Feature: Create a group
     Given I am on the new group page
     When I create a group with multiple members
     Then I should be on the group show page
-    And all the group member email addresses on the list
+    And I should see all the group member handles on the list
     And I should see a message that the group was created successfully
 
   Scenario: Canceling the new group brings back to the users page

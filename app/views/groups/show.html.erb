@@ -7,20 +7,7 @@
       </div>
 
       <div id="members">
-        <% @group.members.each do |member| %>
-          <p>
-            <% if can? :show, member %>
-              <%= link_to member do %>
-                <%= image_tag avatar_url(member) %>
-                <%= member.email %>
-              <% end %>
-            <% else %>
-              <%= image_tag avatar_url(member) %>
-              <%= member.email %>
-            <% end %>
-            <%= "(owner)" if member == @group.owner%>
-          </p>
-        <% end %>
+        <%= render @group.members %>
       </div>
     </div>
 

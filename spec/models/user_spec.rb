@@ -77,6 +77,53 @@ describe User do
     it { should respond_to :has_role? }
   end
 
+  describe "user name fields" do
+    it { should have_db_column :first_name }
+    it { should respond_to :first_name }
+    it { should have_db_column :last_name }
+    it { should respond_to :last_name }
+    it { should respond_to :handle }
+
+    describe "#handle" do
+      it "returns first name if there is only a first name" do
+        user = FactoryGirl.create(:user, first_name: "Foo", last_name: "")
+        expect(user.handle).to eq "Foo"
+      end
+
+      it "returns last name if there is only a last name" do
+        user = FactoryGirl.create(:user, first_name: "", last_name: "Bar")
+        expect(user.handle).to eq "Bar"
+      end
+
+      it "puts a space between first and last names" do
+        user = FactoryGirl.create(:user, first_name: "Foo", last_name: "Bar")
+        expect(user.handle).to eq "Foo Bar"
+      end
+
+      it "strips leading and trailing whitespace" do
+        user = FactoryGirl.create(:user, first_name: " Foo ", last_name: "")
+        expect(user.handle).to eq "Foo"
+      end
+
+      it "returns email when name first and last name are blank" do
+        user = FactoryGirl.create(:user, first_name: "", last_name: "")
+        expect(user.handle).to eq user.email
+      end
+    end
+
+    describe "#handle_with_email" do
+      it "returns just email when no name is present" do
+        user = FactoryGirl.create(:user, first_name: "", last_name: "")
+        expect(user.handle_with_email).to eq user.email
+      end
+
+      it "returns name followed by email in braces when name is present" do
+        user = FactoryGirl.create(:user, first_name: "Foo", last_name: "Bar")
+        expect(user.handle_with_email).to eq "Foo Bar [#{user.email}]"
+      end
+    end
+  end
+
   it { should be_valid }
 
   describe "email" do
