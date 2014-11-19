@@ -1,14 +1,14 @@
 Feature: Create a group
   In order to add a new group to the application
-  As an admin
+  As an manager
   I want to be able to access a page where I can add a new group
 
   Background:
-    Given I am signed in as an admin
+    Given I am signed in as an manager
     And there are 3 other users in the system
 
   @javascript
-  Scenario: Admin goes to new group page
+  Scenario: Manager goes to new group page
     When I am on the users page
     And I follow the new group link
     Then I should be on the new group page
@@ -16,7 +16,7 @@ Feature: Create a group
     And I should see a list of potential members
 
   @javascript
-  Scenario: Admin creates a new group (and they become a member)
+  Scenario: Manager creates a new group (and they become a member)
     Given I am on the new group page
     When I create a new group
     Then I should be on the group show page
