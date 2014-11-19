@@ -3,8 +3,13 @@ Feature: Delete a group
   As a admin
   I can delete a group
 
-  Scenario: Delete a group
-    Given I am signed in as an admin
-    Given I own a group
+  Scenario Outline: Delete a group
+    Given I am signed in as <role>
+    And <group exists>
     When I am on the group page
     Then I should be able to delete a group
+
+    Examples:
+    | role      | group exists                   |
+    | an admin  | there is a group in the system |
+    | a manager | I own a group                  |
