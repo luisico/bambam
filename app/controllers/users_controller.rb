@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   def index
     @users = User.order('created_at DESC')
     @groups = Group.all
+    @projects = Project.accessible_by(current_ability)
   end
 
   def show

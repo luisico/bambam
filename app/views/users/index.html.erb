@@ -15,10 +15,10 @@
             <%= label_tag(:manager, "Check to grant manager priviledges to this user") %>
           </div>
         <% end %>
-        <% if can? :manage, Project %>
+        <% if @projects %>
           <div>
             <%= label_tag :project_id, 'Add invitee to existing projects:', class: "medium-margin-bottom" %>
-            <%= select_tag :project_ids, options_from_collection_for_select(Project.all, "id", "name"), include_blank: true, multiple: true %>
+            <%= select_tag :project_ids, options_from_collection_for_select(@projects, "id", "name"), include_blank: true, multiple: true %>
           </div>
         <% end %>
         <div>

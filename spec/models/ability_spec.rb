@@ -37,6 +37,8 @@ describe User do
         @manager = FactoryGirl.create(:manager)
         @user = FactoryGirl.create(:user)
         @ability = Ability.new(@manager)
+        @project = FactoryGirl.create(:project, owner: @manager)
+        @other_project = FactoryGirl.create(:project)
       end
 
       context "users" do
@@ -45,6 +47,11 @@ describe User do
 
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }
+      end
+
+      context "projects" do
+        it { should_not be_able_to(:manage, @other_project) }
+        it { should be_able_to(:manage, @project) }
       end
     end
 

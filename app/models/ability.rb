@@ -17,6 +17,7 @@ class Ability
       if user.has_role? :manager
         can :invite, User
         can :cancel, User, id: user.id
+        can :manage, Project, owner_id: user.id
       else
         can :show, User, id: user.id
         can :cancel, User, id: user.id

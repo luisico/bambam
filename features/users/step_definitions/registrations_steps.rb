@@ -40,7 +40,7 @@ end
 
 When /^an (admin|manager) user invites me$/ do |role|
   if role == 'admin'
-    @manager = FactoryGirl.create(:admin)
+    @admin = FactoryGirl.create(:admin)
   else
     @manager = FactoryGirl.create(:manager)
   end
@@ -106,7 +106,7 @@ Then /^I should( not)? be able to invite a user with(out)? manager priviledges$/
   end
 end
 
-Then /^I should( not)? be able to invite a user and add them to an existing project$/ do |_not|
+Then /^I should( not)? be able to add invitee to an existing project$/ do |_not|
   if _not
     expect {
       build_invitee
