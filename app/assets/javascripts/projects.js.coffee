@@ -15,7 +15,7 @@ jQuery ->
     new TrackForm(event).restore()
 
   $('form').on 'click', '.add_fields', (event) ->
-    TrackForm.addTrack($(this))
+    TrackForm.addTrack(event)
 
   $(document).ready ->
     TrackForm.change_track_add_text()

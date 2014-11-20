@@ -61,7 +61,8 @@ class @TrackForm
     text = @group.find("label:contains('Name')").next().val()
     @objects['name'].text(text).show()
 
-  @addTrack: (el) ->
+  @addTrack: (event) ->
+    el = $(event.target)
     time = new Date().getTime()
     regexp = new RegExp(el.data('id'), 'g')
     el.before(el.data('fields').replace(regexp, time))
