@@ -1,5 +1,4 @@
 # Be sure to restart your server when you modify this file.
-fullapp = ""
-[2,4].each {|i| fullapp << "_#{Rails.root.to_s.split(File::SEPARATOR)[i]}"}
+_fullapp = "_#{Rails.root.to_s.split(File::SEPARATOR).values_at(2,4).join("_")}"
 
-Bambam::Application.config.session_store :cookie_store, key: fullapp + "_session"
+Bambam::Application.config.session_store :cookie_store, key: _fullapp + "_session"
