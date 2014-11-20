@@ -10,8 +10,9 @@ Given /^I own (\d+|a) groups?$/ do |n|
 end
 
 Given /^I belong to (\d+|a) groups?$/ do |n|
+  member = (@user || @manager || @admin)
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  @groups = FactoryGirl.create_list(:group, n, members: [@user])
+  @groups = FactoryGirl.create_list(:group, n, members: [member])
   @group = @groups.last
 end
 
