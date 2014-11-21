@@ -11,6 +11,7 @@ Feature: Create a track
   Scenario: User can add a new track to the project
     When I visit the edit project page
     Then I should be able to add a track to the project
+    And I should be the owner of that track
 
   Scenario: Add Track button changes depending on track count
     When I visit the edit project page

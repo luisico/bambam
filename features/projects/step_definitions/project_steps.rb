@@ -37,13 +37,6 @@ Given /^there are (\d+) additional users of that project$/ do |n|
   FactoryGirl.create_list(:user, n.to_i, :projects => [@project])
 end
 
-Given /^there (is|are) (\d+|a) tracks? in that project$/ do |foo, n|
-  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  @project ||= @projects.last
-  FactoryGirl.create_list(:test_track, n.to_i, :project => @project)
-  @track = @project.tracks.last
-end
-
 ### When
 
 ### Then
