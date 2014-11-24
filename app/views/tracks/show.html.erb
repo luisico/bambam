@@ -7,9 +7,13 @@
         <h3 class="left" id="track-name">
           <%= @track.name %>
           <small>
-            <% if @track.project %>
-              (<%= link_to @track.project.name, @track.project %>)
-            <% end %>
+            (<%= link_to @track.project.name, @track.project %>,
+            owner:
+            <% if can? :show, @track.owner %>
+              <%= link_to @track.owner.handle, @track.owner %>
+            <% else %>
+              <%= @track.owner.handle%>
+            <% end %>)
           </small>
         </h3>
         <%= render partial: 'timestamps', locals: { record: @track } %>
