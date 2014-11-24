@@ -32,7 +32,7 @@
       <% end %>
 
       <%= f.hidden_field :_destroy %>
-      <%= f.hidden_field :owner_id, value: (f.object.owner_id ? f.object.owner_id : current_user.id) %>
+      <%= f.hidden_field :owner_id, value: (f.object.owner_id || current_user.id) %>
     </div>
   </div>
 <% end %>
