@@ -2,7 +2,17 @@
   <li><%= link_to_igv(track) %></li>
   <li><%= link_to track.name, track %></li>
   <% unless (@project || @projects_and_tracks) %>
-    <li><%= link_to "(#{track.project.name})", track.project %></li>
+    <li>
+      <span>
+        (<%= link_to track.project.name, track.project %>,
+        owner:
+        <% if can? :show, track.owner %>
+          <%= link_to track.owner.handle, track.owner %>
+        <% else %>
+          <%= track.owner.handle %>
+        <% end %>)
+      </span>
+    </li>
   <% end %>
   <% if @projects_and_tracks %>
     <li class="text-color-grey pointer">

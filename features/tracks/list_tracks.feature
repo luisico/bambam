@@ -3,12 +3,19 @@ Feature: List of tracks
   As a user
   I should be able to list tracks
 
-  Scenario: List of tracks
-    Given I am signed in
+  Scenario Outline: List of tracks
+    Given I am signed in as <user type>
     And I belong to a project
     And there are 3 tracks in that project
     When I am on the tracks page
     Then I should see a list of tracks with IGV link
+    And I should see a link to each track's project
+    And I <status> see a link to each track's owner
+
+    Examples:
+      | user type | status      |
+      | a user    | should not  |
+      | an admin  | should      |
 
   Scenario: Provides links to individual track pages
     Given I am signed in
