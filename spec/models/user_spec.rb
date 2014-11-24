@@ -218,6 +218,12 @@ describe User do
       it { should respond_to :projects }
       it { should respond_to :project_ids }
     end
+
+    context "tracks" do
+      it { should have_many :tracks }
+      it { should respond_to :tracks }
+      it { should respond_to :track_ids }
+    end
   end
 
   describe "when user destroyed" do

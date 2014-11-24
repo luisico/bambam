@@ -3,6 +3,7 @@ FactoryGirl.define do
     sequence(:name) {|n| "track#{n}"}
     sequence(:path) {|n| File.join("tmp", "tracks", "track#{n}.bam") }
     project
+    owner
 
     factory :test_track do
       sequence(:name) {|n| "track#{n}" }

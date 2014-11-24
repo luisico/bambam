@@ -101,12 +101,16 @@ describe User do
 
       context "tracks" do
         before do
+          project = FactoryGirl.create(:project, users: [@user])
           @track = FactoryGirl.create(:test_track, project: FactoryGirl.create(:project))
+          @track_from_project = FactoryGirl.create(:test_track, project: project)
         end
 
-        it { should be_able_to(:read, Track, :project => { :user_ids => @user.id }) }
+        it { should be_able_to(:read, @track_from_project) }
+        it { should be_able_to(:modify, Track, :owner => @user)}
 
         it { should_not be_able_to(:read, @track) }
+        it { should_not be_able_to(:modify, @track_from_project)}
       end
 
       context "share_links" do

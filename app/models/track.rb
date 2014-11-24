@@ -1,5 +1,6 @@
 class Track < ActiveRecord::Base
   belongs_to :project, :touch => true
+  belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
   validates_presence_of :name
   #TODO adding presence validation on project_id breaks nested updated.

@@ -6,6 +6,7 @@ class Ability
     alias_action :create, :index, :show, :to => :invite
     #TODO remove this alias
     alias_action :index, :show, :edit, :update, :to => :user_access
+    alias_action :edit, :update, :destroy, :to => :modify
 
     if user.has_role? :admin
       can :manage, User
@@ -29,6 +30,8 @@ class Ability
       can :read, Track, Track.user_tracks(user) do |track|
         track.project.users.include?(user)
       end
+
+      can :modify, Track, owner: user
 
       can :manage, ShareLink do |share_link|
         share_link.track.project.users.include?(user)

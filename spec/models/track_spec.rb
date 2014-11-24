@@ -11,6 +11,7 @@ describe Track do
     it { should have_db_index(:name).unique(false) }
     it { should have_db_column(:path).with_options(null:false) }
     it { should have_db_column(:project_id).with_options(null: false) }
+    it { should have_db_column(:owner_id).with_options(null: false) }
   end
 
   describe "name" do
@@ -80,6 +81,11 @@ describe Track do
   describe "project_id" do
     it {should belong_to :project}
     it {should respond_to :project}
+  end
+
+  describe "owner_id" do
+    it {should belong_to :owner}
+    it {should respond_to :owner}
   end
 
   describe "share_links" do
