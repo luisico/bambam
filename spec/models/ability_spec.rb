@@ -101,16 +101,29 @@ describe User do
 
       context "tracks" do
         before do
-          project = FactoryGirl.create(:project, users: [@user])
-          @track = FactoryGirl.create(:test_track, project: FactoryGirl.create(:project))
-          @track_from_project = FactoryGirl.create(:test_track, project: project)
+          @project = FactoryGirl.create(:project, users: [@user])
+          @other_project = FactoryGirl.create(:project)
+
+          @my_track = FactoryGirl.create(:test_track, owner: @user, project: @project)
+          @project_track = FactoryGirl.create(:test_track, project: @project)
+          @other_project_track = FactoryGirl.create(:test_track, project: @other_project)
         end
 
-        it { should be_able_to(:read, @track_from_project) }
-        it { should be_able_to(:modify, Track, :owner => @user)}
+        it { should     be_able_to(:read, @my_track) }
+        it { should     be_able_to(:read, @project_track) }
+        it { should_not be_able_to(:read, @other_project_track) }
 
-        it { should_not be_able_to(:read, @track) }
-        it { should_not be_able_to(:modify, @track_from_project)}
+        it { should     be_able_to(:update, @my_track) }
+        it { should_not be_able_to(:update, @project_track) }
+        it { should_not be_able_to(:update, @other_project_track) }
+
+        it { should     be_able_to(:destroy, @my_track) }
+        it { should_not be_able_to(:destroy, @project_track) }
+        it { should_not be_able_to(:destroy, @other_project_track) }
+
+        it { should     be_able_to(:create, FactoryGirl.build(:test_track, project: @project)) }
+        it { should_not be_able_to(:create, FactoryGirl.build(:test_track, project: @other_project)) }
+
       end
 
       context "share_links" do

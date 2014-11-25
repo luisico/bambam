@@ -1,4 +1,4 @@
-<% if (can? :modify, f.object) || (f.object.id == nil) %>
+<% if can?(:update, f.object) || f.object.new_record? %>
   <div class="track-form-group <%= k.nil? ? '' : k %>">
     <ul class="inline-list">
       <li><%= link_to f.object.name, '#', class: "track-name edit-track", title: "edit track" %></li>
