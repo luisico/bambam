@@ -14,15 +14,15 @@ class Ability
       can :manage, Project
       can :manage, ShareLink
     else
+
       if user.has_role? :manager
         can :invite, User
-        can :cancel, User, id: user.id
         can :manage, Project, owner_id: user.id
         can :manage, Group, owner_id: user.id
-      else
-        can :show, User, id: user.id
-        can :cancel, User, id: user.id
       end
+
+      can :show, User, id: user.id
+      can :cancel, User, id: user.id
 
       can :read, Group, :memberships => { :user_id => user.id }
 

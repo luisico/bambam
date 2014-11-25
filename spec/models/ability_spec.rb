@@ -48,21 +48,13 @@ describe User do
       end
 
       context "projects" do
-        before do
-          @project = FactoryGirl.create(:project, owner: @manager)
-          @other_project = FactoryGirl.create(:project)
-        end
-        it { should_not be_able_to(:manage, @other_project) }
-        it { should be_able_to(:manage, @project) }
+        it { should     be_able_to(:manage, FactoryGirl.create(:project, owner: @manager)) }
+        it { should_not be_able_to(:manage, FactoryGirl.create(:project)) }
       end
 
       context "groups" do
-        before do
-          @group = FactoryGirl.create(:group, owner: @manager)
-          @other_group = FactoryGirl.create(:group)
-        end
-        it { should_not be_able_to(:manage, @other_group) }
-        it { should be_able_to(:manage, @group) }
+        it { should     be_able_to(:manage, FactoryGirl.create(:group, owner: @manager)) }
+        it { should_not be_able_to(:manage, FactoryGirl.create(:group)) }
       end
     end
 
