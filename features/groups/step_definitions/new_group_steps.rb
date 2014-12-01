@@ -57,14 +57,14 @@ end
 
 Then /^my name should be listed as group owner$/ do
   within('#group-owner') {
-    expect(page).to have_content @admin.handle
+    expect(page).to have_content @manager.handle
   }
 end
 
 Then /^I should see a list of potential members$/ do
   find("#s2id_group_member_ids").click
   within(".select2-results") {
-    expect(page).not_to have_content @admin.handle
+    expect(page).not_to have_content @manager.handle
     @users.each do |user|
       expect(page).to have_content user.handle
     end
@@ -84,7 +84,7 @@ Then /^I should see my handle among the list of group member handles$/ do
 end
 
 Then /^I should be the groups owner$/ do
-  expect(Group.last.owner).to eq(@admin)
+  expect(Group.last.owner).to eq(@manager)
 end
 
 Then /^I should see all the group member handles on the list$/ do

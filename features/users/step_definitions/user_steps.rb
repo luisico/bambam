@@ -81,7 +81,7 @@ Then /^I should see a list of users$/ do
       within('p', text: user.handle) do
         expect(page).to have_css('.fi-crown')
       end
-    elsif user.has_role? :inviter
+    elsif user.has_role? :manager
       within('p', text: user.handle) do
         expect(page).to have_css('.fi-key')
       end
@@ -95,7 +95,7 @@ Then /^I should see their avatars$/ do
   end
 end
 
-Then /^my (admin|inviter) email should not have outstanding invite icon$/ do |role|
+Then /^my (admin|manager) email should not have outstanding invite icon$/ do |role|
   within('p', text: instance_variable_get("@#{role}").handle) do
     expect(page).not_to have_css('.fi-ticket')
   end

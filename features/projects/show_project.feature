@@ -1,11 +1,11 @@
 Feature: Show a project
   In order to see the information about a project
-  As a user/admin
+  As a user
   I want to be able to access a page with the proper information about a project
 
   Scenario Outline: Show a project's information
     Given I am signed in as <role>
-    And I belong to a project
+    And <project exists>
     And there are 3 additional users of that project
     And there are 3 tracks in that project
     When I am on the project page
@@ -18,9 +18,11 @@ Feature: Show a project
     And I <privilege2> see a "Delete" button
 
     Examples:
-      | role     | privilege | privilege2 | button             |
-      | an admin | with      | should     | Edit               |
-      | a user   | without   | should not | Add or edit tracks |
+      | role      | project exists        | privilege | button             | privilege2 |
+      | an admin  | I belong to a project | with      | Edit               | should     |
+      | a manager | I belong to a project | with      | Add or edit tracks | should not |
+      | a manager | I own a project       | with      | Edit               | should     |
+      | a user    | I belong to a project | without   | Add or edit tracks | should not |
 
   Scenario: User can access the tracks page
     Given I am signed in

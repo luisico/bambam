@@ -18,13 +18,13 @@ Feature: Edit project information
     Then I should not be able to change users in the project
 
   Scenario: Cancel out of project edit page
-    Given I am signed in as an admin
-    And I belong to a project
+    Given I am signed in as a manager
+    And I own a project
     When I visit the edit project page
     Then I should be able to cancel edit
 
   Scenario: Project owner sees their name under project owner
-    Given I am signed in as an admin
+    Given I am signed in as a manager
     And I own a project
     When I visit the edit project page
     Then I should see myself listed as project owner
@@ -35,20 +35,30 @@ Feature: Edit project information
     When I visit the edit project page
     Then I should not see myself listed as project owner
 
-  Scenario: Admin can change the project name
-    Given I am signed in as an admin
-    And there is a project in the system
+  Scenario Outline: Admin and managers can change the project name
+    Given I am signed in as an <role>
+    And <project exists>
     When I visit the edit project page
     Then I should be able to edit the project name
 
+    Examples:
+      | role    | project exists                   |
+      | admin   | there is a project in the system |
+      | manager | I own a project                  |
+
   @javascript
-  Scenario: Admin can change users in project
-    Given I am signed in as an admin
-    And there is a project in the system
+  Scenario Outline: Admin and managers can change users in project
+    Given I am signed in as an <role>
+    And <project exists>
     And there are 3 additional users of that project
     And there are 3 other users in the system
     When I visit the edit project page
     Then I should be able to change users in the project
+
+    Examples:
+      | role    | project exists                   |
+      | admin   | there is a project in the system |
+      | manager | I own a project                  |
 
   Scenario: Admin can update project without changing project owner
     Given I am signed in as an admin

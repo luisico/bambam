@@ -29,7 +29,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |u|
-      u.add_role(:inviter) if params[:inviter]
+      u.add_role(:manager) if params[:manager]
       add_invitee_to_projects(u) if params[:project_ids]
     end
   end

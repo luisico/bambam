@@ -20,7 +20,7 @@ Given /^I am signed in( as a user)?$/ do |foo|
   step %{I should be signed in}
 end
 
-Given /^I am signed in as an? (admin|inviter)$/ do |role|
+Given /^I am signed in as an? (admin|manager)$/ do |role|
   send("create_#{role}")
   visit '/users/sign_in'
   fill_in 'Email', with: instance_variable_get("@#{role}").email

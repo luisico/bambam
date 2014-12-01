@@ -4,10 +4,10 @@
 
 Given /^I own (\d+|a) projects?$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  admin = User.last
-  expect(admin.has_role? :admin).to eq(true)
+  project_owner = User.last
+  expect(project_owner.has_any_role? :admin, :manager).to eq(true)
   expect {
-    @projects = FactoryGirl.create_list(:project, n, owner: admin)
+    @projects = FactoryGirl.create_list(:project, n, owner: project_owner)
   }.to change(Project, :count).by(n)
   @project = Project.last
 end

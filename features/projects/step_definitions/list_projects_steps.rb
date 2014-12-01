@@ -15,7 +15,7 @@ end
 
 ### Given
 
-Given /^I do( not)? have an inviter$/ do |negate|
+Given /^I do( not)? have an manager$/ do |negate|
   unless negate
     @admin = FactoryGirl.create(:admin)
     @user.invited_by = @admin

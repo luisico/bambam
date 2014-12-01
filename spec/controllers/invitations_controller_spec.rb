@@ -13,9 +13,9 @@ describe Users::InvitationsController do
       end
     end
 
-    context "as an inviter" do
+    context "as an manager" do
       it "should redirect to users page" do
-        sign_in FactoryGirl.create(:inviter)
+        sign_in FactoryGirl.create(:manager)
         get :new
         expect(response).not_to be_success
         expect(response).to redirect_to users_path
@@ -76,8 +76,8 @@ describe Users::InvitationsController do
       end
     end
 
-    context "as an inviter" do
-      before { sign_in FactoryGirl.create(:inviter) }
+    context "as an manager" do
+      before { sign_in FactoryGirl.create(:manager) }
 
       context "with valid parameters" do
         it "should be a redirect to the users page" do
@@ -186,13 +186,13 @@ describe Users::InvitationsController do
   describe "#invite_resource" do
     before { sign_in FactoryGirl.create(:admin) }
 
-    context "inviter parameter" do
+    context "manager parameter" do
       it "adds role when requested" do
-        controller.params = {user: {email: "test@example.com"}, inviter: "1"}
+        controller.params = {user: {email: "test@example.com"}, manager: "1"}
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by(1)
-        expect(User.last.has_role? :inviter).to be_true
+        expect(User.last.has_role? :manager).to be_true
       end
 
       it "doesn't add role when not requested" do
@@ -200,7 +200,7 @@ describe Users::InvitationsController do
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by(1)
-        expect(User.last.has_role? :inviter).to be_false
+        expect(User.last.has_role? :manager).to be_false
       end
     end
 

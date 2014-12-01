@@ -1,11 +1,11 @@
 Feature: Create a project
   In order to add a new project to the application
-  As an admin
+  As a manager
   I want to be able to access a page where I can add a new project
 
   @javascript
-  Scenario: Admin goes to new project page
-    Given I am signed in as an admin
+  Scenario: Manager goes to new project page
+    Given I am signed in as a manager
     And there are 3 other users in the system
     And I am on the new project page
     Then I should see myself listed as project owner
@@ -13,8 +13,8 @@ Feature: Create a project
     And I should see a link to "Add a track"
 
   @javascript
-  Scenario: Admin creates a new project
-    Given I am signed in as an admin
+  Scenario: Manager creates a new project
+    Given I am signed in as a manager
     And there is another user in the system
     And I am on the new project page
 
@@ -25,8 +25,8 @@ Feature: Create a project
     And I should be the project's owner
     And I should see the project's tracks
 
-  Scenario: Admin cannot create a project without a name
-    Given I am signed in as an admin
+  Scenario: Manager cannot create a project without a name
+    Given I am signed in as a manager
     And there is another user in the system
     And I am on the new project page
     When I create a project without a name
@@ -34,8 +34,8 @@ Feature: Create a project
     And I should be on the new project page
 
   @javascript
-  Scenario: Admin can add multiple users to a project
-    Given I am signed in as an admin
+  Scenario: Manager can add multiple users to a project
+    Given I am signed in as a manager
     And there are 3 other users in the system
     And I am on the new project page
     When I create a project with multiple users
@@ -44,8 +44,8 @@ Feature: Create a project
     And I should see a message that the project was created successfully
 
   @javascript
-  Scenario: Admin can add multiple tracks to a project
-    Given I am signed in as an admin
+  Scenario: Manager can add multiple tracks to a project
+    Given I am signed in as a manager
     And there is another user in the system
     And I am on the new project page
     When I create a project with multiple tracks
@@ -53,14 +53,14 @@ Feature: Create a project
     And I should see the project's tracks
     And I should see a message that the project was created successfully
 
-  Scenario: Admin can cancel out of project new page
-    Given I am signed in as an admin
+  Scenario: Manager can cancel out of project new page
+    Given I am signed in as a manager
     When I am on the new project page
     Then I should be able to cancel new project
 
   @javascript
-  Scenario: Admin can delete a track before creating project
-    Given I am signed in as an admin
+  Scenario: Manager can delete a track before creating project
+    Given I am signed in as a manager
     And there is another user in the system
     When I am on the new project page
     And I delete a track before creating project

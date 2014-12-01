@@ -1,12 +1,12 @@
 Feature: Sign up by invitation only
   In order to get access to protected sections of the site
   As a user
-  I can sign up by invitation from an admin or inviter
+  I can sign up by invitation from an admin or manager
 
   Scenario Outline: Invite a user
     Given I am signed in as an <role>
     And I am on the users page
-    Then I <priviledge> be able to invite a user <status> inviter priviledges
+    Then I <priviledge> be able to invite a user <status> manager priviledges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
     And I should see the invitee email with invitation pending icon
@@ -16,28 +16,23 @@ Feature: Sign up by invitation only
       | role    | priviledge | status  |
       | admin   | should     | with    |
       | admin   | should     | without |
-      | inviter | should not | with    |
+      | manager | should not | with    |
 
   @javascript
-  Scenario Outline: Admin can invite a user and add them to an existing project
-    Given I am signed in as an <role>
-    And there are 3 projects in the system
+  Scenario: Manager can add invitee to existing projects
+    Given I am signed in as a manager
+    And I own 3 projects
     And I am on the users page
-    Then I <priviledge> be able to invite a user and add them to an existing project
+    Then I should be able to add invitee to an existing project
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
     And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
 
-    Examples:
-      | role    | priviledge |
-      | admin   | should     |
-      | inviter | should not |
-
   @javascript
-  Scenario: Admin can invite a user and add them to multiple existing projects
-    Given I am signed in as an admin
-    And there are 3 projects in the system
+  Scenario: Manager can invite a user and add them to multiple existing projects
+    Given I am signed in as a manager
+    And I own 3 projects
     And I am on the users page
     Then I should be able to invite a user and add them to multiple existing projects
     And I should see a message confirming that an invitation email has been sent
@@ -45,31 +40,32 @@ Feature: Sign up by invitation only
     And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
 
-  Scenario Outline: Cannot invite already registered users
-    Given I am signed in as an <role>
+  @javascript
+  Scenario: Manager can't add invitee to existing projects they don't own
+    Given I am signed in as a manager
+    And there are 3 projects in the system
+    And I am on the users page
+    Then I should not be able to add invitee to an existing project
+    And I should see a message confirming that an invitation email has been sent
+    And I should be on the users page
+    And I should see the invitee email with invitation pending icon
+    And the invitee should receive an invitation
+
+  Scenario: Cannot invite already registered users
+    Given I am signed in as a manager
     And I am on the users page
     And I invite an already registered user
     Then the "Email" field should have the error "has already been taken"
     And I should be on the invitation page
     And no invitation should have been sent
 
-    Examples:
-      | role    |
-      | admin   |
-      | inviter |
-
-  Scenario Outline: Cannot invite if email is blank
-    Given I am signed in as an <role>
+  Scenario: Cannot invite if email is blank
+    Given I am signed in as a manager
     And I am on the users page
     When I invite a user with a blank email
     Then the "Email" field should have the error "can't be blank"
     And I should be on the invitation page
     And no invitation should have been sent
-
-    Examples:
-      | role    |
-      | admin   |
-      | inviter |
 
   Scenario: Regular users cannot invite another user
     Given I am signed in
@@ -77,9 +73,9 @@ Feature: Sign up by invitation only
     Then I should be denied access
     And I should be redirected to the projects page
 
-  Scenario Outline: Invitee signs up after being invited
+  Scenario: Invitee signs up after being invited
     Given I do not exist as a user
-    When an <role> user invites me
+    When an manager user invites me
     Then I should receive an invitation
     When I click in the accept invitation email link
     Then I should be able to activate my invitation
@@ -87,14 +83,9 @@ Feature: Sign up by invitation only
     And I should be signed in
     And I should be on the projects page
 
-    Examples:
-      | role    |
-      | admin   |
-      | inviter |
-
   Scenario: Invitee signs up with a first and last name
     Given I do not exist as a user
-    When an inviter user invites me
+    When an manager user invites me
     Then I should receive an invitation
     When I click in the accept invitation email link
     Then I should be able to activate my invitation and add first and last names

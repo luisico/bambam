@@ -37,7 +37,7 @@ Feature: Show a user profile
     When I am on my account profile page
     And I should only see a list of projects I belong to
 
-  Scenario Outline: Admin/inviter can access the user show page from the users page
+  Scenario Outline: Admin/manager can access the user show page from the users page
     Given I am signed in as an <role>
     And there is another user in the system
     And I am on the users page
@@ -48,7 +48,7 @@ Feature: Show a user profile
     Examples:
       | role    |
       | admin   |
-      | inviter |
+      | manager |
 
   Scenario: Access tracks page
     Given I am signed in

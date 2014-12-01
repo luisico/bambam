@@ -84,13 +84,14 @@ Then /^I should be on the new project page$/ do
 end
 
 Then /^I should( not)? see myself listed as project owner$/ do |negate|
+  current_user = (@admin || @manager)
   if negate
     within('#project-owner') {
-      expect(page).not_to have_content @admin.handle
+      expect(page).not_to have_content current_user.handle
     }
   else
     within('#project-owner') {
-      expect(page).to have_content @admin.handle
+      expect(page).to have_content current_user.handle
     }
   end
 end
@@ -98,7 +99,7 @@ end
 Then /^I should see a list of potential users$/ do
   find("#s2id_project_user_ids").click
   within(".select2-results") {
-    expect(page).not_to have_content @admin.handle
+    expect(page).not_to have_content @manager.handle
     @users.each do |user|
       expect(page).to have_content user.handle
     end
@@ -118,7 +119,7 @@ Then /^I should see my handle among the list of project member handles$/ do
 end
 
 Then /^I should be the project's owner$/ do
-  expect(Project.last.owner).to eq(@admin)
+  expect(Project.last.owner).to eq(@manager)
 end
 
 Then /^I should see all project members$/ do

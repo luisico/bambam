@@ -1,7 +1,7 @@
 ### Methods
 
-def create_inviter
-  @inviter ||= FactoryGirl.create(:inviter, @visitor)
+def create_manager
+  @manager ||= FactoryGirl.create(:manager, @visitor)
 end
 
 ### Given

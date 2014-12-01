@@ -18,7 +18,7 @@ gem 'factory_girl_rails', '~> 4.4.0'
 gem 'devise', github: 'plataformatec/devise', ref: '61c497d173'
 gem 'devise_invitable', github: 'scambra/devise_invitable'
 gem 'rolify', '~> 3.4.0'
-gem 'cancancan', '~> 1.7'
+gem 'cancancan', '~> 1.9.2'
 
 # Assets
 gem 'sass-rails', '~> 4.0.2'

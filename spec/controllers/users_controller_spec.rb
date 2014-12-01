@@ -26,6 +26,34 @@ describe UsersController do
         get :index
         expect(assigns(:groups)).to eq groups
       end
+
+      it "should return all the projects" do
+        projects = FactoryGirl.create_list(:project, 3)
+        get :index
+        expect(assigns(:projects)).to eq projects
+      end
+    end
+
+    context "as manager" do
+      before do
+        @manager = FactoryGirl.create(:manager)
+        sign_in @manager
+      end
+
+      it "should return only projects manager owns" do
+        projects = FactoryGirl.create_list(:project, 3)
+        manager_projects = FactoryGirl.create_list(:project, 3, owner: @manager)
+        get :index
+        expect(assigns(:projects)).to eq manager_projects
+      end
+
+      it "should return only groups manager owns or is a member of" do
+        groups = FactoryGirl.create_list(:group, 3)
+        owned_groups = FactoryGirl.create_list(:group, 3, owner: @manager)
+        member_of_groups = FactoryGirl.create_list(:group, 3, members: [@manager])
+        get :index
+        expect(assigns(:groups)).to eq owned_groups + member_of_groups
+      end
     end
 
     context "as regular user" do

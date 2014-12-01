@@ -28,11 +28,16 @@ Feature: List of projects
     And I click on the project name
     Then I should be on the project page
 
-  Scenario: Admin can access the new project page
-    Given I am signed in as an admin
+  Scenario Outline: Admin and managers can access the new project page
+    Given I am signed in as <role>
     When I am on the projects page
     And I click "New Project"
     Then I should be on the new project page
+
+    Examples:
+      | role      |
+      | an admin  |
+      | a manager |
 
   Scenario: User cannot access the new project page
     Given I am signed in as a user
@@ -42,7 +47,7 @@ Feature: List of projects
 
   Scenario Outline: User with no projects will get special message
     Given I am signed in as a user
-    And I <status> have an inviter
+    And I <status> have an manager
     When I am on the projects page
     Then I should see a special message
 

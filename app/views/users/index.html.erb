@@ -9,16 +9,16 @@
           <%= f.text_field :email, placeholder: 'Email' %>
         </div>
 
-        <% if can? :manage, User %>
+        <% if current_user.has_role? :admin %>
           <div>
-            <%= check_box_tag(:inviter) %>
-            <%= label_tag(:inviter, "Check to grant inviter priviledges to this user") %>
+            <%= check_box_tag(:manager) %>
+            <%= label_tag(:manager, "Check to grant manager priviledges to this user") %>
           </div>
         <% end %>
-        <% if can? :manage, Project %>
+        <% if @projects %>
           <div>
             <%= label_tag :project_id, 'Add invitee to existing projects:', class: "medium-margin-bottom" %>
-            <%= select_tag :project_ids, options_from_collection_for_select(Project.all, "id", "name"), include_blank: true, multiple: true %>
+            <%= select_tag :project_ids, options_from_collection_for_select(@projects, "id", "name"), include_blank: true, multiple: true %>
           </div>
         <% end %>
         <div>
@@ -32,7 +32,7 @@
       <ul class="inline-list">
         <li><i class="fi-ticket medium icon_key"> Invite outstanding</i></li>
         <li><i class="fi-crown medium icon_key"> Admin</i></li>
-        <li><i class="fi-key medium icon_key"> Inviter</i></li>
+        <li><i class="fi-key medium icon_key"> Manager</i></li>
       </ul>
 
       <% @users.each do |user| %>
@@ -47,7 +47,7 @@
           <% if user.has_role? :admin %>
             <i class="fi-crown medium"></i>
           <% end %>
-          <% if user.has_role? :inviter %>
+          <% if user.has_role? :manager %>
             <i class="fi-key medium"></i>
           <% end %>
         </p>

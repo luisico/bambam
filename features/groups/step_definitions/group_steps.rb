@@ -3,14 +3,16 @@
 ### Given
 
 Given /^I own (\d+|a) groups?$/ do |n|
+  group_owner = User.last
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  @groups = FactoryGirl.create_list(:group, n, owner: @admin)
+  @groups = FactoryGirl.create_list(:group, n, owner: group_owner)
   @group = @groups.last
 end
 
 Given /^I belong to (\d+|a) groups?$/ do |n|
+  member = (@user || @manager || @admin)
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  @groups = FactoryGirl.create_list(:group, n, members: [@user])
+  @groups = FactoryGirl.create_list(:group, n, members: [member])
   @group = @groups.last
 end
 

@@ -13,9 +13,9 @@ Feature: Show a group
     And I should see the group's members
     And I should see the group's timestamps
 
-  Scenario: Show member links for admins
-    Given I am signed in as an admin
-    And there is a group in the system
+  Scenario: Show member links for managers
+    Given I am signed in as a manager
+    And I own a group
     And there are 3 additional members of that group
     When I am on the group page
     And I should see the group's members with links
@@ -23,16 +23,15 @@ Feature: Show a group
   Scenario Outline: Edit and delete buttons
     Given I am signed in as <role>
     And <group exists>
-    And there is a group in the system
     When I am on the group page
     And I <visible> see a "Delete" button
     And I <visible> see an "Edit" button
 
     Examples:
-     | role     | visible    | group exists                   |
-     | an admin | should     | there is a group in the system |
-     | an admin | should     | I own a group                  |
-     | a user   | should not | I belong to a group            |
+     | role      | visible    | group exists                   |
+     | an admin  | should     | there is a group in the system |
+     | a manager | should     | I own a group                  |
+     | a user    | should not | I belong to a group            |
 
   Scenario Outline: Back button
     Given I am signed in as <role>
@@ -43,6 +42,7 @@ Feature: Show a group
     Then I should be on the <source> page
 
     Examples:
-     | role     | group exists                   | source          |
-     | an admin | there is a group in the system | users           |
-     | a user   | I belong to a group            | account profile |
+     | role      | group exists                   | source          |
+     | an admin  | there is a group in the system | users           |
+     | a manager | I own a group                  | users           |
+     | a user    | I belong to a group            | account profile |
