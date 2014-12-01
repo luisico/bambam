@@ -1,3 +1,6 @@
+# specific admin scenarios left out of this feature under
+# assumption that admin abilities trump manager abilities
+
 Feature: Edit group information
   In order to have an up to date group
   As a manager
