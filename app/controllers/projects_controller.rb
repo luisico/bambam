@@ -8,6 +8,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    if can? :manage, @project
+      @projects_users = @project.projects_users
+    end
   end
 
   def new

@@ -47,6 +47,15 @@ Feature: Show a project
     And I click "Add or edit tracks"
     Then I should be on the edit project page
 
+  @javascript
+  Scenario: Admin can designate user read only
+    Given I am signed in as an admin
+    And I belong to a project
+    And there are 3 additional users of that project
+    And there are 3 tracks in that project
+    When I am on the project page
+    Then I should be able to designate a user read only
+
   Scenario Outline: Back button
     Given I am signed in
     And I belong to a project

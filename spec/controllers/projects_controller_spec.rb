@@ -78,6 +78,11 @@ describe ProjectsController do
         get :show, id: @project
         expect(assigns(:project)).to eq @project
       end
+
+      it "should return the projects_users" do
+        get :show, id: @project
+        expect(assigns(:projects_users)).to eq @project.projects_users
+      end
     end
 
     context "as a signed in user" do
@@ -98,6 +103,11 @@ describe ProjectsController do
         it "should return the project" do
           get :show, id: @project
           expect(assigns(:project)).to eq @project
+        end
+
+        it "should not return the projects_users" do
+          get :show, id: @project
+          expect(assigns(:projects_users)).to eq nil
         end
       end
 

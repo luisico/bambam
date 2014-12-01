@@ -13,6 +13,7 @@ class Ability
       can :manage, Group
       can :manage, Project
       can :manage, ShareLink
+      can :update, ProjectsUser
     else
 
       if user.has_role? :manager

@@ -30,6 +30,10 @@ describe User do
       context "share_links" do
         it { should be_able_to(:manage, ShareLink) }
       end
+
+      context "projects_user" do
+        it { should be_able_to(:update, ProjectsUser)}
+      end
     end
 
     describe "as manager" do
@@ -154,6 +158,10 @@ describe User do
         it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
 
         it { should_not be_able_to(:manage, @other_share_link) }
+      end
+
+      context "projects_user" do
+        it { should_not be_able_to(:update, ProjectsUser) }
       end
     end
   end

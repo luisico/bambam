@@ -58,3 +58,14 @@ end
 Then /^I should be on the tracks page$/ do
   expect(current_path).to eq tracks_path
 end
+
+Then /^I should be able to designate a user read only$/ do
+  @projects_user = @project.projects_users.first
+  expect {
+    within("#edit_projects_user_#{@projects_user.id}") {
+      check "projects_user[read_only]"
+    }
+    sleep 1
+    @projects_user.reload
+  }.to change(@projects_user, :read_only)
+end
