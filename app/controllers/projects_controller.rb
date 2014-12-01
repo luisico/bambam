@@ -8,9 +8,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    if can? :manage, @project
-      @projects_users = @project.projects_users
-    end
+    @project = Project.includes(:projects_users).find(params[:id])
   end
 
   def new
