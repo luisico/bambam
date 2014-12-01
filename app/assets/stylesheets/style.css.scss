@@ -220,6 +220,10 @@ input.with-instructions {
   }
 }
 
+.user-list-item {
+  @extend .large-margin-bottom;
+}
+
 .line-through {
   text-decoration: line-through;
 }
