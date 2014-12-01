@@ -1,10 +1,7 @@
 <div id="user-<%= user.id %>">
   <p>
     <% if @project && (can? :manage, @project) %>
-      <%= form_for @projects_users.where(user_id: user.id).first, remote: true do |f| %>
-        <%= f.check_box :read_only, { checked: f.object.read_only } %>
-        <%= f.submit %>
-      <% end %>
+      <%= render partial: "projects_user/form", locals: { project_user: @projects_users.where(user_id: user.id).first } %>
     <% end %>
     <% if can? :show, user %>
       <%= link_to user do %>
