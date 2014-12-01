@@ -57,6 +57,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :_destroy])
+    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :owner_id, :_destroy])
   end
 end

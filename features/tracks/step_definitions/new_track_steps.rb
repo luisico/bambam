@@ -87,6 +87,11 @@ Then /^I should be able to add a track to the project$/ do
   expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
 end
 
+Then /^I should be the owner of that track$/ do
+  owner = (@user || @manager)
+  expect(@project.tracks.first.owner).to eq owner
+end
+
 Then /^I should be on the track show page$/ do
   expect(current_path).to eq track_path(Track.last)
 end

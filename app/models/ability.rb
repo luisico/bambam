@@ -29,6 +29,10 @@ class Ability
       can :read, Track, Track.user_tracks(user) do |track|
         track.project.users.include?(user)
       end
+      can [:update, :destroy], Track, owner: user
+      can :create, Track do |track|
+        track.project.users.include?(user)
+      end
 
       can :manage, ShareLink do |share_link|
         share_link.track.project.users.include?(user)

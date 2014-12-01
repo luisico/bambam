@@ -20,17 +20,25 @@ end
 
 ### Then
 
-Then /^I should be able to delete a track from the project$/ do
+Then /^I should( not)? be able to delete a track from the project$/ do |negate|
   deleted_track_name = Track.first.name
-  delete_track(deleted_track_name) do
-    expect(page).to have_content deleted_track_name
+  if negate
+    expect(page).not_to have_link deleted_track_name
+  else
+    delete_track(deleted_track_name) do
+      expect(page).to have_content deleted_track_name
+    end
   end
 end
 
-Then /^I should be able to delete a track from the track edit panel$/ do
+Then /^I should( not)? be able to delete a track from the track edit panel$/ do |negate|
   deleted_track_name = Track.first.name
-  click_link deleted_track_name
-  delete_track(deleted_track_name)
+  if negate
+    expect(page).not_to have_link deleted_track_name
+  else
+    click_link deleted_track_name
+    delete_track(deleted_track_name)
+  end
 end
 
 Then /^I should be able to delete tracks from the project$/ do

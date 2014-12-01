@@ -405,6 +405,27 @@ describe ProjectsController do
       end
     end
 
+    context "as a signed in user" do
+      before do
+        sign_in FactoryGirl.create(:user)
+        @track = FactoryGirl.create(:test_track, project: @project)
+      end
+
+      context 'with valid parameters' do
+        it "should not be a success" do
+          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+          expect(response).not_to be_success
+        end
+
+        it "should not change the track's attributes" do
+          expect {
+            patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+            @track.reload
+          }.not_to change(@track, :name)
+        end
+      end
+    end
+
     context "as a visitor" do
       it "should redirect to the sign in page" do
         patch :update, id: @project, project: @new_project

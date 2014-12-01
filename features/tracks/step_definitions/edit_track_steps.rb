@@ -21,29 +21,41 @@ Then /^I should be able to verify track properties$/ do
   end
 end
 
-Then /^I should be able to update the track name$/ do
+Then /^I should( not)? be able to update the track name$/ do |negate|
   track = @project.tracks.first
-  expect {
-    click_link @track.name
-    fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
-    click_link 'done'
-    expect(page).to have_content 'new_track_name'
-    click_button 'Update'
-    track.reload
-  }.to change(track, :name)
-  expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  if negate
+    expect(page).not_to have_link @track.name
+  else
+    expect {
+      click_link @track.name
+      fill_in 'project[tracks_attributes][0][name]', with: 'new_track_name'
+      click_link 'done'
+      expect(page).to have_content 'new_track_name'
+      click_button 'Update'
+      track.reload
+    }.to change(track, :name)
+    expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  end
 end
 
-Then /^I should be able to update the track path$/ do
-  build_track_path
+Then /^the track owners should not change$/ do
+  expect(@track.owner).not_to eq @admin
+end
+
+Then /^I should( not)? be able to update the track path$/ do |negate|
   track = @project.tracks.first
-  expect {
-    click_link track.name
-    fill_in 'project[tracks_attributes][0][path]', with: @path
-    click_button 'Update'
-    track.reload
-  }.to change(track, :path)
-  expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  if negate
+    expect(page).not_to have_link track.name
+  else
+    build_track_path
+    expect {
+      click_link track.name
+      fill_in 'project[tracks_attributes][0][path]', with: @path
+      click_button 'Update'
+      track.reload
+    }.to change(track, :path)
+    expect(page).to have_css('.alert-box', text: 'Project was successfully updated')
+  end
 end
 
 Then /^I should( not)? be able to change the track's project$/ do |negate|

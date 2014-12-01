@@ -4,13 +4,14 @@ Feature: Show a track
   I want to be able to access a page with all the information about a track
 
   Scenario Outline: Show a track's information
-    Given I am signed in
+    Given I am signed in as <user type>
     And I belong to a project
     And there is a <type> track in that project
     When I am on the track page
     Then I should see the track's name
     And I should see the track's path
     And I should see the track's project
+    And I <link status> see a link to the track's owner
     And I should see a link to download a <type> file
     And I <status> see a "download bai file" link
     And I should see button to copy the track path to the clipboard
@@ -19,8 +20,9 @@ Feature: Show a track
     And I should see a link to "Create new share link"
 
    Examples:
-    | type | status     |
-    | bam  | should     |
+    | user type| type | link status | status     |
+    | a user   | bam  | should not  | should     |
+    | an admin | bw   | should      | should not |
 
   Scenario Outline: Download track
     Given I am signed in

@@ -49,6 +49,14 @@ Then /^I should see the track's project$/ do
   expect(page).to have_link @track.project.name
 end
 
+Then /^I should( not)? see a link to the track's owner$/ do |negate|
+  if negate
+    expect(page).to have_content @track.owner.handle
+  else
+    expect(page).to have_link @track.owner.handle
+  end
+end
+
 Then /^I should see a link to open the track in IGV$/ do
   encoded = ERB::Util.url_encode stream_services_track_url(@track)
   expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")

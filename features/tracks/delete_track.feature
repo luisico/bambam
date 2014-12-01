@@ -4,33 +4,48 @@ Feature: Delate a track
   As a user
   I can delete a track
 
-  Scenario: User can delete a track
+  Scenario Outline: Delete a track
     Given I am signed in
     And I belong to a project
-    And there are 3 tracks in that project
+    And <tracks exists in the project>
     When I visit the edit project page
-    Then I should be able to delete a track from the project
+    Then I <privilege> be able to delete a track from the project
 
-  Scenario: Admin can delete a track
+    Examples:
+      | tracks exists in the project      | privilege  |
+      | I own 3 tracks in that project    | should     |
+      | there are 3 track in that project | should not |
+
+  Scenario: Admin can delete any track
     Given I am signed in as an admin
     And there is a project in the system
     And there are 3 tracks in that project
     When I visit the edit project page
     Then I should be able to delete a track from the project
 
-  Scenario: User can delete a track from the track edit panel
+  Scenario Outline: Delete a track from the track edit panel
     Given I am signed in
     And I belong to a project
-    And there are 3 tracks in that project
+    And <tracks exists in the project>
     When I visit the edit project page
-    Then I should be able to delete a track from the track edit panel
+    Then I <privilege> be able to delete a track from the track edit panel
 
-  Scenario: User can delete multiple tracks
+    Examples:
+      | tracks exists in the project      | privilege  |
+      | I own 3 tracks in that project    | should     |
+      | there are 3 track in that project | should not |
+
+  Scenario Outline: User can delete multiple tracks
     Given I am signed in as a user
     And I belong to a project
-    And there are 3 tracks in that project
+    And <tracks exists in the project>
     When I visit the edit project page
-    Then I should be able to delete a track from the project
+    Then I <privilege> be able to delete a track from the project
+
+    Examples:
+      | tracks exists in the project      | privilege  |
+      | I own 3 tracks in that project    | should     |
+      | there are 3 track in that project | should not |
 
   Scenario: Admin can delete multiple tracks
     Given I am signed in as an admin
@@ -42,14 +57,14 @@ Feature: Delate a track
   Scenario: User can restore track after deletion
     Given I am signed in as a user
     And I belong to a project
-    And there are 3 tracks in that project
+    And I own 3 tracks in that project
     When I visit the edit project page
     Then I should be able to restore a deleted track
 
   Scenario: User must restore track before editing
     Given I am signed in as a user
     And I belong to a project
-    And there are 3 tracks in that project
+    And I own 3 tracks in that project
     When I visit the edit project page
     Then I should not be able to edit a deleted track
 

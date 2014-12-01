@@ -1,35 +1,38 @@
-<div class="track-form-group <%= k.nil? ? '' : k %>">
-  <ul class="inline-list">
-    <li><%= link_to f.object.name, '#', class: "track-name edit-track", title: "edit track" %></li>
-    <li><%= link_to "done", '#', class: "done-track" %></li>
-    <li>
-      <%=link_to '#' do %>
-        <i class="trash-icon remove-track", title="delete track"></i>
+<% if can?(:update, f.object) || f.object.new_record? %>
+  <div class="track-form-group <%= k.nil? ? '' : k %>">
+    <ul class="inline-list">
+      <li><%= link_to f.object.name, '#', class: "track-name edit-track", title: "edit track" %></li>
+      <li><%= link_to "done", '#', class: "done-track" %></li>
+      <li>
+        <%=link_to '#' do %>
+          <i class="trash-icon remove-track", title="delete track"></i>
+        <% end %>
+      </li>
+      <li><%= link_to "restore", '#', class: "restore-track" %></li>
+    </ul>
+    <div class="track-form-fields">
+
+        <%= f.label :name %>
+        <%= f.text_field :name, class: "with-instructions" %>
+        <span class="text-color-grey small-text">The track name should be short, as it will be used as the title of the track in IGV or the UCSC browser</span><br><br>
+
+        <%= f.label :path %>
+        <%= f.text_field :path, class: "with-instructions" %>
+        <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
+          <ul class="no-bullet allowed-track-paths">
+            <% ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path| %>
+              <li class="default-cursor"><%= path %></li>
+            <% end %>
+          </ul>
+        </span>
+
+      <% if current_user.has_role?(:admin) && @project.id %>
+        <%= f.label :project_id, "Assign track to a project" %>
+        <%= f.collection_select :project_id, Project.all, :id, :name, {:selected => @project.id} %>
       <% end %>
-    </li>
-    <li><%= link_to "restore", '#', class: "restore-track" %></li>
-  </ul>
-  <div class="track-form-fields">
 
-      <%= f.label :name %>
-      <%= f.text_field :name, class: "with-instructions" %>
-      <span class="text-color-grey small-text">The track name should be short, as it will be used as the title of the track in IGV or the UCSC browser</span><br><br>
-
-      <%= f.label :path %>
-      <%= f.text_field :path, class: "with-instructions" %>
-      <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
-        <ul class="no-bullet allowed-track-paths">
-          <% ENV['ALLOWED_TRACK_PATHS'].split(':').each do |path| %>
-            <li class="default-cursor"><%= path %></li>
-          <% end %>
-        </ul>
-      </span>
-
-    <% if current_user.has_role?(:admin) && @project.id %>
-      <%= f.label :project_id, "Assign track to a project" %>
-      <%= f.collection_select :project_id, Project.all, :id, :name, {:selected => @project.id} %>
-    <% end %>
-
-    <%= f.hidden_field :_destroy %>
+      <%= f.hidden_field :_destroy %>
+      <%= f.hidden_field :owner_id, value: (f.object.owner_id || current_user.id) %>
+    </div>
   </div>
-</div>
+<% end %>
