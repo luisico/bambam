@@ -12,8 +12,16 @@
 
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <h4><i class="users-icon large margin-right" id="project-users"></i>Users</h4>
-          <%= render @project.users %>
+          <% regular_users = @project.users.where( projects_users: { read_only: false }) %>
+          <h4 id="regular-users"><i></i>Users [<%= regular_users.count %>]</h4>
+          <div id="project-users-regular">
+            <%= render regular_users %>
+          </div>
+          <% regular_users = @project.users.where( projects_users: { read_only: true }) %>
+          <h4 id="read-only-users"><i></i>Read-Only Users [<%= regular_users.count %>]</h4>
+          <div id="project-users-read-only">
+            <%= render @project.users.where( projects_users: { read_only: true }) %>
+          </div>
         </div>
         <div class="small-12 medium-6 columns">
           <h4 id="project-tracks"><i class="track-icon large margin-right"></i>Tracks

@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.includes(:projects_users).find(params[:id])
+    @project = Project.includes(:projects_users, :users).find(params[:id])
   end
 
   def new

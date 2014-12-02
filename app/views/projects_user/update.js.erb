@@ -1,0 +1,7 @@
+<% if @projects_user.read_only %>
+  $('#user-<%= @projects_user.user_id %>').appendTo('#project-users-read-only');
+  ProjectUserLists.updateCount();
+<% else %>
+  $('#user-<%= @projects_user.user_id %>').appendTo('#project-users-regular');
+  ProjectUserLists.updateCount();
+<% end %>

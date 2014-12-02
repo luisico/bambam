@@ -231,3 +231,16 @@ input.with-instructions {
 span.select2-hidden-accessible {
   display: none;
 }
+
+#regular-users {
+  i {
+    @extend .users-icon;
+    @extend .large;
+    @extend .margin-right;
+  }
+}
+
+#read-only-users {
+  @extend .text-color-grey;
+  @extend #regular-users;
+}

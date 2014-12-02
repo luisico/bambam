@@ -17,7 +17,7 @@ var tour_project_show = {
     {
       title: "Users",
       content: "Individuals with access to the project. Project owner indicated by sherrif's badge.",
-      target: "#project-users",
+      target: "#regular-users",
       placement: 'top'
     },
     {
