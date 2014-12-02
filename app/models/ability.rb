@@ -19,6 +19,7 @@ class Ability
         can :invite, User
         can :manage, Project, owner_id: user.id
         can :manage, Group, owner_id: user.id
+        can :manage, Track, :project => { :owner_id => user.id }
       end
 
       can :show, User, id: user.id
