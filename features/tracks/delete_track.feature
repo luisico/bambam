@@ -16,6 +16,13 @@ Feature: Delate a track
       | I own 3 tracks in that project    | should     |
       | there are 3 track in that project | should not |
 
+  Scenario: Manager can delete any track in their project
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 tracks in that project
+    When I visit the edit project page
+    Then I should be able to delete a track from the project
+
   Scenario: Admin can delete any track
     Given I am signed in as an admin
     And there is a project in the system

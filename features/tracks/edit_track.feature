@@ -16,6 +16,13 @@ Feature: Edit track information
       | I own a track in that project    | should     |
       | there is a track in that project | should not |
 
+  Scenario: Manager can edit tracks in their project
+    Given I am signed in as a manager
+    And I own a project
+    And there is a track in that project
+    When I visit the edit project page
+    Then I should be able to update the track name
+
   Scenario: Admin can edit track without changing owner
     Given I am signed in as an admin
     And there is a project in the system

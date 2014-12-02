@@ -56,6 +56,13 @@ describe User do
         it { should     be_able_to(:manage, FactoryGirl.create(:group, owner: @manager)) }
         it { should_not be_able_to(:manage, FactoryGirl.create(:group)) }
       end
+
+      context "tracks" do
+        before { @project = FactoryGirl.create(:project, owner: @manager) }
+
+        it { should     be_able_to(:manage, FactoryGirl.create(:test_track, project: @project)) }
+        it { should_not be_able_to(:manage, FactoryGirl.create(:test_track)) }
+      end
     end
 
     describe "as a regular user" do
