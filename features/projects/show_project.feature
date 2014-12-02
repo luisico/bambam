@@ -48,9 +48,9 @@ Feature: Show a project
     Then I should be on the edit project page
 
   @javascript
-  Scenario: Admin can designate user read only
-    Given I am signed in as an admin
-    And I belong to a project
+  Scenario: Manager can designate user read only
+    Given I am signed in as a manager
+    And I own a project
     And there are 3 additional users of that project
     And there are 3 tracks in that project
     When I am on the project page
@@ -60,9 +60,9 @@ Feature: Show a project
     And the read only user count should be 1
 
   @javascript
-  Scenario: Admin can remove user from read only list
-    Given I am signed in as an admin
-    And I belong to a project
+  Scenario: Manager can remove user from read only list
+    Given I am signed in as a manager
+    And I own a project
     And there are 3 additional users of that project
     And there are 3 tracks in that project
     And there is a read only user in that project
