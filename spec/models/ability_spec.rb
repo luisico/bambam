@@ -67,6 +67,16 @@ describe User do
         it { should     be_able_to(:manage, FactoryGirl.create(:test_track, project: @project)) }
         it { should_not be_able_to(:manage, FactoryGirl.create(:test_track)) }
       end
+
+      context "projects_user" do
+        before do
+          @project = FactoryGirl.create(:project, owner: @manager)
+          @other_project = FactoryGirl.create(:project)
+        end
+
+        it { should     be_able_to(:update, @project.projects_users.first) }
+        it { should_not be_able_to(:update, @other_project.projects_users.first) }
+      end
     end
 
     describe "as a regular user" do
