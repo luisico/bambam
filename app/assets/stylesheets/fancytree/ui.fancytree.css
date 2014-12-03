@@ -76,7 +76,7 @@ span.fancytree-drag-helper-img,
   vertical-align: top;
   background-repeat: no-repeat;
   background-position: left;
-  background-image: url("icons.gif");
+  background-image: image-url("fancytree/icons.gif");
   background-position: 0px 0px;
 }
 span.fancytree-icon,
