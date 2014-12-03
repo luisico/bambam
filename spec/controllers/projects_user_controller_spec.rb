@@ -42,6 +42,22 @@ describe ProjectsUserController do
         end
       end
     end
+
+    context "as a regular user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should raise an error" do
+        expect{
+          patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
+        }.to raise_error
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
+        expect(response).not_to be_success
+      end
     end
   end
 end
