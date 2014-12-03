@@ -69,7 +69,7 @@ Then /^I should be able to designate a user read only$/ do
   @projects_user = @project.projects_users.first
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-      check "projects_user[read_only]"
+    find('label', text: "read-only").click
     }
     sleep 1
     @projects_user.reload
@@ -89,7 +89,7 @@ end
 Then /^I should be able to remove a user from the read only list$/ do
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-      uncheck "projects_user[read_only]"
+      find('label', text: "read-only").click
     }
     sleep 1
     @projects_user.reload

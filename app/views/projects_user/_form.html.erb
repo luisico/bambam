@@ -1,4 +1,5 @@
 <%= form_for project_user, remote: true do |f| %>
-  <%= f.check_box :read_only, { checked: f.object.read_only } %>
+  <label for="read-only-<%= f.object.user_id %>">read-only</label>
+  <%= f.check_box :read_only, { checked: f.object.read_only, id: "read-only-#{f.object.user_id}" } %>
   <%= f.submit %>
 <% end %>
