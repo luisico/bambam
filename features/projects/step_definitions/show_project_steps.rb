@@ -71,7 +71,7 @@ Then /^I should be able to designate a user read only$/ do
     within("#edit_projects_user_#{@projects_user.id}") {
     find('label', text: "set read-only access").click
     }
-    sleep 1
+    expect(page).to have_content "restore access"
     @projects_user.reload
   }.to change(@projects_user, :read_only)
 end
@@ -92,7 +92,7 @@ Then /^I should be able to remove a user from the read only list$/ do
     within("#edit_projects_user_#{@projects_user.id}") {
       find('label', text: "restore access").click
     }
-    sleep 1
+    expect(page).not_to have_content "restore access"
     @projects_user.reload
   }.to change(@projects_user, :read_only)
 end
