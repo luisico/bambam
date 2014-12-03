@@ -69,7 +69,7 @@ Then /^I should be able to designate a user read only$/ do
   @projects_user = @project.projects_users.first
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-    find('label', text: "read-only").click
+    find('label', text: "set read-only access").click
     }
     sleep 1
     @projects_user.reload
@@ -83,13 +83,14 @@ Then /^that user should move to the read\-only list$/ do
   }
   within("#project-users-read-only") {
     expect(page).to have_content user.handle
+    expect(page).to have_css('label', text: 'restore access')
   }
 end
 
 Then /^I should be able to remove a user from the read only list$/ do
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-      find('label', text: "read-only").click
+      find('label', text: "restore access").click
     }
     sleep 1
     @projects_user.reload
@@ -100,6 +101,7 @@ Then /^that user should move to the regular user list$/ do
   user = User.find(@projects_user.user_id)
   within("#project-users-regular") {
     expect(page).to have_content user.handle
+    expect(page).not_to have_css('label', text: 'restore access')
   }
   within("#project-users-read-only") {
     expect(page).not_to have_content user.handle

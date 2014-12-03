@@ -7,6 +7,7 @@ jQuery.fn.submitOnCheck = ->
 
 jQuery ->
   $('.edit_projects_user').submitOnCheck()
+  $('#project-users-read-only').find('label').text('restore access')
 
 class @ProjectUserLists
   @regularUserCount: ->

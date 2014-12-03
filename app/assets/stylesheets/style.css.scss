@@ -223,6 +223,11 @@ input.with-instructions {
   }
 }
 
+.checkbox-link {
+  @extend .pointer;
+  @extend .text-color-grey;
+}
+
 .user-list-item {
   @extend .large-margin-bottom;
 }
