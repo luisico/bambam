@@ -12,7 +12,7 @@ describe ProjectsUserController do
       before { sign_in @admin }
 
       context 'with valid parameters' do
-        it "should redirect to the updated show page" do
+        it "should be a success" do
           patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
           expect(response).to be_success
         end
