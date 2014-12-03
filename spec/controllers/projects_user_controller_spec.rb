@@ -33,6 +33,15 @@ describe ProjectsUserController do
           }.not_to change(@projects_user, :read_only)
         end
       end
+
+      context "with html response" do
+        it "raises an error" do
+          expect {
+            patch :update, id: @projects_user, projects_user: {read_only: true}
+          }.to raise_error
+        end
+      end
+    end
     end
   end
 end
