@@ -38,7 +38,7 @@ describe ProjectsUserController do
         it "raises an error" do
           expect {
             patch :update, id: @projects_user, projects_user: {read_only: true}
-          }.to raise_error
+          }.to raise_error ActionView::MissingTemplate
         end
       end
     end
@@ -54,9 +54,10 @@ describe ProjectsUserController do
     end
 
     context "as a visitor" do
-      it "should redirect to the sign in page" do
+      it "should return unauthorized" do
         patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
         expect(response).not_to be_success
+        expect(response.status).to be 401
       end
     end
   end
