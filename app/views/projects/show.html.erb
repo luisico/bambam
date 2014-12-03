@@ -12,15 +12,13 @@
 
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <% regular_users = @project.users.where( projects_users: { read_only: false }) %>
-          <h4 id="regular-users"><i></i>Users [<%= regular_users.count %>]</h4>
+          <h4 id="regular-users"><i></i>Users [<%= @regular_users.count %>]</h4>
           <div id="project-users-regular">
-            <%= render regular_users %>
+            <%= render partial: "projects/project_user", collection: @regular_users, as: :user %>
           </div>
-          <% regular_users = @project.users.where( projects_users: { read_only: true }) %>
-          <h4 id="read-only-users"><i></i>Read-Only Users [<%= regular_users.count %>]</h4>
+          <h4 id="read-only-users"><i></i>Read-Only Users [<%= @read_only_users.count %>]</h4>
           <div id="project-users-read-only">
-            <%= render @project.users.where( projects_users: { read_only: true }) %>
+            <%= render partial: "projects/project_user", collection: @read_only_users, as: :user %>
           </div>
         </div>
         <div class="small-12 medium-6 columns">

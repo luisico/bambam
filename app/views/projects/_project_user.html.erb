@@ -1,0 +1,34 @@
+<div class="user-list-item" id="user-<%= user.id %>">
+  <% if can? :manage, @project %>
+    <div class="clearfix">
+      <%= link_to user do %>
+        <%= image_tag avatar_url(user), class: "left margin-right" %>
+        <% if user == @project.owner %>
+          <%= user.handle %>
+          <i class="admin-icon small" title="owner"></i>
+        <% else %>
+          <%= user.handle %>
+        <% end %>
+        <%= render partial: "projects_user/form", locals: { project_user: @project.projects_users.select {|p_u| p_u.user_id == user.id} } %>
+      <% end %>
+    </div>
+  <% elsif can? :show, user %>
+    <%= link_to user do %>
+      <%= image_tag avatar_url(user) %>
+      <% if user == @project.owner %>
+        <%= user.handle %>
+        <i class="admin-icon small" title="owner"></i>
+      <% else %>
+        <%= user.handle %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= image_tag avatar_url(user) %>
+    <% if user == @project.owner %>
+      <%= user.handle %>
+      <i class="admin-icon small" title="owner"></i>
+    <% else %>
+      <%= user.handle %>
+    <% end %>
+  <% end %>
+</div>
