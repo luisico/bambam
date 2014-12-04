@@ -59,6 +59,12 @@ describe ProjectsUsersController do
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
+
+      it "should not change the project user's attributes" do
+        expect{
+          patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
+        }.not_to change(@projects_user, :read_only)
+      end
     end
   end
 end
