@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProjectsUserController do
+describe ProjectsUsersController do
   describe "Patch 'update'" do
     before do
       @admin = FactoryGirl.create(:admin)
@@ -17,7 +17,7 @@ describe ProjectsUserController do
           expect(response).to be_success
         end
 
-        it "should update the project_user" do
+        it "should update the projects user" do
           expect {
             patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
             @projects_user.reload
@@ -26,7 +26,7 @@ describe ProjectsUserController do
       end
 
       context "with invalid parameters" do
-        it "should not update the project_user" do
+        it "should not update the projects user" do
           expect {
             patch :update, id: @projects_user, projects_user: {read_only: "99999"}, format: 'js'
             @projects_user.reload

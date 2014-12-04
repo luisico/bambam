@@ -9,7 +9,7 @@
         <% else %>
           <%= user.handle %>
         <% end %>
-        <%= render partial: "projects_user/form", locals: { project_user: @project.projects_users.select {|p_u| p_u.user_id == user.id} } %>
+        <%= render partial: "projects_users/form", locals: { projects_user: @project.projects_users.select {|p_u| p_u.user_id == user.id} } %>
       <% end %>
     </div>
   <% elsif can? :show, user %>

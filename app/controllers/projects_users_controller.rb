@@ -1,4 +1,4 @@
-class ProjectsUserController < ApplicationController
+class ProjectsUsersController < ApplicationController
   before_filter :authenticate_user!
   authorize_resource
 
