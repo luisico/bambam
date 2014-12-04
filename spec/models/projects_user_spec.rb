@@ -9,6 +9,7 @@ describe ProjectsUser do
     it_behaves_like "timestampable table"
     it { should have_db_column(:user_id) }
     it { should have_db_column(:project_id) }
+    it { should have_db_column(:read_only) }
   end
 
   describe "user_id" do

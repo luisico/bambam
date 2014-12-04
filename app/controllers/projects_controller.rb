@@ -8,6 +8,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    @project = Project.includes(:projects_users, :users).find(params[:id])
+    @regular_users = @project.users.where( projects_users: { read_only: false })
+    @read_only_users = @project.users.where( projects_users: { read_only: true })
   end
 
   def new

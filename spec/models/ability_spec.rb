@@ -30,6 +30,10 @@ describe User do
       context "share_links" do
         it { should be_able_to(:manage, ShareLink) }
       end
+
+      context "projects_user" do
+        it { should be_able_to(:update, ProjectsUser)}
+      end
     end
 
     describe "as manager" do
@@ -62,6 +66,16 @@ describe User do
 
         it { should     be_able_to(:manage, FactoryGirl.create(:test_track, project: @project)) }
         it { should_not be_able_to(:manage, FactoryGirl.create(:test_track)) }
+      end
+
+      context "projects_user" do
+        before do
+          @project = FactoryGirl.create(:project, owner: @manager)
+          @other_project = FactoryGirl.create(:project)
+        end
+
+        it { should     be_able_to(:update, @project.projects_users.first) }
+        it { should_not be_able_to(:update, @other_project.projects_users.first) }
       end
     end
 
@@ -154,6 +168,10 @@ describe User do
         it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
 
         it { should_not be_able_to(:manage, @other_share_link) }
+      end
+
+      context "projects_user" do
+        it { should_not be_able_to(:update, ProjectsUser) }
       end
     end
   end

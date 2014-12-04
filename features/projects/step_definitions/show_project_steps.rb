@@ -2,6 +2,12 @@
 
 ### Given
 
+Given /^there is a read only user in that project$/ do
+  @projects_user = @project.projects_users.first
+  @projects_user.update_attributes(read_only: true)
+  expect(@projects_user.read_only).to eq true
+end
+
 ### When
 
 When /^I am on the project page$/ do
@@ -57,4 +63,55 @@ end
 
 Then /^I should be on the tracks page$/ do
   expect(current_path).to eq tracks_path
+end
+
+Then /^I should be able to designate a user read only$/ do
+  @projects_user = @project.projects_users.first
+  expect {
+    within("#edit_projects_user_#{@projects_user.id}") {
+    find('label', text: "set read-only").click
+    }
+    expect(page).to have_content "restore access"
+    @projects_user.reload
+  }.to change(@projects_user, :read_only)
+end
+
+Then /^that user should move to the read\-only list$/ do
+  user = User.find(@projects_user.user_id)
+  within("#project-users-regular") {
+    expect(page).not_to have_content user.handle
+  }
+  within("#project-users-read-only") {
+    expect(page).to have_content user.handle
+    expect(page).to have_css('label', text: 'restore access')
+  }
+end
+
+Then /^I should be able to remove a user from the read only list$/ do
+  expect {
+    within("#edit_projects_user_#{@projects_user.id}") {
+      find('label', text: "restore access").click
+    }
+    expect(page).not_to have_content "restore access"
+    @projects_user.reload
+  }.to change(@projects_user, :read_only)
+end
+
+Then /^that user should move to the regular user list$/ do
+  user = User.find(@projects_user.user_id)
+  within("#project-users-regular") {
+    expect(page).to have_content user.handle
+    expect(page).not_to have_css('label', text: 'restore access')
+  }
+  within("#project-users-read-only") {
+    expect(page).not_to have_content user.handle
+  }
+end
+
+Then /^the regular user counts should be (\d+)$/ do |n|
+  expect(find("#regular-users").text).to include n
+end
+
+Then /^the read only user count should be (\d+)$/ do |n|
+  expect(find("#read-only-users").text).to include n
 end

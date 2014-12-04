@@ -87,7 +87,12 @@ describe ProjectsController do
       end
 
       context "and project user" do
-        before { @project.users << @user }
+        before do
+          @project.users << @user
+          @regular_users = [@project.owner, @user]
+          @read_only_users = FactoryGirl.create_list(:user, 2, projects: [@project])
+          @read_only_users.each {|u| u.projects_users.first.update_attributes(read_only: true)}
+        end
 
         it "should be successful" do
           get :show, id: @project
@@ -98,6 +103,16 @@ describe ProjectsController do
         it "should return the project" do
           get :show, id: @project
           expect(assigns(:project)).to eq @project
+        end
+
+        it "should return the regular project users" do
+          get :show, id: @project
+          expect(assigns(:regular_users)).to eq @regular_users
+        end
+
+        it "should return the read-only project users" do
+          get :show, id: @project
+          expect(assigns(:read_only_users)).to eq @read_only_users
         end
       end
 

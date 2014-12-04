@@ -1,0 +1,9 @@
+<% if @projects_user.read_only %>
+  $('#user-<%= @projects_user.user_id %>').appendTo('#project-users-read-only');
+  $('#user-<%= @projects_user.user_id %>').find('label').text('restore access')
+  ProjectUserLists.updateCount();
+<% else %>
+  $('#user-<%= @projects_user.user_id %>').appendTo('#project-users-regular');
+  $('#user-<%= @projects_user.user_id %>').find('label').text('set read-only')
+  ProjectUserLists.updateCount();
+<% end %>
