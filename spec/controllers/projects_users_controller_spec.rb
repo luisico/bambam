@@ -50,6 +50,7 @@ describe ProjectsUsersController do
         patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
         expect(response).not_to be_success
         expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
       end
 
       it "should not update the projects user" do
