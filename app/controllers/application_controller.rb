@@ -7,7 +7,14 @@ class ApplicationController < ActionController::Base
 
   # Redirect cancan exceptions to tracks page and show a flash message
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to projects_path, alert: exception.message
+    respond_to do |format|
+      format.html {
+        redirect_to projects_path, alert: exception.message
+      }
+      format.js {
+        render json: {:status => :error, :message => "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, :status => 403
+      }
+    end
   end
 
   def after_sign_in_path_for(resource)

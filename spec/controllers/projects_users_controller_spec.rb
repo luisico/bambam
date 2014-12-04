@@ -46,9 +46,10 @@ describe ProjectsUsersController do
     context "as a regular user" do
       before { sign_in FactoryGirl.create(:user) }
 
-      it "should redirect to the projects index" do
+      it "should return forbidden" do
         patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
-        expect(response).to redirect_to(projects_path)
+        expect(response).not_to be_success
+        expect(response.status).to be 403
       end
 
       it "should not update the projects user" do
