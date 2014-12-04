@@ -23,6 +23,8 @@ Bambam::Application.routes.draw do
 
   resources :groups, except: :index
 
+  resources :datapaths, only: [:index]
+
   get 'search', to: 'search#search'
 
   get 'help', to: 'static_pages#help'

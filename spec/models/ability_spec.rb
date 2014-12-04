@@ -34,6 +34,10 @@ describe User do
       context "projects_user" do
         it { should be_able_to(:update, ProjectsUser)}
       end
+
+      context "datapaths" do
+        it { should be_able_to(:manage, Datapath) }
+      end
     end
 
     describe "as manager" do
