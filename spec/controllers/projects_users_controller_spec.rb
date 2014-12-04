@@ -46,10 +46,15 @@ describe ProjectsUsersController do
     context "as a regular user" do
       before { sign_in FactoryGirl.create(:user) }
 
-      it "should raise an error" do
+      it "should redirect to the projects index" do
+        patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
+        expect(response).to redirect_to(projects_path)
+      end
+
+      it "should not update the projects user" do
         expect{
           patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
-        }.to raise_error
+        }.not_to change(@projects_user, :read_only)
       end
     end
 
@@ -60,7 +65,7 @@ describe ProjectsUsersController do
         expect(response.status).to be 401
       end
 
-      it "should not change the project user's attributes" do
+      it "should not update the projects user" do
         expect{
           patch :update, id: @projects_user, projects_user: {read_only: true}, format: 'js'
         }.not_to change(@projects_user, :read_only)

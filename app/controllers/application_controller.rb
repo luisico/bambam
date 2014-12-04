@@ -7,11 +7,7 @@ class ApplicationController < ActionController::Base
 
   # Redirect cancan exceptions to tracks page and show a flash message
   rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.html {
-        redirect_to projects_path, alert: exception.message
-      }
-    end
+    redirect_to projects_path, alert: exception.message
   end
 
   def after_sign_in_path_for(resource)
