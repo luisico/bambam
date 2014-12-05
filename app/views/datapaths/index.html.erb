@@ -7,7 +7,9 @@
         <% if @datapaths.count > 0 %>
           <%= render @datapaths %>
         <% else %>
-          <li>There are currently no datapaths in the system</li>
+          <li id="no-datapaths">
+            There are currently no datapaths in the system
+          </li>
         <% end %>
       </ul>
 

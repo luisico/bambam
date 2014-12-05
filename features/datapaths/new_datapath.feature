@@ -17,3 +17,12 @@ Feature: Create a datapath
     And I am on the datapaths page
     When I create a new datapath with an invalid path
     Then the form should have the error "must exist in filesystem"
+
+  @javascript
+  Scenario: Admin creates a new datapath with managers
+    Given I am signed in as an admin
+    And there are 3 other managers in the system
+    And I am on the datapaths page
+    When I create a new datapath with managers
+    Then I should the new datapath in the datapath list
+    And I should see the datapaths users

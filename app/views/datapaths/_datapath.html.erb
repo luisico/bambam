@@ -1,1 +1,9 @@
-<li><%= datapath.path %></li>
+<li id='datapath-<%= datapath.id %>'><%= datapath.path %>
+  <% if datapath.users.any? %>
+    <ul>
+      <% datapath.users.each do |user| %>
+        <li><%= user.handle %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</li>

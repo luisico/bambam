@@ -14,6 +14,6 @@ class DatapathsController < ApplicationController
   private
 
   def datapath_params
-    params.require(:datapath).permit(:path)
+    params.require(:datapath).permit(:path, :user_ids => [])
   end
 end

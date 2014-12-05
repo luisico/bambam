@@ -9,6 +9,10 @@
     <%= f.text_field :path, placeholder: 'new datapath' %>
   </div>
 
+  <div class="field">
+    <%= f.collection_select :user_ids, User.with_role(:manager), :id, :handle_with_email, {}, {multiple:true, title: :email} %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Create datapath", class: 'button tiny radius' %>
   </div>
