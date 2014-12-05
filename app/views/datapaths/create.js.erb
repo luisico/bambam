@@ -1,0 +1,8 @@
+$('.new_datapath').remove();
+<% if @datapath.errors.any? %>
+  $('#datapath-form').append('<%= j render("form") %>');
+<% else %>
+  $('#datapath-list').append('<%= j render(@datapath) %>');
+  <% @datapath = Datapath.new %>
+  $('#datapath-form').append('<%= j render("form") %>');
+<% end %>

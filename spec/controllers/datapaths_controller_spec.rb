@@ -39,4 +39,67 @@ describe DatapathsController do
       end
     end
   end
+
+  describe "Post 'create'" do
+    before do
+      @datapath_attr = FactoryGirl.attributes_for(:test_datapath)
+      Pathname.new(@datapath_attr[:path]).mkpath unless File.exist?(@datapath_attr[:path])
+    end
+
+    context "as an admin" do
+      before { sign_in FactoryGirl.create(:admin) }
+
+      context "with valid parameters" do
+        it "should be a success" do
+          post :create, datapath: @datapath_attr, format: 'js'
+          expect(response).to be_success
+        end
+
+        it "should create a new datapath" do
+          expect{
+            post :create, datapath: @datapath_attr, format: 'js'
+          }.to change(Datapath, :count).by(1)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should not create a new datapath" do
+          expect{
+            post :create, datapath: @datapath_attr.merge(path: ""), format: 'js'
+          }.not_to change(Datapath, :count)
+        end
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        post :create, datapath: @datapath_attr, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not create a new datapath" do
+        expect{
+          post :create, datapath: @datapath_attr, format: 'js'
+        }.not_to change(Datapath, :count)
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized response" do
+        post :create, datapath: @datapath_attr, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+
+      it "should not create a new datapath" do
+        expect{
+          post :create, datapath: @datapath_attr, format: 'js'
+        }.not_to change(Datapath, :count)
+      end
+    end
+  end
 end

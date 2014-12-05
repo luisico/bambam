@@ -1,0 +1,15 @@
+<%= form_for @datapath, :url => datapaths_path, remote: true do |f| %>
+  <% if @datapath.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@datapath.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :path, placeholder: 'new datapath' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Create datapath", class: 'button tiny radius' %>
+  </div>
+<% end %>
