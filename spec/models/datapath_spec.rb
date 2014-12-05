@@ -42,4 +42,16 @@ describe Datapath do
       end
     end
   end
+
+  describe "datapaths_users" do
+    it { should have_many :datapaths_users }
+    it { should respond_to :datapaths_users }
+    it { should respond_to :datapaths_user_ids }
+  end
+
+  describe "users" do
+    it { should have_many :users }
+    it { should respond_to :users }
+    it { should respond_to :user_ids }
+  end
 end
