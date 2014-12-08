@@ -15,7 +15,7 @@ Feature: Create a project
   @javascript
   Scenario: Manager creates a new project
     Given I am signed in as a manager
-    And there is another user in the system
+    And there is 1 other user in the system
     And I am on the new project page
 
     When I create a new project with a user and a track
@@ -27,7 +27,7 @@ Feature: Create a project
 
   Scenario: Manager cannot create a project without a name
     Given I am signed in as a manager
-    And there is another user in the system
+    And there is 1 other user in the system
     And I am on the new project page
     When I create a project without a name
     Then the "Project name" field should have the error "can't be blank"
@@ -46,7 +46,7 @@ Feature: Create a project
   @javascript
   Scenario: Manager can add multiple tracks to a project
     Given I am signed in as a manager
-    And there is another user in the system
+    And there is 1 other user in the system
     And I am on the new project page
     When I create a project with multiple tracks
     Then I should be on the project show page
@@ -61,7 +61,7 @@ Feature: Create a project
   @javascript
   Scenario: Manager can delete a track before creating project
     Given I am signed in as a manager
-    And there is another user in the system
+    And there is 1 other user in the system
     When I am on the new project page
     And I delete a track before creating project
     Then I should not create a new track

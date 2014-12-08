@@ -39,7 +39,7 @@ Feature: Show a user profile
 
   Scenario Outline: Admin/manager can access the user show page from the users page
     Given I am signed in as an <role>
-    And there is another user in the system
+    And there is 1 other user in the system
     And I am on the users page
     When I click on the user handle
     Then I should be on the account profile page
