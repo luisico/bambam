@@ -47,12 +47,13 @@ Given /^there is( not)? a users link in the navigation bar$/ do |negate|
   end
 end
 
-Given /^there is another user in the system$/ do
-  @user = FactoryGirl.create(:user)
-end
+Given /^there (is|are) (\d+|a) other users? in the system$/ do |foo, n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
-Given /^there are (\d+) other users in the system$/ do |number|
-  @users = FactoryGirl.create_list(:user, 3)
+  expect {
+    @users = FactoryGirl.create_list(:user, n)
+  }.to change(User, :count).by(n)
+  @user = @users.last
 end
 
 ### When
