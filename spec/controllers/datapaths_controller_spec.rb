@@ -102,4 +102,71 @@ describe DatapathsController do
       end
     end
   end
+
+  describe "Delete 'destroy'" do
+    before { @datapath = FactoryGirl.create(:test_datapath) }
+
+    context "as an admin" do
+      before { sign_in @admin}
+
+      it "should be a success" do
+        delete :destroy, id: @datapath, format: 'js'
+        expect(response).to be_success
+      end
+
+      it "should delete the share link" do
+        expect{
+          delete :destroy, id: @datapath, format: 'js'
+        }.to change(Datapath, :count).by(-1)
+        expect(assigns(:datapath)).to eq @datapath
+      end
+    end
+
+    context "as an admin" do
+      before { sign_in @admin}
+
+      it "should be a success" do
+        delete :destroy, id: @datapath, format: 'js'
+        expect(response).to be_success
+      end
+
+      it "should delete the share link" do
+        expect{
+          delete :destroy, id: @datapath, format: 'js'
+        }.to change(Datapath, :count).by(-1)
+        expect(assigns(:datapath)).to eq @datapath
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        delete :destroy, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not delete the datapath" do
+        expect{
+          delete :destroy, id: @datapath, format: 'js'
+        }.not_to change(Datapath, :count)
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        delete :destroy, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+
+      it "should not delete the datapath" do
+        expect{
+          delete :destroy, id: @datapath, format: 'js'
+        }.not_to change(Datapath, :count)
+      end
+    end
+  end
 end

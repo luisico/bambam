@@ -54,4 +54,24 @@ describe Datapath do
     it { should respond_to :users }
     it { should respond_to :user_ids }
   end
+
+  describe "when datapath destroyed" do
+    before do
+      @datapath.users << FactoryGirl.create(:manager)
+      @datapath.save!
+    end
+
+    it "should destroy the datapath" do
+      expect { @datapath.destroy }.to change(Datapath, :count).by(-1)
+      expect { Datapath.find(@datapath.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should destroy associated memberships" do
+      expect { @datapath.destroy }.to change(DatapathsUser, :count).by(-1)
+    end
+
+    it "should not destroy the user" do
+      expect { @datapath.destroy }.not_to change(User, :count)
+    end
+  end
 end

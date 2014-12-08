@@ -1,0 +1,4 @@
+$('#datapath-<%= @datapath.id %>').remove();
+if ($('#datapath-list').find('.datapath').length == 0) {
+  $('#datapath-list').append('<li id="no-datapaths">There are currently no datapaths in the system</li>');
+}

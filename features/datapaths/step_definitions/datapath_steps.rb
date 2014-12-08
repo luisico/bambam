@@ -2,7 +2,7 @@
 
 ### Given
 
-Given /^there (is|are) (\d+) datapaths? in the system$/ do |foo, n|
+Given /^there (is|are) (\d+|a) datapaths? in the system$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {

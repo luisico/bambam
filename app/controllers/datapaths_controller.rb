@@ -11,6 +11,10 @@ class DatapathsController < ApplicationController
     @datapath.save
   end
 
+  def destroy
+    @datapath = Datapath.destroy(params[:id])
+  end
+
   private
 
   def datapath_params
