@@ -6,6 +6,9 @@ class DatapathsController < ApplicationController
     @datapath = Datapath.new
   end
 
+  def new
+  end
+
   def create
     @datapath = Datapath.new(datapath_params)
     @datapath.save

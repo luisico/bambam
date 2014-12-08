@@ -1,5 +1,8 @@
 jQuery ->
-  DatapathUsers.applySelect2()
+  $('#datapaths-index').on 'click', '.datapath-cancel', (event) ->
+    $('#new-datapath-link').show()
+    $(this).closest('form').remove()
+    event.preventDefault()
 
 class @DatapathUsers
   @applySelect2: ->

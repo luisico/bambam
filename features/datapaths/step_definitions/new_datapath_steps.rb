@@ -5,11 +5,11 @@ def build_datapath
   Pathname.new(@datapath_attrs[:path]).mkpath unless File.exist?(@datapath_attrs[:path])
 end
 
-def fill_data_path_form(datapath=nil)
-  datapath ||= @datapath_attrs
-  fill_in 'new datapath', with: datapath[:path]
+def create_datapath(opts={})
+  click_link "Create new datapath"
+  fill_in 'new datapath', with: @datapath_attrs[:path]
   yield if block_given?
-  click_button 'Create datapath'
+  opts[:cancel] ? click_link('Cancel') : click_button('Create datapath')
   sleep 1
 end
 
@@ -20,20 +20,21 @@ end
 When /^I create a new datapath$/ do
   expect {
     build_datapath
-    fill_data_path_form
+    create_datapath
   }.to change(Datapath, :count).by(1)
 end
 
 When /^I create a new datapath with an invalid path$/ do
    expect {
-    fill_data_path_form({path:"my/invalid/datapath" })
+    @datapath_attrs = {path:"my/invalid/datapath" }
+    create_datapath
   }.not_to change(Datapath, :count)
 end
 
 When /^I create a new datapath with managers$/ do
   expect {
     build_datapath
-    fill_data_path_form do
+    create_datapath do
       fill_in_select2("datapath_user_ids", with: @manager.handle)
     end
   }.to change(Datapath, :count).by(1)
@@ -59,4 +60,12 @@ Then /^I should see the datapaths users$/ do
   within("#datapath-#{Datapath.last.id}"){
     expect(page).to have_content @manager.handle
   }
+end
+
+Then /^I should be able to cancel the creation of a datapath$/ do
+  expect{
+    build_datapath
+    create_datapath(cancel: true)
+  }.not_to change(Datapath, :count)
+  expect(page).not_to have_css('.new_datapath')
 end

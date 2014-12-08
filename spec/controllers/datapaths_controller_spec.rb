@@ -40,6 +40,48 @@ describe DatapathsController do
     end
   end
 
+  describe "GET 'new'" do
+    context "as an admin" do
+      before { sign_in @admin }
+
+      it "should be successful" do
+        get :new, format: 'js'
+        expect(response).to be_success
+        expect(response).to render_template :new
+      end
+
+      it "should build a new share link" do
+        get :new, format: 'js'
+        expect(assigns(:datapath)).to be_new_record
+      end
+
+      it "should not respond html" do
+        expect {
+          get :new, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        get :new, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        get :new, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+    end
+  end
+
   describe "Post 'create'" do
     before do
       @datapath_attr = FactoryGirl.attributes_for(:test_datapath)
