@@ -2,11 +2,11 @@
 
 ### Given
 
-Given /^I am on the datapaths page$/ do
+### When
+
+When /^I visit the datapaths page$/ do
   visit datapaths_path
 end
-
-### When
 
 ### Then
 
@@ -26,4 +26,8 @@ Then /^I should( not)? see a message that no datapaths exist$/ do |negate|
       expect(page).to have_content "no datapaths in the system"
     }
   end
+end
+
+Then /^I should be on the datapaths page$/ do
+  expect(current_path).to eq datapaths_path
 end

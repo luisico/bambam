@@ -39,14 +39,6 @@ Given /^I am on the users page$/ do
   expect(page).to have_content('Current users')
 end
 
-Given /^there is( not)? a users link in the navigation bar$/ do |negate|
-  if negate
-    expect(page).not_to have_css('li a', text: 'Users')
-  else
-    expect(page).to have_css('li a', text: 'Users')
-  end
-end
-
 Given /^there (is|are) (\d+|a) other users? in the system$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
