@@ -9,7 +9,7 @@ def create_datapath(opts={})
   click_link "Create new datapath"
   fill_in 'new datapath', with: @datapath_attrs[:path]
   yield if block_given?
-  opts[:cancel] ? click_link('Cancel') : click_button('Create datapath')
+  opts[:cancel] ? click_link('Cancel') : click_button('Create Datapath')
   sleep 1
 end
 

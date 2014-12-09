@@ -82,6 +82,50 @@ describe DatapathsController do
     end
   end
 
+  describe "GET 'edit'" do
+    before { @datapath = FactoryGirl.create(:test_datapath) }
+
+    context "as an admin" do
+      before { sign_in @admin }
+
+      it "should be successful" do
+        get :edit, id: @datapath, format: 'js'
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it "should return the datapath" do
+        get :edit, id: @datapath, format: 'js'
+        expect(assigns(:datapath)).to eq @datapath
+      end
+
+      it "should not respond html" do
+        expect {
+          get :edit, id: @datapath, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        get :edit, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        get :edit, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+    end
+  end
+
   describe "Post 'create'" do
     before do
       @datapath_attr = FactoryGirl.attributes_for(:test_datapath)
@@ -141,6 +185,85 @@ describe DatapathsController do
         expect{
           post :create, datapath: @datapath_attr, format: 'js'
         }.not_to change(Datapath, :count)
+      end
+    end
+  end
+
+  describe "Patch 'update'" do
+    before do
+     @datapath = FactoryGirl.create(:test_datapath)
+     @new_datapath_attrs = FactoryGirl.attributes_for(:test_datapath)
+     Pathname.new(@new_datapath_attrs[:path]).mkpath unless File.exist?(@new_datapath_attrs[:path])
+    end
+
+    context "as an admin" do
+      before { sign_in @admin }
+
+      context 'with valid parameters' do
+        it "should be a success" do
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+          expect(response).to be_success
+        end
+
+        it "should update the share link" do
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+          @datapath.reload
+          expect(assigns(:datapath)).to eq @datapath
+          expect(@datapath.path).to eq @new_datapath_attrs[:path]
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should render the update template" do
+          patch :update, id: @datapath, datapath: {path: "my_invalid_path"}, format: 'js'
+          expect(response).to be_success
+          expect(response).to render_template :update
+        end
+
+        it "should not change the datapath's attributes" do
+          expect {
+            patch :update, id: @datapath, datapath: {path: "my_invalid_path"}, format: 'js'
+            @datapath.reload
+          }.not_to change(@datapath, :path)
+          expect(assigns(:datapath)).to eq @datapath
+        end
+      end
+
+      it "should not respond html" do
+        expect {
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not update the datapath" do
+        expect{
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        }.not_to change(@datapath, :path)
+      end
+    end
+
+    context "as a visitor" do
+      it "should return unauthorized" do
+        patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+
+      it "should not change the share link's attributes" do
+        expect{
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        }.not_to change(@datapath, :path)
       end
     end
   end

@@ -9,9 +9,16 @@ class DatapathsController < ApplicationController
   def new
   end
 
+  def edit
+  end
+
   def create
     @datapath = Datapath.new(datapath_params)
     @datapath.save
+  end
+
+  def update
+    @datapath.update(datapath_params)
   end
 
   def destroy

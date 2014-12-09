@@ -1,6 +1,12 @@
 jQuery ->
-  $('#datapaths-index').on 'click', '.datapath-cancel', (event) ->
+  $('#new-datapath').on 'click', '.datapath-cancel', (event) ->
     $('#new-datapath-link').show()
+    $(this).closest('form').remove()
+    event.preventDefault()
+
+  $('#datapath-list').on 'click', '.datapath-cancel', (event) ->
+    $(this).closest('form').siblings().find('.edit-datapath-link').show()
+    $(this).closest('form').siblings().find('.datapath-users').show()
     $(this).closest('form').remove()
     event.preventDefault()
 

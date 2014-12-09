@@ -4,8 +4,8 @@ $('.new_datapath').remove();
   DatapathUsers.applySelect2();
 <% else %>
   $('#datapath-list').append('<%= j render(@datapath) %>');
+  $('#new-datapath-link').show();
   <% @datapath = Datapath.new %>
-  $('#new-datapath').append('<%= j render("form") %>');
   DatapathUsers.applySelect2();
   $('#no-datapaths').remove();
 <% end %>

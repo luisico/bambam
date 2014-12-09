@@ -1,0 +1,7 @@
+<% if @datapath.errors.any? %>
+  $('#edit_datapath_<%= @datapath.id %>').remove();
+  $('#datapath-<%= @datapath.id %>').append('<%= j render("form") %>');
+<% else %>
+  $('#edit_datapath_<%= @datapath.id %>').remove();
+  $('#datapath-<%= @datapath.id %>').replaceWith('<%= j render(@datapath) %>' )
+<% end %>

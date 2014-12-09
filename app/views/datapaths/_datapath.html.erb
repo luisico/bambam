@@ -2,9 +2,10 @@
   <ul class="no-bullet">
     <li id='datapath-path-<%= datapath.id %>'>
       <%= datapath.path %>
+      <%= link_to "edit", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-datapath-link margin-left" %>
       <%= link_to "", datapath, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
       <% if datapath.users.any? %>
-        <ul>
+        <ul class="datapath-users" id="datapath-users-<%= datapath.id %>">
           <% datapath.users.each do |user| %>
             <li><%= user.handle %></li>
           <% end %>

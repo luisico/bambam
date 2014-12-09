@@ -23,7 +23,7 @@ Bambam::Application.routes.draw do
 
   resources :groups, except: :index
 
-  resources :datapaths, except: [:show, :edit]
+  resources :datapaths, except: :show
 
   get 'search', to: 'search#search'
 
