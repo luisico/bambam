@@ -287,22 +287,6 @@ describe DatapathsController do
       end
     end
 
-    context "as an admin" do
-      before { sign_in @admin}
-
-      it "should be a success" do
-        delete :destroy, id: @datapath, format: 'js'
-        expect(response).to be_success
-      end
-
-      it "should delete the share link" do
-        expect{
-          delete :destroy, id: @datapath, format: 'js'
-        }.to change(Datapath, :count).by(-1)
-        expect(assigns(:datapath)).to eq @datapath
-      end
-    end
-
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
