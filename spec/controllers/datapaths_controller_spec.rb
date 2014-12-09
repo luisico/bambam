@@ -21,6 +21,16 @@ describe DatapathsController do
       end
     end
 
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
+
+      it "should be denied" do
+        get :index
+        expect(response).not_to be_success
+        expect(response).to redirect_to projects_path
+      end
+    end
+
     context "as regular user" do
       before { sign_in FactoryGirl.create(:user) }
 
@@ -59,6 +69,17 @@ describe DatapathsController do
         expect {
           get :new, format: 'html'
         }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
+
+      it "should return forbidden" do
+        get :new, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
       end
     end
 
@@ -103,6 +124,17 @@ describe DatapathsController do
         expect {
           get :edit, id: @datapath, format: 'html'
         }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
+
+      it "should return forbidden" do
+        get :edit, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
       end
     end
 
@@ -159,6 +191,23 @@ describe DatapathsController do
 
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden" do
+        post :create, datapath: @datapath_attr, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not create a new datapath" do
+        expect{
+          post :create, datapath: @datapath_attr, format: 'js'
+        }.not_to change(Datapath, :count)
+      end
+    end
+
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
 
       it "should return forbidden" do
         post :create, datapath: @datapath_attr, format: 'js'
@@ -236,6 +285,23 @@ describe DatapathsController do
       end
     end
 
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
+
+      it "should return forbidden" do
+        patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not update the datapath" do
+        expect{
+          patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
+        }.not_to change(@datapath, :path)
+      end
+    end
+
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
@@ -284,6 +350,23 @@ describe DatapathsController do
           delete :destroy, id: @datapath, format: 'js'
         }.to change(Datapath, :count).by(-1)
         expect(assigns(:datapath)).to eq @datapath
+      end
+    end
+
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
+
+      it "should return forbidden" do
+        delete :destroy, id: @datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+        expect(response).not_to redirect_to(projects_path)
+      end
+
+      it "should not delete the datapath" do
+        expect{
+          delete :destroy, id: @datapath, format: 'js'
+        }.not_to change(Datapath, :count)
       end
     end
 
