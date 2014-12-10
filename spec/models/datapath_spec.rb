@@ -37,7 +37,7 @@ describe Datapath do
 
       context "should not be valid" do
         it "when it does not exist" do
-          Pathname.new(TEST_BASE).rmtree if Pathname.new(TEST_BASE).exist?
+          Pathname.new(@datapath.path).rmtree if Pathname.new(@datapath.path).exist?
           expect(@datapath).not_to be_valid
         end
 
