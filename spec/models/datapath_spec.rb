@@ -40,6 +40,12 @@ describe Datapath do
           FileUtils.rmtree @datapath.path
           expect(@datapath).not_to be_valid
         end
+
+        it "when it exists as a file" do
+          track = FactoryGirl.create(:test_track)
+          @datapath.path = track.path
+          expect(@datapath).not_to be_valid
+        end
       end
     end
   end
