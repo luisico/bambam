@@ -60,7 +60,7 @@ describe DatapathsController do
         expect(response).to render_template :new
       end
 
-      it "should build a new share link" do
+      it "should build a new datapath" do
         get :new, format: 'js'
         expect(assigns(:datapath)).to be_new_record
       end
@@ -254,7 +254,7 @@ describe DatapathsController do
           expect(response).to be_success
         end
 
-        it "should update the share link" do
+        it "should update the datapath" do
           patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
           @datapath.reload
           expect(assigns(:datapath)).to eq @datapath
@@ -326,7 +326,7 @@ describe DatapathsController do
         expect(response.status).to be 401
       end
 
-      it "should not change the share link's attributes" do
+      it "should not change the datapath's attributes" do
         expect{
           patch :update, id: @datapath, datapath: @new_datapath_attrs, format: 'js'
         }.not_to change(@datapath, :path)
@@ -345,7 +345,7 @@ describe DatapathsController do
         expect(response).to be_success
       end
 
-      it "should delete the share link" do
+      it "should delete the datapath" do
         expect{
           delete :destroy, id: @datapath, format: 'js'
         }.to change(Datapath, :count).by(-1)
