@@ -80,5 +80,10 @@ describe Datapath do
     it "should not destroy the user" do
       expect { @datapath.destroy }.not_to change(User, :count)
     end
+
+    it "should not remove the actual directory" do
+      @datapath.destroy
+      expect(File.directory?(@datapath.path)).to be true
+    end
   end
 end
