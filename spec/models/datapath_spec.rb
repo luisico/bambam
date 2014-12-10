@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-TEST_BASE = File.join Rails.root, 'tmp', 'tests'
-
 describe Datapath do
   before { @datapath = FactoryGirl.build(:test_datapath) }
   after { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
