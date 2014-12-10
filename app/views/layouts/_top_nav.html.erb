@@ -17,6 +17,9 @@
       <% if can? :invite, User %>
         <li><%= link_to 'Users', users_url %></li>
       <% end %>
+      <% if can? :manage, Datapath %>
+        <li><%= link_to 'Datapaths', datapaths_url %></li>
+      <% end %>
       <li><%= link_to 'Projects', projects_path %></li>
       <!-- Search bar -->
       <% if user_signed_in? %>

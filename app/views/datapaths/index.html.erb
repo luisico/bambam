@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="small-12 medium-8 medium-centered columns">
+    <div class="panel" id="datapaths-index">
+
+      <h3>Datapaths</h3>
+
+      <p id="new-datapath">
+        <%= link_to "Create new datapath", new_datapath_path, id: "new-datapath-link", class: "big-margin-right", remote: true %>
+      </p>
+
+      <ul class="no-bullet" id="datapath-list">
+        <% if @datapaths.count > 0 %>
+          <%= render @datapaths %>
+        <% else %>
+          <li id="no-datapaths">
+            There are currently no datapaths in the system
+          </li>
+        <% end %>
+      </ul>
+
+    </div>
+  </div>
+</div>

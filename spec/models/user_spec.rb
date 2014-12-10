@@ -224,6 +224,18 @@ describe User do
       it { should respond_to :tracks }
       it { should respond_to :track_ids }
     end
+
+    context "datapaths" do
+      it { should have_many :datapaths }
+      it { should respond_to :datapaths }
+      it { should respond_to :datapath_ids }
+    end
+
+    context "datapaths_users" do
+      it { should have_many :datapaths_users }
+      it { should respond_to :datapaths_users }
+      it { should respond_to :datapaths_user_ids }
+    end
   end
 
   describe "when user destroyed" do

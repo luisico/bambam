@@ -7,6 +7,9 @@ require 'rspec/autorun'
 # Email spec
 require 'email_spec'
 
+# Define file path for path related specs
+TEST_BASE = File.join Rails.root, 'tmp', 'tests'
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }

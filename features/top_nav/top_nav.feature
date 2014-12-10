@@ -23,3 +23,15 @@ Feature: Top navigation
     Given I am signed in
     When I click on "help" in the top nav
     Then I should be on the help page
+
+  Scenario: Admin can access the datapaths page
+    Given I am signed in as an admin
+    When I click on "Datapaths" in the top nav
+    Then I should be on the datapaths page
+
+  Scenario: User cannot access the datapaths page
+    Given I am signed in
+    And there is not a "Datapaths" link in the navigation bar
+    When I visit the datapaths page
+    Then I should be denied access
+    And I should be redirected to the projects page

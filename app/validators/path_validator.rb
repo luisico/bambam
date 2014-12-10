@@ -22,7 +22,10 @@ module ActiveModel
         end
 
         if File.file?(value)
-          if !allow_empty? && File.zero?(value)
+          if !allow_file?
+            record.errors.add(attr_name, :file)
+            return
+          elsif !allow_empty? && File.zero?(value)
             record.errors.add(attr_name, :empty)
           end
 
@@ -49,6 +52,10 @@ module ActiveModel
 
       def allow_directory?
         options.include?(:allow_directory) ? options[:allow_directory] : true
+      end
+
+      def allow_file?
+        options.include?(:allow_file) ? options[:allow_file] : true
       end
 
       def allowed_paths

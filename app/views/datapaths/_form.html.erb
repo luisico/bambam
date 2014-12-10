@@ -1,0 +1,20 @@
+<%= form_for @datapath, remote: true do |f| %>
+  <% if @datapath.errors.any? %>
+    <div class="field">
+      <p style="color:#FF3333">Please check the highlighted <%= "error".pluralize(@datapath.errors.count) %> below:</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :path, placeholder: 'new datapath' %>
+  </div>
+
+  <div class="field">
+    <%= f.collection_select :user_ids, User.with_role(:manager), :id, :handle_with_email, {}, {multiple:true, title: :email} %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius' %>
+    <%= link_to "Cancel", "#", class: 'button tiny radius datapath-cancel no-margin-bottom' %>
+  </div>
+<% end %>

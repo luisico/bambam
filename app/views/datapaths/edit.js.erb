@@ -1,0 +1,4 @@
+$('#edit-datapath-<%= @datapath.id %>').hide();
+$('#datapath-users-<%= @datapath.id %>').hide();
+$('#datapath-<%= @datapath.id %>').append('<%= j render("form") %>');
+DatapathUsers.applySelect2();

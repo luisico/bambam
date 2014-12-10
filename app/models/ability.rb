@@ -14,6 +14,7 @@ class Ability
       can :manage, Project
       can :manage, ShareLink
       can :update, ProjectsUser
+      can :manage, Datapath
     else
 
       if user.has_role? :manager

@@ -2,6 +2,14 @@
 
 ### Given
 
+Given /^there is( not)? a "(.*?)" link in the navigation bar$/ do |negate, link_text|
+  if negate
+    expect(page).not_to have_css('li a', text: link_text)
+  else
+    expect(page).to have_css('li a', text: link_text)
+  end
+end
+
 ### When
 
 When /^I click on "(.*?)" in the top nav$/ do |link|

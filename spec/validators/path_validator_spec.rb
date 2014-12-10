@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-TEST_BASE = File.join Rails.root, 'tmp', 'tests'
-
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
   dirname = pathname.dirname
@@ -280,6 +278,77 @@ describe ActiveModel::Validations::PathValidator do
             subject.valid?
           }.to change(subject.errors, :size).by(1)
           expect(subject.errors[:path]).to include I18n.t('errors.messages.directory')
+        end
+      end
+    end
+  end
+
+  describe "option :allow_file" do
+    context "'true'" do
+      before(:all) do
+        class Validatable < ValidatableA
+          validates_path_of :path, allow_file: true
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
+
+      it "should be valid as a file" do
+        with_file(subject.path) { expect(subject).to be_valid }
+      end
+
+      context "when empty" do
+        it "should not be valid" do
+          with_empty_file(subject.path) { expect(subject).not_to be_valid }
+        end
+
+        it "should add :empty translation to errors" do
+          with_empty_file(subject.path) do
+            expect{
+              subject.valid?
+            }.to change(subject.errors, :size).by(1)
+            expect(subject.errors[:path]).to include I18n.t('errors.messages.empty')
+          end
+        end
+      end
+    end
+
+    context "'false'" do
+      before(:all) do
+        class Validatable < ValidatableA
+          validates_path_of :path, allow_file: false
+        end
+      end
+      after(:all) { Object.send(:remove_const, :Validatable) }
+
+      before { subject.path = File.join TEST_BASE, 'dir1', 'file1' }
+
+      it "should not be valid as a file" do
+        with_file(subject.path) { expect(subject).not_to be_valid }
+      end
+
+      it "should add :file translation to errors" do
+        with_file(subject.path) do
+          expect{
+            subject.valid?
+          }.to change(subject.errors, :size).by(1)
+          expect(subject.errors[:path]).to include I18n.t('errors.messages.file')
+        end
+      end
+
+      context "when empty" do
+        it "should not be valid" do
+          with_empty_file(subject.path) { expect(subject).not_to be_valid }
+        end
+
+        it "should add :file translation to errors" do
+          with_empty_file(subject.path) do
+            expect{
+              subject.valid?
+            }.to change(subject.errors, :size).by(1)
+            expect(subject.errors[:path]).to include I18n.t('errors.messages.file')
+          end
         end
       end
     end

@@ -34,6 +34,10 @@ describe User do
       context "projects_user" do
         it { should be_able_to(:update, ProjectsUser)}
       end
+
+      context "datapaths" do
+        it { should be_able_to(:manage, Datapath) }
+      end
     end
 
     describe "as manager" do
@@ -76,6 +80,10 @@ describe User do
 
         it { should     be_able_to(:update, @project.projects_users.first) }
         it { should_not be_able_to(:update, @other_project.projects_users.first) }
+      end
+
+      context "datapaths" do
+        it { should_not be_able_to(:manage, Datapath) }
       end
     end
 
@@ -172,6 +180,10 @@ describe User do
 
       context "projects_user" do
         it { should_not be_able_to(:update, ProjectsUser) }
+      end
+
+      context "datapaths" do
+        it { should_not be_able_to(:manage, Datapath) }
       end
     end
   end

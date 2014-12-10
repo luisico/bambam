@@ -5,8 +5,7 @@ Feature: List of users
 
   Scenario: Users index page
     Given I am signed in as an manager
-    And there is a users link in the navigation bar
-    When I visit the users page
+    When I click on "Users" in the top nav
     Then I should see a list of users
     And I should see their avatars
     And my manager email should not have outstanding invite icon
@@ -44,7 +43,7 @@ Feature: List of users
 
   Scenario: User cannot access the users page from navigation bar
     Given I am signed in
-    And there is not a users link in the navigation bar
+    And there is not a "Users" link in the navigation bar
     When I visit the users page
     Then I should be denied access
     And I should be redirected to the projects page
