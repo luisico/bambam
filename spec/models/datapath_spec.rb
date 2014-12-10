@@ -1,7 +1,10 @@
 require 'spec_helper'
 
+TEST_BASE = File.join Rails.root, 'tmp', 'tests'
+
 describe Datapath do
   before { @datapath = FactoryGirl.build(:test_datapath) }
+  after { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 
   subject { @datapath }
 
@@ -15,8 +18,6 @@ describe Datapath do
     it { should validate_uniqueness_of(:path) }
 
     context "is validated" do
-      after { FileUtils.rmtree(@datapath.path) if File.exist?(@datapath.path) }
-
       it "should be valid when it exists as an empty directory" do
         expect(@datapath).to be_valid
       end
@@ -29,15 +30,14 @@ describe Datapath do
       end
 
       it "stips leading and trailing whitespace from path" do
-        datapath = FactoryGirl.build(:test_datapath, path: File.join('tmp', 'mydatapath'))
-        datapath.path = File.join(' tmp', 'mydatapath ')
+        datapath = FactoryGirl.build(:test_datapath, path: File.join('tmp', 'tests', 'mydatapath'))
+        datapath.path = File.join(' tmp', 'tests', 'mydatapath ')
         expect(datapath).to be_valid
-        FileUtils.rmtree datapath.path
       end
 
       context "should not be valid" do
         it "when it does not exist" do
-          FileUtils.rmtree @datapath.path
+          Pathname.new(TEST_BASE).rmtree if Pathname.new(TEST_BASE).exist?
           expect(@datapath).not_to be_valid
         end
 
