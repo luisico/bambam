@@ -7,11 +7,12 @@ describe Datapath do
 
   describe "database fields" do
     it { should have_db_column(:path).with_options(null: false) }
-    it { should have_db_index(:path).unique(false) }
+    it { should have_db_index(:path).unique(true) }
   end
 
   describe "path" do
     it { should respond_to :path }
+    it { should validate_uniqueness_of(:path) }
 
     context "is validated" do
       after { FileUtils.rmtree(@datapath.path) if File.exist?(@datapath.path) }

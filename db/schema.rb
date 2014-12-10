@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20141205193039) do
     t.datetime "updated_at"
   end
 
-  add_index "datapaths", ["path"], name: "index_datapaths_on_path", using: :btree
+  add_index "datapaths", ["path"], name: "index_datapaths_on_path", unique: true, using: :btree
 
   create_table "datapaths_users", force: true do |t|
     t.integer  "user_id"

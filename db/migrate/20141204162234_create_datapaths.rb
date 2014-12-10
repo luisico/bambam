@@ -5,6 +5,6 @@ class CreateDatapaths < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :datapaths, :path
+    add_index :datapaths, :path, unique: true
   end
 end
