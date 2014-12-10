@@ -9,6 +9,10 @@ users << FactoryGirl.create(:user, :unnamed)
 FactoryGirl.create(:group, owner: manager1, members: [manager2, users[0], users[1]])
 FactoryGirl.create(:group, owner: manager2, members: [users[2], users[3]])
 
+# Datapaths
+FactoryGirl.create_list(:datapath, 3, users: [manager1, manager2])
+FactoryGirl.create(:datapath)
+
 # Projects & projects_users
 project1 = FactoryGirl.create(:project, owner: manager1, users: [manager2, users[0], users[1]])
 project2 = FactoryGirl.create(:project, owner: manager2, users: [users[2], users[3]])
