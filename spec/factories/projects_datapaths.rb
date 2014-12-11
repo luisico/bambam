@@ -1,0 +1,17 @@
+# Read about factories at https://github.com/thoughtbot/factory_girl
+
+FactoryGirl.define do
+  factory :projects_datapath do
+    project
+    datapath
+    sequence(:sub_directory) {|n| File.join("dir#{n}", "dir#{n+1}") }
+    sequence(:name) {|n| "Projectsdatapath#{n}"}
+
+    after(:build) do |projects_datapath|
+      full_path = File.join projects_datapath.datapath.path, projects_datapath.sub_directory
+      unless File.exist?(full_path)
+        Pathname.new(full_path).mkpath
+      end
+    end
+  end
+end

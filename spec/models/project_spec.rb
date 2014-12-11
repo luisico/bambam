@@ -33,6 +33,18 @@ describe Project do
     it { should respond_to :user_ids }
   end
 
+  describe "projects_datapaths" do
+    it { should have_many :projects_datapaths }
+    it { should respond_to :projects_datapaths }
+    it { should respond_to :projects_datapath_ids }
+  end
+
+  describe "datapaths" do
+    it { should have_many :datapaths }
+    it { should respond_to :datapaths }
+    it { should respond_to :datapath_ids }
+  end
+
   describe "tracks" do
     it { should have_many :tracks }
     it { should respond_to :tracks }

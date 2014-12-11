@@ -60,6 +60,18 @@ describe Datapath do
     it { should respond_to :user_ids }
   end
 
+  describe "projects_datapaths" do
+    it { should have_many :projects_datapaths }
+    it { should respond_to :projects_datapaths }
+    it { should respond_to :projects_datapath_ids }
+  end
+
+  describe "projects" do
+    it { should have_many :projects }
+    it { should respond_to :projects }
+    it { should respond_to :project_ids }
+  end
+
   describe "when datapath destroyed" do
     before do
       @datapath.users << FactoryGirl.create(:manager)
