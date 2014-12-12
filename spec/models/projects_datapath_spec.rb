@@ -38,4 +38,22 @@ describe ProjectsDatapath do
     it { should respond_to :tracks }
     it { should respond_to :track_ids }
   end
+
+  describe "#full_path" do
+    it "should return the full path of the projects datapath" do
+      result = File.join(
+                          Datapath.find(@projects_datapath.datapath_id).path,
+                          @projects_datapath.sub_directory
+                        )
+
+      expect(@projects_datapath.full_path).to eq result
+    end
+
+    it "should return the full path of the projects datapath with empty sub_directory" do
+      @projects_datapath.sub_directory = ""
+      result = File.join(Datapath.find(@projects_datapath.datapath_id).path)
+
+      expect(@projects_datapath.full_path).to eq result
+    end
+  end
 end
