@@ -32,4 +32,10 @@ describe ProjectsDatapath do
   describe "name" do
     it { should respond_to :name }
   end
+
+  describe "tracks" do
+    it { should have_many :tracks }
+    it { should respond_to :tracks }
+    it { should respond_to :track_ids }
+  end
 end

@@ -24,9 +24,9 @@ project2 = FactoryGirl.create(:project,
                               datapaths: [datapaths[2]])
 
 # Projects datapaths
-FactoryGirl.create(:projects_datapath, project: project1, datapath: datapaths[0])
-FactoryGirl.create(:projects_datapath, project: project2, datapath: datapaths[2])
+projects_datapath1 = FactoryGirl.create(:projects_datapath, project: project1, datapath: datapaths[0])
+projects_datapath2 = FactoryGirl.create(:projects_datapath, project: project2, datapath: datapaths[2])
 
 # Tracks
-FactoryGirl.create_list(:track, 3, project: project1)
-FactoryGirl.create(:track, project: project2)
+FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath1)
+FactoryGirl.create(:track, projects_datapath: projects_datapath2)

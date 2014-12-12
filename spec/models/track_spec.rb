@@ -11,6 +11,7 @@ describe Track do
     it { should have_db_index(:name).unique(false) }
     it { should have_db_column(:path).with_options(null:false) }
     it { should have_db_column(:project_id).with_options(null: false) }
+    it { should have_db_column(:projects_datapath_id).with_options(null:false) }
     it { should have_db_column(:owner_id).with_options(null: false) }
   end
 
@@ -83,6 +84,11 @@ describe Track do
     it {should respond_to :project}
   end
 
+  describe "projects_datapath_id" do
+    it {should belong_to :projects_datapath}
+    it { should respond_to :projects_datapath_id}
+  end
+
   describe "owner_id" do
     it {should belong_to :owner}
     it {should respond_to :owner}
@@ -100,6 +106,21 @@ describe Track do
       expect {
         @track.save
       }.to change(@track.project, :updated_at)
+    end
+  end
+
+  describe "#projects_datapath_id_comes_from_project" do
+    before do
+      @track.projects_datapath = FactoryGirl.create(:projects_datapath)
+    end
+
+    it "should require a valid expires_at date" do
+      expect(@track).not_to be_valid
+    end
+
+    it "should add different_projects errors to error messages" do
+      @track.valid?
+      expect(@track.errors[:different_projects]).to be_present
     end
   end
 end
