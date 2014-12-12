@@ -13,7 +13,7 @@ describe StreamServicesController do
 
         it "should respond not found when file is not found" do
           track = FactoryGirl.create(:test_track)
-          File.unlink track.path
+          File.unlink track.full_path
           get :show, id: track
           expect(response).to be_not_found
         end
@@ -22,14 +22,14 @@ describe StreamServicesController do
           track = FactoryGirl.create(:test_track)
           get :show, id: track, format: 'non'
           expect(response).to be_forbidden
-          File.unlink track.path
+          File.unlink track.full_path
         end
 
         it "should respond not found when file is empty" do
           track = FactoryGirl.create(:test_track)
-          Pathname.new(track.path).truncate(0)
+          Pathname.new(track.full_path).truncate(0)
           get :show, id: track
-          File.unlink(track.path)
+          File.unlink(track.full_path)
 
           expect(response).to be_not_found
         end
@@ -37,7 +37,8 @@ describe StreamServicesController do
 
       context "with valid record and file" do
         before(:all) do
-          @path = 'tmp/mytrack.bam'
+          @track = FactoryGirl.create(:test_track)
+          @path = @track.full_path
           @text = ['word1', 'word2', 'word3', 'word4']
           File.open(@path, 'wb') { |f| f.write @text.pack('A*A*A*A*') }
         end
@@ -45,7 +46,6 @@ describe StreamServicesController do
         after(:all) { File.unlink(@path) if File.exist?(@path) }
 
         before do
-          @track = FactoryGirl.create(:test_track, path: @path)
           headers = {
             'Accept' => 'text/plain',
             'User-Agent' => 'IGV Version 2.3.32 (37)03/17/2014 08:51 PM',
