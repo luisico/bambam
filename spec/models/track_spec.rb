@@ -42,25 +42,18 @@ describe Track do
         cp_track track.path
         track.path = File.join(' tmp', 'mytrack.bam ')
         expect(track).to be_valid
-        File.unlink track.path
+        File.unlink track.full_path
       end
 
       context "should not be valid" do
         it "when it does not exist" do
-          File.unlink(@track.path)
+          File.unlink(@track.full_path)
           expect(@track).not_to be_valid
         end
 
         it "when it is empty" do
-          Pathname.new(@track.path).truncate(0)
+          Pathname.new(@track.full_path).truncate(0)
           expect(@track).not_to be_valid
-        end
-
-        it "when it is not included in allowed paths" do
-          track = FactoryGirl.build(:test_track, path: File.join('', 'tmp', 'mytrack.bam'))
-          cp_track track.path
-          expect(track).not_to be_valid
-          File.unlink track.path
         end
 
         it "when it does not have a valid file extenstion" do

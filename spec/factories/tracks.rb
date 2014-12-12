@@ -21,9 +21,9 @@ FactoryGirl.define do
         track.project = Project.find(track.projects_datapath.project_id)
       end
 
-      unless File.exist?(track.path)
-        Pathname.new(track.path).dirname.mkpath
-        FileUtils.cp File.join(Rails.root, 'spec', 'data', 'tracks', 'test_500_sorted.bam'), track.path
+      unless File.exist?(track.full_path)
+        Pathname.new(track.full_path).dirname.mkpath
+        FileUtils.cp File.join(Rails.root, 'spec', 'data', 'tracks', 'test_500_sorted.bam'), track.full_path
       end
     end
   end
