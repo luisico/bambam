@@ -123,4 +123,24 @@ describe Track do
       expect(@track.errors[:different_projects]).to be_present
     end
   end
+
+  describe "#full_path" do
+    it "should return the full path of the track" do
+      result = File.join(
+                          Datapath.find(@track.projects_datapath.datapath_id).path,
+                          @track.projects_datapath.sub_directory,
+                          @track.path
+                        )
+
+      expect(@track.full_path).to eq result
+    end
+
+    it "should return the full path of the track with empty sub_directory" do
+      @track.projects_datapath.sub_directory = ""
+      result = File.join(
+                          Datapath.find(@track.projects_datapath.datapath_id).path,
+                          @track.path
+                        )
+    end
+  end
 end

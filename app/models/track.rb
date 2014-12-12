@@ -17,4 +17,11 @@ class Track < ActiveRecord::Base
       errors.add(:different_projects, "projects datapath id must belong to track's project")
     end
   end
+
+  def full_path
+    datapath = Datapath.find(self.projects_datapath.datapath_id).path
+    sub_directory = self.projects_datapath.sub_directory
+    track_path = self.path
+    File.join datapath, sub_directory, track_path
+  end
 end
