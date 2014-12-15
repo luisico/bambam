@@ -40,13 +40,13 @@ describe Project do
   end
 
   describe "datapaths" do
-    it { should have_many :datapaths }
+    it { should have_many(:datapaths).through(:projects_datapaths) }
     it { should respond_to :datapaths }
     it { should respond_to :datapath_ids }
   end
 
   describe "tracks" do
-    it { should have_many :tracks }
+    it { should have_many(:tracks).through(:projects_datapaths) }
     it { should respond_to :tracks }
     it { should respond_to :track_ids }
   end
