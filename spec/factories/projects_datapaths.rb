@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :projects_datapath do
     project
     datapath
-    sequence(:sub_directory) {|n| File.join("dir#{n}", "dir#{n+1}") }
+    sequence(:sub_directory) {|n| File.join("dir#{n}", "subdir#{n}") }
     sequence(:name) {|n| "Projectsdatapath#{n}"}
 
     after(:build) do |projects_datapath|
