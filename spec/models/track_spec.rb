@@ -22,7 +22,7 @@ describe Track do
   describe "path" do
     it { should respond_to :path }
 
-    context 'is validated' do
+    context 'is validated with full_path' do
       after { File.unlink(@track.path) if File.exist?(@track.path) }
 
       it "should be valid when it exists with a .bam file extension" do
@@ -55,6 +55,10 @@ describe Track do
           expect(@track).not_to be_valid
         end
 
+        it "when it is not included in allowed paths" do
+          pending "test removed"
+        end
+
         it "when it does not have a valid file extenstion" do
           track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.ext'))
           cp_track track.path
@@ -71,11 +75,6 @@ describe Track do
     end
   end
 
-  describe "project_id" do
-    it {should have_one :project}
-    it {should respond_to :project}
-  end
-
   describe "projects_datapath_id" do
     it { should belong_to :projects_datapath }
     it { should respond_to :projects_datapath_id }
@@ -84,6 +83,16 @@ describe Track do
         @track.save
       }.to change(@track.projects_datapath, :updated_at)
     end
+  end
+
+  describe "project_id" do
+    it {should have_one(:project).through(:projects_datapath)}
+    it {should respond_to :project}
+  end
+
+  describe "datapath_id" do
+    it {should have_one(:datapath).through(:projects_datapath)}
+    it {should respond_to :datapath}
   end
 
   describe "owner_id" do
@@ -100,21 +109,19 @@ describe Track do
 
   describe "#full_path" do
     it "should return the full path of the track" do
-      result = File.join(
-                          Datapath.find(@track.projects_datapath.datapath_id).path,
-                          @track.projects_datapath.sub_directory,
-                          @track.path
-                        )
-
-      expect(@track.full_path).to eq result
+      expect(@track.full_path).to eq File.join(
+        @track.datapath.path,
+        @track.projects_datapath.sub_directory,
+        @track.path
+      )
     end
 
     it "should return the full path of the track with empty sub_directory" do
       @track.projects_datapath.sub_directory = ""
-      result = File.join(
-                          Datapath.find(@track.projects_datapath.datapath_id).path,
-                          @track.path
-                        )
+      expect(@track.full_path).to eq File.join(
+        @track.datapath.path,
+        @track.path
+      )
     end
   end
 end
