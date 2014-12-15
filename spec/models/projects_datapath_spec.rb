@@ -46,19 +46,17 @@ describe ProjectsDatapath do
 
   describe "#full_path" do
     it "should return the full path of the projects datapath" do
-      result = File.join(
-                          Datapath.find(@projects_datapath.datapath_id).path,
-                          @projects_datapath.sub_directory
-                        )
-
-      expect(@projects_datapath.full_path).to eq result
+      expect(@projects_datapath.full_path).to eq File.join(
+        @projects_datapath.datapath.path,
+        @projects_datapath.sub_directory
+      )
     end
 
     it "should return the full path of the projects datapath with empty sub_directory" do
       @projects_datapath.sub_directory = ""
-      result = File.join(Datapath.find(@projects_datapath.datapath_id).path)
-
-      expect(@projects_datapath.full_path).to eq result
+      expect(@projects_datapath.full_path).to eq File.join(
+        @projects_datapath.datapath.path
+      )
     end
   end
 end

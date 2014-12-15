@@ -55,23 +55,16 @@ describe Project do
     it "should return an array of allowed datapaths for the project" do
       master1 = FactoryGirl.create(:test_datapath)
       master2 = FactoryGirl.create(:test_datapath)
-      FactoryGirl.create(:projects_datapath,
-                          datapath: master1,
-                          project: @project,
-                          sub_directory: "")
-      projects_datapath = FactoryGirl.create(:projects_datapath,
-                                              datapath: master1,
-                                              project: @project)
-      FactoryGirl.create(:projects_datapath,
-                          datapath: master2,
-                          project: @project,
-                          sub_directory: "")
-      results = [
+
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "mysubdir")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: master2, sub_directory: "")
+
+      expect(@project.allowed_paths).to eq [
+        File.join(master1.path, "mysubdir"),
         master1.path,
-        File.join(master1.path, projects_datapath.sub_directory),
         master2.path
       ]
-      expect(@project.allowed_paths).to eq results
     end
 
     it "should return an empty array when the project has no datapaths" do

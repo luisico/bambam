@@ -4,12 +4,6 @@ class ProjectsDatapath < ActiveRecord::Base
   has_many :tracks
 
   def full_path
-    datapath = Datapath.find(self.datapath_id).path
-    sub_directory = self.sub_directory
-    if sub_directory.empty?
-      datapath
-    else
-      File.join datapath, sub_directory
-    end
+    Pathname.new('').join(datapath.path, sub_directory).to_s
   end
 end
