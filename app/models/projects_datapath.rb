@@ -1,5 +1,5 @@
 class ProjectsDatapath < ActiveRecord::Base
-  belongs_to :project
+  belongs_to :project, touch: true
   belongs_to :datapath
   has_many :tracks
 

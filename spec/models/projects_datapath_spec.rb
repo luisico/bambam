@@ -17,6 +17,11 @@ describe ProjectsDatapath do
     it { should belong_to :project }
     it { should respond_to :project }
     it { should respond_to :project_id }
+    it "should touch the project" do
+      expect {
+        @projects_datapath.save
+      }.to change(@projects_datapath.project, :updated_at)
+    end
   end
 
   describe "datapath_id" do

@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
   has_many :users, :through => :projects_users
   has_many :projects_datapaths, dependent: :destroy
   has_many :datapaths, :through => :projects_datapaths
-  has_many :tracks
+  has_many :tracks, through: :projects_datapaths, source: :tracks
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   validates_presence_of :name
   accepts_nested_attributes_for :tracks, allow_destroy: true
