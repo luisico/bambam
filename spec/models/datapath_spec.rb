@@ -55,7 +55,7 @@ describe Datapath do
   end
 
   describe "users" do
-    it { should have_many :users }
+    it { should have_many(:users).through(:datapaths_users) }
     it { should respond_to :users }
     it { should respond_to :user_ids }
   end
@@ -67,7 +67,7 @@ describe Datapath do
   end
 
   describe "projects" do
-    it { should have_many :projects }
+    it { should have_many(:projects).through(:projects_datapaths) }
     it { should respond_to :projects }
     it { should respond_to :project_ids }
   end
