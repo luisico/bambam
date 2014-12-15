@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe TracksHelper do
   describe "#igv_url" do
-    before { @track = FactoryGirl.create(:test_track) }
+    before { @track = FactoryGirl.create(:track) }
 
     it "needs a track object as argument" do
       expect{helper.igv_url}.to raise_error(ArgumentError)
@@ -46,7 +46,7 @@ describe TracksHelper do
 
   describe "#link_to_igv" do
     before do
-      @track = FactoryGirl.build(:test_track)
+      @track = FactoryGirl.build(:track)
       allow(helper).to receive(:igv_url).and_return('myurl')
     end
 
@@ -73,7 +73,7 @@ describe TracksHelper do
 
   describe "#ucsc_url" do
     before do
-      @track = FactoryGirl.create(:test_track)
+      @track = FactoryGirl.create(:track)
       @share_link = FactoryGirl.create(:share_link, track: @track)
     end
 
@@ -95,7 +95,7 @@ describe TracksHelper do
 
   describe "#ucsc_track_line" do
     before do
-      @track = FactoryGirl.create(:test_track)
+      @track = FactoryGirl.create(:track)
       @share_link = FactoryGirl.create(:share_link, track: @track)
       allow(helper).to receive(:ucsc_url).and_return('myurl')
     end

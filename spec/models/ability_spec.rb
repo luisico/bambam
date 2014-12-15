@@ -68,8 +68,8 @@ describe User do
       context "tracks" do
         before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-        it { should     be_able_to(:manage, FactoryGirl.create(:test_track, project: @project)) }
-        it { should_not be_able_to(:manage, FactoryGirl.create(:test_track)) }
+        it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project)) }
+        it { should_not be_able_to(:manage, FactoryGirl.create(:track)) }
       end
 
       context "projects_user" do
@@ -143,9 +143,9 @@ describe User do
           @project = FactoryGirl.create(:project, users: [@user])
           @other_project = FactoryGirl.create(:project)
 
-          @my_track = FactoryGirl.create(:test_track, owner: @user, project: @project)
-          @project_track = FactoryGirl.create(:test_track, project: @project)
-          @other_project_track = FactoryGirl.create(:test_track, project: @other_project)
+          @my_track = FactoryGirl.create(:track, owner: @user, project: @project)
+          @project_track = FactoryGirl.create(:track, project: @project)
+          @other_project_track = FactoryGirl.create(:track, project: @other_project)
         end
 
         it { should     be_able_to(:read, @my_track) }
@@ -160,15 +160,15 @@ describe User do
         it { should_not be_able_to(:destroy, @project_track) }
         it { should_not be_able_to(:destroy, @other_project_track) }
 
-        it { should     be_able_to(:create, FactoryGirl.build(:test_track, project: @project)) }
-        it { should_not be_able_to(:create, FactoryGirl.build(:test_track, project: @other_project)) }
+        it { should     be_able_to(:create, FactoryGirl.build(:track, project: @project)) }
+        it { should_not be_able_to(:create, FactoryGirl.build(:track, project: @other_project)) }
 
       end
 
       context "share_links" do
         before do
           @user_on_project = FactoryGirl.create(:project, users: [@user])
-          @track = FactoryGirl.create(:test_track, project: @user_on_project)
+          @track = FactoryGirl.create(:track, project: @user_on_project)
           @share_link = FactoryGirl.create(:share_link, track: @track)
           @other_share_link = FactoryGirl.create(:share_link)
         end

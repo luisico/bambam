@@ -1,14 +1,9 @@
 FactoryGirl.define do
   factory :track do
     sequence(:name) {|n| "track#{n}"}
-    sequence(:path) {|n| File.join("tmp", "tracks", "track#{n}.bam") }
+    sequence(:path) {|n| File.join("tracks", "track#{n}.bam") }
     projects_datapath
     owner
-
-    factory :test_track do
-      sequence(:name) {|n| "track#{n}" }
-      sequence(:path) {|n| File.join("tmp", "tests", "track#{n}.bam") }
-    end
 
     after(:build) do |track|
       unless File.exist?(track.full_path)

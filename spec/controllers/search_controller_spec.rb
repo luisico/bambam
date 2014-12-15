@@ -19,31 +19,31 @@ describe SearchController do
       context "projects and tracks" do
         before do
           @project1 = FactoryGirl.create(:project, name: "best project", users: [@user])
-          @track11 = FactoryGirl.create(:test_track, name: "a track", project: @project1)
+          @track11 = FactoryGirl.create(:track, name: "a track", project: @project1)
 
           @project2 = FactoryGirl.create(:project, name: "another best project", users: [@user])
-          @track21 = FactoryGirl.create(:test_track, name: "best track", project: @project2)
-          @track22 = FactoryGirl.create(:test_track, name: "a track", project: @project2)
-          @track23 = FactoryGirl.create(:test_track, name: "second best track", project: @project2)
+          @track21 = FactoryGirl.create(:track, name: "best track", project: @project2)
+          @track22 = FactoryGirl.create(:track, name: "a track", project: @project2)
+          @track23 = FactoryGirl.create(:track, name: "second best track", project: @project2)
 
           @project3 = FactoryGirl.create(:project, name: "ok project", users: [@user])
-          @track31 = FactoryGirl.create(:test_track, name: "a track", project: @project3)
-          @track32 = FactoryGirl.create(:test_track, name: "third best track", project: @project3)
+          @track31 = FactoryGirl.create(:track, name: "a track", project: @project3)
+          @track32 = FactoryGirl.create(:track, name: "third best track", project: @project3)
 
           @project4 = FactoryGirl.create(:project, name: "bad project", users: [@user])
-          @track41 = FactoryGirl.create(:test_track, name: "a track", project: @project4)
+          @track41 = FactoryGirl.create(:track, name: "a track", project: @project4)
 
           @project5 = FactoryGirl.create(:project, name: "so so project", users: [@user])
-          @track51 = FactoryGirl.create(:test_track, name: "b track", project: @project5, path: "tmp/tests/best.bam")
+          @track51 = FactoryGirl.create(:track, name: "b track", project: @project5, path: "tmp/tests/best.bam")
 
           @project6 = FactoryGirl.create(:project, name: "meh project", users: [@user, @user2])
-          @track61 = FactoryGirl.create(:test_track, name: "a track", project: @project6)
+          @track61 = FactoryGirl.create(:track, name: "a track", project: @project6)
 
           @project7 = FactoryGirl.create(:project, name: "blah project", users: [@user, @user3])
-          @track71 = FactoryGirl.create(:test_track, name: "a track", project: @project7)
+          @track71 = FactoryGirl.create(:track, name: "a track", project: @project7)
 
           @project8 = FactoryGirl.create(:project, name: "blerg project", users: [@user, @user4])
-          @track81 = FactoryGirl.create(:test_track, name: "b track", project: @project8)
+          @track81 = FactoryGirl.create(:track, name: "b track", project: @project8)
         end
 
         it "should be correctly returned and sorted" do

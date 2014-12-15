@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Track do
-  before { @track = FactoryGirl.build(:test_track) }
+  before { @track = FactoryGirl.build(:track) }
 
   subject { @track }
 
@@ -30,14 +30,14 @@ describe Track do
       end
 
       it "should be valid when it exists with a .bw file extension" do
-        track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.bw'))
+        track = FactoryGirl.build(:track, path: File.join('tmp', 'mytrack.bw'))
         cp_track track.path, 'bw'
         expect(track).to be_valid
         File.unlink track.path
       end
 
       it "stips leading and trailing whitespace from path" do
-        track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.bam'))
+        track = FactoryGirl.build(:track, path: File.join('tmp', 'mytrack.bam'))
         cp_track track.path
         track.path = File.join(' tmp', 'mytrack.bam ')
         expect(track).to be_valid
@@ -60,7 +60,7 @@ describe Track do
         end
 
         it "when it does not have a valid file extenstion" do
-          track = FactoryGirl.build(:test_track, path: File.join('tmp', 'mytrack.ext'))
+          track = FactoryGirl.build(:track, path: File.join('tmp', 'mytrack.ext'))
           cp_track track.path
           expect(track).not_to be_valid
           File.unlink track.path

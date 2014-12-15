@@ -53,8 +53,8 @@ describe Project do
 
   describe "#allowed_datapaths" do
     it "should return an array of allowed datapaths for the project" do
-      master1 = FactoryGirl.create(:test_datapath)
-      master2 = FactoryGirl.create(:test_datapath)
+      master1 = FactoryGirl.create(:datapath)
+      master2 = FactoryGirl.create(:datapath)
 
       FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "mysubdir")
       FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "")

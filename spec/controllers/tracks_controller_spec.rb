@@ -4,7 +4,7 @@ describe TracksController do
   before { @admin = FactoryGirl.create(:admin) }
 
   describe "GET 'index'" do
-    before { @tracks = FactoryGirl.create_list(:test_track, 3) }
+    before { @tracks = FactoryGirl.create_list(:track, 3) }
 
     context "as an admin" do
       before { sign_in @admin }
@@ -67,7 +67,7 @@ describe TracksController do
   describe "GET 'show'" do
     before do
       @project = FactoryGirl.create(:project)
-      @track = FactoryGirl.create(:test_track, project: @project)
+      @track = FactoryGirl.create(:track, project: @project)
     end
 
     context "as an admin" do

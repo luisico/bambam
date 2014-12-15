@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ShareLinksController do
   before do
     @project = FactoryGirl.create(:project)
-    @track = FactoryGirl.create(:test_track, project: @project)
+    @track = FactoryGirl.create(:track, project: @project)
     @user = FactoryGirl.create(:user, projects: [@project])
   end
 

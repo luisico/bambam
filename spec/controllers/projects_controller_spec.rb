@@ -386,7 +386,7 @@ describe ProjectsController do
     context "as a signed in user and project user" do
       before do
         sign_in FactoryGirl.create(:user, projects: [@project])
-        @track = FactoryGirl.create(:test_track, project: @project)
+        @track = FactoryGirl.create(:track, project: @project)
       end
 
       context 'with valid parameters' do
@@ -423,7 +423,7 @@ describe ProjectsController do
     context "as a signed in user" do
       before do
         sign_in FactoryGirl.create(:user)
-        @track = FactoryGirl.create(:test_track, project: @project)
+        @track = FactoryGirl.create(:track, project: @project)
       end
 
       context 'with valid parameters' do
