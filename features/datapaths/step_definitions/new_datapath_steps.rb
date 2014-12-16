@@ -1,7 +1,7 @@
 ### Methods
 
 def build_datapath
-  @datapath_attrs ||= FactoryGirl.attributes_for(:test_datapath)
+  @datapath_attrs ||= FactoryGirl.attributes_for(:datapath)
   Pathname.new(@datapath_attrs[:path]).mkpath unless File.exist?(@datapath_attrs[:path])
 end
 

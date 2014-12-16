@@ -1,11 +1,12 @@
 ### Methods
 
 def build_track
-  @track ||= FactoryGirl.attributes_for(:test_track)
+  @track ||= FactoryGirl.attributes_for(:track)
 end
 
 def build_track_with_path
   build_track
+  # TODO: path should go to tmp/tests/....
   cp_track @track[:path]
  end
 

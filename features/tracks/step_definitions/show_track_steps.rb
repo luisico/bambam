@@ -5,10 +5,11 @@
 Given /^there is a (bam|bw) track in that project$/ do |type|
   @project ||= @projects.last
   if type == 'bam'
-    @track = FactoryGirl.create(:test_track, project: @project)
+    @track = FactoryGirl.create(:track, project: @project)
+    # TODO: path should go to tmp/tests/....
     cp_track Pathname.new(@track.path).sub_ext('.bai'), 'bai'
   elsif type== 'bw'
-    @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"), project: @project)
+    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "bw_track.bw"), project: @project)
   end
 end
 

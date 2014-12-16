@@ -7,9 +7,9 @@ Given /^I belong to a project named "(.*?)" with track "(.*?)"( and path "(.*?)"
   expect {
     @project = FactoryGirl.create(:project, name: project, users: [user])
     if w_p
-      @track = FactoryGirl.create(:test_track, name: track, path: path, project: @project)
+      @track = FactoryGirl.create(:track, name: track, path: path, project: @project)
     else
-      @track = FactoryGirl.create(:test_track, name: track, project: @project)
+      @track = FactoryGirl.create(:track, name: track, project: @project)
     end
   }.to change(Project, :count).by(1)
   expect(@track.project).to eq @project

@@ -5,7 +5,7 @@
 Given /^there (is|are) (\d+|a) tracks? in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   @project ||= @projects.last
-  FactoryGirl.create_list(:test_track, n.to_i, :project => @project)
+  FactoryGirl.create_list(:track, n.to_i, :project => @project)
   @track = @project.tracks.last
 end
 
@@ -13,7 +13,7 @@ Given /^I own (\d+|a) tracks? in that project$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   owner = (@user || @manager)
   @project ||= @projects.last
-  FactoryGirl.create_list(:test_track, n.to_i, :project => @project, owner: owner)
+  FactoryGirl.create_list(:track, n.to_i, :project => @project, owner: owner)
   @track = @project.tracks.last
 end
 
