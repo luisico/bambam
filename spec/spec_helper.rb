@@ -53,6 +53,9 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+  config.before(:all) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
