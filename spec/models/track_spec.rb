@@ -85,14 +85,54 @@ describe Track do
     end
   end
 
-  describe "project_id" do
-    it {should have_one(:project).through(:projects_datapath)}
-    it {should respond_to :project}
-  end
+  describe "delegated methods" do
+    context "project" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it { should respond_to :project }
+      it "should change projects_datapath project when track project is changed" do
+        @track.save
+        expect {
+          @track.project = FactoryGirl.create(:project)
+          @track.save
+        }.to change(@track.projects_datapath, :project)
+      end
+    end
 
-  describe "datapath_id" do
-    it {should have_one(:datapath).through(:projects_datapath)}
-    it {should respond_to :datapath}
+    context "project_id" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it { should respond_to :project_id }
+      it "should change projects_datapath project when track project_id is changed" do
+        @track.save
+        expect {
+          @track.project_id = FactoryGirl.create(:project).id
+          @track.save
+        }.to change(@track.projects_datapath, :project)
+      end
+    end
+
+    context "datapath" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it {should respond_to :datapath}
+      it "should change projects_datapath datapath when track datapath is changed" do
+        @track.save
+        expect {
+          @track.datapath = FactoryGirl.create(:datapath)
+          @track.save
+        }.to change(@track.projects_datapath, :datapath)
+      end
+    end
+
+    context "datapath_id" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it {should respond_to :datapath_id}
+      it "should change projects_datapath datapath when track datapath_id is changed" do
+        @track.save
+        expect {
+          @track.datapath_id = FactoryGirl.create(:datapath).id
+          @track.save
+        }.to change(@track.projects_datapath, :datapath)
+      end
+    end
   end
 
   describe "owner_id" do

@@ -1,7 +1,7 @@
 class Track < ActiveRecord::Base
   belongs_to :projects_datapath, touch: true
-  has_one :project,  through: :projects_datapath
-  has_one :datapath, through: :projects_datapath
+  delegate :project, :project=, :project_id, :project_id=, to: :projects_datapath
+  delegate :datapath, :datapath=, :datapath_id, :datapath_id=, to: :projects_datapath
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
