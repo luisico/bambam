@@ -48,38 +48,49 @@ describe User do
       end
 
       context "users" do
-        it { should be_able_to(:invite, User) }
-        it { should be_able_to(:cancel, @manager) }
+        it { should  be_able_to(:invite, User) }
+        it { should  be_able_to(:cancel, @manager) }
 
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }
       end
 
-      context "projects" do
-        it { should     be_able_to(:manage, FactoryGirl.create(:project, owner: @manager)) }
-        it { should_not be_able_to(:manage, FactoryGirl.create(:project)) }
-      end
-
       context "groups" do
         it { should     be_able_to(:manage, FactoryGirl.create(:group, owner: @manager)) }
         it { should_not be_able_to(:manage, FactoryGirl.create(:group)) }
+
+        it { should     be_able_to(:read, FactoryGirl.create(:group, members: [@manager])) }
+        it { should_not be_able_to(:read, FactoryGirl.create(:group)) }
       end
 
-      context "tracks" do
-        before { @project = FactoryGirl.create(:project, owner: @manager) }
-
-        it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project)) }
-        it { should_not be_able_to(:manage, FactoryGirl.create(:track)) }
-      end
-
-      context "projects_user" do
+      context "projects and tracks" do
         before do
           @project = FactoryGirl.create(:project, owner: @manager)
+          @project_as_user = FactoryGirl.create(:project, users: [@manager])
           @other_project = FactoryGirl.create(:project)
         end
 
-        it { should     be_able_to(:update, @project.projects_users.first) }
-        it { should_not be_able_to(:update, @other_project.projects_users.first) }
+        context "projects" do
+          it { should     be_able_to(:manage, @project) }
+          it { should_not be_able_to(:manage, @other_project) }
+
+          it { should     be_able_to(:user_access, @project_as_user) }
+          it { should_not be_able_to(:user_access, @other_project) }
+        end
+
+        context "projects_user" do
+          it { should     be_able_to(:update, @project.projects_users.first) }
+          it { should_not be_able_to(:update, @project_as_user.projects_users.first) }
+          it { should_not be_able_to(:update, @other_project.projects_users.first) }
+        end
+
+        context "tracks" do
+          it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project)) }
+          it { should_not be_able_to(:manage, FactoryGirl.create(:track)) }
+
+          it { should     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
+          it { should_not be_able_to(:read, FactoryGirl.create(:track)) }
+        end
       end
 
       context "datapaths" do

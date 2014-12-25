@@ -14,8 +14,6 @@ class Track < ActiveRecord::Base
 
   before_validation :strip_whitespace
 
-  scope :user_tracks, ->(user) { includes(:projects_datapath => {:project => :projects_users}).where(projects_users: {user_id: user}).references(:projects_users) }
-
   def full_path
     File.join datapath.path, projects_datapath.sub_directory, path
   end

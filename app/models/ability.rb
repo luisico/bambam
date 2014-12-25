@@ -21,7 +21,7 @@ class Ability
         can :invite, User
         can :manage, Project, owner_id: user.id
         can :manage, Group, owner_id: user.id
-        can :manage, Track, :project => { :owner_id => user.id }
+        can :manage, Track, :projects_datapath => { :project => { :owner_id => user.id }}
         can :update, ProjectsUser, :project => { :owner_id => user.id }
       end
 
@@ -32,9 +32,7 @@ class Ability
 
       can :user_access, Project, :projects_users => { :user_id => user.id }
 
-      can :read, Track, Track.user_tracks(user) do |track|
-        track.project.users.include?(user)
-      end
+      can :read, Track, :projects_datapath => { :project => { :projects_users => { :user_id => user.id } } }
       can [:update, :destroy], Track, owner: user
       can :create, Track do |track|
         track.project.users.include?(user)
