@@ -13,6 +13,7 @@ class Track < ActiveRecord::Base
     message: "file must have extension .bw or .bam" }
 
   before_validation :strip_whitespace
+  after_save        :update_projects_datapath
 
   def full_path
     File.join datapath.path, projects_datapath.sub_directory, path
@@ -20,5 +21,10 @@ class Track < ActiveRecord::Base
 
   def strip_whitespace
     self.path = self.path.strip
+  end
+
+  protected
+  def update_projects_datapath
+    self.projects_datapath.save if self.projects_datapath.changed?
   end
 end
