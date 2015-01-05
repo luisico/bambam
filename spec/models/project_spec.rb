@@ -72,6 +72,27 @@ describe Project do
     end
   end
 
+  describe "project user permissions" do
+    before do
+      @project.users << @user = FactoryGirl.create(:user)
+      @regular_users = [@project.owner, @user]
+      @read_only_users = FactoryGirl.create_list(:user, 2, projects: [@project])
+      @read_only_users.each {|u| u.projects_users.first.update_attributes(read_only: true)}
+    end
+
+    context "#regular_users" do
+      it "returns all regular users" do
+        expect(@project.regular_users).to eq @regular_users
+      end
+    end
+
+    context "#read_only_users" do
+      it "returns all read-only users" do
+        expect(@project.read_only_users).to eq @read_only_users
+      end
+    end
+  end
+
   describe "when project destroyed" do
     before {@project.save!}
 

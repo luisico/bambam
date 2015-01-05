@@ -14,4 +14,12 @@ class Project < ActiveRecord::Base
   def allowed_paths
     projects_datapaths.collect{ |project_datapath| project_datapath.full_path }
   end
+
+  def regular_users
+    self.users.where( projects_users: { read_only: false })
+  end
+
+  def read_only_users
+    self.users.where( projects_users: { read_only: true })
+  end
 end

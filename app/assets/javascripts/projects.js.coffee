@@ -27,3 +27,7 @@ jQuery ->
   $('#create-new-project').on 'click', '#project-cancel', (event) ->
     $('#new-project').show()
     $(this).closest('form').remove()
+
+  $('.project-attributes').on 'click', '#cancel-edit-users', (event) ->
+    $('#project-users').show()
+    $(this).closest('form').remove()

@@ -31,30 +31,6 @@ Then /^I should( not)? be able to edit the project name$/ do |negate|
   end
 end
 
-Then /^I should( not)? be able to change users in the project$/ do |negate|
-  if negate
-    expect(page).not_to have_css "#project_user_ids"
-  else
-    expect(page).to have_css "#project_user_ids"
-    deleted = []
-    expect {
-      @project.users[-2..-1].each{ |u| remove_from_select2(u.handle_with_email); deleted << u }
-      @users.each{ |u| fill_in_select2("project_user_ids", with: u.handle)}
-      click_button 'Update'
-      @project.reload
-    }.to change(@project.users, :count).by(1)
-    expect(current_path).to eq project_path(@project)
-    deleted.each do |u|
-      expect(@project.users).not_to include(u)
-      expect(page).not_to have_content(u.handle)
-    end
-    @users.each do |u|
-      expect(@project.users).to include(u)
-      expect(page).to have_content(u.handle)
-    end
-  end
-end
-
 Then /^I should be able to cancel edit$/ do
   expect {
     fill_in 'Project name', with: 'new_project_name'

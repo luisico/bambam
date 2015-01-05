@@ -2,15 +2,16 @@ class ProjectsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
 
-  respond_to :html
+  respond_to :html, only: [:index, :show]
+  respond_to :js, only: [:new, :create, :edit, :update]
 
   def index
   end
 
   def show
     @project = Project.includes(:projects_users, :users).find(params[:id])
-    @regular_users = @project.users.where( projects_users: { read_only: false })
-    @read_only_users = @project.users.where( projects_users: { read_only: true })
+    @regular_users = @project.regular_users
+    @read_only_users = @project.read_only_users
   end
 
   def new
@@ -29,19 +30,10 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if params[:project]
-      authorize! :manage, @project if has_admin_attr?
-      if params['project']['user_ids']
-        params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
-      end
-      if @project.update(project_params)
-        redirect_to @project, notice: 'Project was successfully updated.'
-      else
-        render action: 'edit'
-      end
-    else
-      redirect_to @project, notice: 'Nothing was changed in the project.'
+    if params['project']['user_ids']
+      params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
+    @project.update(project_params)
   end
 
   def destroy
@@ -50,14 +42,7 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  def has_admin_attr?
-    params[:project].include?(:name) || params[:project].include?(:user_ids) ||
-      (params[:project][:tracks_attributes] &&
-      params[:project][:tracks_attributes].map {|k, v| v[:project_id]}.any?)
-  end
-
   def project_params
-    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :owner_id, :_destroy])
+    params.require(:project).permit(:name, :user_ids => [])
   end
 end
