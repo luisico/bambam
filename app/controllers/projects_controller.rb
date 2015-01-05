@@ -24,9 +24,7 @@ class ProjectsController < ApplicationController
     @project.owner ||= current_user
     @project.users << @project.owner unless @project.users.include?(@project.owner)
     if @project.save
-      redirect_to @project, notice: 'Project was successfully created.'
-    else
-      render action: 'new'
+      render :js => "window.location = '#{project_path(@project)}'"
     end
   end
 

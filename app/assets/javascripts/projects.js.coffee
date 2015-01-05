@@ -23,3 +23,7 @@ jQuery ->
   $("#project_user_ids").select2({
     placeholder: "Add a user"
   });
+
+  $('#create-new-project').on 'click', '#project-cancel', (event) ->
+    $('#new-project').show()
+    $(this).closest('form').remove()

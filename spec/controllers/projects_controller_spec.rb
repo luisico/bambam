@@ -241,33 +241,27 @@ describe ProjectsController do
   describe "Post 'create'" do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in FactoryGirl.create(:manager) }
 
       context "with valid parameters" do
-        it "should be a redirect to the new project show page" do
-          post :create, project: @project_attr
-          expect(response).to redirect_to project_path(Project.last)
+        it "should be a a success" do
+          post :create, project: @project_attr, format: 'js'
+          expect(response).to be_success
         end
 
         it "should create a new project" do
           expect{
-            post :create, project: @project_attr
+            post :create, project: @project_attr, format: 'js'
           }.to change(Project, :count).by(1)
           expect(assigns(:project)).to eq Project.last
         end
       end
 
       context "with invalid parameters" do
-        it "should render new template" do
-          post :create, project: @project_attr.merge(name: '')
-          expect(response).to be_success
-          expect(response).to render_template :new
-        end
-
         it "should not create a new project" do
           expect{
-            post :create, project: @project_attr.merge(name: '')
+            post :create, project: @project_attr.merge(name: ''), format: 'js'
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
         end
