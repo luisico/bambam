@@ -3,7 +3,7 @@ Feature: Edit project users
   In order to have an up to date project
   As a manager/admin
   I can update project users
-  @now
+
   Scenario Outline: Admin and managers can change users in project
     Given I am signed in as <role>
     And <project exists>
