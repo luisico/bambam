@@ -1,0 +1,10 @@
+<%= form_for @project, remote: true do |f| %>
+  <div id="track-tree">
+    <ul id="treeData" style="display: none;"></ul>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius update-project-datapaths' %>
+    <%= link_to 'Cancel', "#", class: 'button tiny radius', id: 'cancel-edit-datapaths' %>
+  </div>
+<% end %>

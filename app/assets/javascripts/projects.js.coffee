@@ -31,3 +31,21 @@ jQuery ->
   $('.project-attributes').on 'click', '#cancel-edit-users', (event) ->
     $('#project-users').show()
     $(this).closest('form').remove()
+
+  $('#track-tree').fancytree {
+    source:
+      url: "/tracks/browser"
+    checkbox: true
+  }
+
+  $('#project-datapath-form').hide()
+
+  $('#edit-datapaths').on 'click', (event) ->
+    $('#edit-datapaths').hide()
+    $('#project-datapath-list').hide()
+    $('#project-datapath-form').show()
+
+  $('.project-datapaths').on 'click', '#cancel-edit-datapaths', (event) ->
+    $('#edit-datapaths').show()
+    $('#project-datapath-list').show()
+    $('#project-datapath-form').hide()

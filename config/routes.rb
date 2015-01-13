@@ -9,7 +9,9 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index, :show]
 
-  resources :tracks, only: [:index, :show]
+  resources :tracks, only: [:index, :show] do
+    get 'browser', on: :collection
+  end
 
   resources :share_links, except: [:index, :show]
 
