@@ -44,7 +44,7 @@
             <h4><i class="datapath-icon large margin-right"></i>
               Datapaths
               <small>
-                <%= link_to 'Edit Project Datapaths', '#', id: 'edit-datapaths' %>
+                <%= link_to 'Edit Project Datapaths', new_track_path(project_id: @project.id), id: 'edit-datapaths', remote: true %>
               </small>
             </h4>
             <ul class="no-bullet" id="project-datapath-list">
@@ -52,9 +52,6 @@
                 <li><%= allowed_path %></li>
               <% end %>
             </ul>
-            <div id="project-datapath-form">
-              <%= render partial: 'projects/datapaths_form' %>
-            </div>
           </div>
         </div>
       <% end %>

@@ -1,14 +1,24 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
-  load_and_authorize_resource except: :browser
+  load_and_authorize_resource except: [:browser, :new, :create]
+  # authorize_resource only: [:new, :create]
 
   respond_to :html, only: [:index, :show]
   respond_to :json, only: [:browser]
+
 
   def index
   end
 
   def show
+  end
+
+  def new
+    @project = Project.find(params[:project_id])
+  end
+
+  def create
+    raise params.inspect
   end
 
   def browser
