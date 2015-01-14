@@ -22,7 +22,8 @@ class TracksController < ApplicationController
   end
 
   def browser
-    tree = generate_tree unique_paths(ENV['ALLOWED_TRACK_PATHS'])
+    allowed_paths = Datapath.all.collect {|d| d.path }
+    tree = generate_tree unique_paths(allowed_paths)
     respond_with tree
   end
 
@@ -33,7 +34,7 @@ class TracksController < ApplicationController
   end
 
   def unique_paths(paths=[])
-    paths.split(':').map{|p| File.absolute_path(p)}.uniq
+    paths.map{|p| File.absolute_path(p)}.uniq
   end
 
   def generate_tree(paths=[])
