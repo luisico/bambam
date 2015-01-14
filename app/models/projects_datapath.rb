@@ -4,6 +4,6 @@ class ProjectsDatapath < ActiveRecord::Base
   has_many :tracks
 
   def full_path
-    Pathname.new('').join(datapath.path, sub_directory).to_s
+    Pathname.new('').join(datapath.path, sub_directory ? sub_directory : "").to_s
   end
 end

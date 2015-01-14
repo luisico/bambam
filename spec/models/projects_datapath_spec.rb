@@ -53,10 +53,12 @@ describe ProjectsDatapath do
     end
 
     it "should return the full path of the projects datapath with empty sub_directory" do
-      @projects_datapath.sub_directory = ""
-      expect(@projects_datapath.full_path).to eq File.join(
-        @projects_datapath.datapath.path
-      )
+      ["", nil].each do |empty|
+        @projects_datapath.sub_directory = empty
+        expect(@projects_datapath.full_path).to eq File.join(
+          @projects_datapath.datapath.path
+        )
+      end
     end
   end
 end
