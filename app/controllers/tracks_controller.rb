@@ -18,18 +18,18 @@ class TracksController < ApplicationController
   end
 
   def create
-    raise params.inspect
+    ProjectsDatapath.create(project_id: params[:id], datapath_id: track_params[:datapath_id])
   end
 
   def browser
     tree = generate_tree Datapath.all
-    respond_with tree
+    respond_with tree.map {|hash| { title: hash[:title], key: hash[:key]}}
   end
 
   private
 
   def track_params
-    params.require(:track).permit(:name, :path, :project_id)
+    params.require(:track).permit(:name, :path, :project_id, :datapath_id)
   end
 
   def generate_tree(datapaths=[])

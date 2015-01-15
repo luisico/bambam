@@ -6,10 +6,16 @@ class @Fancytree
     checkbox: true
     select: (event, data) ->
       node = data.node
-      console.log(node.title)
+      console.log(node.key)
+      $.ajax({
+        type: "POST",
+        url: "/tracks?id=" + $('#project_id').val() ,
+        data: { track: { datapath_id: node.key } },
+        success:(data) ->
+          alert node.key
+          return false
+        error:(data) ->
+          return false
+      })
     }
-
-    $("form").submit ->
-      $("#track-tree").fancytree("getTree").generateFormElements()
-      alert("POST data:\n" + jQuery.param($(this).serializeArray()))
 
