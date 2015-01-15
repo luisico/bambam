@@ -22,8 +22,7 @@ class TracksController < ApplicationController
   end
 
   def browser
-    allowed_paths = Datapath.all.collect {|d| d.path }
-    tree = generate_tree unique_paths(allowed_paths)
+    tree = generate_tree unique_paths(Datapath.all)
     respond_with tree
   end
 
@@ -33,26 +32,27 @@ class TracksController < ApplicationController
     params.require(:track).permit(:name, :path, :project_id)
   end
 
-  def unique_paths(paths=[])
-    paths.map{|p| File.absolute_path(p)}.uniq
+  def unique_paths(datapaths=[])
+    datapaths.uniq {|d| d.path}
   end
 
-  def generate_tree(paths=[])
+  def generate_tree(datapaths=[])
     @key = 0
     formats = %w(.bw .bam)
     tree = []
 
-    paths.each do |path|
-      common = File.dirname(path)
-      globs = formats.map{ |f| File.join(path, "**", "*#{f}") }
+    datapaths.each do |datapath|
+      common = File.dirname(datapath.path)
+      globs = formats.map{ |f| File.join(datapath.path, "**", "*#{f}") }
 
       files = Dir.glob(globs)
       if files.empty?
-        parent = add_node_to_tree(tree, path)
+        parent = add_node_to_tree(tree, datapath.path)
         parent[:folder] = true
+        parent[:key] = datapath.path
       else
         files.each do |file|
-          parent = add_node_to_tree(tree, path, true)
+          parent = add_node_to_tree(tree, datapath.path, true)
           file.sub!(common, '').split(File::SEPARATOR)[2..-1].each do |item|
             parent = add_node_to_tree(parent, item)
           end
