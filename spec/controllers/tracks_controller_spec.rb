@@ -156,25 +156,30 @@ describe TracksController do
   end
 
   describe "#generate_tree" do
-    it "creates nodes for all files and directories found recursively" do
-      expect(Dir).to receive(:glob).and_return(
-        %w(/dir1/dir2/file1 /dir1/dir2/dir3/file2 /dir1/dir2/dir3/file3 /dir1/dir2/dir4/file4),
-        %w(/dir1/dir5/file5)
-      )
+    before { @datapath1 = FactoryGirl.create(:datapath) }
 
-      expect(controller.send(:generate_tree, ['/dir1/dir2', '/dir1/dir5'])).to eq [
-        {title: '/dir1/dir2', key: 1, expanded: true, children: [
-          {title: 'file1', key: 2},
-          {title: 'dir3', key: 3, children: [
-            {title: 'file2', key: 4},
-            {title: 'file3', key: 5},
+    it "creates nodes for all files and directories found recursively" do
+      datapath2 = FactoryGirl.create(:datapath)
+      datapath1_paths =  %w(/file1 /dir3/file2 /dir3/file3 /dir4/file4).collect do |dir|
+        @datapath1.path + dir
+      end
+      datapath2_paths = [datapath2.path + "/file5"]
+
+      expect(Dir).to receive(:glob).and_return( datapath1_paths, datapath2_paths)
+
+      expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
+        {title: @datapath1.path, key: @datapath1.id, expanded: true, children: [
+          {title: 'file1'},
+          {title: 'dir3', children: [
+            {title: 'file2' },
+            {title: 'file3'},
           ], folder: true},
-          {title: 'dir4', key: 6, children: [
-            {title: 'file4', key: 7}
+          {title: 'dir4', children: [
+            {title: 'file4'}
           ], folder: true}
         ], folder: true},
-        {title: '/dir1/dir5', key: 8, expanded: true, children: [
-          {title: 'file5', key: 9}
+        {title: datapath2.path, key: datapath2.id, expanded: true, children: [
+          {title: 'file5'}
         ], folder: true}
       ]
     end
@@ -182,14 +187,14 @@ describe TracksController do
     it "marks a path as empty when no tracks are found" do
       expect(Dir).to receive(:glob).and_return []
 
-      expect(controller.send(:generate_tree, ['/dir1'])).to eq [
-        {title: '/dir1', key: 1, folder: true}
+      expect(controller.send(:generate_tree, [@datapath1])).to eq [
+        {title: @datapath1.path, key: @datapath1.id, folder: true}
       ]
     end
 
     it "only searches for defined formats" do
-      expect(Dir).to receive(:glob).with(['/mypath/**/*.bw', '/mypath/**/*.bam']).and_call_original
-      controller.send(:generate_tree, ['/mypath'])
+      expect(Dir).to receive(:glob).with(["#{@datapath1.path}/**/*.bw", "#{@datapath1.path}/**/*.bam"]).and_call_original
+      controller.send(:generate_tree, [@datapath1])
     end
   end
 
