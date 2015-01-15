@@ -127,9 +127,8 @@ describe TracksController do
           expect(response.header['Content-Type']).to include 'application/json'
         end
 
-        it "should use paths from ALLOWED_TRACK_PATHS" do
-          expect(controller).to receive(:unique_paths).with(Datapath.all)
-          expect(controller).to receive(:generate_tree)
+        it "should use all available master datapaths" do
+          expect(controller).to receive(:generate_tree).with(Datapath.all)
           get :browser, format: 'json'
         end
 
@@ -153,15 +152,6 @@ describe TracksController do
         expect(response).not_to be_success
         expect(response.status).to eq 401
       end
-    end
-  end
-
-  describe "#unique_paths" do
-    it "remove repeteated paths based on absolute path" do
-      expect(File).to receive(:absolute_path).with('/dir1/dir2/dir3').and_return('/dir1/dir2/dir3')
-      expect(File).to receive(:absolute_path).with('dir3').and_return('/dir1/dir2/dir3')
-
-      expect(controller.send(:unique_paths, ['/dir1/dir2/dir3','dir3'])).to eq %w(/dir1/dir2/dir3)
     end
   end
 

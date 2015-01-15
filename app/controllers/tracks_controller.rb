@@ -22,7 +22,7 @@ class TracksController < ApplicationController
   end
 
   def browser
-    tree = generate_tree unique_paths(Datapath.all)
+    tree = generate_tree Datapath.all
     respond_with tree
   end
 
@@ -30,10 +30,6 @@ class TracksController < ApplicationController
 
   def track_params
     params.require(:track).permit(:name, :path, :project_id)
-  end
-
-  def unique_paths(datapaths=[])
-    datapaths.uniq {|d| d.path}
   end
 
   def generate_tree(datapaths=[])
