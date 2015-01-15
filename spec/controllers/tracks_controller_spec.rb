@@ -200,10 +200,12 @@ describe TracksController do
 
   describe "#add_node_to_tree" do
     context "top level nodes" do
-      before { controller.instance_variable_set(:@key, 0) }
+      before { @datapath = FactoryGirl.create(:datapath) }
 
-      it "returns the node" do
-        expect(controller.send(:add_node_to_tree, [], '/dir1')).to eq({title: '/dir1', key: 1})
+      it "returns the node with datapath id as key" do
+        expect(controller.send(:add_node_to_tree, [], @datapath.path, false, @datapath.id)).to eq(
+          {title: @datapath.path, key: @datapath.id}
+        )
       end
 
       it "does not add an existing node" do
@@ -239,12 +241,6 @@ describe TracksController do
         it "has a title attribute" do
           expect(controller.send(:add_node_to_tree, [], '/dir1')[:title]).to eq '/dir1'
         end
-
-        it "has a consecutive key attributes" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1')[:key]).to eq 1
-          expect(controller.send(:add_node_to_tree, [], '/dir2')[:key]).to eq 2
-          expect(controller.send(:add_node_to_tree, [], '/dir3')[:key]).to eq 3
-        end
       end
     end
 
@@ -256,7 +252,7 @@ describe TracksController do
       end
 
       it "returns the node" do
-        expect(controller.send(:add_node_to_tree, @parent, '/dir2')).to eq({title: '/dir2', key: 2})
+        expect(controller.send(:add_node_to_tree, @parent, '/dir2')).to eq({title: '/dir2'})
       end
 
       it "does not add an existing node" do
@@ -288,12 +284,6 @@ describe TracksController do
 
         it "has a title attribute" do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2')[:title]).to eq '/dir2'
-        end
-
-        it "has a consecutive key attributes" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2')[:key]).to eq 2
-          expect(controller.send(:add_node_to_tree, @parent, '/dir3')[:key]).to eq 3
-          expect(controller.send(:add_node_to_tree, @parent, '/dir4')[:key]).to eq 4
         end
       end
     end
