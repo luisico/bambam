@@ -22,8 +22,9 @@ class TracksController < ApplicationController
   end
 
   def browser
+    @project = Project.find(params[:id])
     tree = generate_tree Datapath.all
-    respond_with tree.map {|hash| { title: hash[:title], key: hash[:key]}}
+    respond_with tree.map {|hash| { title: hash[:title], key: hash[:key], selected: hash[:selected]}}
   end
 
   private
@@ -45,6 +46,7 @@ class TracksController < ApplicationController
         parent = add_node_to_tree(tree, datapath.path)
         parent[:folder] = true
         parent[:key] = datapath.id
+        parent[:selected] = true if @project.datapaths.include? datapath
       else
         files.each do |file|
           parent = add_node_to_tree(tree, datapath.path, true, datapath.id)
@@ -70,8 +72,12 @@ class TracksController < ApplicationController
 
     if node.empty?
       node = {title: child}
-      node.merge!(key: id) if id
+      if id
+        node.merge!(key: id)
+        node.merge!(selected: true) if @project.datapaths.include? Datapath.find(id)
+      end
       node.merge!(expanded: true) if expanded
+
       tree[:folder] = true unless tree.is_a? Array
       parent << node
     else

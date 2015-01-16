@@ -1,5 +1,5 @@
 <%= form_for Track.new, remote: true do |f|%>
-  <div id="track-tree">
+  <div id="track-tree" data-project=<%= @project.id %>>
     <ul id="treeData" style="display: none;"></ul>
   </div>
 
