@@ -118,37 +118,39 @@ describe TracksController do
       before do
         user = FactoryGirl.create(:user)
         sign_in user
+        @project = FactoryGirl.create(:project)
       end
 
       context "responds to json" do
         it "should be successful" do
-          get :browser, format: 'json'
+          get :browser, id: @project, format: 'json'
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
         end
 
         it "should use all available master datapaths" do
-          expect(controller).to receive(:generate_tree).with(Datapath.all)
-          get :browser, format: 'json'
+          controller.stub(:tree).and_return([{title: 'path', key: 1}])
+          expect(controller).to receive(:generate_tree).with(Datapath.all).and_return([{}])
+          get :browser, id: @project, format: 'json'
         end
 
         it "should render json from the generate_tree method" do
-          expect(controller).to receive(:generate_tree).and_return("fakejson")
-          get :browser, format: 'json'
-          expect(response.body).to eq 'fakejson'
+          expect(controller).to receive(:generate_tree).and_return([{}])
+          get :browser, id: @project, format: 'json'
+          expect(response.body).to eq "[{\"title\":null,\"key\":null,\"selected\":null}]"
         end
       end
 
       it "should not respond to html" do
         expect {
-          get :browser, format: 'html'
+          get :browser, id: @project, format: 'html'
         }.to raise_error ActionController::UnknownFormat
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :browser, format: 'json'
+        get :browser, id: @project, format: 'json'
         expect(response).not_to be_success
         expect(response.status).to eq 401
       end
@@ -156,7 +158,10 @@ describe TracksController do
   end
 
   describe "#generate_tree" do
-    before { @datapath1 = FactoryGirl.create(:datapath) }
+    before do
+      @datapath1 = FactoryGirl.create(:datapath)
+      controller.instance_variable_set(:@project, FactoryGirl.create(:project))
+    end
 
     it "creates nodes for all files and directories found recursively" do
       datapath2 = FactoryGirl.create(:datapath)
@@ -196,6 +201,17 @@ describe TracksController do
       expect(Dir).to receive(:glob).with(["#{@datapath1.path}/**/*.bw", "#{@datapath1.path}/**/*.bam"]).and_call_original
       controller.send(:generate_tree, [@datapath1])
     end
+
+    it "marks project's datapaths as selected" do
+      datapath2 = FactoryGirl.create(:datapath)
+      project = FactoryGirl.create(:project, datapaths: [datapath2])
+      controller.instance_variable_set(:@project, project)
+
+      expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
+        {title: @datapath1.path, key: @datapath1.id, folder: true},
+        {title: datapath2.path, key: datapath2.id, folder: true, selected: true}
+      ]
+    end
   end
 
   describe "#add_node_to_tree" do
@@ -203,6 +219,7 @@ describe TracksController do
       before { @datapath = FactoryGirl.create(:datapath) }
 
       it "returns the node with datapath id as key" do
+        controller.instance_variable_set(:@project, FactoryGirl.create(:project))
         expect(controller.send(:add_node_to_tree, [], @datapath.path, false, @datapath.id)).to eq(
           {title: @datapath.path, key: @datapath.id}
         )
