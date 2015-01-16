@@ -10,7 +10,7 @@ class @Fancytree
       console.log(node)
       $.ajax({
         type: "POST",
-        url: "/tracks?id=" + $('#project_id').val() ,
+        url: "/tracks?id=" + $('#track-tree').data('project'),
         data: { track: { datapath_id: node.key } },
         success:(data) ->
           alert node.key

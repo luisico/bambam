@@ -1,5 +1,8 @@
 jQuery ->
   $('.edit-track').show()
+
+  Fancytree.applyFancytree()
+
   $('.error').closest('div.track-form-fields').show()
 
   $('form').on 'click', '.remove-track', (event) ->
@@ -31,10 +34,3 @@ jQuery ->
   $('.project-attributes').on 'click', '#cancel-edit-users', (event) ->
     $('#project-users').show()
     $(this).closest('form').remove()
-
-  $('#project-datapath-form').hide()
-
-  $('.project-datapaths').on 'click', '#cancel-edit-datapaths', (event) ->
-    $('#edit-datapaths').show()
-    $('#project-datapath-list').show()
-    $('#new_track').remove()

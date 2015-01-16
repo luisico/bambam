@@ -43,15 +43,9 @@
           <div class="small-12 columns project-datapaths">
             <h4><i class="datapath-icon large margin-right"></i>
               Datapaths
-              <small>
-                <%= link_to 'Edit Project Datapaths', new_track_path(project_id: @project.id), id: 'edit-datapaths', remote: true %>
-              </small>
-            </h4>
-            <ul class="no-bullet" id="project-datapath-list">
-              <% @project.allowed_paths.each do |allowed_path| %>
-                <li><%= allowed_path %></li>
-              <% end %>
-            </ul>
+            <div id="track-tree" data-project=<%= @project.id %>>
+              <ul id="treeData" style="display: none;"></ul>
+            </div>
           </div>
         </div>
       <% end %>
