@@ -4,10 +4,18 @@ Feature: Edit projects datapaths
   As a manager
   I can update the projects datapaths
 
-  Scenario: Managers can change project master datapaths
+  Scenario: Managers can add a project master datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
     And I have access to 3 additional datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
+
+  Scenario: Managers can remove a project master datapaths
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And I have access to 3 additional datapaths
+    When I am on the project page
+    Then I should be able to remove a datapath from the project

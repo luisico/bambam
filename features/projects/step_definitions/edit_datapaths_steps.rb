@@ -14,7 +14,7 @@ Given /^there (is|are) (\d+|a) datapaths in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
-    @project_datapaths = FactoryGirl.create_list(:datapath, n, users: [@manager])
+    @project_datapaths = FactoryGirl.create_list(:datapath, n, users: [@manager], projects: [@project])
   }.to change(Datapath, :count).by(n)
   @project_datapath = @project_datapaths.last
 end
@@ -38,4 +38,12 @@ Then /^I should be able to add a datapath to the project$/ do
     expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
     @project.reload
   }.to change(@project.datapaths, :count).by(1)
+end
+
+Then /^I should be able to remove a datapath from the project$/ do
+  expect {
+    fancytree_parent(@project_datapath.path).find('span.fancytree-checkbox').click
+    expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
+    @project.reload
+  }.to change(@project.datapaths, :count).by(-1)
 end

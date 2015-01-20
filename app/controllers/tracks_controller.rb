@@ -13,7 +13,11 @@ class TracksController < ApplicationController
   end
 
   def create
-    ProjectsDatapath.create(project_id: params[:id], datapath_id: track_params[:datapath_id])
+    if projects_datapath = ProjectsDatapath.where(project_id: params[:id], datapath_id: track_params[:datapath_id]).first
+      projects_datapath.destroy
+    else
+      ProjectsDatapath.create(project_id: params[:id], datapath_id: track_params[:datapath_id])
+    end
   end
 
   def browser
