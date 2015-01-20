@@ -1,8 +1,9 @@
 class @Fancytree
   @applyFancytree: ->
+    project_id = $('#track-tree').data('project')
     $('#track-tree').fancytree {
     source:
-      url: "/tracks/browser?id=" + $('#track-tree').data('project')
+      url: "/tracks/browser?id=" + project_id
     checkbox: true
     selectMode: 2
     select: (event, data) ->
@@ -10,7 +11,7 @@ class @Fancytree
       console.log(node)
       $.ajax({
         type: "POST",
-        url: "/tracks?id=" + $('#track-tree').data('project'),
+        url: "/tracks?id=" + project_id,
         data: { track: { datapath_id: node.key } },
         success:(data) ->
           alert node.key
