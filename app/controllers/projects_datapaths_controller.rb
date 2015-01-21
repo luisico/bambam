@@ -1,16 +1,21 @@
 class ProjectsDatapathsController < ApplicationController
   before_filter :authenticate_user!
-  load_and_authorize_resource except: [:browser, :create]
 
   respond_to :json, only: [:browser]
-  respond_to :js, only: [:create]
+  respond_to :js, only: [:create, :destroy]
 
   def create
-    if projects_datapath = ProjectsDatapath.where(project_id: projects_datapath_params[:project_id], datapath_id: projects_datapath_params[:datapath_id]).first
-      projects_datapath.destroy
-    else
-      ProjectsDatapath.create(project_id: projects_datapath_params[:project_id], datapath_id: projects_datapath_params[:datapath_id])
-    end
+    ProjectsDatapath.create(
+      project_id: projects_datapath_params[:project_id],
+      datapath_id: projects_datapath_params[:datapath_id]
+    )
+  end
+
+  def destroy
+    ProjectsDatapath.where(
+      project_id: params[:id],
+      datapath_id: projects_datapath_params[:datapath_id]
+    ).first.destroy
   end
 
   def browser

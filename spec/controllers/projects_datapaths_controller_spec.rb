@@ -1,17 +1,20 @@
 require 'spec_helper'
 
+def create_projects_datapath
+  @datapath = FactoryGirl.create(:datapath)
+  @project = FactoryGirl.create(:project)
+  @projects_datapath = FactoryGirl.attributes_for(:projects_datapath)
+  @projects_datapath.merge!(datapath_id: @datapath.id, project_id: @project.id)
+end
+
 describe ProjectsDatapathsController do
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "Post 'create'" do
+    before { create_projects_datapath }
+
     context "as a signed in manager and project owner" do
-      before do
-        @datapath = FactoryGirl.create(:datapath)
-        @project = FactoryGirl.create(:project)
-        @projects_datapath = FactoryGirl.attributes_for(:projects_datapath)
-        @projects_datapath.merge!(datapath_id: @datapath.id, project_id: @project.id)
-        sign_in @manager
-      end
+      before { sign_in @manager }
 
       context "project datapath creation" do
         context "with valid parameters" do
@@ -28,23 +31,6 @@ describe ProjectsDatapathsController do
         end
       end
 
-      context "project datapath deletion" do
-        before { @project.datapaths << @datapath}
-
-        context "with valid parameters" do
-          it "should be a success" do
-            post :create, projects_datapath: @projects_datapath, format: 'js'
-            expect(response).to be_success
-          end
-
-          it "should create a new project's datapath" do
-            expect{
-              post :create, projects_datapath: @projects_datapath, format: 'js'
-            }.to change(ProjectsDatapath, :count).by(-1)
-          end
-        end
-      end
-
       context "with invalid parameters" do
         it "should not create a new project's datapath" do
           count = ProjectsDatapath.all.count
@@ -55,7 +41,7 @@ describe ProjectsDatapathsController do
         end
       end
 
-      it "should not respond html" do
+      it "should not respond to html" do
         expect {
           post :create, projects_datapath: @projects_datapath, format: 'html'
         }.to raise_error ActionView::MissingTemplate
@@ -73,6 +59,60 @@ describe ProjectsDatapathsController do
         expect{
           post :create, share_link: @projects_datapath, format: 'js'
         }.not_to change(ShareLink, :count)
+      end
+    end
+  end
+
+  describe "Delete 'destroy'" do
+    before do
+      create_projects_datapath
+      @project.datapaths << @datapath
+    end
+
+    context "as a signed in manager and project owner" do
+      before { sign_in @manager }
+
+      context "with valid parameters" do
+        it "should be a success" do
+          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          expect(response).to be_success
+        end
+
+        it "should create a new project's datapath" do
+          expect{
+            delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          }.to change(ProjectsDatapath, :count).by(-1)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "should not create a new project's datapath" do
+          count = ProjectsDatapath.all.count
+          expect{
+            delete :destroy, projects_datapath: @projects_datapath, format: 'js'
+          }.to raise_error ActionController::UrlGenerationError
+          expect(count).to eq ProjectsDatapath.all.count
+        end
+      end
+
+      it "should not respond to html" do
+        expect {
+          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'html'
+        }.to raise_error ActionView::MissingTemplate
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+      end
+
+      it "should not delete the project" do
+        expect{
+          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+        }.not_to change(Project, :count)
       end
     end
   end

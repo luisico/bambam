@@ -11,7 +11,7 @@ Bambam::Application.routes.draw do
 
   resources :tracks, only: [:index, :show]
 
-  resources :projects_datapaths, only: [:create] do
+  resources :projects_datapaths, only: [:create, :destroy] do
     get 'browser', on: :collection
   end
 
