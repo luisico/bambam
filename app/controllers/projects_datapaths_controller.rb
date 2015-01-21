@@ -7,21 +7,23 @@ class ProjectsDatapathsController < ApplicationController
   def create
     ProjectsDatapath.create(
       project_id: projects_datapath_params[:project_id],
-      datapath_id: projects_datapath_params[:datapath_id]
+      datapath_id: projects_datapath_params[:datapath_id],
+      sub_directory: projects_datapath_params[:sub_directory]
     )
   end
 
   def destroy
     ProjectsDatapath.where(
       project_id: params[:id],
-      datapath_id: projects_datapath_params[:datapath_id]
+      datapath_id: projects_datapath_params[:datapath_id],
+      sub_directory: projects_datapath_params[:sub_directory]
     ).first.destroy
   end
 
   def browser
     @project = Project.find(params[:id])
     tree = generate_tree Datapath.all
-    respond_with tree.map {|hash| { title: hash[:title], key: hash[:key], selected: hash[:selected]}}
+    respond_with tree
   end
 
   private
@@ -46,9 +48,12 @@ class ProjectsDatapathsController < ApplicationController
         parent[:selected] = true if @project.datapaths.include? datapath
       else
         files.each do |file|
-          parent = add_node_to_tree(tree, datapath.path, true, datapath.id)
+          built_path = datapath.path
+          parent = add_node_to_tree(tree, datapath.path, true, datapath.id, @project.allowed_paths.include?(datapath.path))
           file.sub!(common, '').split(File::SEPARATOR)[2..-1].each do |item|
-            parent = add_node_to_tree(parent, item)
+            built_path = File.join built_path, item
+            selected = @project.allowed_paths.include?(built_path)
+            parent = add_node_to_tree(parent, item, selected, nil, selected)
           end
         end
       end
@@ -57,7 +62,7 @@ class ProjectsDatapathsController < ApplicationController
     tree
   end
 
-  def add_node_to_tree(tree, child, expanded=false, id=nil)
+  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false)
     if tree.is_a? Array
       parent = tree
     else
@@ -71,7 +76,7 @@ class ProjectsDatapathsController < ApplicationController
       node = {title: child}
       if id
         node.merge!(key: id)
-        node.merge!(selected: true) if @project.datapaths.include? Datapath.find(id)
+        node.merge!(selected: true) if selected
       end
       node.merge!(expanded: true) if expanded
 
@@ -79,6 +84,8 @@ class ProjectsDatapathsController < ApplicationController
       parent << node
     else
       node = node.first
+      node.merge!(selected: true) if selected
+
     end
 
     node
