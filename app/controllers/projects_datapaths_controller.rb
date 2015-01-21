@@ -48,12 +48,20 @@ class ProjectsDatapathsController < ApplicationController
         parent[:selected] = true if @project.datapaths.include? datapath
       else
         files.each do |file|
-          built_path = datapath.path
           parent = add_node_to_tree(tree, datapath.path, true, datapath.id, @project.allowed_paths.include?(datapath.path))
-          file.sub!(common, '').split(File::SEPARATOR)[2..-1].each do |item|
-            built_path = File.join built_path, item
+
+          components = file.sub!(common, '').split(File::SEPARATOR)[2..-1]
+          built_path = datapath.path
+          selected_indexes = []
+          components.each_with_index do |component, index|
+            built_path = File.join built_path, component
             selected = @project.allowed_paths.include?(built_path)
-            parent = add_node_to_tree(parent, item, selected, nil, selected)
+            selected_indexes << index if selected
+          end
+
+          components.each_with_index do |component, index|
+            expanded = !selected_indexes.empty? && selected_indexes.last > index
+            parent = add_node_to_tree(parent, component, expanded, nil, selected_indexes.include?(index))
           end
         end
       end
@@ -85,7 +93,7 @@ class ProjectsDatapathsController < ApplicationController
     else
       node = node.first
       node.merge!(selected: true) if selected
-
+      node.merge!(expanded: true) if expanded
     end
 
     node
