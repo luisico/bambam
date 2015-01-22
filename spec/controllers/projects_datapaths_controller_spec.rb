@@ -208,15 +208,41 @@ describe ProjectsDatapathsController do
       controller.send(:generate_tree, [@datapath1])
     end
 
-    it "marks project's datapaths as selected" do
+    it "marks project's datapaths as selected and expanded" do
       datapath2 = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project, datapaths: [datapath2])
+      projects_datapaths = %w(dir1 dir1/subdir2/tracks).collect do |sub_dir|
+        FactoryGirl.create(:projects_datapath,
+          datapath: @datapath1,
+          project: project,
+          sub_directory: sub_dir)
+      end
+      track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
+      project.reload
+
       controller.instance_variable_set(:@project, project)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {title: @datapath1.path, key: @datapath1.id, folder: true},
-        {title: datapath2.path, key: datapath2.id, folder: true, selected: true}
-      ]
+        {:title=> @datapath1.path,:key=> @datapath1.id, :expanded=>true,
+         :children=>
+          [{:title=>"dir1",
+            :expanded=>true,
+            :selected=>true,
+            :children=>
+             [{:title=>"subdir2",
+               :expanded=>true,
+               :children=>
+                [{:title=>"tracks",
+                  :selected=>true,
+                  :children=>
+                   [{:title=>"tracks",
+                     :children=>[{:title=>Pathname.new(track.full_path).basename.to_s}],
+                     :folder=>true}],
+                  :folder=>true}],
+               :folder=>true}],
+            :folder=>true}],
+         :folder=>true},
+        {:title=>datapath2.path, :folder=>true, :key=>datapath2.id, :selected=>true}]
     end
   end
 
