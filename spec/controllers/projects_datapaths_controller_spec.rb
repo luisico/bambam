@@ -179,7 +179,7 @@ describe ProjectsDatapathsController do
       expect(Dir).to receive(:glob).and_return( datapath1_paths, datapath2_paths)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {title: @datapath1.path, key: @datapath1.id, expanded: true, children: [
+        {title: @datapath1.path, key: @datapath1.id, children: [
           {title: 'file1'},
           {title: 'dir3', children: [
             {title: 'file2' },
@@ -189,7 +189,7 @@ describe ProjectsDatapathsController do
             {title: 'file4'}
           ], folder: true}
         ], folder: true},
-        {title: datapath2.path, key: datapath2.id, expanded: true, children: [
+        {title: datapath2.path, key: datapath2.id, children: [
           {title: 'file5'}
         ], folder: true}
       ]
