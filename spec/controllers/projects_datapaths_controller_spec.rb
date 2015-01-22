@@ -66,6 +66,7 @@ describe ProjectsDatapathsController do
   describe "Delete 'destroy'" do
     before do
       create_projects_datapath
+      FactoryGirl.create(:projects_datapath, @projects_datapath)
       @project.datapaths << @datapath
     end
 
@@ -78,7 +79,7 @@ describe ProjectsDatapathsController do
           expect(response).to be_success
         end
 
-        it "should create a new project's datapath" do
+        it "should destroy the project's datapath" do
           expect{
             delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
           }.to change(ProjectsDatapath, :count).by(-1)
@@ -139,7 +140,8 @@ describe ProjectsDatapathsController do
         end
 
         it "should render json from the generate_tree method" do
-          expect(controller).to receive(:generate_tree).and_return([{}])
+          json = [{title: nil, key: nil, selected: nil}]
+          expect(controller).to receive(:generate_tree).and_return(json)
           get :browser, id: @project, format: 'json'
           expect(response.body).to eq "[{\"title\":null,\"key\":null,\"selected\":null}]"
         end
