@@ -171,47 +171,40 @@ describe ProjectsDatapathsController do
 
     it "creates nodes for all files and directories found recursively" do
       datapath2 = FactoryGirl.create(:datapath)
-      datapath1_paths =  %w(/file1 /dir3/file2 /dir3/file3 /dir4/file4).collect do |dir|
+      datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
         @datapath1.path + dir
       end
-      datapath2_paths = [datapath2.path + "/file5"]
+      datapath2_paths = [datapath2.path + "/dir6/"]
 
       expect(Dir).to receive(:glob).and_return( datapath1_paths, datapath2_paths)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {title: @datapath1.path, key: @datapath1.id, children: [
-          {title: 'file1'},
-          {title: 'dir3', children: [
-            {title: 'file2' },
-            {title: 'file3'},
-          ], folder: true},
-          {title: 'dir4', children: [
-            {title: 'file4'}
-          ], folder: true}
-        ], folder: true},
-        {title: datapath2.path, key: datapath2.id, children: [
-          {title: 'file5'}
-        ], folder: true}
-      ]
+        {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :children=>[
+          {:title=>"dir1", :folder=>true},
+          {:title=>"dir2", :folder=>true, :children=>[
+            {:title=>"dir3", :folder=>true},
+            {:title=>"dir4", :folder=>true}]},
+            {:title=>"dir5", :folder=>true, :children=>[
+              {:title=>"dir6", :folder=>true}
+            ]}
+          ]},
+        {:title=>datapath2.path, :key=>datapath2.id, :folder=>true, :children=>[
+          {:title=>"dir6", :folder=>true}]
+        }]
     end
 
     it "marks a path as empty when no tracks are found" do
-      expect(Dir).to receive(:glob).and_return []
+      expect(Dir).to receive(:glob).and_return [@datapath1.path]
 
       expect(controller.send(:generate_tree, [@datapath1])).to eq [
         {title: @datapath1.path, key: @datapath1.id, folder: true}
       ]
     end
 
-    it "only searches for defined formats" do
-      expect(Dir).to receive(:glob).with(["#{@datapath1.path}/**/*.bw", "#{@datapath1.path}/**/*.bam"]).and_call_original
-      controller.send(:generate_tree, [@datapath1])
-    end
-
     it "marks project's datapaths as selected and expanded" do
       datapath2 = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project, datapaths: [datapath2])
-      projects_datapaths = %w(dir1 dir1/subdir2/tracks).collect do |sub_dir|
+      projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
         FactoryGirl.create(:projects_datapath,
           datapath: @datapath1,
           project: project,
@@ -223,26 +216,17 @@ describe ProjectsDatapathsController do
       controller.instance_variable_set(:@project, project)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {:title=> @datapath1.path,:key=> @datapath1.id, :expanded=>true,
-         :children=>
-          [{:title=>"dir1",
-            :expanded=>true,
-            :selected=>true,
-            :children=>
-             [{:title=>"subdir2",
-               :expanded=>true,
-               :children=>
-                [{:title=>"tracks",
-                  :selected=>true,
-                  :children=>
-                   [{:title=>"tracks",
-                     :children=>[{:title=>Pathname.new(track.full_path).basename.to_s}],
-                     :folder=>true}],
-                  :folder=>true}],
-               :folder=>true}],
+        {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true,:children=>[
+          {:title=>"dir1", :selected=>true, :children=>[
+            {:title=>"subdir2", :expanded=>true, :children=>[
+              {:title=>"subdir3", :selected=>true, :children=>[
+                {:title=>"tracks", folder: true}],
+              :folder=>true}],
             :folder=>true}],
-         :folder=>true},
-        {:title=>datapath2.path, :folder=>true, :key=>datapath2.id, :selected=>true}]
+          :folder=>true, :expanded=>true}],
+        :folder=>true},
+        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, folder: true}
+      ]
     end
   end
 
@@ -253,7 +237,7 @@ describe ProjectsDatapathsController do
       it "returns the node with datapath id as key" do
         controller.instance_variable_set(:@project, FactoryGirl.create(:project))
         expect(controller.send(:add_node_to_tree, [], @datapath.path, false, @datapath.id)).to eq(
-          {title: @datapath.path, key: @datapath.id}
+          {title: @datapath.path, key: @datapath.id, folder: true}
         )
       end
 
@@ -301,7 +285,7 @@ describe ProjectsDatapathsController do
       end
 
       it "returns the node" do
-        expect(controller.send(:add_node_to_tree, @parent, '/dir2')).to eq({title: '/dir2'})
+        expect(controller.send(:add_node_to_tree, @parent, '/dir2')).to eq({title: '/dir2', folder: true})
       end
 
       it "does not add an existing node" do
@@ -314,11 +298,6 @@ describe ProjectsDatapathsController do
         expect(@parent[:children]).to be_nil
         node = controller.send(:add_node_to_tree, @parent, '/dir2')
         expect(@parent[:children]).to eq [node]
-      end
-
-      it "sets the folder attribute to the parent" do
-        node = controller.send(:add_node_to_tree, @parent, '/dir2')
-        expect(@parent).to have_key :folder
       end
 
       context "node" do
