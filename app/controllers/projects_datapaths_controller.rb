@@ -5,19 +5,15 @@ class ProjectsDatapathsController < ApplicationController
   respond_to :js, only: [:create, :destroy]
 
   def create
-    ProjectsDatapath.create(
-      project_id: projects_datapath_params[:project_id],
-      datapath_id: projects_datapath_params[:datapath_id],
-      sub_directory: projects_datapath_params[:sub_directory]
-    )
+    @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
+    @projects_datapath.save
   end
 
   def destroy
-    ProjectsDatapath.where(
-      project_id: params[:id],
-      datapath_id: projects_datapath_params[:datapath_id],
-      sub_directory: projects_datapath_params[:sub_directory]
-    ).first.destroy
+    @projects_datapath = ProjectsDatapath.where(
+      projects_datapath_params.merge(project_id: params[:id])
+    ).first
+    @projects_datapath.destroy
   end
 
   def browser
