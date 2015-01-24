@@ -61,4 +61,26 @@ describe ProjectsDatapath do
       end
     end
   end
+
+  describe "#remove_nil" do
+    before { @projects_datapath = FactoryGirl.build(:projects_datapath) }
+
+    context "sub_directory" do
+      it "is set to a empty string when nil" do
+          @projects_datapath.sub_directory = nil
+          expect {
+            @projects_datapath.save
+            @projects_datapath.reload
+          }.to change(@projects_datapath, :sub_directory).to('')
+      end
+
+      it "is not changed when not nil" do
+         @projects_datapath.sub_directory = 'dir1'
+        expect {
+          @projects_datapath.save
+          @projects_datapath.reload
+        }.not_to change(@projects_datapath, :sub_directory)
+      end
+    end
+  end
 end
