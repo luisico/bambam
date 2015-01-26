@@ -36,6 +36,8 @@ Then /^I should be able to add a datapath to the project$/ do
   expect {
     fancytree_parent(@datapath.path).find('span.fancytree-checkbox').click
     expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
+
+    loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(1)
 end
@@ -44,6 +46,8 @@ Then /^I should be able to remove a datapath from the project$/ do
   expect {
     page.execute_script("$('span.fancytree-selected').last().children('.fancytree-checkbox').click()")
     expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
+
+    loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(-1)
 end
