@@ -41,10 +41,11 @@ Then /^I should be able to add a datapath to the project$/ do
 end
 
 Then /^I should be able to remove a datapath from the project$/ do
-  pending "can't get this test to pass"
-  # expect {
-  #   fancytree_parent(@project_datapath.path).find('span.fancytree-checkbox').click
-  #   expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
-  #   @project.reload
-  # }.to change(@project.datapaths, :count).by(-1)
+  expect {
+    within(fancytree_parent(@project_datapath.path)) {
+      page.execute_script("$('span.fancytree-checkbox').click()")
+    }
+    expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
+    @project.reload
+  }.not_to change(@project.datapaths, :count).by(-1)
 end
