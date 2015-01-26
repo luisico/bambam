@@ -44,9 +44,9 @@ class @Fancytree
 
   @deleteNode: (event, data, datapath_id, sub_dir) ->
     $.ajax({
-      type: "DELETE",
+      type: "POST",
       url: "/projects_datapaths/" + project_id,
-      data: { projects_datapath: { datapath_id: datapath_id, sub_directory: sub_dir } },
+      data: { projects_datapath: { datapath_id: datapath_id, sub_directory: sub_dir }, _method: "delete" },
       success:(data) ->
         console.log(datapath_id)
         return false
