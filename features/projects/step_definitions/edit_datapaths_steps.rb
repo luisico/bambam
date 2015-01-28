@@ -35,6 +35,11 @@ Given /^one of those additional datapaths has a sub\-directory$/ do
   Pathname.new(sub_dir).mkpath unless File.exist?(sub_dir)
 end
 
+Given /^one of those project datapaths has a sub\-directory$/ do
+  sub_dir = FactoryGirl.create(:projects_datapath, project: @project, datapath: @project_datapath)
+  @basename = Pathname.new(sub_dir.full_path).basename.to_s
+end
+
 ### When
 
 ### Then
@@ -68,4 +73,12 @@ Then /^I should be able to add a sub\-directory to the project$/ do
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(1)
+end
+
+Then /^I should be able to remove a sub\-directory to the project$/ do
+  expect {
+    fancytree_parent(@basename).find('span.fancytree-checkbox').click
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.datapaths, :count).by(-1)
 end
