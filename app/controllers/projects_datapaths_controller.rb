@@ -10,6 +10,7 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def destroy
+    # TODO pass the ProjectsDatapath id instead of project id
     @projects_datapath = ProjectsDatapath.where(
       projects_datapath_params.merge(project_id: params[:id])
     ).first

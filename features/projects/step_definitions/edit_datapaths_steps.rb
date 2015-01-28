@@ -1,6 +1,7 @@
 ### Methods
 
 def fancytree_node(title)
+  # TODO make sure these take advantage of capybara inherent waiting
   page.find('span.fancytree-title', text: title)
 end
 
@@ -49,6 +50,7 @@ Then /^I should be able to add a datapath to the project$/ do
     fancytree_parent(@datapath.path).find('span.fancytree-checkbox').click
     expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
 
+    # TODO sub below for module like in thoughbot post
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(1)
