@@ -19,3 +19,12 @@ Feature: Edit projects datapaths
     And I have access to 3 additional datapaths
     When I am on the project page
     Then I should be able to remove a datapath from the project
+
+  Scenario: Managers can add a sub-directory to the project
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And I have access to 3 additional datapaths
+    And one of those additional datapaths has a sub-directory
+    When I am on the project page
+    Then I should be able to add a sub-directory to the project

@@ -28,6 +28,13 @@ Given /^I have access to (\d+|a) additional datapaths$/ do |n|
   @datapath = @datapaths.last
 end
 
+Given /^one of those additional datapaths has a sub\-directory$/ do
+  @dir = 'dir1'
+  @basename = 'subdir1'
+  sub_dir = File.join(@datapath.path, @dir, @basename)
+  Pathname.new(sub_dir).mkpath unless File.exist?(sub_dir)
+end
+
 ### When
 
 ### Then
@@ -50,4 +57,15 @@ Then /^I should be able to remove a datapath from the project$/ do
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(-1)
+end
+
+Then /^I should be able to add a sub\-directory to the project$/ do
+  expect {
+    fancytree_parent(@datapath.path).find('span.fancytree-expander').click
+    fancytree_parent(@dir).find('span.fancytree-expander').click
+    fancytree_parent(@basename).find('span.fancytree-checkbox').click
+
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.datapaths, :count).by(1)
 end
