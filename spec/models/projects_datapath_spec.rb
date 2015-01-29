@@ -63,8 +63,6 @@ describe ProjectsDatapath do
   end
 
   describe "#remove_nil" do
-    before { @projects_datapath = FactoryGirl.build(:projects_datapath) }
-
     context "sub_directory" do
       it "is set to a empty string when nil" do
           @projects_datapath.sub_directory = nil
