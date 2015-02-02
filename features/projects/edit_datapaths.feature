@@ -37,3 +37,11 @@ Feature: Edit projects datapaths
     And I have access to 3 additional datapaths
     When I am on the project page
     Then I should be able to remove a sub-directory to the project
+
+  Scenario: Managers are informed about failed project datapath creation
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And I have access to 3 additional datapaths
+    When I am on the project page
+    Then I should be informed of a failed datapath creation

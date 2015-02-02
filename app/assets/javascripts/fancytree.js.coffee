@@ -31,14 +31,24 @@ class @Fancytree
     [datapath_id, sub_dir]
 
   @addNode: (event, data, datapath_id, sub_dir) ->
+    node = data.node
     $.ajax({
       type: "POST",
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
-      success:(data) ->
-        console.log(datapath_id)
+      success:(jqXHR, textStatus, errorThrown) ->
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+        $span = $(node.span)
+        $span.effect("highlight", {}, 1500)
         return false
-      error:(data) ->
+      error:(jqXHR, textStatus, errorThrown) ->
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+        $span = $(node.span)
+        $span.addClass('error-red').removeClass('fancytree-selected')
         return false
     })
 

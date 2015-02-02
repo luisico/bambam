@@ -9,6 +9,10 @@ def fancytree_parent(node_title)
   fancytree_node(node_title).find(:xpath, '..')
 end
 
+def select_node(title)
+  fancytree_parent(title).find('span.fancytree-checkbox').click
+end
+
 ### Given
 
 Given /^there (is|are) (\d+|a) datapaths in that project$/ do |foo, n|
@@ -50,11 +54,11 @@ end
 
 Then /^I should be able to add a datapath to the project$/ do
   expect {
-    fancytree_parent(@datapath.path).find('span.fancytree-checkbox').click
-    expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
-
+    select_node(@datapath.path)
     # TODO sub below for module like in thoughbot post
     loop until page.evaluate_script('jQuery.active').zero?
+    expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
+
     @project.reload
   }.to change(@project.datapaths, :count).by(1)
 end
@@ -86,4 +90,13 @@ Then /^I should be able to remove a sub\-directory to the project$/ do
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(-1)
+end
+
+Then /^I should be informed of a failed datapath creation$/ do
+  ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
+  select_node(@datapath.path)
+  loop until page.evaluate_script('jQuery.active').zero?
+
+  expect(fancytree_parent(@datapath.path)[:class]).to include 'error-red'
+  expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
 end

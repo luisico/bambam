@@ -256,3 +256,7 @@ span.select2-hidden-accessible {
   @extend .text-color-grey;
   @extend #regular-users;
 }
+
+.error-red {
+  background-color: red !important;
+}
