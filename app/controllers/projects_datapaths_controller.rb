@@ -7,7 +7,7 @@ class ProjectsDatapathsController < ApplicationController
     @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
     if @projects_datapath.save
       render json: {:status => :success, :message => "OK"}, :status => 200
-    elsif response.status = 404
+    else
       render json: {:status => :error, :message => "Record not found"}, :status => 404
     end
   end
