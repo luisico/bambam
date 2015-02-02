@@ -1,12 +1,15 @@
 class ProjectsDatapathsController < ApplicationController
   before_filter :authenticate_user!
 
-  respond_to :json, only: [:browser]
-  respond_to :js, only: [:create, :destroy]
+  respond_to :json
 
   def create
     @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
-    @projects_datapath.save
+    if @projects_datapath.save
+      render json: {:status => :success, :message => "OK"}, :status => 200
+    elsif response.status = 404
+      render json: {:status => :error, :message => "Record not found"}, :status => 404
+    end
   end
 
   def destroy
@@ -14,7 +17,11 @@ class ProjectsDatapathsController < ApplicationController
     @projects_datapath = ProjectsDatapath.where(
       projects_datapath_params.merge(project_id: params[:id])
     ).first
-    @projects_datapath.destroy
+    if @projects_datapath && @projects_datapath.destroy
+      render json: {status: :success, message: "OK" }, :status => 200
+    else
+      render json: {:status => :error, :message => "Record not found"}, :status => 404
+    end
   end
 
   def browser

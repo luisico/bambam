@@ -32,19 +32,21 @@ describe ProjectsDatapathsController do
       end
 
       context "with invalid parameters" do
-        it "should not create a new project's datapath" do
-          count = ProjectsDatapath.all.count
-          expect{
-            post :create, format: 'js'
-          }.to raise_error ActionController::ParameterMissing
-          expect(count).to eq ProjectsDatapath.all.count
-        end
-      end
+        context "invalide datapath" do
+          before { @datapath.destroy }
 
-      it "should not respond to html" do
-        expect {
-          post :create, projects_datapath: @projects_datapath, format: 'html'
-        }.to raise_error ActionView::MissingTemplate
+          it "should not create a new project's datapath" do
+            expect{
+              post :create, projects_datapath: @projects_datapath, format: 'js'
+            }.not_to change(ProjectsDatapath, :count)
+          end
+
+          it "should raise recond not found error" do
+            post :create, projects_datapath: @projects_datapath, format: 'js'
+            expect(response.status).to eq 404
+            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Record not found\"}"
+          end
+        end
       end
     end
 
@@ -87,19 +89,19 @@ describe ProjectsDatapathsController do
       end
 
       context "with invalid parameters" do
-        it "should not create a new project's datapath" do
-          count = ProjectsDatapath.all.count
-          expect{
-            delete :destroy, projects_datapath: @projects_datapath, format: 'js'
-          }.to raise_error ActionController::UrlGenerationError
-          expect(count).to eq ProjectsDatapath.all.count
-        end
-      end
+        before { @datapath.destroy }
 
-      it "should not respond to html" do
-        expect {
-          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'html'
-        }.to raise_error ActionView::MissingTemplate
+        it "should raise recond not found error" do
+          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          expect(response.status).to eq 404
+          expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Record not found\"}"
+        end
+
+        it "should not destroy the project's datapath" do
+          expect{
+            delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          }.not_to change(ProjectsDatapath, :count)
+        end
       end
     end
 
