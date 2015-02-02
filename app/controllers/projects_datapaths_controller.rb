@@ -8,7 +8,7 @@ class ProjectsDatapathsController < ApplicationController
     if @projects_datapath.save
       render json: {:status => :success, :message => "OK"}, :status => 200
     else
-      render json: {:status => :error, :message => "Record not found"}, :status => 404
+      render json: {:status => :error, :message => "Bad request"}, :status => 400
     end
   end
 
@@ -20,7 +20,7 @@ class ProjectsDatapathsController < ApplicationController
     if @projects_datapath && @projects_datapath.destroy
       render json: {status: :success, message: "OK" }, :status => 200
     else
-      render json: {:status => :error, :message => "Record not found"}, :status => 404
+      render json: {:status => :error, :message => "Bad request"}, :status => 400
     end
   end
 

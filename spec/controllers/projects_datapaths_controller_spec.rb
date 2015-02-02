@@ -43,8 +43,8 @@ describe ProjectsDatapathsController do
 
           it "should raise recond not found error" do
             post :create, projects_datapath: @projects_datapath, format: 'js'
-            expect(response.status).to eq 404
-            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Record not found\"}"
+            expect(response.status).to eq 400
+            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Bad request\"}"
           end
         end
       end
@@ -93,8 +93,8 @@ describe ProjectsDatapathsController do
 
         it "should raise recond not found error" do
           delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
-          expect(response.status).to eq 404
-          expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Record not found\"}"
+          expect(response.status).to eq 400
+          expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Bad request\"}"
         end
 
         it "should not destroy the project's datapath" do
