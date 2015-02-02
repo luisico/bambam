@@ -81,4 +81,23 @@ describe ProjectsDatapath do
       end
     end
   end
+
+  describe "validations" do
+    context "#datapath_id_exists" do
+      before do
+        datapath = FactoryGirl.create(:datapath)
+        @invalid_projects_datapath = FactoryGirl.build(:projects_datapath, datapath: datapath)
+        datapath.destroy
+      end
+
+      it "should require a valid datapath" do
+        expect(@invalid_projects_datapath).not_to be_valid
+      end
+
+      it "should add datapath_id errors to error messages" do
+        @invalid_projects_datapath.valid?
+        expect(@invalid_projects_datapath.errors[:datapath_id]).to be_present
+      end
+    end
+  end
 end

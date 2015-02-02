@@ -15,7 +15,10 @@ Given /^there (is|are) (\d+|a) datapaths in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
-    @project_datapaths = FactoryGirl.create_list(:datapath, n, users: [@manager], projects: [@project])
+    @project_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
+    @project_datapaths.each do |datapath|
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath)
+    end
   }.to change(Datapath, :count).by(n)
   @project_datapath = @project_datapaths.last
 end
