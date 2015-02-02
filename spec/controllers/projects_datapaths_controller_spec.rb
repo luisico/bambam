@@ -44,7 +44,7 @@ describe ProjectsDatapathsController do
           it "should raise recond not found error" do
             post :create, projects_datapath: @projects_datapath, format: 'js'
             expect(response.status).to eq 400
-            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Bad request\"}"
+            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"datapath must exist\"}"
           end
         end
       end
@@ -91,16 +91,18 @@ describe ProjectsDatapathsController do
       context "with invalid parameters" do
         before { @datapath.destroy }
 
-        it "should raise recond not found error" do
-          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
-          expect(response.status).to eq 400
-          expect(response.body).to eq "{\"status\":\"error\",\"message\":\"Bad request\"}"
-        end
-
-        it "should not destroy the project's datapath" do
-          expect{
+        context "non-existance projects datapath" do
+          it "should raise recond not found error" do
             delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
-          }.not_to change(ProjectsDatapath, :count)
+            expect(response.status).to eq 400
+            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"file system error\"}"
+          end
+
+          it "should not destroy the project's datapath" do
+            expect{
+              delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+            }.not_to change(ProjectsDatapath, :count)
+          end
         end
       end
     end
