@@ -3,8 +3,8 @@ require 'spec_helper'
 def create_projects_datapath
   @datapath = FactoryGirl.create(:datapath)
   @project = FactoryGirl.create(:project)
-  @projects_datapath = FactoryGirl.attributes_for(:projects_datapath)
-  @projects_datapath.merge!(datapath_id: @datapath.id, project_id: @project.id)
+  @projects_datapath_attr = FactoryGirl.attributes_for(:projects_datapath)
+  @projects_datapath_attr.merge!(datapath_id: @datapath.id, project_id: @project.id)
 end
 
 describe ProjectsDatapathsController do
@@ -19,13 +19,13 @@ describe ProjectsDatapathsController do
       context "project datapath creation" do
         context "with valid parameters" do
           it "should be a success" do
-            post :create, projects_datapath: @projects_datapath, format: 'js'
+            post :create, projects_datapath: @projects_datapath_attr, format: 'js'
             expect(response).to be_success
           end
 
           it "should create a new project's datapath" do
             expect{
-              post :create, projects_datapath: @projects_datapath, format: 'js'
+              post :create, projects_datapath: @projects_datapath_attr, format: 'js'
             }.to change(ProjectsDatapath, :count).by(1)
           end
         end
@@ -37,12 +37,12 @@ describe ProjectsDatapathsController do
 
           it "should not create a new project's datapath" do
             expect{
-              post :create, projects_datapath: @projects_datapath, format: 'js'
+              post :create, projects_datapath: @projects_datapath_attr, format: 'js'
             }.not_to change(ProjectsDatapath, :count)
           end
 
           it "should raise recond not found error" do
-            post :create, projects_datapath: @projects_datapath, format: 'js'
+            post :create, projects_datapath: @projects_datapath_attr, format: 'js'
             expect(response.status).to eq 400
             expect(response.body).to eq "{\"status\":\"error\",\"message\":\"datapath must exist\"}"
           end
@@ -52,14 +52,14 @@ describe ProjectsDatapathsController do
 
     context "as a visitor" do
       it "should return unauthorized response" do
-        post :create, share_link: @projects_datapath, format: 'js'
+        post :create, share_link: @projects_datapath_attr, format: 'js'
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
       it "should not create a new projec's datapath" do
         expect{
-          post :create, share_link: @projects_datapath, format: 'js'
+          post :create, share_link: @projects_datapath_attr, format: 'js'
         }.not_to change(ShareLink, :count)
       end
     end
@@ -68,7 +68,7 @@ describe ProjectsDatapathsController do
   describe "Delete 'destroy'" do
     before do
       create_projects_datapath
-      FactoryGirl.create(:projects_datapath, @projects_datapath)
+      @projects_datapath = FactoryGirl.create(:projects_datapath, @projects_datapath_attr)
       @project.datapaths << @datapath
     end
 
@@ -77,13 +77,13 @@ describe ProjectsDatapathsController do
 
       context "with valid parameters" do
         it "should be a success" do
-          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          delete :destroy, id: @projects_datapath.id, format: 'js'
           expect(response).to be_success
         end
 
         it "should destroy the project's datapath" do
           expect{
-            delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+            delete :destroy, id: @projects_datapath.id, format: 'js'
           }.to change(ProjectsDatapath, :count).by(-1)
         end
       end
@@ -93,14 +93,14 @@ describe ProjectsDatapathsController do
 
         context "non-existance projects datapath" do
           it "should raise recond not found error" do
-            delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+            delete :destroy, id: @projects_datapath.id, format: 'js'
             expect(response.status).to eq 400
             expect(response.body).to eq "{\"status\":\"error\",\"message\":\"file system error\"}"
           end
 
           it "should not destroy the project's datapath" do
             expect{
-              delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+              delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
             }.not_to change(ProjectsDatapath, :count)
           end
         end
@@ -109,14 +109,14 @@ describe ProjectsDatapathsController do
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+        delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
       it "should not delete the project" do
         expect{
-          delete :destroy, id: @project.id, projects_datapath: @projects_datapath, format: 'js'
+          delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
         }.not_to change(Project, :count)
       end
     end
@@ -220,16 +220,16 @@ describe ProjectsDatapathsController do
       controller.instance_variable_set(:@project, project)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true,:children=>[
-          {:title=>"dir1", :selected=>true, :children=>[
-            {:title=>"subdir2", :expanded=>true, :children=>[
-              {:title=>"subdir3", :selected=>true, :children=>[
-                {:title=>"tracks", folder: true}],
-              :folder=>true}],
-            :folder=>true}],
-          :folder=>true, :expanded=>true}],
-        :folder=>true},
-        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, folder: true}
+        {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :expanded=>true,
+          :children=>[
+          {:title=>"dir1", :selected=>true, :projects_datapath_id=>projects_datapaths.first.id.to_s, :folder=>true,
+            :children=>[
+            {:title=>"subdir2", :folder=>true, :expanded=>true,
+              :children=>[
+              {:title=>"subdir3", :selected=>true, :projects_datapath_id=>projects_datapaths.last.id.to_s, :folder=>true,
+                :children=>[
+                {:title=>"tracks", :folder=>true}]}]}], :expanded=>true}]},
+        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, :projects_datapath_id=>project.projects_datapaths.first.id, :folder=>true}
       ]
     end
   end

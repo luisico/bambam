@@ -14,13 +14,10 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def destroy
-    # TODO pass the ProjectsDatapath id instead of project id
-    @projects_datapath = ProjectsDatapath.where(
-      projects_datapath_params.merge(project_id: params[:id])
-    ).first
+    @projects_datapath = ProjectsDatapath.find_by_id(params[:id])
     if @projects_datapath && @projects_datapath.destroy
       render json: {status: :success, message: "OK" }, :status => 200
-    elsif @projects_datapath == nil
+    else
       render json: {:status => :error, :message => "file system error"}, :status => 400
     end
   end
@@ -51,15 +48,23 @@ class ProjectsDatapathsController < ApplicationController
 
         components.each_with_index do |component, index|
           built_path = File.join built_path, component
-          selected_indexes << index if @project.allowed_paths.include?(built_path)
+          if @project.allowed_paths.include?(built_path)
+            selected_indexes << { index => @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first.id }
+          end
         end
 
-        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, @project.allowed_paths.include?(datapath.path))
+        if parent_selected = @project.allowed_paths.include?(datapath.path)
+          parent_projects_datapath_id = @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first.id
+        end
+
+        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, parent_selected, parent_projects_datapath_id)
 
         components.each_with_index do |component, index|
-          expanded = !selected_indexes.empty? && selected_indexes.last > index
-          selected = selected_indexes.include?(index)
-          parent = add_node_to_tree(parent, component, expanded, nil, selected)
+          expanded = !selected_indexes.empty? && selected_indexes.last.keys.first > index
+          if selected = selected_indexes.select {|hash| hash.keys.include?(index)}.any?
+            projects_datapath_id = selected_indexes.collect {|hash| hash[index]}.join
+          end
+          parent = add_node_to_tree(parent, component, expanded, nil, selected, projects_datapath_id)
         end
       end
     end
@@ -67,7 +72,7 @@ class ProjectsDatapathsController < ApplicationController
     tree
   end
 
-  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false)
+  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false, projects_datapath_id=nil)
     if tree.is_a? Array
       parent = tree
     else
@@ -82,12 +87,14 @@ class ProjectsDatapathsController < ApplicationController
       node.merge!(key: id) if id
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
+      node.merge!(projects_datapath_id: projects_datapath_id) if selected
 
       parent << node
     else
       node = node.first
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
+      node.merge!(projects_datapath_id: projects_datapath_id) if selected
     end
 
     node.merge!(folder: true)
