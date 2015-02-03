@@ -59,8 +59,17 @@ class @Fancytree
       type: "POST",
       url: "/projects_datapaths/" + projects_datapath_id
       data: { _method: "delete" },
-      success:(data) ->
+      success:(jqXHR, textStatus, errorThrown) ->
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
         return false
-      error:(data) ->
+      error:(jqXHR, textStatus, errorThrown) ->
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+        $span = $(node.span)
+        $span.addClass('error-red')
+        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })

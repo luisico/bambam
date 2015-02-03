@@ -10,6 +10,7 @@ def fancytree_parent(node_title)
 end
 
 def select_node(title)
+  @title = title
   fancytree_parent(title).find('span.fancytree-checkbox').click
 end
 
@@ -101,6 +102,14 @@ Then /^I should be informed of a failed datapath creation$/ do
   expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
 end
 
+Then /^I should be informed of a failed datapath deletion$/ do
+  ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
+  select_node(@project_datapath.path)
+  loop until page.evaluate_script('jQuery.active').zero?
+
+  expect(fancytree_parent(@project_datapath.path)[:class]).to include 'error-red'
+end
+
 Then /^I should see the status code appended to the node title$/ do
-  expect(fancytree_node(@datapath.path).text).to include '[Bad Request]'
+  expect(fancytree_node(@title).text).to include '[Bad Request]'
 end
