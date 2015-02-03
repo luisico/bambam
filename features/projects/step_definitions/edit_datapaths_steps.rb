@@ -100,3 +100,7 @@ Then /^I should be informed of a failed datapath creation$/ do
   expect(fancytree_parent(@datapath.path)[:class]).to include 'error-red'
   expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
 end
+
+Then /^I should see the status code appended to the node title$/ do
+  expect(fancytree_node(@datapath.path).text).to include '[Bad Request]'
+end

@@ -45,3 +45,4 @@ Feature: Edit projects datapaths
     And I have access to 3 additional datapaths
     When I am on the project page
     Then I should be informed of a failed datapath creation
+    And I should see the status code appended to the node title

@@ -49,6 +49,7 @@ class @Fancytree
         console.log(errorThrown)
         $span = $(node.span)
         $span.addClass('error-red').removeClass('fancytree-selected')
+        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
 
