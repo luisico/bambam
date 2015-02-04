@@ -50,6 +50,22 @@ describe ProjectsDatapathsController do
       end
     end
 
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden response" do
+        post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+      end
+
+      it "should not create a new projects datapath" do
+        expect {
+          post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+        }.not_to change(ProjectsDatapath, :count)
+      end
+    end
+
     context "as a visitor" do
       it "should return unauthorized response" do
         post :create, projects_datapath: @projects_datapath_attr, format: 'js'
@@ -104,6 +120,22 @@ describe ProjectsDatapathsController do
             }.not_to change(ProjectsDatapath, :count)
           end
         end
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      it "should return forbidden reponse" do
+        delete :destroy, id: @projects_datapath.id, format: 'js'
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+      end
+
+      it "should not delete the projects datapath" do
+        expect {
+          delete :destroy, id: @projects_datapath.id, format: 'js'
+        }.not_to change(ProjectsDatapath, :count)
       end
     end
 
