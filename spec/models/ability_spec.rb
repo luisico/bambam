@@ -38,6 +38,10 @@ describe User do
       context "datapaths" do
         it { should be_able_to(:manage, Datapath) }
       end
+
+      context "projects_datapaths" do
+        it { should be_able_to(:manage, ProjectsDatapath) }
+      end
     end
 
     describe "as manager" do
@@ -90,6 +94,21 @@ describe User do
 
           it { should     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
           it { should_not be_able_to(:read, FactoryGirl.create(:track)) }
+        end
+
+        context "projects_datapaths" do
+          before do
+            @projects_datapath_as_owner = FactoryGirl.create(:projects_datapath, project: @project)
+            @projects_datapath_as_user = FactoryGirl.create(:projects_datapath, project: @project_as_user)
+            @other_projects_datapath = FactoryGirl.create(:projects_datapath)
+          end
+
+          it { should     be_able_to(:manage, @projects_datapath_as_owner) }
+
+          it { should_not be_able_to(:manage, @projects_datapath_as_user) }
+          it { should     be_able_to(:browser, @projects_datapath_as_user) }
+
+          it { should_not be_able_to(:browser, @other_projects_datapath)}
         end
       end
 
@@ -195,6 +214,19 @@ describe User do
 
       context "datapaths" do
         it { should_not be_able_to(:manage, Datapath) }
+      end
+
+      context "projects_datapaths" do
+        before do
+          project = FactoryGirl.create(:project, users: [@user])
+          @projects_datapath_as_user = FactoryGirl.create(:projects_datapath, project: project)
+          @projects_datapath = FactoryGirl.create(:projects_datapath)
+        end
+
+        it { should_not be_able_to(:manage, @projects_datapath_as_user) }
+        it { should     be_able_to(:browser, @projects_datapath_as_user) }
+
+        it { should_not be_able_to(:browser, @projects_datapath) }
       end
     end
   end

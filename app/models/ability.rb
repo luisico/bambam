@@ -15,6 +15,7 @@ class Ability
       can :manage, ShareLink
       can :update, ProjectsUser
       can :manage, Datapath
+      can :manage, ProjectsDatapath
     else
 
       if user.has_role? :manager
@@ -23,6 +24,7 @@ class Ability
         can :manage, Group, owner_id: user.id
         can :manage, Track, :projects_datapath => { :project => { :owner_id => user.id }}
         can :update, ProjectsUser, :project => { :owner_id => user.id }
+        can :manage, ProjectsDatapath, :project => { :owner_id => user.id }
       end
 
       can :show, User, id: user.id
@@ -41,6 +43,9 @@ class Ability
       can :manage, ShareLink do |share_link|
         share_link.track.project.users.include?(user)
       end
+
+      can :browser, ProjectsDatapath, :project => { :projects_users => { :user_id => user.id }}
+
     end
   end
 end
