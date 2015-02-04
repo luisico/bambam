@@ -52,15 +52,15 @@ describe ProjectsDatapathsController do
 
     context "as a visitor" do
       it "should return unauthorized response" do
-        post :create, share_link: @projects_datapath_attr, format: 'js'
+        post :create, projects_datapath: @projects_datapath_attr, format: 'js'
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
-      it "should not create a new projec's datapath" do
+      it "should not create a new project's datapath" do
         expect{
-          post :create, share_link: @projects_datapath_attr, format: 'js'
-        }.not_to change(ShareLink, :count)
+          post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+        }.not_to change(ProjectsDatapath, :count)
       end
     end
   end
@@ -109,15 +109,15 @@ describe ProjectsDatapathsController do
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
+        delete :destroy, id: @projects_datapath.id, format: 'js'
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
-      it "should not delete the project" do
+      it "should not delete the projects datapath" do
         expect{
-          delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
-        }.not_to change(Project, :count)
+          delete :destroy, id: @projects_datapath.id, format: 'js'
+        }.not_to change(ProjectsDatapath, :count)
       end
     end
   end
