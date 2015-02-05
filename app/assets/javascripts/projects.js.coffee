@@ -1,6 +1,8 @@
 jQuery ->
   $('.edit-track').show()
 
+  $('.best_in_place').best_in_place()
+
   Fancytree.applyFancytree()
 
   $('.error').closest('div.track-form-fields').show()
