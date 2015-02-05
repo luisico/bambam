@@ -25,7 +25,7 @@ class ProjectsDatapathsController < ApplicationController
 
   def browser
     @project = Project.find(params[:id])
-    tree = generate_tree Datapath.all
+    tree = generate_tree @project.owner.datapaths
     respond_with tree
   end
 

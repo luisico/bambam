@@ -30,9 +30,9 @@ end
 
 Given /^I have access to (\d+|a) additional datapaths$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  owner = (@manager || FactoryGirl.create(:manager))
+
   expect {
-    @datapaths = FactoryGirl.create_list(:datapath, n, users: [owner])
+    @datapaths = FactoryGirl.create_list(:datapath, n, users: [@project.owner])
   }.to change(Datapath, :count).by(n)
   @datapath = @datapaths.last
 end

@@ -169,9 +169,9 @@ describe ProjectsDatapathsController do
           expect(response.header['Content-Type']).to include 'application/json'
         end
 
-        it "should use all available master datapaths" do
+        it "should use the project owners datapaths" do
           controller.stub(:tree).and_return([{title: 'path', key: 1}])
-          expect(controller).to receive(:generate_tree).with(Datapath.all).and_return([{}])
+          expect(controller).to receive(:generate_tree).with(@project.owner.datapaths).and_return([{}])
           get :browser, id: @project, format: 'json'
         end
 
