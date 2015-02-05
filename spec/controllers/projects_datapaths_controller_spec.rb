@@ -278,6 +278,16 @@ describe ProjectsDatapathsController do
         it "has a title attribute" do
           expect(controller.send(:add_node_to_tree, [], '/dir1')[:title]).to eq '/dir1'
         end
+
+        it "has a projects_datapath_id attribute if requested" do
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, 2)).
+          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :projects_datapath_id=>2, :folder=>true})
+        end
+
+        it "does not no have a projects_datapath_id attribute if it's not selected" do
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, false, 2)).
+          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :folder=>true})
+        end
       end
     end
 
@@ -316,6 +326,16 @@ describe ProjectsDatapathsController do
 
         it "has a title attribute" do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2')[:title]).to eq '/dir2'
+        end
+
+        it "has a projects_datapath_id attribute if requested" do
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, 1)).
+          to eq({title: '/dir2', :selected=>true, :projects_datapath_id=>1, :folder=>true})
+        end
+
+        it "does not no have a projects_datapath_id attribute if it's not selected" do
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, false, 1)).
+          to eq({title: '/dir2', :folder=>true})
         end
       end
     end
