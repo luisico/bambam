@@ -30,9 +30,9 @@ end
 
 Given /^I have access to (\d+|a) additional datapaths$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-
+  owner = (@manager || FactoryGirl.create(:manager))
   expect {
-    @datapaths = FactoryGirl.create_list(:datapath, n, users: [@manager])
+    @datapaths = FactoryGirl.create_list(:datapath, n, users: [owner])
   }.to change(Datapath, :count).by(n)
   @datapath = @datapaths.last
 end
@@ -53,15 +53,19 @@ end
 
 ### Then
 
-Then /^I should be able to add a datapath to the project$/ do
-  expect {
-    select_node(@datapath.path)
-    # TODO sub below for module like in thoughbot post
-    loop until page.evaluate_script('jQuery.active').zero?
-    expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
+Then /^I should( not)? be able to add a datapath to the project$/ do |negate|
+  if negate
+    expect(fancytree_parent(@datapath.path)).not_to have_css('span.fancytree-checkbox')
+  else
+    expect {
+      select_node(@datapath.path)
+      # TODO sub below for module like in thoughbot post
+      loop until page.evaluate_script('jQuery.active').zero?
+      expect(fancytree_parent(@datapath.path)[:class]).to include 'fancytree-selected'
 
-    @project.reload
-  }.to change(@project.datapaths, :count).by(1)
+      @project.reload
+    }.to change(@project.datapaths, :count).by(1)
+  end
 end
 
 Then /^I should be able to remove a datapath from the project$/ do

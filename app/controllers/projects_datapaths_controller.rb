@@ -89,6 +89,7 @@ class ProjectsDatapathsController < ApplicationController
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
       node.merge!(projects_datapath_id: projects_datapath_id) if selected
+      node.merge!(hideCheckbox: true) if cannot? :manage, @project
 
       parent << node
     else
@@ -96,6 +97,7 @@ class ProjectsDatapathsController < ApplicationController
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
       node.merge!(projects_datapath_id: projects_datapath_id) if selected
+      node.merge!(hideCheckbox: true) if cannot? :manage, @project
     end
 
     node.merge!(folder: true)

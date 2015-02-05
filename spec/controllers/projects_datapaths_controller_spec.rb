@@ -203,6 +203,7 @@ describe ProjectsDatapathsController do
     before do
       @datapath1 = FactoryGirl.create(:datapath)
       controller.instance_variable_set(:@project, FactoryGirl.create(:project))
+      controller.stub(:cannot?).and_return(false)
     end
 
     it "creates nodes for all files and directories found recursively" do
@@ -268,10 +269,13 @@ describe ProjectsDatapathsController do
 
   describe "#add_node_to_tree" do
     context "top level nodes" do
-      before { @datapath = FactoryGirl.create(:datapath) }
+      before do
+        controller.stub(:cannot?).and_return(false)
+        @datapath = FactoryGirl.create(:datapath)
+      end
 
       it "returns the node with datapath id as key" do
-        controller.instance_variable_set(:@project, FactoryGirl.create(:project))
+        controller.instance_variable_set(:@project, @project)
         expect(controller.send(:add_node_to_tree, [], @datapath.path, false, @datapath.id)).to eq(
           {title: @datapath.path, key: @datapath.id, folder: true}
         )
@@ -328,6 +332,7 @@ describe ProjectsDatapathsController do
         tree = [{title: '/dir1', key: 1}]
         @parent = tree.first
         controller.instance_variable_set(:@key, 1)
+        controller.stub(:cannot?).and_return(false)
       end
 
       it "returns the node" do
@@ -368,6 +373,29 @@ describe ProjectsDatapathsController do
         it "does not no have a projects_datapath_id attribute if it's not selected" do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, false, 1)).
           to eq({title: '/dir2', :folder=>true})
+        end
+      end
+    end
+
+    context "regular users" do
+      before { controller.stub(:cannot?).and_return(true) }
+
+      context "top level nodes" do
+        it "hides the node checkbox" do
+          controller.instance_variable_set(:@project, FactoryGirl.create(:project))
+          expect(controller.send(:add_node_to_tree, [], '/dir1')).
+          to eq({:title=>"/dir1", :hideCheckbox=>true, :folder=>true})
+        end
+      end
+
+      context "regular nodes" do
+        it "hides the node checkbox" do
+          tree = [{title: '/dir1', key: 1}]
+          parent = tree.first
+          controller.instance_variable_set(:@key, 1)
+
+          expect(controller.send(:add_node_to_tree, parent, '/dir2')).
+          to eq({:title=>"/dir2", :hideCheckbox=>true, :folder=>true})
         end
       end
     end

@@ -38,17 +38,15 @@
         </div>
       </div>
 
-      <% if can? :manage, @project %>
-        <div class="row">
-          <div class="small-12 columns project-datapaths">
-            <h4><i class="datapath-icon large margin-right"></i>
-              Datapaths
-            <div id="track-tree" data-project=<%= @project.id %>>
-              <ul id="treeData" style="display: none;"></ul>
-            </div>
+      <div class="row">
+        <div class="small-12 columns project-datapaths">
+          <h4><i class="datapath-icon large margin-right"></i>
+            Datapaths
+          <div id="track-tree" data-project=<%= @project.id %>>
+            <ul id="treeData" style="display: none;"></ul>
           </div>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
