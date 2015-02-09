@@ -7,7 +7,7 @@ class ProjectsDatapath < ActiveRecord::Base
   validates_exclusion_of :sub_directory, {in: [nil]}
 
   def full_path
-    Pathname.new('').join(datapath.path, sub_directory ? sub_directory : "").to_s
+    Pathname.new('').join(datapath.path, sub_directory || "").to_s
   end
 
   def datapath_id_exists
