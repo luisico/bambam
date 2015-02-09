@@ -240,9 +240,9 @@ describe DatapathsController do
 
   describe "Patch 'update'" do
     before do
-     @datapath = FactoryGirl.create(:datapath)
-     @new_datapath_attrs = FactoryGirl.attributes_for(:datapath)
-     Pathname.new(@new_datapath_attrs[:path]).mkpath unless File.exist?(@new_datapath_attrs[:path])
+      @datapath = FactoryGirl.create(:datapath)
+      @new_datapath_attrs = FactoryGirl.attributes_for(:datapath)
+      Pathname.new(@new_datapath_attrs[:path]).mkpath unless File.exist?(@new_datapath_attrs[:path])
     end
 
     context "as an admin" do

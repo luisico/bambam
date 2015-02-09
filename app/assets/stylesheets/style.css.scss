@@ -220,8 +220,8 @@ input.with-instructions {
 .cloud-tag {
   li {
     @include label(
-    $bg: $secondary-color,
-    $radius: $global-radius
+      $bg: $secondary-color,
+      $radius: $global-radius
     );
     margin-bottom: rem-calc(10);
   }

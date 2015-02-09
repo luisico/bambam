@@ -25,7 +25,7 @@ When /^I create a new datapath$/ do
 end
 
 When /^I create a new datapath with an invalid path$/ do
-   expect {
+  expect {
     @datapath_attrs = {path:"my/invalid/datapath" }
     create_datapath
   }.not_to change(Datapath, :count)

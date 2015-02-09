@@ -69,7 +69,7 @@ Then /^I should be able to designate a user read only$/ do
   @projects_user = @project.projects_users.first
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-    find('label', text: "set read-only").click
+      find('label', text: "set read-only").click
     }
     expect(page).to have_content "restore access"
     @projects_user.reload

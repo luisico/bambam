@@ -406,7 +406,7 @@ describe ActiveModel::Validations::PathValidator do
         with_file(File.join(subject.path, 'file1')) { expect(subject).to be_valid }
       end
 
-       it "a file deep in the directory should be valid" do
+      it "a file deep in the directory should be valid" do
         subject.path = File.join TEST_BASE, 'dir1', 'subdir1', 'file1'
         with_file(subject.path) { expect(subject).to be_valid }
       end

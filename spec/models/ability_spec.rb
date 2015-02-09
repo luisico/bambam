@@ -52,8 +52,8 @@ describe User do
       end
 
       context "users" do
-        it { should  be_able_to(:invite, User) }
-        it { should  be_able_to(:cancel, @manager) }
+        it { should be_able_to(:invite, User) }
+        it { should be_able_to(:cancel, @manager) }
 
         it { should_not be_able_to(:manage, @user) }
         it { should_not be_able_to(:cancel, @user) }

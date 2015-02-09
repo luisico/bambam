@@ -21,6 +21,6 @@ class User < ActiveRecord::Base
   end
 
   def handle_with_email
-   self.handle.eql?(self.email) ? self.email : "#{self.handle} [#{self.email}]"
+    self.handle.eql?(self.email) ? self.email : "#{self.handle} [#{self.email}]"
   end
 end

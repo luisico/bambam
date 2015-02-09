@@ -62,7 +62,7 @@ end
 
 Then /^I should see the invitee email with invitation pending icon$/ do
   within('p', text: @invitee[:email]) do
-   expect(page).to have_css('.fi-ticket')
+    expect(page).to have_css('.fi-ticket')
   end
 end
 

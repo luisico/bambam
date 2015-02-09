@@ -25,6 +25,7 @@ class Track < ActiveRecord::Base
   end
 
   protected
+
   def update_projects_datapath
     self.projects_datapath.save if self.projects_datapath.changed?
   end
