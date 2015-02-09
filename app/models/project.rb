@@ -16,10 +16,10 @@ class Project < ActiveRecord::Base
   end
 
   def regular_users
-    self.users.where( projects_users: { read_only: false })
+    users.where(projects_users: { read_only: false })
   end
 
   def read_only_users
-    self.users.where( projects_users: { read_only: true })
+    users.where(projects_users: { read_only: true })
   end
 end
