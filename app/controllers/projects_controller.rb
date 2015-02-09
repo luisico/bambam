@@ -10,8 +10,6 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.includes(:projects_users, :users).find(params[:id])
-    @regular_users = @project.regular_users
-    @read_only_users = @project.read_only_users
   end
 
   def new
