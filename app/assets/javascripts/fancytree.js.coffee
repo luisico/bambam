@@ -37,16 +37,10 @@ class @Fancytree
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
       success:(jqXHR, textStatus, errorThrown) ->
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
         $span = $(node.span)
         $span.addClass('error-red').removeClass('fancytree-selected')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
@@ -60,14 +54,8 @@ class @Fancytree
       url: "/projects_datapaths/" + projects_datapath_id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
         $span = $(node.span)
         $span.addClass('error-red')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
