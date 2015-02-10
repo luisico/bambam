@@ -16,7 +16,7 @@ class ProjectsDatapath < ActiveRecord::Base
   end
 
   def datapath_id_exists
-    if Datapath.find_by_id(self.datapath_id).nil?
+    unless Datapath.exists?(datapath_id)
       errors.add(:datapath_id, "datapath must exist")
       false
     end
