@@ -78,11 +78,6 @@ describe Track do
   describe "projects_datapath_id" do
     it { should belong_to :projects_datapath }
     it { should respond_to :projects_datapath_id }
-    it "should touch the projects_datapath" do
-      expect {
-        @track.save
-      }.to change(@track.projects_datapath, :updated_at)
-    end
   end
 
   describe "delegated methods" do
@@ -167,10 +162,10 @@ describe Track do
 
   describe "#update_projects_datapath" do
     it "should save changes to the track projects datapath when the track project is changed" do
-      projects_datapath = @track.projects_datapath
       expect {
         @track.update_attributes(project: FactoryGirl.create(:project))
-      }.to change(projects_datapath, :project_id)
+        @track.reload
+      }.to change(@track.projects_datapath, :project_id)
     end
   end
 end
