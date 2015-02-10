@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe ProjectsController do
-  describe "GET 'index'" do
-    before { @projects = FactoryGirl.create_list(:project, 3) }
+  before { @manager = FactoryGirl.create(:manager) }
 
-    context "as admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+  describe "GET 'index'" do
+    before { @projects = FactoryGirl.create_list(:project, 3, owner: @manager) }
+
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :index
@@ -63,10 +65,10 @@ describe ProjectsController do
   end
 
   describe "GET 'show'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :show, id: @project
@@ -135,11 +137,8 @@ describe ProjectsController do
   end
 
   describe "GET 'new'" do
-    context "as an admin" do
-      before do
-        @admin = FactoryGirl.create(:admin)
-        sign_in @admin
-     end
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :new
@@ -155,12 +154,12 @@ describe ProjectsController do
 
       it "should assign ownership to signed in user" do
         get :new
-        expect(assigns(:project).owner).to eq @admin
+        expect(assigns(:project).owner).to eq @manager
       end
 
       it "should add signed in user to users" do
         get :new
-        expect(assigns(:project).users).to include @admin
+        expect(assigns(:project).users).to include @manager
       end
     end
 
@@ -183,10 +182,10 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :edit, id: @project
@@ -242,7 +241,7 @@ describe ProjectsController do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
     context "as a manager" do
-      before { sign_in FactoryGirl.create(:manager) }
+      before { sign_in @manager }
 
       context "with valid parameters" do
         it "should be a a success" do
@@ -301,7 +300,6 @@ describe ProjectsController do
 
   describe "Patch 'update'" do
     before do
-      @manager = FactoryGirl.create(:manager)
       @project = FactoryGirl.create(:project,  owner: @manager)
       @new_project = FactoryGirl.attributes_for(:project)
     end
@@ -354,7 +352,7 @@ describe ProjectsController do
       end
     end
 
-    context "as a admin" do
+    context "as an admin" do
       before do
        @admin = FactoryGirl.create(:admin)
        sign_in @admin
@@ -414,10 +412,10 @@ describe ProjectsController do
   end
 
   describe "Delete 'destroy'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should redirect to project#index" do
         delete :destroy, id: @project
