@@ -9,7 +9,7 @@ describe ProjectsDatapath do
     it_behaves_like "timestampable table"
     it { should have_db_column(:project_id) }
     it { should have_db_column(:datapath_id) }
-    it { should have_db_column(:sub_directory) }
+    it { should have_db_column(:sub_directory).with_options(null: false) }
     it { should have_db_column(:name) }
   end
 
@@ -58,26 +58,6 @@ describe ProjectsDatapath do
         expect(@projects_datapath.full_path).to eq File.join(
           @projects_datapath.datapath.path
         )
-      end
-    end
-  end
-
-  describe "#remove_nil" do
-    context "sub_directory" do
-      it "is set to a empty string when nil" do
-          @projects_datapath.sub_directory = nil
-          expect {
-            @projects_datapath.save
-            @projects_datapath.reload
-          }.to change(@projects_datapath, :sub_directory).to('')
-      end
-
-      it "is not changed when not nil" do
-         @projects_datapath.sub_directory = 'dir1'
-        expect {
-          @projects_datapath.save
-          @projects_datapath.reload
-        }.not_to change(@projects_datapath, :sub_directory)
       end
     end
   end

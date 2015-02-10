@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20141212201008) do
   create_table "projects_datapaths", force: true do |t|
     t.integer  "project_id"
     t.integer  "datapath_id"
-    t.string   "sub_directory"
+    t.string   "sub_directory", default: "", null: false
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
