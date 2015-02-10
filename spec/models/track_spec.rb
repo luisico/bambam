@@ -166,12 +166,11 @@ describe Track do
   end
 
   describe "#update_projects_datapath" do
-    it "should save changes the track projects datapath when the track project is changed" do
-      track_projects_datapath = @track.projects_datapath
-      @track.project = FactoryGirl.create(:project)
-      @track.save
-      @track.reload
-      expect(track_projects_datapath.project_id).to eq @track.projects_datapath.project_id
+    it "should save changes to the track projects datapath when the track project is changed" do
+      projects_datapath = @track.projects_datapath
+      expect {
+        @track.update_attributes(project: FactoryGirl.create(:project))
+      }.to change(projects_datapath, :project_id)
     end
   end
 end
