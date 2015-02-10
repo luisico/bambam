@@ -24,8 +24,12 @@ class ProjectsController < ApplicationController
   def create
     @project.owner ||= current_user
     @project.users << @project.owner unless @project.users.include?(@project.owner)
-    if @project.save
-      render :js => "window.location = '#{project_path(@project)}'"
+    respond_to do |format|
+      if @project.save
+        format.js {render :js => "window.location = '#{project_path(@project)}'"}
+      else
+        format.js
+      end
     end
   end
 
