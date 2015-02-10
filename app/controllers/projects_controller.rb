@@ -37,7 +37,13 @@ class ProjectsController < ApplicationController
     if params['project']['user_ids']
       params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
-    @project.update(project_params)
+    respond_to do |format|
+      if @project.update(project_params)
+        format.js
+      else
+        format.js
+      end
+    end
   end
 
   def destroy
