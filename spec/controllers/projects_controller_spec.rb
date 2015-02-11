@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+# TODO: add specs for html/js only requests
+
 describe ProjectsController do
   before { @manager = FactoryGirl.create(:manager) }
 
@@ -246,9 +248,21 @@ describe ProjectsController do
           }.to change(Project, :count).by(1)
           expect(assigns(:project)).to eq Project.last
         end
+
+        it "should assign ownership to signed in user" do
+          post :create, project: @project_attr, format: 'js'
+          expect(assigns(:project).owner).to eq @manager
+        end
+
+        it "should add signed in user to users" do
+          post :create, project: @project_attr, format: 'js'
+          expect(assigns(:project).users).to include @manager
+        end
       end
 
       context "with invalid parameters" do
+        before { @project_attr.merge!(name: '') }
+
         it "should be a success" do
           post :create, project: @project_attr, format: 'js'
           expect(response).to be_success
@@ -257,7 +271,7 @@ describe ProjectsController do
 
         it "should not create a new project" do
           expect{
-            post :create, project: @project_attr.merge(name: ''), format: 'js'
+            post :create, project: @project_attr, format: 'js'
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
         end
@@ -298,7 +312,7 @@ describe ProjectsController do
   describe "Patch 'update'" do
     before do
       @project = FactoryGirl.create(:project,  owner: @manager)
-      @new_project = FactoryGirl.attributes_for(:project)
+      @new_project_attrs = FactoryGirl.attributes_for(:project)
     end
 
     context "as a manager and owner of project" do
@@ -308,27 +322,33 @@ describe ProjectsController do
         before { @user = FactoryGirl.create(:user) }
 
         it "should render the update template" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
+          patch :update, id: @project, project: @new_project_attrs, format: :js
+          expect(response).to be_success
           expect(response).to render_template :update
         end
 
-        it "should update the project" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
-          @project.reload
+        it "should update the project's name'" do
+          expect {
+            patch :update, id: @project, project: @new_project_attrs, format: :js
+            @project.reload
+          }.to change(@project, :name).to @new_project_attrs[:name]
           expect(assigns(:project)).to eq @project
-          expect(@project.name).to eq @new_project[:name]
-          expect(@project.users).to include @user
+        end
+
+        it "should update the project's users'" do
+          patch :update, id: @project, project: @new_project_attrs.merge(user_ids: [@user.id]), format: :js
+          expect(@project.reload.users).to include @user
         end
 
         it "should not change ownership" do
           expect {
-            patch :update, id: @project, project: @new_project, format: :js
+            patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
           }.not_to change(@project, :owner)
         end
 
         it "should add owner to users if not present" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: []), format: :js
-          expect(assigns(:project).users).to include @project.owner
+          patch :update, id: @project, project: @new_project_attrs.merge(user_ids: []), format: :js
+          expect(@project.reload.users).to include @project.owner
         end
       end
 
@@ -357,18 +377,19 @@ describe ProjectsController do
 
       it "should not change ownership" do
         expect {
-          patch :update, id: @project, project: @new_project, format: :js
+          patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
+          @project.reload
         }.not_to change(@project, :owner)
       end
 
       it "should add owner to users if not present" do
-        patch :update, id: @project, project: @new_project.merge(user_ids: []), format: :js
-        expect(assigns(:project).users).to include @project.owner
+        patch :update, id: @project, project: @new_project_attrs.merge(user_ids: []), format: :js
+        expect(@project.reload.users).to include @project.owner
       end
 
       it "should not add admin to users" do
-        patch :update, id: @project, project: @new_project.merge(user_ids: []), format: :js
-        expect(assigns(:project).users).not_to include @admin
+        patch :update, id: @project, project: @new_project_attrs.merge(user_ids: []), format: :js
+        expect(@project.reload.users).not_to include @admin
       end
     end
 
@@ -380,29 +401,29 @@ describe ProjectsController do
 
       context 'with valid parameters' do
         it "should not be a success" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
+          patch :update, id: @project, project: @new_project_attrs, format: :js
           expect(response).not_to be_success
         end
 
         it "should not change the track's attributes" do
           expect {
-            patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
+            patch :update, id: @project, project: @new_project_attrs, format: :js
             @project.reload
-          }.not_to change(@project, :users)
+          }.not_to change(@project, :name)
         end
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        patch :update, id: @project, project: @new_project
+        patch :update, id: @project, project: @new_project_attrs
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
 
       it "should not change the project's attributes" do
         expect{
-          patch :update, id: @project, project: @new_project
+          patch :update, id: @project, project: @new_project_attrs
         }.not_to change(@project, :name)
       end
     end

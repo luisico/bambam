@@ -20,16 +20,14 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project.owner ||= current_user
-    @project.users << @project.owner unless @project.users.include?(@project.owner)
     @project.save
   end
 
   def update
-    if params['project']['user_ids']
-      params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
+    if users = params['project']['user_ids']
+      users << @project.owner.id unless users.include?(@project.owner.id)
     end
-    @project.update(project_params)
+    @project.update(update_params)
   end
 
   def destroy
@@ -38,7 +36,12 @@ class ProjectsController < ApplicationController
   end
 
   private
-  def project_params
-    params.require(:project).permit(:name, :user_ids => [])
+
+  def create_params
+    params.require(:project).permit(:name).merge(user_ids: [current_user.id], owner_id: current_user.id)
+  end
+
+  def update_params
+    params.require(:project).permit(:name, user_ids: [])
   end
 end
