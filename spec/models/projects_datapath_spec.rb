@@ -32,6 +32,19 @@ describe ProjectsDatapath do
 
   describe "sub_directory" do
     it { should respond_to :sub_directory }
+
+    context "when nil" do
+      before { @projects_datapath.sub_directory = nil }
+
+      it "should be invalid" do
+        expect(@projects_datapath).not_to be_valid
+      end
+
+      it "should add sub_directory errors to error messages" do
+        @projects_datapath.valid?
+        expect(@projects_datapath.errors[:sub_directory]).to be_present
+      end
+    end
   end
 
   describe "name" do
