@@ -12,9 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
-// = require jquery.ui.datepicker
-// = require jquery.ui.effect-highlight
+//= require jquery.ui.datepicker
+//= require jquery.ui.effect-highlight
+//= require jquery.ui.widget
 //= require foundation
 //= require local_time
 //= require_tree .
