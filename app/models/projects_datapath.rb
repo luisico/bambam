@@ -10,10 +10,7 @@ class ProjectsDatapath < ActiveRecord::Base
   end
 
   def datapath_id_exists
-    unless Datapath.exists?(datapath_id)
-      errors.add(:datapath_id, "datapath must exist")
-      false
-    end
+    errors.add(:datapath_id, "datapath must exist") unless Datapath.exists?(datapath_id)
   end
 
   def sub_directory_not_nil
