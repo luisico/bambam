@@ -24,12 +24,8 @@ class ProjectsController < ApplicationController
   def create
     @project.owner ||= current_user
     @project.users << @project.owner unless @project.users.include?(@project.owner)
-    respond_to do |format|
-      if @project.save
-        format.js {render :js => "window.location = '#{project_path(@project)}'"}
-      else
-        format.js
-      end
+    if @project.save
+      render js: "window.location = '#{project_path(@project)}'"
     end
   end
 
@@ -37,13 +33,7 @@ class ProjectsController < ApplicationController
     if params['project']['user_ids']
       params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
-    respond_to do |format|
-      if @project.update(project_params)
-        format.js
-      else
-        format.js
-      end
-    end
+    @project.update(project_params)
   end
 
   def destroy
