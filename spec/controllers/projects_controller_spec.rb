@@ -112,7 +112,7 @@ describe ProjectsController do
         it "should redirect to projects page" do
           get :show, id: FactoryGirl.create(:project)
           expect(response).not_to be_success
-          expect(response).to redirect_to projects_path
+          expect(response).to redirect_to projects_url
         end
       end
     end
@@ -158,7 +158,7 @@ describe ProjectsController do
         sign_in FactoryGirl.create(:user)
         get :new
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
     end
 
@@ -214,7 +214,7 @@ describe ProjectsController do
       it "should be denied" do
         get :edit, id: FactoryGirl.create(:project)
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
     end
 
@@ -234,7 +234,7 @@ describe ProjectsController do
       before { sign_in @manager }
 
       context "with valid parameters" do
-        it "should be a a success" do
+        it "should be a success" do
           post :create, project: @project_attr, format: 'js'
           expect(response).to be_success
         end
@@ -263,7 +263,7 @@ describe ProjectsController do
       it "should redirect to the projects page" do
         post :create, project: @project_attr
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
 
       it "should not create a new project" do
@@ -344,9 +344,9 @@ describe ProjectsController do
 
     context "as an admin" do
       before do
-       @admin = FactoryGirl.create(:admin)
-       sign_in @admin
-     end
+        @admin = FactoryGirl.create(:admin)
+        sign_in @admin
+      end
 
       it "should not change ownership" do
         expect {
@@ -425,7 +425,7 @@ describe ProjectsController do
       it "should redirect to the projects page" do
         delete :destroy, id: @project
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
 
       it "should not delete the project" do
