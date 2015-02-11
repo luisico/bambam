@@ -32,18 +32,16 @@ describe ProjectsDatapath do
 
   describe "sub_directory" do
     it { should respond_to :sub_directory }
+    it { should ensure_exclusion_of(:sub_directory).in_array([nil]) }
 
-    context "when nil" do
-      before { @projects_datapath.sub_directory = nil }
+    it "should be invalid when nil" do
+      @projects_datapath.sub_directory = nil
+      expect(@projects_datapath).not_to be_valid
+    end
 
-      it "should be invalid" do
-        expect(@projects_datapath).not_to be_valid
-      end
-
-      it "should add sub_directory errors to error messages" do
-        @projects_datapath.valid?
-        expect(@projects_datapath.errors[:sub_directory]).to be_present
-      end
+    it "should be valid when an empty string" do
+      @projects_datapath.sub_directory = ''
+      expect(@projects_datapath).to be_valid
     end
   end
 
