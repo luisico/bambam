@@ -22,9 +22,7 @@ class ProjectsController < ApplicationController
   def create
     @project.owner ||= current_user
     @project.users << @project.owner unless @project.users.include?(@project.owner)
-    if @project.save
-      render js: "window.location = '#{project_path(@project)}'"
-    end
+    @project.save
   end
 
   def update

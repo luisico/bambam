@@ -1,4 +1,6 @@
 <% if @project.errors.any? %>
   $('.new_project').remove();
   $('#create-new-project').append('<%= j render("form") %>');
+<% else %>
+  window.location = '<%= project_path(@project) %>'
 <% end %>

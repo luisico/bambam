@@ -237,6 +237,7 @@ describe ProjectsController do
         it "should be a success" do
           post :create, project: @project_attr, format: 'js'
           expect(response).to be_success
+          expect(response).to render_template :create
         end
 
         it "should create a new project" do
@@ -248,6 +249,12 @@ describe ProjectsController do
       end
 
       context "with invalid parameters" do
+        it "should be a success" do
+          post :create, project: @project_attr, format: 'js'
+          expect(response).to be_success
+          expect(response).to render_template :create
+        end
+
         it "should not create a new project" do
           expect{
             post :create, project: @project_attr.merge(name: ''), format: 'js'
