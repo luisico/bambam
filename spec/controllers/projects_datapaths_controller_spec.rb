@@ -19,13 +19,13 @@ describe ProjectsDatapathsController do
       context "project datapath creation" do
         context "with valid parameters" do
           it "should be a success" do
-            post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+            post :create, projects_datapath: @projects_datapath_attr, format: :json
             expect(response).to be_success
           end
 
           it "should create a new project's datapath" do
             expect{
-              post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+              post :create, projects_datapath: @projects_datapath_attr, format: :json
             }.to change(ProjectsDatapath, :count).by(1)
           end
         end
@@ -37,12 +37,12 @@ describe ProjectsDatapathsController do
 
           it "should not create a new project's datapath" do
             expect{
-              post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+              post :create, projects_datapath: @projects_datapath_attr, format: :json
             }.not_to change(ProjectsDatapath, :count)
           end
 
           it "should raise recond not found error" do
-            post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+            post :create, projects_datapath: @projects_datapath_attr, format: :json
             expect(response.status).to eq 400
             expect(response.body).to eq "{\"status\":\"error\",\"message\":\"datapath must exist\"}"
           end
@@ -53,29 +53,31 @@ describe ProjectsDatapathsController do
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
+      # TODO: format should be :json
       it "should return forbidden response" do
-        post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+        post :create, projects_datapath: @projects_datapath_attr, format: :js
         expect(response).not_to be_success
         expect(response.status).to be 403
       end
 
+      # TODO: format should be :json
       it "should not create a new projects datapath" do
         expect {
-          post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+          post :create, projects_datapath: @projects_datapath_attr, format: :js
         }.not_to change(ProjectsDatapath, :count)
       end
     end
 
     context "as a visitor" do
       it "should return unauthorized response" do
-        post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+        post :create, projects_datapath: @projects_datapath_attr, format: :json
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
       it "should not create a new project's datapath" do
         expect{
-          post :create, projects_datapath: @projects_datapath_attr, format: 'js'
+          post :create, projects_datapath: @projects_datapath_attr, format: :json
         }.not_to change(ProjectsDatapath, :count)
       end
     end
@@ -93,13 +95,13 @@ describe ProjectsDatapathsController do
 
       context "with valid parameters" do
         it "should be a success" do
-          delete :destroy, id: @projects_datapath.id, format: 'js'
+          delete :destroy, id: @projects_datapath.id, format: :json
           expect(response).to be_success
         end
 
         it "should destroy the project's datapath" do
           expect{
-            delete :destroy, id: @projects_datapath.id, format: 'js'
+            delete :destroy, id: @projects_datapath.id, format: :json
           }.to change(ProjectsDatapath, :count).by(-1)
         end
       end
@@ -109,14 +111,14 @@ describe ProjectsDatapathsController do
 
         context "non-existance projects datapath" do
           it "should raise recond not found error" do
-            delete :destroy, id: @projects_datapath.id, format: 'js'
+            delete :destroy, id: @projects_datapath.id, format: :json
             expect(response.status).to eq 400
             expect(response.body).to eq "{\"status\":\"error\",\"message\":\"file system error\"}"
           end
 
           it "should not destroy the project's datapath" do
             expect{
-              delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: 'js'
+              delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: :json
             }.not_to change(ProjectsDatapath, :count)
           end
         end
@@ -126,29 +128,31 @@ describe ProjectsDatapathsController do
     context "as a signed in user" do
       before { sign_in FactoryGirl.create(:user) }
 
+      # TODO: format should be :json
       it "should return forbidden reponse" do
-        delete :destroy, id: @projects_datapath.id, format: 'js'
+        delete :destroy, id: @projects_datapath.id, format: :js
         expect(response).not_to be_success
         expect(response.status).to be 403
       end
 
+      # TODO: format should be :json
       it "should not delete the projects datapath" do
         expect {
-          delete :destroy, id: @projects_datapath.id, format: 'js'
+          delete :destroy, id: @projects_datapath.id, format: :js
         }.not_to change(ProjectsDatapath, :count)
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        delete :destroy, id: @projects_datapath.id, format: 'js'
+        delete :destroy, id: @projects_datapath.id, format: :json
         expect(response).not_to be_success
         expect(response.status).to be 401
       end
 
       it "should not delete the projects datapath" do
         expect{
-          delete :destroy, id: @projects_datapath.id, format: 'js'
+          delete :destroy, id: @projects_datapath.id, format: :json
         }.not_to change(ProjectsDatapath, :count)
       end
     end
@@ -164,7 +168,7 @@ describe ProjectsDatapathsController do
 
       context "responds to json" do
         it "should be successful" do
-          get :browser, id: @project, format: 'json'
+          get :browser, id: @project, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
         end
@@ -172,27 +176,27 @@ describe ProjectsDatapathsController do
         it "should use the project owners datapaths" do
           controller.stub(:tree).and_return([{title: 'path', key: 1}])
           expect(controller).to receive(:generate_tree).with(@project.owner.datapaths).and_return([{}])
-          get :browser, id: @project, format: 'json'
+          get :browser, id: @project, format: :json
         end
 
         it "should render json from the generate_tree method" do
           json = [{title: nil, key: nil, selected: nil}]
           expect(controller).to receive(:generate_tree).and_return(json)
-          get :browser, id: @project, format: 'json'
+          get :browser, id: @project, format: :json
           expect(response.body).to eq "[{\"title\":null,\"key\":null,\"selected\":null}]"
         end
       end
 
       it "should not respond to html" do
         expect {
-          get :browser, id: @project, format: 'html'
+          get :browser, id: @project, format: :html
         }.to raise_error ActionController::UnknownFormat
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :browser, id: @project, format: 'json'
+        get :browser, id: @project, format: :json
         expect(response).not_to be_success
         expect(response.status).to eq 401
       end
