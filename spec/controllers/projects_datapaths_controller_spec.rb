@@ -218,6 +218,7 @@ describe ProjectsDatapathsController do
     end
   end
 
+  # TODO: review when tracks are added to fancytree
   describe "#generate_tree" do
     before do
       @datapath1 = FactoryGirl.create(:datapath)
