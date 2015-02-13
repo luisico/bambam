@@ -192,17 +192,21 @@ describe ProjectsDatapathsController do
           expect(response.header['Content-Type']).to include 'application/json'
         end
 
+        it "should use the right project" do
+          get :browser, id: @project, format: :json
+          expect(assigns(:project)).to eq @project
+        end
+
         it "should use the project owners datapaths" do
-          controller.stub(:tree).and_return([{title: 'path', key: 1}])
-          expect(controller).to receive(:generate_tree).with(@project.owner.datapaths).and_return([{}])
+          @project.owner.datapaths << FactoryGirl.create(:datapath)
+          expect(controller).to receive(:generate_tree).with(@project.owner.datapaths)
           get :browser, id: @project, format: :json
         end
 
         it "should render json from the generate_tree method" do
-          json = [{title: nil, key: nil, selected: nil}]
-          expect(controller).to receive(:generate_tree).and_return(json)
+          expect(controller).to receive(:generate_tree).and_return('fakejson')
           get :browser, id: @project, format: :json
-          expect(response.body).to eq "[{\"title\":null,\"key\":null,\"selected\":null}]"
+          expect(response.body).to eq 'fakejson'
         end
       end
 
