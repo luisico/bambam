@@ -1,23 +1,19 @@
 require 'spec_helper'
 
-def create_projects_datapath
-  @datapath = FactoryGirl.create(:datapath)
-  @project = FactoryGirl.create(:project)
-  @projects_datapath_attr = FactoryGirl.attributes_for(:projects_datapath)
-  @projects_datapath_attr.merge!(datapath_id: @datapath.id, project_id: @project.id)
-end
-
 describe ProjectsDatapathsController do
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "Post 'create'" do
-    before { create_projects_datapath }
+    before { @projects_datapath_attr = FactoryGirl.attributes_for(:projects_datapath) }
 
     context "as a signed in manager and project owner" do
       before { sign_in @manager }
 
       context "project datapath creation" do
+
         context "with valid parameters" do
+          before { @projects_datapath_attr.merge!(datapath_id: FactoryGirl.create(:datapath).id) }
+
           it "should be a success" do
             post :create, projects_datapath: @projects_datapath_attr, format: :json
             expect(response).to be_success
@@ -37,7 +33,7 @@ describe ProjectsDatapathsController do
 
       context "with invalid parameters" do
         context "invalid datapath" do
-          before { @datapath.destroy }
+          before { @projects_datapath_attr.merge!(datapath_id: 9999) }
 
           it "should raise not found error" do
             post :create, projects_datapath: @projects_datapath_attr, format: :json
@@ -93,18 +89,14 @@ describe ProjectsDatapathsController do
   end
 
   describe "Delete 'destroy'" do
-    before do
-      create_projects_datapath
-      @projects_datapath = FactoryGirl.create(:projects_datapath, @projects_datapath_attr)
-      @project.datapaths << @datapath
-    end
+    before { @projects_datapath = FactoryGirl.create(:projects_datapath) }
 
     context "as a signed in manager and project owner" do
       before { sign_in @manager }
 
       context "with valid parameters" do
         it "should be a success" do
-          delete :destroy, id: @projects_datapath.id, format: :json
+          delete :destroy, id: @projects_datapath, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
@@ -114,17 +106,15 @@ describe ProjectsDatapathsController do
 
         it "should destroy the project's datapath" do
           expect{
-            delete :destroy, id: @projects_datapath.id, format: :json
+            delete :destroy, id: @projects_datapath, format: :json
           }.to change(ProjectsDatapath, :count).by(-1)
         end
       end
 
       context "with invalid parameters" do
-        before { @datapath.destroy }
-
         context "non-existance projects datapath" do
           it "should raise record not found error" do
-            delete :destroy, id: @projects_datapath.id, format: :json
+            delete :destroy, id: 9999, format: :json
             expect(response.status).to eq 400
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
@@ -134,7 +124,7 @@ describe ProjectsDatapathsController do
 
           it "should not destroy the project's datapath" do
             expect{
-              delete :destroy, id: @project.id, projects_datapath: @projects_datapath_attr, format: :json
+              delete :destroy, id: 9999, format: :json
             }.not_to change(ProjectsDatapath, :count)
           end
         end
