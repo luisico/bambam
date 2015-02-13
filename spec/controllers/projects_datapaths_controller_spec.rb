@@ -21,6 +21,10 @@ describe ProjectsDatapathsController do
           it "should be a success" do
             post :create, projects_datapath: @projects_datapath_attr, format: :json
             expect(response).to be_success
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json['status']).to eq 'success'
+            expect(json['message']).to eq 'OK'
           end
 
           it "should create a new project's datapath" do
@@ -32,19 +36,22 @@ describe ProjectsDatapathsController do
       end
 
       context "with invalid parameters" do
-        context "invalide datapath" do
+        context "invalid datapath" do
           before { @datapath.destroy }
+
+          it "should raise not found error" do
+            post :create, projects_datapath: @projects_datapath_attr, format: :json
+            expect(response.status).to eq 400
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json['status']).to eq 'error'
+            expect(json['message']).to eq 'datapath must exist'
+          end
 
           it "should not create a new project's datapath" do
             expect{
               post :create, projects_datapath: @projects_datapath_attr, format: :json
             }.not_to change(ProjectsDatapath, :count)
-          end
-
-          it "should raise recond not found error" do
-            post :create, projects_datapath: @projects_datapath_attr, format: :json
-            expect(response.status).to eq 400
-            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"datapath must exist\"}"
           end
         end
       end
@@ -71,8 +78,10 @@ describe ProjectsDatapathsController do
     context "as a visitor" do
       it "should return unauthorized response" do
         post :create, projects_datapath: @projects_datapath_attr, format: :json
-        expect(response).not_to be_success
         expect(response.status).to be 401
+        expect(response.header['Content-Type']).to include 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq I18n.t('devise.failure.unauthenticated')
       end
 
       it "should not create a new project's datapath" do
@@ -97,6 +106,10 @@ describe ProjectsDatapathsController do
         it "should be a success" do
           delete :destroy, id: @projects_datapath.id, format: :json
           expect(response).to be_success
+          expect(response.header['Content-Type']).to include 'application/json'
+          json = JSON.parse(response.body)
+          expect(json['status']).to eq 'success'
+          expect(json['message']).to eq 'OK'
         end
 
         it "should destroy the project's datapath" do
@@ -110,10 +123,13 @@ describe ProjectsDatapathsController do
         before { @datapath.destroy }
 
         context "non-existance projects datapath" do
-          it "should raise recond not found error" do
+          it "should raise record not found error" do
             delete :destroy, id: @projects_datapath.id, format: :json
             expect(response.status).to eq 400
-            expect(response.body).to eq "{\"status\":\"error\",\"message\":\"file system error\"}"
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json['status']).to eq 'error'
+            expect(json['message']).to eq 'file system error'
           end
 
           it "should not destroy the project's datapath" do
@@ -148,6 +164,9 @@ describe ProjectsDatapathsController do
         delete :destroy, id: @projects_datapath.id, format: :json
         expect(response).not_to be_success
         expect(response.status).to be 401
+        expect(response.header['Content-Type']).to include 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq I18n.t('devise.failure.unauthenticated')
       end
 
       it "should not delete the projects datapath" do
@@ -197,8 +216,10 @@ describe ProjectsDatapathsController do
     context "as a visitor" do
       it "should redirect to the sign in page" do
         get :browser, id: @project, format: :json
-        expect(response).not_to be_success
         expect(response.status).to eq 401
+        expect(response.header['Content-Type']).to include 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

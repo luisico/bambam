@@ -7,7 +7,7 @@ class ProjectsDatapathsController < ApplicationController
   def create
     @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
     if @projects_datapath.save
-      render json: {status: :success, message: "OK"}, status: 200
+      render json: {status: :success, message: 'OK'}, status: 200
     else
       message = @projects_datapath.errors.collect {|name, msg| msg }.join(';')
       render json: {status: :error, message: message}, status: 400
@@ -17,9 +17,9 @@ class ProjectsDatapathsController < ApplicationController
   def destroy
     @projects_datapath = ProjectsDatapath.find_by_id(params[:id])
     if @projects_datapath && @projects_datapath.destroy
-      render json: {status: :success, message: "OK" }, status: 200
+      render json: {status: :success, message: 'OK' }, status: 200
     else
-      render json: {status: :error, message: "file system error"}, status: 400
+      render json: {status: :error, message: 'file system error'}, status: 400
     end
   end
 
