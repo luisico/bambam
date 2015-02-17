@@ -16,6 +16,7 @@ end
 
 ### Given
 
+# TODO: nomenclatures: master datapath vs datapath vs datapath with subdir
 Given /^there (is|are) (\d+|a) datapaths in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 

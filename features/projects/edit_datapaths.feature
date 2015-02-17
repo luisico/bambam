@@ -4,7 +4,7 @@ Feature: Edit projects datapaths
   As a manager
   I can update the projects datapaths
 
-  Scenario: Managers can add a project master datapaths
+  Scenario: Managers can add a master datapath to a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
@@ -12,7 +12,7 @@ Feature: Edit projects datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
 
-  Scenario: Managers can remove a project master datapaths
+  Scenario: Managers can remove a master datapath from a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
@@ -20,7 +20,7 @@ Feature: Edit projects datapaths
     When I am on the project page
     Then I should be able to remove a datapath from the project
 
-  Scenario: Managers can add a sub-directory to the project
+  Scenario: Managers can add a datapath with sub-directory to the project
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
@@ -29,7 +29,7 @@ Feature: Edit projects datapaths
     When I am on the project page
     Then I should be able to add a sub-directory to the project
 
-  Scenario: Managers can remove a sub-directory from the project
+  Scenario: Managers can remove a datapath with sub-directory from the project
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
