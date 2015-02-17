@@ -3,7 +3,7 @@ module ActiveModel
 
     class PathValidator < EachValidator
       def validate_each(record, attr_name, value)
-        if value.blank?
+        if value.blank? && !has_full_path?(record)
           record.errors.add(attr_name, :blank)
           return
         end
@@ -60,6 +60,14 @@ module ActiveModel
 
       def allowed_paths
         options[:within] || options[:in]
+      end
+
+      def has_full_path?(record)
+        record.class.method_defined? :full_path
+      end
+
+      def full_path(record, value)
+        has_full_path?(record) ? record.full_path : value
       end
     end
 
