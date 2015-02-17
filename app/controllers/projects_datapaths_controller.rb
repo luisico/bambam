@@ -36,14 +36,16 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def generate_tree(datapaths=[])
+    formats = %w(*.bw *.bam /)
     tree = []
 
     datapaths.each do |datapath|
       common = File.dirname(datapath.path)
-      directories = Dir.glob(File.join(datapath.path, "**/"))
+      globs = formats.map{ |f| File.join(datapath.path, "**", f) }
 
-      directories.each do |file|
-        components = file.sub!(common, '').split(File::SEPARATOR)[2..-1]
+      nodes = Dir.glob(globs)
+      nodes.each do |node|
+        components = node.sub!(common, '').split(File::SEPARATOR)[2..-1]
         built_path = datapath.path
         selected_indexes = []
 

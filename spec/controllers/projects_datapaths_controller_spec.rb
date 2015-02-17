@@ -230,9 +230,13 @@ describe ProjectsDatapathsController do
       datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
         @datapath1.path + dir
       end
-      datapath2_paths = [datapath2.path + "/dir6/"]
 
-      expect(Dir).to receive(:glob).and_return( datapath1_paths, datapath2_paths)
+      folder_path = datapath2.path + "/dir6/"
+      track_path = folder_path + "track1.bam"
+      cp_track track_path
+      datapath2_paths = [folder_path, track_path]
+
+      expect(Dir).to receive(:glob).and_return(datapath1_paths, datapath2_paths)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
         {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :children=>[
@@ -245,8 +249,12 @@ describe ProjectsDatapathsController do
             ]}
           ]},
         {:title=>datapath2.path, :key=>datapath2.id, :folder=>true, :children=>[
-          {:title=>"dir6", :folder=>true}]
-        }]
+          {:title=>"dir6", :folder=>true, :children=>[
+            {:title=>"track1.bam"}
+          ]}
+        ]}
+      ]
+      File.unlink track_path if File.exists?(track_path)
     end
 
     it "marks a path as empty when no tracks are found" do
