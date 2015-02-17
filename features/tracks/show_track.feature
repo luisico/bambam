@@ -24,13 +24,13 @@ Feature: Show a track
     | a user   | bam  | should not  | should     |
     | an admin | bw   | should      | should not |
 
-  # Scenario Outline: Download track
-  #   Given I am signed in
-  #   And I belong to a project
-  #   And there is a <type> track in that project
-  #   When I am on the track page
-  #   And I click on the download <ext> track link
-  #   Then a <ext> file should download
+  Scenario Outline: Download track
+    Given I am signed in
+    And I belong to a project
+    And there is a <type> track in that project
+    When I am on the track page
+    And I click on the download <ext> track link
+    Then a <ext> file should download
 
     Examples:
       | type | ext |

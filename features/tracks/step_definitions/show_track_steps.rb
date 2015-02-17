@@ -4,12 +4,12 @@
 
 Given /^there is a (bam|bw) track in that project$/ do |type|
   @project ||= @projects.last
+  projects_datapath = FactoryGirl.create(:projects_datapath, project: @project)
   if type == 'bam'
-    @track = FactoryGirl.create(:track, project: @project)
-    # TODO: path should go to tmp/tests/....
-    cp_track Pathname.new(@track.path).sub_ext('.bai'), 'bai'
+    @track = FactoryGirl.create(:track, projects_datapath: projects_datapath)
+    cp_track Pathname.new(@track.full_path).sub_ext('.bai'), 'bai'
   elsif type== 'bw'
-    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "bw_track.bw"), project: @project)
+    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "bw_track.bw"), projects_datapath: projects_datapath)
   end
 end
 
