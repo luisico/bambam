@@ -11,13 +11,9 @@ def fill_project_form(project=nil)
   fill_in 'Project name', with: project[:name]
 end
 
-def submit_project_form(options={})
-  if options[:cancel]
-    click_link "Cancel"
-  else
-    click_button 'Create Project'
-    expect(page).to have_content options[:content]
-  end
+def submit_project_form(content)
+  click_button 'Create Project'
+  expect(page).to have_content content
 end
 
 ### Given
@@ -34,7 +30,7 @@ Then /^I should be able to create a new project$/ do
   build_project
   expect {
     fill_project_form
-    submit_project_form(content: @project_attrs[:name])
+    submit_project_form(@project_attrs[:name])
   }.to change(Project, :count).by(1)
   @project = Project.last
 end
@@ -42,7 +38,7 @@ end
 Then /^I should not be able to create a new project without a name$/ do
   expect {
     fill_project_form({:name=>""})
-    submit_project_form(content: "can't be blank")
+    submit_project_form("can't be blank")
   }.not_to change(Project, :count)
 end
 
@@ -50,9 +46,9 @@ Then /^I should be able to cancel new project$/ do
   build_project
   expect {
     fill_project_form
-    submit_project_form(cancel: true)
+    click_link "Cancel"
+    expect(page).to have_link "New Project"
   }.not_to change(Project, :count)
-  expect(page).to have_link "New Project"
 end
 
 Then /^I should see a message that the project was created successfully$/ do
@@ -64,5 +60,6 @@ Then /^I should see my handle among the list of project member handles$/ do
 end
 
 Then /^I should be the project's owner$/ do
-  expect(Project.last.owner).to eq(@manager)
+  expect(@project.owner).to eq @manager
+  # TODO: find owner in page (already in show project features?)
 end
