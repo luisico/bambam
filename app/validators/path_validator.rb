@@ -16,26 +16,26 @@ module ActiveModel
           return
         end
 
-        unless File.exist?(value)
+        unless File.exist?(full_path(record, value))
           record.errors.add(attr_name, :exist)
           return
         end
 
-        if File.file?(value)
+        if File.file?(full_path(record, value))
           if !allow_file?
             record.errors.add(attr_name, :file)
             return
-          elsif !allow_empty? && File.zero?(value)
+          elsif !allow_empty? && File.zero?(full_path(record, value))
             record.errors.add(attr_name, :empty)
           end
 
-        elsif File.directory?(value)
+        elsif File.directory?(full_path(record, value))
           if !allow_directory?
             record.errors.add(attr_name, :directory)
             return
           end
 
-          if !allow_empty? && Dir[File.join value, '*'].empty?
+          if !allow_empty? && Dir[File.join full_path(record, value), '*'].empty?
             record.errors.add(attr_name, :empty)
           end
 
