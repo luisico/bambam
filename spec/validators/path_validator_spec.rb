@@ -78,31 +78,45 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
-    it "removes redirection from pathname" do
-      [
-        ['..',                        TEST_BASE],
-        [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
-        [File.join('..', '..', '..'), File.join(Rails.root)],
-      ].each do |item|
-        subject.path = File.join TEST_BASE, 'dir1', item[0]
+    context "when path is present" do
+      it "removes redirection from pathname" do
+        [
+          ['..',                        TEST_BASE],
+          [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
+          [File.join('..', '..', '..'), File.join(Rails.root)],
+        ].each do |item|
+          subject.path = File.join TEST_BASE, 'dir1', item[0]
+          expect{
+            subject.valid?
+          }.to change(subject, :path).to(item[1])
+        end
+      end
+
+      it "should remove trailing slash from path before validation" do
+        subject.path = TEST_BASE + '/'
         expect{
           subject.valid?
-        }.to change(subject, :path).to(item[1])
+        }.to change(subject, :path).to(TEST_BASE)
+      end
+
+      it "should remove leading and trailing whitespace before validation" do
+        subject.path = ' '+ TEST_BASE + ' '
+        expect{
+          subject.valid?
+        }.to change(subject, :path).to(TEST_BASE)
       end
     end
 
-    it "should remove trailing slash from path before validation" do
-      subject.path = TEST_BASE + '/'
-      expect{
-        subject.valid?
-      }.to change(subject, :path).to(TEST_BASE)
-    end
-
-    it "should remove leading and trailing whitespace from path before validation" do
-      subject.path = ' '+ TEST_BASE + ' '
-      expect{
-        subject.valid?
-      }.to change(subject, :path).to(TEST_BASE)
+    context "when path is blank" do
+      [nil, ''].each do |blank_value|
+        it "should not verify true path or remove whitespace if path is #{blank_value.inspect}" do
+          subject.path = blank_value
+          expect {
+            expect(Pathname).not_to receive(:new)
+            subject.valid?
+          }.not_to change(subject, :path)
+        end
+      end
     end
 
     context "validates path exists in filesystem" do
