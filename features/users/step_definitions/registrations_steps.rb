@@ -82,7 +82,7 @@ When /^I visit the cancel account page$/ do
   visit '/users/cancel'
 end
 
-Then /^I should( not)? be able to invite a user with(out)? manager priviledges$/ do |_not, out|
+Then /^I should( not)? be able to invite a user with(out)? manager privileges$/ do |_not, out|
   build_invitee
   if out
     expect {
@@ -92,14 +92,14 @@ Then /^I should( not)? be able to invite a user with(out)? manager priviledges$/
   elsif _not
     expect {
       fill_invitation_form do
-        expect(page).not_to have_content('Check to grant manager priviledges to this user')
+        expect(page).not_to have_content('Check to grant manager privileges to this user')
       end
     }.to change(User, :count).by(1)
     expect(User.last.has_role?(:manager)).to eq false
   else
     expect{
       fill_invitation_form do
-        check('Check to grant manager priviledges to this user')
+        check('Check to grant manager privileges to this user')
       end
     }.to change(User, :count).by(1)
     expect(User.last.has_role?(:manager)).to eq true
