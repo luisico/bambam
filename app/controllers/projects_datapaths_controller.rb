@@ -7,7 +7,7 @@ class ProjectsDatapathsController < ApplicationController
   def create
     @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
     if @projects_datapath.save
-      render json: {status: :success, message: 'OK'}, status: 200
+      render json: {projects_datapath_id: @projects_datapath.id}, status: 200
     else
       message = @projects_datapath.errors.collect {|name, msg| msg }.join(';')
       render json: {status: :error, message: message}, status: 400

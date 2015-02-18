@@ -37,6 +37,7 @@ class @Fancytree
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
       success:(jqXHR, textStatus, errorThrown) ->
+        node.data['projects_datapath_id'] = jqXHR['projects_datapath_id']
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
