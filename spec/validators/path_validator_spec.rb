@@ -30,7 +30,7 @@ describe ActiveModel::Validations::PathValidator do
     end
   end
 
-  after(:all) { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree}
+  after(:all) { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 
   subject { Validatable.new }
 
@@ -43,9 +43,9 @@ describe ActiveModel::Validations::PathValidator do
     after(:all) { Object.send(:remove_const, :Validatable) }
 
     [nil, ''].each do |blank_value|
-      context "does not allow #{blank_value.inspect} values" do
-        before { subject.path = blank_value }
+      before { subject.path = blank_value }
 
+      context "does not allow #{blank_value.inspect} values without full_path" do
         it { should_not be_valid }
 
         it "should add :exist translation to errors" do
@@ -55,33 +55,58 @@ describe ActiveModel::Validations::PathValidator do
           expect(subject.errors[:path]).to include I18n.t('errors.messages.blank')
         end
       end
-    end
 
-    it "removes redirection from pathname" do
-      [
-        ['..',                        TEST_BASE],
-        [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
-        [File.join('..', '..', '..'), File.join(Rails.root)],
-      ].each do |item|
-        subject.path = File.join TEST_BASE, 'dir1', item[0]
-        expect{
-          subject.valid?
-        }.to change(subject, :path).to(item[1])
+      context "allows #{blank_value.inspect} values with full_path" do
+        it "should be valid" do
+          allow(subject).to receive(:full_path).and_return File.join(TEST_BASE, 'dir', 'file1')
+          with_file(subject.full_path) {
+            expect(subject).to be_valid
+          }
+        end
       end
     end
 
-    it "should remove trailing slash from path before validation" do
-      subject.path = TEST_BASE + '/'
-      expect{
-        subject.valid?
-      }.to change(subject, :path).to(TEST_BASE)
-    end
+    context "sanitize the path value" do
+      context "when present" do
+        it "removes redirection from pathname" do
+          [
+            ['..',                        TEST_BASE],
+            [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
+            [File.join('..', '..', '..'), File.join(Rails.root)],
+          ].each do |item|
+            subject.path = File.join TEST_BASE, 'dir1', item[0]
+            expect{
+              subject.valid?
+            }.to change(subject, :path).to(item[1])
+          end
+        end
 
-    it "should remove leading and trailing whitespace from path before validation" do
-      subject.path = ' '+ TEST_BASE + ' '
-      expect{
-        subject.valid?
-      }.to change(subject, :path).to(TEST_BASE)
+        it "should remove trailing slash from path before validation" do
+          subject.path = TEST_BASE + '/'
+          expect{
+            subject.valid?
+          }.to change(subject, :path).to(TEST_BASE)
+        end
+
+        it "should remove leading and trailing whitespace before validation" do
+          subject.path = ' ' + TEST_BASE + ' '
+          expect{
+            subject.valid?
+          }.to change(subject, :path).to(TEST_BASE)
+        end
+      end
+
+      context "when blank" do
+        [nil, ''].each do |blank_value|
+          it "should not change the path value" do
+            allow(subject).to receive(:full_path).and_return 'full/path'
+            subject.path = blank_value
+            expect {
+              subject.valid?
+            }.not_to change(subject, :path)
+          end
+        end
+      end
     end
 
     context "validates path exists in filesystem" do
@@ -124,15 +149,28 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
+    context "#full_path" do
+      it "returns full_path on a record object with full_path method" do
+        validator = subject._validators[:path].first
+        allow(subject).to receive(:full_path).and_return 'full/path'
+        expect(validator.send(:full_path, subject, 'subdir1')).to eq 'full/path'
+      end
+
+      it "returns value for record object without full_path method" do
+        validator = subject._validators[:path].first
+        expect(validator.send(:full_path, subject, 'subdir1')).to eq 'subdir1'
+      end
+    end
+
     context "options" do
       it ":allow_empty defaults to 'false'" do
         validator = subject._validators[:path].first
-        expect( validator.send(:allow_empty?) ).to be_false
+        expect(validator.send(:allow_empty?)).to be_false
       end
 
       it ":allow_directory defaults to 'true'" do
         validator = subject._validators[:path].first
-        expect( validator.send(:allow_directory?) ).to be_true
+        expect(validator.send(:allow_directory?)).to be_true
       end
     end
   end
