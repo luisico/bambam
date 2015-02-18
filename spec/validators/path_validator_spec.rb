@@ -30,7 +30,7 @@ describe ActiveModel::Validations::PathValidator do
     end
   end
 
-  after(:all) { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree}
+  after(:all) { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 
   subject { Validatable.new }
 
@@ -66,43 +66,45 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
-    context "when path is present" do
-      it "removes redirection from pathname" do
-        [
-          ['..',                        TEST_BASE],
-          [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
-          [File.join('..', '..', '..'), File.join(Rails.root)],
-        ].each do |item|
-          subject.path = File.join TEST_BASE, 'dir1', item[0]
+    context "sanitize the path value" do
+      context "when present" do
+        it "removes redirection from pathname" do
+          [
+            ['..',                        TEST_BASE],
+            [File.join('..', '..'),       File.join(Rails.root, 'tmp')],
+            [File.join('..', '..', '..'), File.join(Rails.root)],
+          ].each do |item|
+            subject.path = File.join TEST_BASE, 'dir1', item[0]
+            expect{
+              subject.valid?
+            }.to change(subject, :path).to(item[1])
+          end
+        end
+
+        it "should remove trailing slash from path before validation" do
+          subject.path = TEST_BASE + '/'
           expect{
             subject.valid?
-          }.to change(subject, :path).to(item[1])
+          }.to change(subject, :path).to(TEST_BASE)
+        end
+
+        it "should remove leading and trailing whitespace before validation" do
+          subject.path = ' ' + TEST_BASE + ' '
+          expect{
+            subject.valid?
+          }.to change(subject, :path).to(TEST_BASE)
         end
       end
 
-      it "should remove trailing slash from path before validation" do
-        subject.path = TEST_BASE + '/'
-        expect{
-          subject.valid?
-        }.to change(subject, :path).to(TEST_BASE)
-      end
-
-      it "should remove leading and trailing whitespace before validation" do
-        subject.path = ' '+ TEST_BASE + ' '
-        expect{
-          subject.valid?
-        }.to change(subject, :path).to(TEST_BASE)
-      end
-    end
-
-    context "when path is blank" do
-      [nil, ''].each do |blank_value|
-        it "should not verify true path or remove whitespace if path is #{blank_value.inspect}" do
-          subject.path = blank_value
-          expect {
-            expect(Pathname).not_to receive(:new)
-            subject.valid?
-          }.not_to change(subject, :path)
+      context "when blank" do
+        [nil, ''].each do |blank_value|
+          it "should not change the path value" do
+            allow(subject).to receive(:full_path).and_return 'full/path'
+            subject.path = blank_value
+            expect {
+              subject.valid?
+            }.not_to change(subject, :path)
+          end
         end
       end
     end
