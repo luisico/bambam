@@ -65,7 +65,7 @@ class ProjectsDatapathsController < ApplicationController
         parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, parent_selected, parent_projects_datapath_id)
 
         components.each_with_index do |component, index|
-          expanded = !selected_indexes.empty? && selected_indexes.last.keys.first > index
+          expanded = selected_indexes.any? && selected_indexes.last.keys.first > index
           if selected = selected_indexes.select {|hash| hash.keys.include?(index)}.any?
             projects_datapath_id = selected_indexes.collect {|hash| hash[index]}.join
           end
