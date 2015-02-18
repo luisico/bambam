@@ -19,8 +19,7 @@ describe ProjectsDatapathsController do
             expect(response).to be_success
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
-            expect(json['status']).to eq 'success'
-            expect(json['message']).to eq 'OK'
+            expect(json['projects_datapath_id']).to eq ProjectsDatapath.last.id
           end
 
           it "should create a new project's datapath" do
