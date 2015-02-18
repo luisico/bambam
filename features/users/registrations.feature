@@ -6,14 +6,14 @@ Feature: Sign up by invitation only
   Scenario Outline: Invite a user
     Given I am signed in as an <role>
     And I am on the users page
-    Then I <priviledge> be able to invite a user <status> manager priviledges
+    Then I <privilege> be able to invite a user <status> manager privileges
     And I should see a message confirming that an invitation email has been sent
     And I should be on the users page
     And I should see the invitee email with invitation pending icon
     And the invitee should receive an invitation
 
     Examples:
-      | role    | priviledge | status  |
+      | role    | privilege  | status  |
       | admin   | should     | with    |
       | admin   | should     | without |
       | manager | should not | with    |

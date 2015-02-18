@@ -12,7 +12,7 @@
         <% if current_user.has_role? :admin %>
           <div>
             <%= check_box_tag(:manager) %>
-            <%= label_tag(:manager, "Check to grant manager priviledges to this user") %>
+            <%= label_tag(:manager, "Check to grant manager privileges to this user") %>
           </div>
         <% end %>
         <% if @projects %>
