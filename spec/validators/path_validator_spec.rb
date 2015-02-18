@@ -43,13 +43,9 @@ describe ActiveModel::Validations::PathValidator do
     after(:all) { Object.send(:remove_const, :Validatable) }
 
     [nil, ''].each do |blank_value|
-      context "does not allow #{blank_value.inspect} values without full_path" do
-        before do
-          validator = subject._validators[:path].first
-          validator.stub(:has_full_path?) { false }
-          subject.path = blank_value
-        end
+      before { subject.path = blank_value }
 
+      context "does not allow #{blank_value.inspect} values without full_path" do
         it { should_not be_valid }
 
         it "should add :exist translation to errors" do
@@ -61,17 +57,9 @@ describe ActiveModel::Validations::PathValidator do
       end
 
       context "allows #{blank_value.inspect} values with full_path" do
-        before do
-          @full_path = File.join TEST_BASE, 'dir', 'file1'
-          validator = subject._validators[:path].first
-          validator.stub(:has_full_path?) { true }
-
-          validator.stub(:full_path).and_return(@full_path)
-          subject.path = blank_value
-        end
-
         it "should be valid" do
-          with_file(@full_path) {
+          allow(subject).to receive(:full_path).and_return File.join(TEST_BASE, 'dir', 'file1')
+          with_file(subject.full_path) {
             expect(subject).to be_valid
           }
         end
@@ -159,58 +147,28 @@ describe ActiveModel::Validations::PathValidator do
       end
     end
 
-    context "#has_full_path?" do
-      before { @validator = subject._validators[:path].first }
-
-      context "record class with full_path instance method" do
-        it "returns true" do
-          class ClassWithFullPath
-            def full_path
-            end
-          end
-          record = ClassWithFullPath.new
-          expect(@validator.send(:has_full_path?, record)).to be_true
-        end
-      end
-
-      context "record class with full_path instance method" do
-        it "returns true" do
-          class ClassWithoutFullPath
-          end
-          record = ClassWithoutFullPath.new
-          expect(@validator.send(:has_full_path?, record)).to be_false
-        end
-      end
-    end
-
     context "#full_path" do
-      before { @validator = subject._validators[:path].first }
-
-      it "returns full_path or record object with full_path method" do
-        class ClassWithFullPath
-          def full_path
-          end
-        end
-        ClassWithFullPath.any_instance.stub(:full_path).and_return('full/path')
-        expect( @validator.send(:full_path, ClassWithFullPath.new, 'subdir1') ).to eq 'full/path'
+      it "returns full_path on a record object with full_path method" do
+        validator = subject._validators[:path].first
+        allow(subject).to receive(:full_path).and_return 'full/path'
+        expect(validator.send(:full_path, subject, 'subdir1')).to eq 'full/path'
       end
 
       it "returns value for record object without full_path method" do
-        class ClassWithOutFullPath
-        end
-        expect( @validator.send(:full_path, ClassWithOutFullPath.new, 'subdir1') ).to eq 'subdir1'
+        validator = subject._validators[:path].first
+        expect(validator.send(:full_path, subject, 'subdir1')).to eq 'subdir1'
       end
     end
 
     context "options" do
       it ":allow_empty defaults to 'false'" do
         validator = subject._validators[:path].first
-        expect( validator.send(:allow_empty?) ).to be_false
+        expect(validator.send(:allow_empty?)).to be_false
       end
 
       it ":allow_directory defaults to 'true'" do
         validator = subject._validators[:path].first
-        expect( validator.send(:allow_directory?) ).to be_true
+        expect(validator.send(:allow_directory?)).to be_true
       end
     end
   end
