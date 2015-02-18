@@ -56,6 +56,16 @@ Feature: Edit projects datapaths
     Then I should be informed of a failed datapath deletion
     And I should see the status code appended to the node title
 
+  Scenario: Managers can add and immediately remove datapath
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And I have access to 3 additional datapaths
+    And one of those additional datapaths has a sub-directory
+    When I am on the project page
+    Then I should be able to add a datapath to the project
+    And I should be able to immediately remove the datapath
+
   Scenario: User cannot add a datapath
     Given I am signed in as a user
     And I belong to a project

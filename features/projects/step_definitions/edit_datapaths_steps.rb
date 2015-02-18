@@ -117,3 +117,13 @@ end
 Then /^I should see the status code appended to the node title$/ do
   expect(fancytree_node(@title).text).to include '[Bad Request]'
 end
+
+Then /^I should be able to immediately remove the datapath$/ do
+  expect {
+    select_node(@datapath.path)
+    expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
+
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.datapaths, :count).by(-1)
+end
