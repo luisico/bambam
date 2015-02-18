@@ -53,6 +53,8 @@ class ProjectsDatapathsController < ApplicationController
           built_path = File.join built_path, component
           if @project.allowed_paths.include?(built_path)
             selected_indexes << { index => @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first.id }
+          elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
+            selected_indexes << { index => @project.tracks.select {|t| t.full_path == built_path}.first.id }
           end
         end
 
