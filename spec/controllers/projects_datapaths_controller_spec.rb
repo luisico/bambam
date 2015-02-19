@@ -267,7 +267,8 @@ describe ProjectsDatapathsController do
 
     it "marks project's datapaths as selected and expanded" do
       datapath2 = FactoryGirl.create(:datapath)
-      project = FactoryGirl.create(:project, datapaths: [datapath2])
+      project = FactoryGirl.create(:project)
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
       projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
         FactoryGirl.create(:projects_datapath,
           datapath: @datapath1,
@@ -280,16 +281,24 @@ describe ProjectsDatapathsController do
       controller.instance_variable_set(:@project, project)
 
       expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :expanded=>true,
+        {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :folder=>true,
           :children=>[
-          {:title=>"dir1", :selected=>true, :projects_datapath_id=>projects_datapaths.first.id.to_s, :folder=>true,
-            :children=>[
-            {:title=>"subdir2", :folder=>true, :expanded=>true,
+            {:title=>"dir1", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.first.id}, :folder=>true,
               :children=>[
-              {:title=>"subdir3", :selected=>true, :projects_datapath_id=>projects_datapaths.last.id.to_s, :folder=>true,
-                :children=>[
-                {:title=>"tracks", :folder=>true}]}]}], :expanded=>true}]},
-        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, :projects_datapath_id=>project.projects_datapaths.first.id, :folder=>true}
+                {:title=>"subdir2", :expanded=>true, :folder=>true,
+                  :children=>[
+                    {:title=>"subdir3", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.last.id}, :folder=>true,
+                      :children=>[
+                        {:title=>"tracks", :expanded=>true, :folder=>true,
+                          :children=>[
+                            {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object_id=>{:track_id=>track.id}
+                          }]
+                      }]
+                  }]
+              }]
+          }]
+        },
+        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, object_id: {projects_datapath_id: projects_datapath.id}, :folder=>true}
       ]
     end
   end
@@ -342,12 +351,12 @@ describe ProjectsDatapathsController do
           expect(controller.send(:add_node_to_tree, [], '/dir1')[:title]).to eq '/dir1'
         end
 
-        it "has a projects_datapath_id attribute if requested" do
+        it "has a object_id attribute if requested" do
           expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, 2)).
-          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :projects_datapath_id=>2, :folder=>true})
+          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :object_id=>2, :folder=>true})
         end
 
-        it "does not no have a projects_datapath_id attribute if it's not selected" do
+        it "does not no have a object_id attribute if it's not selected" do
           expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, false, 2)).
           to eq({:title=>"/dir1", :key=>1, :expanded=>true, :folder=>true})
         end
@@ -392,12 +401,12 @@ describe ProjectsDatapathsController do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2')[:title]).to eq '/dir2'
         end
 
-        it "has a projects_datapath_id attribute if requested" do
+        it "has a object_id attribute if requested" do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, 1)).
-          to eq({title: '/dir2', :selected=>true, :projects_datapath_id=>1, :folder=>true})
+          to eq({title: '/dir2', :selected=>true, :object_id=>1, :folder=>true})
         end
 
-        it "does not no have a projects_datapath_id attribute if it's not selected" do
+        it "does not no have a object_id attribute if it's not selected" do
           expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, false, 1)).
           to eq({title: '/dir2', :folder=>true})
         end
