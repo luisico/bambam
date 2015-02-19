@@ -19,6 +19,9 @@ class @Fancytree
             Fancytree.addPath(event, data, attr[0], attr[1])
           else
             Fancytree.deletePath(event, data, attr[0], attr[1])
+        else
+          attr = Fancytree.buildTrack(event, data)
+          console.log(attr)
     }
 
   @buildPath: (event, data) ->
@@ -35,6 +38,21 @@ class @Fancytree
       datapath_id = data.node.key
       sub_dir = ""
     [datapath_id, sub_dir]
+
+  @buildTrack: (event, data) ->
+    parent_list = data.node.getParentList()
+    dir_array = []
+    projects_datapaths = []
+    for i of parent_list
+      dir_array.push(parent_list[i].title)
+      if parent_list[i].data.object_id
+        projects_datapaths.push([i, parent_list[i].data.object_id.projects_datapath_id])
+    dir_array.push(data.node.title)
+    track_array = dir_array.slice(Number(projects_datapaths[projects_datapaths.length-1][0])+1)
+    path = track_array.join('/')
+    name = track_array[track_array.length-1]
+    projects_datapath_id = projects_datapaths[projects_datapaths.length-1][1]
+    [path, name, projects_datapath_id]
 
   @addPath: (event, data, datapath_id, sub_dir) ->
     node = data.node
