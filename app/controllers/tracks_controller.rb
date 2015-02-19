@@ -1,13 +1,27 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
-  load_and_authorize_resource
+  authorize_resource
 
-  respond_to :html
+  respond_to :html, only: [:index, :show]
+  respond_to :json, only: [:create]
 
   def index
+    @tracks = Track.accessible_by(current_ability)
   end
 
   def show
+    @track = Track.find(params[:id])
+  end
+
+  def create
+    @track = Track.new(track_params)
+    @track.owner = current_user
+    if @track.save
+      render json: {track_id: @track.id}, status: 200
+    else
+      message = @track.errors.collect {|name, msg| msg }.join(';')
+      render json: {status: :error, message: message}, status: 400
+    end
   end
 
   private

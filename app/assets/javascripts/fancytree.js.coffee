@@ -22,6 +22,8 @@ class @Fancytree
         else
           attr = Fancytree.buildTrack(event, data)
           console.log(attr)
+          if data.node.selected
+            Fancytree.addTrack(event, data, attr[0], attr[1], attr[2])
     }
 
   @buildPath: (event, data) ->
@@ -86,6 +88,24 @@ class @Fancytree
       error:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
         $span.addClass('error-red')
+        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        return false
+    })
+
+  @addTrack: (event, data, path, name, projects_datapath_id) ->
+    node = data.node
+    $.ajax({
+      type: "POST",
+      url: "/tracks",
+      data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
+      success:(jqXHR, textStatus, errorThrown) ->
+        node.data['object_id'] = { track_id: jqXHR['track_id']}
+        $span = $(node.span)
+        $span.effect("highlight", {}, 1500)
+        return false
+      error:(jqXHR, textStatus, errorThrown) ->
+        $span = $(node.span)
+        $span.addClass('error-red').removeClass('fancytree-selected')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
