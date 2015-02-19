@@ -16,7 +16,7 @@ class Track < ActiveRecord::Base
   after_save :update_projects_datapath
 
   def full_path
-    File.join datapath.path, projects_datapath.sub_directory, path
+    File.join projects_datapath.full_path, path
   end
 
   protected
