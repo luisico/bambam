@@ -9,19 +9,14 @@ class Track < ActiveRecord::Base
 
   validates_presence_of :name, :owner_id
   #TODO adding presence validation on project_id breaks nested updated.
-  validates_path_of :full_path
+  validates_path_of :path
   validates :path, format: { with: /\A.*\.(bw|bam)\z/,
     message: "file must have extension .bw or .bam" }
 
-  before_validation :strip_whitespace
-  after_save        :update_projects_datapath
+  after_save :update_projects_datapath
 
   def full_path
     File.join datapath.path, projects_datapath.sub_directory, path
-  end
-
-  def strip_whitespace
-    self.path = self.path.strip
   end
 
   protected
