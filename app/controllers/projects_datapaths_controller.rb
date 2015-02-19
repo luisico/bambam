@@ -52,24 +52,24 @@ class ProjectsDatapathsController < ApplicationController
         components.each_with_index do |component, index|
           built_path = File.join built_path, component
           if @project.allowed_paths.include?(built_path)
-            selected_indexes << { index => @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first.id }
+            selected_indexes << { index => { projects_datapath_id: @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first.id }}
           elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
-            selected_indexes << { index => @project.tracks.select {|t| t.full_path == built_path}.first.id }
+            selected_indexes << { index => { track_id: @project.tracks.select {|t| t.full_path == built_path}.first.id }}
           end
         end
 
         if parent_selected = @project.allowed_paths.include?(datapath.path)
-          parent_projects_datapath_id = @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first.id
+          parent_object_id = { projects_datapath_id: @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first.id }
         end
 
-        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, parent_selected, parent_projects_datapath_id)
+        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, parent_selected, parent_object_id)
 
         components.each_with_index do |component, index|
           expanded = selected_indexes.any? && selected_indexes.last.keys.first > index
           if selected = selected_indexes.select {|hash| hash.keys.include?(index)}.any?
-            projects_datapath_id = selected_indexes.collect {|hash| hash[index]}.join
+            object_id = selected_indexes.select {|hash| hash[index]}.first.values.first
           end
-          parent = add_node_to_tree(parent, component, expanded, nil, selected, projects_datapath_id)
+          parent = add_node_to_tree(parent, component, expanded, nil, selected, object_id)
         end
       end
     end
@@ -77,7 +77,7 @@ class ProjectsDatapathsController < ApplicationController
     tree
   end
 
-  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false, projects_datapath_id=nil)
+  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false, object_id=nil)
     if tree.is_a? Array
       parent = tree
     else
@@ -92,7 +92,7 @@ class ProjectsDatapathsController < ApplicationController
       node.merge!(key: id) if id
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
-      node.merge!(projects_datapath_id: projects_datapath_id) if selected
+      node.merge!(object_id: object_id) if selected
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
 
       parent << node
@@ -100,10 +100,10 @@ class ProjectsDatapathsController < ApplicationController
       node = node.first
       node.merge!(expanded: true) if expanded
       node.merge!(selected: true) if selected
-      node.merge!(projects_datapath_id: projects_datapath_id) if selected
+      node.merge!(object_id: object_id) if selected
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
     end
 
-    node.merge!(folder: true)
+    node.merge!(folder: true) unless node[:title].include? ('.bam'||'.bw')
   end
 end

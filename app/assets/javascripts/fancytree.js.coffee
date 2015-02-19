@@ -13,11 +13,12 @@ class @Fancytree
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
       }
       select: (event, data) ->
-        attr = Fancytree.buildPath(event, data)
-        if data.node.selected
-          Fancytree.addNode(event, data, attr[0], attr[1])
-        else
-          Fancytree.deleteNode(event, data, attr[0], attr[1])
+        if data.node.folder
+          attr = Fancytree.buildPath(event, data)
+          if data.node.selected
+            Fancytree.addPath(event, data, attr[0], attr[1])
+          else
+            Fancytree.deletePath(event, data, attr[0], attr[1])
     }
 
   @buildPath: (event, data) ->
@@ -35,14 +36,14 @@ class @Fancytree
       sub_dir = ""
     [datapath_id, sub_dir]
 
-  @addNode: (event, data, datapath_id, sub_dir) ->
+  @addPath: (event, data, datapath_id, sub_dir) ->
     node = data.node
     $.ajax({
       type: "POST",
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
       success:(jqXHR, textStatus, errorThrown) ->
-        node.data['projects_datapath_id'] = jqXHR['projects_datapath_id']
+        node.data['object_id'] = { projects_datapath_id: jqXHR['projects_datapath_id']}
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
@@ -54,11 +55,11 @@ class @Fancytree
         return false
     })
 
-  @deleteNode: (event, data, datapath_id, sub_dir) ->
+  @deletePath: (event, data, datapath_id, sub_dir) ->
     node = data.node
     $.ajax({
       type: "POST",
-      url: "/projects_datapaths/" + node.data.projects_datapath_id
+      url: "/projects_datapaths/" + node.data.object_id.projects_datapath_id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
