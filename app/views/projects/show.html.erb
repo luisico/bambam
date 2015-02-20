@@ -57,11 +57,6 @@
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <% if can? :manage, @project %>
-      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
-    <% elsif can? :edit, @project %>
-      <%= link_to 'Add or edit tracks', edit_project_path(@project), class: 'button tiny radius' %>
-    <% end %>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>
       <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure? Clicking this button will delete this project and all its associated tracks' }, class: 'button tiny radius [secondary alert success] right', id: "delete-project" %>
