@@ -21,9 +21,10 @@ class @Fancytree
             Fancytree.deletePath(event, data, attr[0], attr[1])
         else
           attr = Fancytree.buildTrack(event, data)
-          console.log(attr)
           if data.node.selected
             Fancytree.addTrack(event, data, attr[0], attr[1], attr[2])
+          else
+            Fancytree.deleteTrack(event, data)
     }
 
   @buildPath: (event, data) ->
@@ -106,6 +107,22 @@ class @Fancytree
       error:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
         $span.addClass('error-red').removeClass('fancytree-selected')
+        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        return false
+    })
+
+  @deleteTrack: (event, data) ->
+    node = data.node
+    track_id = node.data.object_id.track_id
+    $.ajax({
+      type: "POST",
+      url: "/tracks/" + track_id
+      data: { _method: "delete" },
+      success:(jqXHR, textStatus, errorThrown) ->
+        return false
+      error:(jqXHR, textStatus, errorThrown) ->
+        $span = $(node.span)
+        $span.addClass('error-red')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })

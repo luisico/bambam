@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+# TODO fix authorization on this controller
 describe TracksController do
   before { @admin = FactoryGirl.create(:admin) }
 
@@ -181,6 +181,89 @@ describe TracksController do
       it "should not create a new project's datapath" do
         expect{
           post :create, track: @track_attr, format: :json
+        }.not_to change(ProjectsDatapath, :count)
+      end
+    end
+  end
+
+  describe "Delete 'destroy'" do
+    context "as a signed in user and track owner" do
+      before do
+        user = FactoryGirl.create(:user)
+        @track = FactoryGirl.create(:track, owner: user)
+        sign_in user
+      end
+
+      context "with valid parameters" do
+        it "should be a success" do
+          delete :destroy, id: @track, format: :js
+          expect(response).to be_success
+          expect(response.header['Content-Type']).to include 'application/json'
+          json = JSON.parse(response.body)
+          expect(json['status']).to eq 'success'
+          expect(json['message']).to eq 'OK'
+        end
+
+        it "should destroy the track" do
+          expect{
+            delete :destroy, id: @track, format: :js
+          }.to change(Track, :count).by(-1)
+        end
+      end
+
+      context "with invalid parameters" do
+        context "non-existance track" do
+          it "should raise record not found error" do
+            delete :destroy, id: 9999, format: :js
+            expect(response.status).to eq 403
+            json = JSON.parse(response.body)
+            expect(json['status']).to eq 'error'
+            expect(json['message']).to eq "You don't have permission to destroy "
+          end
+
+          it "should not destroy the track" do
+            expect{
+              delete :destroy, id: 9999, format: :js
+            }.not_to change(Track, :count)
+          end
+        end
+      end
+    end
+
+    context "as a signed in user" do
+      before do
+        @track = FactoryGirl.create(:track)
+        sign_in FactoryGirl.create(:user)
+      end
+
+      it "should return forbidden reponse" do
+        delete :destroy, id: @track.id, format: :js
+        expect(response).not_to be_success
+        expect(response.status).to be 403
+      end
+
+      it "should not delete the track" do
+        expect {
+          delete :destroy, id: @track.id, format: :js
+        }.not_to change(Track, :count)
+      end
+    end
+
+    context "as a visitor" do
+      before { @track = FactoryGirl.create(:track) }
+
+      it "should redirect to the sign in page" do
+        delete :destroy, id: @track.id, format: :json
+        expect(response).not_to be_success
+        expect(response.status).to be 401
+        expect(response.header['Content-Type']).to include 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq I18n.t('devise.failure.unauthenticated')
+      end
+
+      it "should not delete the track" do
+        expect{
+          delete :destroy, id: @track.id, format: :json
         }.not_to change(ProjectsDatapath, :count)
       end
     end

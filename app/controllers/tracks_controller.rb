@@ -24,6 +24,16 @@ class TracksController < ApplicationController
     end
   end
 
+  def destroy
+    @track = Track.find_by_id(params[:id])
+    authorize! :destroy, @track
+    if @track && @track.destroy
+      render json: {status: :success, message: 'OK' }, status: 200
+    else
+      render json: {status: :error, message: 'file system error'}, status: 400
+    end
+  end
+
   private
 
   def track_params
