@@ -16,3 +16,11 @@ Feature: Edit project name
       | role      | project exists        | privilege  |
       | a manager | I own a project       | should     |
       | a user    | I belong to a project | should not |
+
+  Scenario: Manager not allowed to set project name to blank
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 additional users of that project
+    And there are 3 datapaths in that project
+    When I am on the project page
+    Then I should not be able to set project name to blank

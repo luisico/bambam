@@ -4,6 +4,10 @@ jQuery ->
   $('.best_in_place').best_in_place()
   $('.best_in_place').bind 'ajax:success', ->
     $(this).closest('#project-name').effect("highlight", {}, 1500)
+  $('.best_in_place').bind 'ajax:error', (event, data) ->
+    $(this).closest('#project-name').effect("highlight", {color: 'red'}, 3000)
+    $(this).closest('#project-name').append("<h3 class='bip-error'>"+$(data)[0].responseText+"</h3>")
+    $('.bip-error').hide("fade", {}, 3000)
 
   Fancytree.applyFancytree()
 

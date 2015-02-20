@@ -21,3 +21,12 @@ Then /^I should( not)? be able to edit the project name$/ do |negate|
     expect(@project.name).to eq 'new_name'
   end
 end
+
+Then /^I should not be able to set project name to blank$/ do
+  expect{
+    bip_text(@project, :name, '')
+    expect(page).to have_css '.bip-error'
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.not_to change(@project, :name)
+end
