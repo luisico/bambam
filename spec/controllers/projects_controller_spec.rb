@@ -137,8 +137,8 @@ describe ProjectsController do
   describe "GET 'new'" do
     context "as an admin" do
       before do
-        @admin = FactoryGirl.create(:admin)
-        sign_in @admin
+        @manager = FactoryGirl.create(:manager)
+        sign_in @manager
      end
 
       it "should be successful" do
@@ -155,12 +155,12 @@ describe ProjectsController do
 
       it "should assign ownership to signed in user" do
         get :new
-        expect(assigns(:project).owner).to eq @admin
+        expect(assigns(:project).owner).to eq @manager
       end
 
       it "should add signed in user to users" do
         get :new
-        expect(assigns(:project).users).to include @admin
+        expect(assigns(:project).users).to include @manager
       end
     end
 
@@ -183,19 +183,22 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = FactoryGirl.create(:project) }
+    before do
+      @manager = FactoryGirl.create(:manager)
+      @project = FactoryGirl.create(:project, owner: @manager)
+    end
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before {sign_in @manager}
 
       it "should be successful" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(response).to be_success
         expect(response).to render_template :edit
       end
 
       it "should return the project" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(assigns(:project)).to eq @project
       end
     end
@@ -207,15 +210,10 @@ describe ProjectsController do
         sign_in user
       end
 
-      it "should be successful" do
-        get :edit, id: @project
-        expect(response).to be_success
-        expect(response).to render_template :edit
-      end
-
-      it "should return the project" do
-        get :edit, id: @project
-        expect(assigns(:project)).to eq @project
+      it "should not be successful" do
+        get :edit, id: @project, format: :js
+        expect(response).not_to be_success
+        expect(response.status).to eq 403
       end
     end
 
@@ -223,17 +221,17 @@ describe ProjectsController do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
-        get :edit, id: FactoryGirl.create(:project)
+        get :edit, id: FactoryGirl.create(:project), format: :js
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response.status).to eq 403
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
+        expect(response.status).to eq 401
       end
     end
   end
