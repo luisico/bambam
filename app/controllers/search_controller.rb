@@ -12,7 +12,7 @@ class SearchController < ApplicationController
     users = User.search(email_or_first_name_or_last_name_cont: @q).result
     users_projects = []
     users.each do |user|
-      users_projects << user.projects.select{|p| can? :user_access, p}
+      users_projects << user.projects.select{|p| can? :read, p}
     end
 
     projects = projects | users_projects.flatten.uniq
