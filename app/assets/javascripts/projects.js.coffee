@@ -2,6 +2,8 @@ jQuery ->
   $('.edit-track').show()
 
   $('.best_in_place').best_in_place()
+  $('.best_in_place').bind 'ajax:success', ->
+    $(this).closest('#project-name').effect("highlight", {}, 1500)
 
   Fancytree.applyFancytree()
 
