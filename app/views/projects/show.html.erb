@@ -6,7 +6,7 @@
       <div class="clearfix">
         <h3 class="left" id="project-name">
           <%= best_in_place_if can?(:manage, @project), @project, :name,
-            { ok_button: 'save', ok_button_class: 'button tiny radius',
+            { inner_class: 'small-margin-bottom' , ok_button: 'save', ok_button_class: 'button tiny radius',
               cancel_button: 'cancel', cancel_button_class: 'button tiny radius margin-left'
             }
           %>
