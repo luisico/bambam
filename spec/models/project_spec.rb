@@ -8,7 +8,7 @@ describe Project do
   describe "database fields" do
     it { should have_db_column(:name).with_options(null: false) }
     it { should have_db_index(:name).unique(false) }
-    it { should have_db_column(:owner_id) }
+    it { should have_db_column(:owner_id).with_options(null: false) }
   end
 
   describe "name" do
@@ -19,6 +19,8 @@ describe Project do
   describe "owner" do
     it { should belong_to :owner }
     it { should respond_to :owner }
+    it { should respond_to :owner_id }
+    it { should validate_presence_of(:owner_id) }
   end
 
   describe "projects_users" do
