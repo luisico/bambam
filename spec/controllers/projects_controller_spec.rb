@@ -307,47 +307,85 @@ describe ProjectsController do
     context "as a manager and owner of project" do
       before { sign_in @manager }
 
-      context 'with valid parameters' do
-        before { @user = FactoryGirl.create(:user) }
+      context "update the name" do
+        context "with valid parameters" do
+          it "should be a success without content" do
+            patch :update, id: @project, project: @new_project, format: :json
+            expect(response.status).to eq 204       # no content
+          end
 
-        it "should render the update template" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
-          expect(response).to render_template :update
+          it "should update the project's name'" do
+            expect {
+              patch :update, id: @project, project: @new_project, format: :json
+              @project.reload
+            }.to change(@project, :name).to @new_project[:name]
+            expect(assigns(:project)).to eq @project
+          end
         end
 
-        it "should update the project" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id]), format: :js
-          @project.reload
-          expect(assigns(:project)).to eq @project
-          expect(@project.name).to eq @new_project[:name]
-          expect(@project.users).to include @user
-        end
+        context "with invalid parameters" do
+          it "should response with unprocessable entity" do
+            patch :update, id: @project, project: {name: ''}, format: :json
+            expect(response.status).to eq 422       # unprocessable entity
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json[0]).to eq "Name #{I18n.t('errors.messages.blank')}"
+          end
 
-        it "should not change ownership" do
-          expect {
-            patch :update, id: @project, project: @new_project, format: :js
-          }.not_to change(@project, :owner)
-        end
-
-        it "should add owner to users if not present" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: []), format: :js
-          expect(assigns(:project).users).to include @project.owner
+          it "should not change the project's name" do
+            expect {
+              patch :update, id: @project, project: {name: ''}, format: :json
+              @project.reload
+            }.not_to change(@project, :name)
+            expect(assigns(:project)).to eq @project
+          end
         end
       end
 
-      context "with invalid parameters" do
-        it "should render the edit template" do
-          patch :update, id: @project, project: {name: ''}, format: :js
-          expect(response).to be_success
-          expect(response).to render_template :update
+      context "update the users" do
+        context "with valid parameters" do
+          before do
+            @user = FactoryGirl.create(:user)
+            @new_project = {user_ids: [@user.id]}
+          end
+
+          it "should render the update template" do
+            patch :update, id: @project, project: @new_project, format: :js
+            expect(response).to be_success
+            expect(response).to render_template :update
+          end
+
+          it "should update the project's users'" do
+            patch :update, id: @project, project: @new_project, format: :js
+            expect(@project.reload.users).to include @user
+          end
+
+          it "should add owner to users if not present" do
+            patch :update, id: @project, project: {user_ids: []}, format: :js
+            expect(@project.reload.users).to include @project.owner
+          end
+
+          it "should not change ownership" do
+            expect {
+              patch :update, id: @project, project: @new_project.merge(owner_id: FactoryGirl.create(:user).id), format: :js
+              @project.reload
+            }.not_to change(@project, :owner)
+          end
         end
 
-        it "should not change the project's attributes" do
-          expect {
-            patch :update, id: @project, project: {name: ''}, format: :js
-            @project.reload
-          }.not_to change(@project, :name)
-          expect(assigns(:project)).to eq @project
+        context "with invalid parameters" do
+          it "should render the edit template" do
+            patch :update, id: @project, project: {user_ids: ''}, format: :js
+            expect(response).to be_success
+            expect(response).to render_template :update
+          end
+
+          it "should not change the project's users" do
+            old_users = @project.users
+            patch :update, id: @project, project: {user_ids: ''}, format: :js
+            expect(@project.reload.users).to eq old_users
+            expect(assigns(:project)).to eq @project
+          end
         end
       end
     end

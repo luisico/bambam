@@ -31,7 +31,9 @@ class ProjectsController < ApplicationController
 
   def update
     # TODO: move to projects_users controller? And keep here only basic project changes (ie: name)
+    # TODO: blank users should give an error?
     if params['project']['user_ids']
+      params['project']['user_ids'] = [] if params['project']['user_ids'].blank?
       params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
 
