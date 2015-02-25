@@ -3,15 +3,16 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <div class="clearfix">
-        <h3 class="left" id="project-name">
-          <%= best_in_place_if can?(:manage, @project), @project, :name,
-            { inner_class: 'small-margin-bottom' , ok_button: 'save', ok_button_class: 'button tiny radius',
-              cancel_button: 'cancel', cancel_button_class: 'button tiny radius margin-left'
-            }
-          %>
-        </h3>
-        <%= render partial: 'timestamps', locals: { record: @project } %>
+      <div class="row">
+        <div class="small-12 medium-8 columns">
+          <h3 id="project-name">
+            <%= best_in_place_if can?(:manage, @project), @project, :name,
+              {ok_button: 'save', cancel_button: 'cancel'} %>
+          </h3>
+        </div>
+        <div class="small-12 medium-4 columns">
+          <%= render partial: 'timestamps', locals: { record: @project } %>
+        </div>
       </div>
 
       <div class="row">
