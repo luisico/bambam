@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   load_and_authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :js, only: [:new, :create, :edit, :update]
+  respond_to :js, :json, only: [:new, :create, :edit, :update]
 
   def index
   end
@@ -24,10 +24,18 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if users = params['project']['user_ids']
-      users << @project.owner.id unless users.include?(@project.owner.id)
+    # TODO: move to projects_users controller? And keep here only basic project changes (ie: name)
+    # TODO: blank users should give an error?
+    if params['project']['user_ids']
+      params['project']['user_ids'] = [] if params['project']['user_ids'].blank?
+      params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
-    @project.update(update_params)
+
+    respond_to do |format|
+      @project.update(update_params)
+      format.js
+      format.json { respond_with_bip(@project) }
+    end
   end
 
   def destroy

@@ -78,8 +78,8 @@ describe User do
           it { should     be_able_to(:manage, @project) }
           it { should_not be_able_to(:manage, @other_project) }
 
-          it { should     be_able_to(:user_access, @project_as_user) }
-          it { should_not be_able_to(:user_access, @other_project) }
+          it { should     be_able_to(:read, @project_as_user) }
+          it { should_not be_able_to(:read, @other_project) }
         end
 
         context "projects_user" do
@@ -161,7 +161,7 @@ describe User do
           @other_user_project = FactoryGirl.create(:project, owner: @other_user)
         end
 
-        it { should be_able_to(:user_access, @user_on_project) }
+        it { should be_able_to(:read, @user_on_project) }
         it { should_not be_able_to(:manage, @user_on_project) }
 
         it { should_not be_able_to(:read, @other_user_project) }

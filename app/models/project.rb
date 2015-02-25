@@ -9,7 +9,6 @@ class Project < ActiveRecord::Base
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
 
   validates_presence_of :name, :owner_id
-  accepts_nested_attributes_for :tracks, allow_destroy: true
 
   def allowed_paths
     projects_datapaths.collect{ |project_datapath| project_datapath.full_path }

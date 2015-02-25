@@ -3,11 +3,16 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <div class="clearfix">
-        <h3 class="left" id="project-name">
-          <%= @project.name %>
-        </h3>
-        <%= render partial: 'timestamps', locals: { record: @project } %>
+      <div class="row">
+        <div class="small-12 medium-8 columns">
+          <h3 id="project-name">
+            <%= best_in_place_if can?(:manage, @project), @project, :name,
+              {ok_button: 'save', cancel_button: 'cancel'} %>
+          </h3>
+        </div>
+        <div class="small-12 medium-4 columns">
+          <%= render partial: 'timestamps', locals: { record: @project } %>
+        </div>
       </div>
 
       <div class="row">
@@ -53,11 +58,6 @@
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <% if can? :manage, @project %>
-      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
-    <% elsif can? :edit, @project %>
-      <%= link_to 'Add or edit tracks', edit_project_path(@project), class: 'button tiny radius' %>
-    <% end %>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>
       <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure? Clicking this button will delete this project and all its associated tracks' }, class: 'button tiny radius [secondary alert success] right', id: "delete-project" %>

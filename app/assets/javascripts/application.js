@@ -17,6 +17,7 @@
 //= require jquery.ui.widget
 //= require foundation
 //= require local_time
+//= require best_in_place
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

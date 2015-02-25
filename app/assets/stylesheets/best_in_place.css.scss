@@ -1,0 +1,15 @@
+.best_in_place {
+  input {
+    margin-bottom: rem-calc(-5);
+  }
+  [type='submit'], [type='button'] {
+    @extend .button;
+    @extend .tiny;
+    @extend .radius;
+    padding: rem-calc(0 5);
+    margin-bottom: 0;
+  }
+  [type='button'] {
+    margin-left: rem-calc(5);
+  }
+}

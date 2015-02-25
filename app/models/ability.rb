@@ -4,8 +4,6 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
     alias_action :create, :index, :show, :to => :invite
-    #TODO remove this alias
-    alias_action :index, :show, :edit, :update, :to => :user_access
 
     if user.has_role? :admin
       can :manage, User
@@ -32,7 +30,7 @@ class Ability
 
       can :read, Group, :memberships => { :user_id => user.id }
 
-      can :user_access, Project, :projects_users => { :user_id => user.id }
+      can :read, Project, :projects_users => { :user_id => user.id }
 
       can :read, Track, :projects_datapath => { :project => { :projects_users => { :user_id => user.id } } }
       can [:update, :destroy], Track, owner: user
