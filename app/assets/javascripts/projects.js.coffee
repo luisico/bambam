@@ -1,14 +1,6 @@
 jQuery ->
   $('.edit-track').show()
 
-  $('.best_in_place').best_in_place()
-  $('.best_in_place').bind 'ajax:success', ->
-    $(this).closest('#project-name').effect("highlight", {}, 1500)
-  $('.best_in_place').bind 'ajax:error', (event, data) ->
-    $(this).closest('#project-name').effect("highlight", {color: 'red'}, 3000)
-      .append("<h3 class='bip-error'>"+$(data)[0].responseText+"</h3>")
-      .children('.bip-error').fadeOut(3000)
-
   Fancytree.applyFancytree()
 
   $('.error').closest('div.track-form-fields').show()

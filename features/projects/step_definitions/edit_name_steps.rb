@@ -25,7 +25,7 @@ end
 Then /^I should not be able to set project name to blank$/ do
   expect{
     bip_text(@project, :name, '')
-    expect(page).to have_css '.bip-error'
+    expect(page).to have_css 'small.error', text: I18n.t('errors.messages.blank')
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.not_to change(@project, :name)
