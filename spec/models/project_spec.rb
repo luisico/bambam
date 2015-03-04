@@ -77,20 +77,27 @@ describe Project do
   describe "project user permissions" do
     before do
       @project.users << @user = FactoryGirl.create(:user)
-      @regular_users = [@project.owner, @user]
       @read_only_users = FactoryGirl.create_list(:user, 2, projects: [@project])
       @read_only_users.each {|u| u.projects_users.first.update_attributes(read_only: true)}
     end
 
     context "#regular_users" do
       it "returns all regular users" do
-        expect(@project.regular_users).to eq @regular_users
+        expect(@project.regular_users).to include @user
+      end
+
+      it "includes the owner" do
+        expect(@project.regular_users).to include @project.owner
       end
     end
 
     context "#read_only_users" do
       it "returns all read-only users" do
         expect(@project.read_only_users).to eq @read_only_users
+      end
+
+      it "does not include the owner" do
+        expect(@project.read_only_users).not_to include @project.owner
       end
     end
   end

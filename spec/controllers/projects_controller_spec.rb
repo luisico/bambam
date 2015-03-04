@@ -19,7 +19,7 @@ describe ProjectsController do
 
       it "should return all projects" do
         get :index
-        expect(assigns(:projects)).to eq @projects
+        expect(assigns(:projects).sort).to eq @projects.sort
       end
     end
 
@@ -147,11 +147,6 @@ describe ProjectsController do
       it "should assign ownership to signed in user" do
         get :new
         expect(assigns(:project).owner).to eq @manager
-      end
-
-      it "should add signed in user to users" do
-        get :new
-        expect(assigns(:project).users).to include @manager
       end
     end
 
