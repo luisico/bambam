@@ -10,8 +10,6 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :name, :owner_id
 
-  before_validation :add_owner_to_users
-
   def allowed_paths
     projects_datapaths.collect{ |project_datapath| project_datapath.full_path }
   end
@@ -22,11 +20,5 @@ class Project < ActiveRecord::Base
 
   def read_only_users
     users.where(projects_users: { read_only: true })
-  end
-
-  private
-
-  def add_owner_to_users
-    users << owner if owner && !users.include?(owner)
   end
 end
