@@ -48,7 +48,7 @@ Feature: Show a project
     When I am on the project page
     Then I should be able to designate a user read only
     And that user should move to the read-only list
-    And the regular user counts should be 3
+    And the regular user counts should be 2
     And the read only user count should be 1
 
   @javascript
@@ -61,7 +61,7 @@ Feature: Show a project
     When I am on the project page
     Then I should be able to remove a user from the read only list
     And that user should move to the regular user list
-    And the regular user counts should be 4
+    And the regular user counts should be 3
     And the read only user count should be 0
 
   Scenario Outline: Back button
