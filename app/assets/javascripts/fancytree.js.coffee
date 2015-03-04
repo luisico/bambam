@@ -49,12 +49,14 @@ class @Fancytree
     })
 
   @deleteNode: (event, data, datapath_id, sub_dir) ->
-    projects_datapath_id = data.node.data.projects_datapath_id
+    node = data.node
     $.ajax({
       type: "POST",
-      url: "/projects_datapaths/" + projects_datapath_id
+      url: "/projects_datapaths/" + node.data.projects_datapath_id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
+        $span = $(node.span)
+        $span.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
