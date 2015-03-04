@@ -243,11 +243,6 @@ describe ProjectsController do
           post :create, project: @project_attr, format: 'js'
           expect(assigns(:project).owner).to eq @manager
         end
-
-        it "should add signed in user to users" do
-          post :create, project: @project_attr, format: 'js'
-          expect(assigns(:project).users).to include @manager
-        end
       end
 
       context "with invalid parameters" do
@@ -361,11 +356,6 @@ describe ProjectsController do
             expect(@project.reload.users).to include @user
           end
 
-          it "should add owner to users if not present" do
-            patch :update, id: @project, project: {user_ids: []}, format: :js
-            expect(@project.reload.users).to include @project.owner
-          end
-
           it "should not change ownership" do
             expect {
               patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
@@ -402,11 +392,6 @@ describe ProjectsController do
           patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
           @project.reload
         }.not_to change(@project, :owner)
-      end
-
-      it "should add owner to users if not present" do
-        patch :update, id: @project, project: @new_project_attrs.merge(user_ids: []), format: :js
-        expect(@project.reload.users).to include @project.owner
       end
 
       it "should not add admin to users" do
