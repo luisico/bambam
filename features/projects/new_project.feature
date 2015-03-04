@@ -9,8 +9,8 @@ Feature: Create a project
     When I am on the projects page
     Then I should be able to create a new project
     And I should be on the project page
-    And I should be the project's owner
-    And I should see my handle among the list of project member handles
+    And I should see myself listed as the project's owner
+    And I should not see my handle among the list of project member handles
     # TODO: this last step, is it repeated in show features?
 
   Scenario: Manager cannot create a project without a name

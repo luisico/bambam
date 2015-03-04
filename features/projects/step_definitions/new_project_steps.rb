@@ -55,11 +55,14 @@ Then /^I should see a message that the project was created successfully$/ do
   expect(page).to have_content('Project was successfully created')
 end
 
-Then /^I should see my handle among the list of project member handles$/ do
-  expect(page).to have_content User.first.handle
+Then /^I should not see my handle among the list of project member handles$/ do
+  within("#project-users"){
+    expect(page).not_to have_content @project.owner.handle
+  }
 end
 
-Then /^I should be the project's owner$/ do
-  expect(@project.owner).to eq @manager
-  # TODO: find owner in page (already in show project features?)
+Then /^I should see myself listed as the project's owner$/ do
+  within("#project-name") {
+    expect(page).to have_content @project.owner.handle
+  }
 end

@@ -8,6 +8,9 @@
           <h3 id="project-name">
             <%= best_in_place_if can?(:manage, @project), @project, :name,
               {ok_button: 'save', cancel_button: 'cancel'} %>
+            <small>
+              (owner: <%= @project.owner.handle %>)
+            </small>
           </h3>
         </div>
         <div class="small-12 medium-4 columns">
