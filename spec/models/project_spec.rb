@@ -55,17 +55,17 @@ describe Project do
 
   describe "#allowed_datapaths" do
     it "should return an array of allowed datapaths for the project" do
-      master1 = FactoryGirl.create(:datapath)
-      master2 = FactoryGirl.create(:datapath)
+      datapath1 = FactoryGirl.create(:datapath)
+      datapath2 = FactoryGirl.create(:datapath)
 
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "mysubdir")
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: master1, sub_directory: "")
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: master2, sub_directory: "")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, sub_directory: "mysubdir")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, sub_directory: "")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath2, sub_directory: "")
 
       expect(@project.allowed_paths).to eq [
-        File.join(master1.path, "mysubdir"),
-        master1.path,
-        master2.path
+        File.join(datapath1.path, "mysubdir"),
+        datapath1.path,
+        datapath2.path
       ]
     end
 

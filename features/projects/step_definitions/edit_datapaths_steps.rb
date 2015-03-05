@@ -16,8 +16,7 @@ end
 
 ### Given
 
-# TODO: nomenclatures: master datapath vs datapath vs datapath with subdir
-Given /^there (is|are) (\d+|a) datapaths in that project$/ do |foo, n|
+Given /^there (is|are) (\d+|a) datapaths in that project?$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
@@ -45,7 +44,7 @@ Given /^one of those additional datapaths has a sub\-directory$/ do
   Pathname.new(sub_dir).mkpath unless File.exist?(sub_dir)
 end
 
-Given /^one of those project datapaths has a sub\-directory$/ do
+Given /^there is a datapath sub\-directory in the project$/ do
   sub_dir = FactoryGirl.create(:projects_datapath, project: @project, datapath: @project_datapath)
   @basename = Pathname.new(sub_dir.full_path).basename.to_s
 end
@@ -79,7 +78,7 @@ Then /^I should be able to remove a datapath from the project$/ do
   }.to change(@project.datapaths, :count).by(-1)
 end
 
-Then /^I should be able to add a sub\-directory to the project$/ do
+Then /^I should be able to add the datapath sub\-directory to the project$/ do
   expect {
     fancytree_parent(@datapath.path).find('span.fancytree-expander').click
     fancytree_parent(@dir).find('span.fancytree-expander').click
@@ -90,7 +89,7 @@ Then /^I should be able to add a sub\-directory to the project$/ do
   }.to change(@project.datapaths, :count).by(1)
 end
 
-Then /^I should be able to remove a sub\-directory to the project$/ do
+Then /^I should be able to remove the datapath sub\-directory from the project$/ do
   expect {
     fancytree_parent(@basename).find('span.fancytree-checkbox').click
     loop until page.evaluate_script('jQuery.active').zero?
@@ -98,7 +97,7 @@ Then /^I should be able to remove a sub\-directory to the project$/ do
   }.to change(@project.datapaths, :count).by(-1)
 end
 
-Then /^I should be informed of a failed datapath creation$/ do
+Then /^I should be informed of a failed datapath addition$/ do
   ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
   select_node(@datapath.path)
   loop until page.evaluate_script('jQuery.active').zero?
