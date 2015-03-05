@@ -56,8 +56,8 @@ end
 
 Then /^I should see the project's owner$/ do
   project = @project || Project.last
-  within("#user-#{project.owner.id}") do
-    expect(page).to have_css('.admin-icon')
+  within("#project-name") do
+    expect(page).to have_content @project.owner.handle
   end
 end
 

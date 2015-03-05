@@ -33,6 +33,10 @@ describe Project do
     it { should have_many :users }
     it { should respond_to :users }
     it { should respond_to :user_ids }
+    it "should not include owner" do
+      @project.save!
+      expect(@project.users).not_to include(@project.owner)
+    end
   end
 
   describe "projects_datapaths" do
@@ -76,15 +80,14 @@ describe Project do
 
   describe "project user permissions" do
     before do
-      @project.users << @user = FactoryGirl.create(:user)
-      @regular_users = [@project.owner, @user]
+      @project.users << @users = FactoryGirl.create_list(:user, 2)
       @read_only_users = FactoryGirl.create_list(:user, 2, projects: [@project])
       @read_only_users.each {|u| u.projects_users.first.update_attributes(read_only: true)}
     end
 
     context "#regular_users" do
       it "returns all regular users" do
-        expect(@project.regular_users).to eq @regular_users
+        expect(@project.regular_users).to eq @users
       end
     end
 
@@ -96,7 +99,10 @@ describe Project do
   end
 
   describe "when project destroyed" do
-    before {@project.save!}
+    before do
+      @project.users << FactoryGirl.create(:user)
+      @project.save!
+    end
 
     it "should destroy the project" do
       expect { @project.destroy }.to change(Project, :count).by(-1)

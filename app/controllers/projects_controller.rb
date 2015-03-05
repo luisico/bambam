@@ -13,7 +13,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new(owner: current_user, users: [current_user])
+    @project = Project.new(owner: current_user)
   end
 
   def edit
@@ -28,7 +28,6 @@ class ProjectsController < ApplicationController
     # TODO: blank users should give an error?
     if params['project']['user_ids']
       params['project']['user_ids'] = [] if params['project']['user_ids'].blank?
-      params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
     end
 
     respond_to do |format|
@@ -46,7 +45,7 @@ class ProjectsController < ApplicationController
   private
 
   def create_params
-    params.require(:project).permit(:name).merge(user_ids: [current_user.id], owner_id: current_user.id)
+    params.require(:project).permit(:name).merge(owner_id: current_user.id)
   end
 
   def update_params

@@ -69,7 +69,7 @@ describe User do
 
       context "projects and tracks" do
         before do
-          @project = FactoryGirl.create(:project, owner: @manager)
+          @project = FactoryGirl.create(:project, owner: @manager, users: [FactoryGirl.create(:user)])
           @project_as_user = FactoryGirl.create(:project, users: [@manager])
           @other_project = FactoryGirl.create(:project)
         end
