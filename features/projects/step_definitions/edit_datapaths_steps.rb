@@ -38,8 +38,8 @@ Given /^I have access to (\d+|a) additional datapaths$/ do |n|
 end
 
 Given /^one of those additional datapaths has a sub\-directory$/ do
-  @dir = 'dir1'
-  @basename = 'subdir1'
+  @dir = 'my_dir'
+  @basename = 'my_subdir'
   sub_dir = File.join(@datapath.path, @dir, @basename)
   Pathname.new(sub_dir).mkpath unless File.exist?(sub_dir)
 end
