@@ -3,22 +3,37 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <div class="clearfix">
-        <h3 class="left" id="project-name">
-          <%= @project.name %>
-        </h3>
-        <%= render partial: 'timestamps', locals: { record: @project } %>
+      <div class="row">
+        <div class="small-12 medium-8 columns">
+          <h3 id="project-name">
+            <%= best_in_place_if can?(:manage, @project), @project, :name,
+              {ok_button: 'save', cancel_button: 'cancel'} %>
+            <small>
+              (owner: <%= @project.owner.handle %>)
+            </small>
+          </h3>
+        </div>
+        <div class="small-12 medium-4 columns">
+          <%= render partial: 'timestamps', locals: { record: @project } %>
+        </div>
       </div>
 
       <div class="row">
-        <div class="small-12 medium-6 columns">
-          <h4 id="regular-users"><i></i>Users [<%= @regular_users.count %>]</h4>
-          <div id="project-users-regular">
-            <%= render partial: "projects/project_user", collection: @regular_users, as: :user %>
-          </div>
-          <h4 id="read-only-users"><i></i>Read-Only Users [<%= @read_only_users.count %>]</h4>
-          <div id="project-users-read-only">
-            <%= render partial: "projects/project_user", collection: @read_only_users, as: :user %>
+        <div class="small-12 medium-6 columns project-attributes">
+          <div id="project-users">
+            <h4 id="regular-users"><i></i>
+              Users [<%= @project.regular_users.count %>]
+              <% if can? :manage, @project %>
+                <small><%= link_to 'Edit Project Users', edit_project_path(@project), id: 'edit-users', remote: true  %></small>
+              <% end %>
+            </h4>
+            <div id="project-users-regular">
+              <%= render partial: "projects/project_user", collection: @project.regular_users, as: :user %>
+            </div>
+            <h4 id="read-only-users"><i></i>Read-Only Users [<%= @project.read_only_users.count %>]</h4>
+            <div id="project-users-read-only">
+              <%= render partial: "projects/project_user", collection: @project.read_only_users, as: :user %>
+            </div>
           </div>
         </div>
         <div class="small-12 medium-6 columns">
@@ -30,17 +45,22 @@
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="small-12 columns project-datapaths">
+          <h4><i class="datapath-icon large margin-right"></i>
+            Datapaths
+          <div id="track-tree" data-project=<%= @project.id %>>
+            <ul id="treeData" style="display: none;"></ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <% if can? :manage, @project %>
-      <%= link_to 'Edit', edit_project_path(@project), class: 'button tiny radius' %>
-    <% elsif can? :edit, @project %>
-      <%= link_to 'Add or edit tracks', edit_project_path(@project), class: 'button tiny radius' %>
-    <% end %>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :manage, @project %>
       <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure? Clicking this button will delete this project and all its associated tracks' }, class: 'button tiny radius [secondary alert success] right', id: "delete-project" %>

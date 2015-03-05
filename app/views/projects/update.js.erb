@@ -1,0 +1,9 @@
+$('#edit_project_<%= @project.id %>').remove();
+<% if @project.errors.any? %>
+  $('#project-users').append('<%= j render("users_form") %>');
+<% else %>
+  $('#project-users').show();
+  $('#project-users-regular').html("<%= escape_javascript(render partial: 'projects/project_user', collection: @project.regular_users, as: :user) %>");
+  $('#project-users-read-only').html("<%= escape_javascript(render partial: 'projects/project_user', collection: @project.read_only_users, as: :user) %>");
+  $('.edit_projects_user').submitOnCheck()
+<% end %>

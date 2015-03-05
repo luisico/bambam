@@ -1,0 +1,15 @@
+<%= form_for @project, remote: true do |f| %>
+  <div class="row">
+    <div class="small-12 medium-10 columns">
+      <h4>Edit Project Users</h4>
+      <div class="field">
+        <%= f.collection_select :user_ids, User.all_except(@project.owner), :id, :handle_with_email, {}, {multiple:true, title: :email} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'button tiny radius update-project-users' %>
+    <%= link_to 'Cancel', "#", class: 'button tiny radius', id: 'cancel-edit-users' %>
+  </div>
+<% end %>

@@ -78,21 +78,56 @@ describe Track do
   describe "projects_datapath_id" do
     it { should belong_to :projects_datapath }
     it { should respond_to :projects_datapath_id }
-    it "should touch the projects_datapath" do
-      expect {
+  end
+
+  describe "delegated methods" do
+    context "project" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it { should respond_to :project }
+      it "should change projects_datapath project when track project is changed" do
         @track.save
-      }.to change(@track.projects_datapath, :updated_at)
+        expect {
+          @track.project = FactoryGirl.create(:project)
+          @track.save
+        }.to change(@track.projects_datapath, :project)
+      end
     end
-  end
 
-  describe "project_id" do
-    it {should have_one(:project).through(:projects_datapath)}
-    it {should respond_to :project}
-  end
+    context "project_id" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it { should respond_to :project_id }
+      it "should change projects_datapath project when track project_id is changed" do
+        @track.save
+        expect {
+          @track.project_id = FactoryGirl.create(:project).id
+          @track.save
+        }.to change(@track.projects_datapath, :project)
+      end
+    end
 
-  describe "datapath_id" do
-    it {should have_one(:datapath).through(:projects_datapath)}
-    it {should respond_to :datapath}
+    context "datapath" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it {should respond_to :datapath}
+      it "should change projects_datapath datapath when track datapath is changed" do
+        @track.save
+        expect {
+          @track.datapath = FactoryGirl.create(:datapath)
+          @track.save
+        }.to change(@track.projects_datapath, :datapath)
+      end
+    end
+
+    context "datapath_id" do
+      # TODO add delegate_method matchers when shoulda-matchers gem is updated
+      it {should respond_to :datapath_id}
+      it "should change projects_datapath datapath when track datapath_id is changed" do
+        @track.save
+        expect {
+          @track.datapath_id = FactoryGirl.create(:datapath).id
+          @track.save
+        }.to change(@track.projects_datapath, :datapath)
+      end
+    end
   end
 
   describe "owner_id" do
@@ -122,6 +157,15 @@ describe Track do
         @track.datapath.path,
         @track.path
       )
+    end
+  end
+
+  describe "#update_projects_datapath" do
+    it "should save changes to the track projects datapath when the track project is changed" do
+      expect {
+        @track.update_attributes(project: FactoryGirl.create(:project))
+        @track.reload
+      }.to change(@track.projects_datapath, :project_id)
     end
   end
 end

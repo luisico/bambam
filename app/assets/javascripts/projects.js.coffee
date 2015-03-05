@@ -1,5 +1,8 @@
 jQuery ->
   $('.edit-track').show()
+
+  Fancytree.applyFancytree()
+
   $('.error').closest('div.track-form-fields').show()
 
   $('form').on 'click', '.remove-track', (event) ->
@@ -23,3 +26,11 @@ jQuery ->
   $("#project_user_ids").select2({
     placeholder: "Add a user"
   });
+
+  $('#create-new-project').on 'click', '#project-cancel', (event) ->
+    $('#new-project').show()
+    $(this).closest('form').remove()
+
+  $('.project-attributes').on 'click', '#cancel-edit-users', (event) ->
+    $('#project-users').show()
+    $(this).closest('form').remove()

@@ -23,3 +23,7 @@
 .icon_key {
   padding-right: 1em;
 }
+
+.datapath-icon {
+  @extend .fi-anchor;
+}

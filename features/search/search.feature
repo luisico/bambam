@@ -34,11 +34,11 @@ Feature: Search the application
     And I should see a section for groups and users
 
     Examples:
-      |model   |
-      |project |
-      |track   |
-      |group   |
-      |user    |
+    | model   |
+    | project |
+    | track   |
+    | group   |
+    | user    |
 
   Scenario: Visitors cannot search
     Given I do not exist as a user

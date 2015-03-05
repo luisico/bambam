@@ -1,7 +1,8 @@
 class Track < ActiveRecord::Base
-  belongs_to :projects_datapath, touch: true
-  has_one :project,  through: :projects_datapath
-  has_one :datapath, through: :projects_datapath
+  belongs_to :projects_datapath
+  # TODO revisit delegated project= on track when adding tracks to fancytree
+  delegate :project, :project=, :project_id, :project_id=, to: :projects_datapath
+  delegate :datapath, :datapath=, :datapath_id, :datapath_id=, to: :projects_datapath
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
@@ -13,8 +14,7 @@ class Track < ActiveRecord::Base
     message: "file must have extension .bw or .bam" }
 
   before_validation :strip_whitespace
-
-  scope :user_tracks, ->(user) { includes(project: :projects_users).where(projects_users: {user_id: user}).references(:projects_users) }
+  after_save        :update_projects_datapath
 
   def full_path
     File.join datapath.path, projects_datapath.sub_directory, path
@@ -22,5 +22,11 @@ class Track < ActiveRecord::Base
 
   def strip_whitespace
     self.path = self.path.strip
+  end
+
+  protected
+
+  def update_projects_datapath
+    self.projects_datapath.save if self.projects_datapath.changed?
   end
 end

@@ -16,15 +16,14 @@ FactoryGirl.create(:seeded_datapath)
 # Projects & projects_users
 project1 = FactoryGirl.create(:project,
                               owner: manager1,
-                              users: [manager2, users[0], users[1]],
-                              datapaths: [datapaths[0], datapaths[1]])
+                              users: [manager2, users[0], users[1]])
 project2 = FactoryGirl.create(:project,
                               owner: manager2,
-                              users: [users[2], users[3]],
-                              datapaths: [datapaths[2]])
+                              users: [users[2], users[3]])
 
 # Projects datapaths
 projects_datapath1 = FactoryGirl.create(:projects_datapath, project: project1, datapath: datapaths[0])
+projects_datapath1 = FactoryGirl.create(:projects_datapath, project: project1, datapath: datapaths[1])
 projects_datapath2 = FactoryGirl.create(:projects_datapath, project: project2, datapath: datapaths[2])
 
 # Tracks

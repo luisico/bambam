@@ -32,7 +32,7 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       redirect_to @group, notice: 'Group was successfully updated.'
     else
-     render action: 'edit'
+      render action: 'edit'
     end
   end
 

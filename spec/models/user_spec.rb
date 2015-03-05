@@ -188,7 +188,7 @@ describe User do
     context "by user" do
       before { @users = FactoryGirl.create_list(:user, 3) }
       it "returns all users except indicated user" do
-        expect(User.all_except(@user)).to eq @users
+        expect(User.all_except(@user).sort).to eq @users.sort
         expect(User.all_except(@user)).not_to include @user
       end
     end

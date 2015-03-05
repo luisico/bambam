@@ -1,0 +1,4 @@
+$('#edit-datapaths').hide();
+$('#project-datapath-list').hide().after("<%= escape_javascript(render partial: 'projects/datapaths_form') %>");
+Fancytree.applyFancytree();
+

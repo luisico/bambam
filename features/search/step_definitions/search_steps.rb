@@ -6,10 +6,11 @@ Given /^I belong to a project named "(.*?)" with track "(.*?)"( and path "(.*?)"
   user = @user || @admin
   expect {
     @project = FactoryGirl.create(:project, name: project, users: [user])
+    projects_datapath = FactoryGirl.create(:projects_datapath, project: @project)
     if w_p
-      @track = FactoryGirl.create(:track, name: track, path: path, project: @project)
+      @track = FactoryGirl.create(:track, name: track, path: path, projects_datapath: projects_datapath)
     else
-      @track = FactoryGirl.create(:track, name: track, project: @project)
+      @track = FactoryGirl.create(:track, name: track, projects_datapath: projects_datapath)
     end
   }.to change(Project, :count).by(1)
   expect(@track.project).to eq @project

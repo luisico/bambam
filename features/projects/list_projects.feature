@@ -28,11 +28,12 @@ Feature: List of projects
     And I click on the project name
     Then I should be on the project page
 
+  @javascript
   Scenario Outline: Admin and managers can access the new project page
     Given I am signed in as <role>
     When I am on the projects page
     And I click "New Project"
-    Then I should be on the new project page
+    Then I should see a new project form
 
     Examples:
       | role      |

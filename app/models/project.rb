@@ -8,10 +8,17 @@ class Project < ActiveRecord::Base
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
 
-  validates_presence_of :name
-  accepts_nested_attributes_for :tracks, allow_destroy: true
+  validates_presence_of :name, :owner_id
 
   def allowed_paths
     projects_datapaths.collect{ |project_datapath| project_datapath.full_path }
+  end
+
+  def regular_users
+    users.where(projects_users: { read_only: false })
+  end
+
+  def read_only_users
+    users.where(projects_users: { read_only: true })
   end
 end

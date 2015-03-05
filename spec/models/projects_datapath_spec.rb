@@ -9,7 +9,7 @@ describe ProjectsDatapath do
     it_behaves_like "timestampable table"
     it { should have_db_column(:project_id) }
     it { should have_db_column(:datapath_id) }
-    it { should have_db_column(:sub_directory) }
+    it { should have_db_column(:sub_directory).with_options(null: false) }
     it { should have_db_column(:name) }
   end
 
@@ -32,6 +32,17 @@ describe ProjectsDatapath do
 
   describe "sub_directory" do
     it { should respond_to :sub_directory }
+    it { should ensure_exclusion_of(:sub_directory).in_array([nil]) }
+
+    it "should be invalid when nil" do
+      @projects_datapath.sub_directory = nil
+      expect(@projects_datapath).not_to be_valid
+    end
+
+    it "should be valid when an empty string" do
+      @projects_datapath.sub_directory = ''
+      expect(@projects_datapath).to be_valid
+    end
   end
 
   describe "name" do
@@ -53,10 +64,31 @@ describe ProjectsDatapath do
     end
 
     it "should return the full path of the projects datapath with empty sub_directory" do
-      @projects_datapath.sub_directory = ""
-      expect(@projects_datapath.full_path).to eq File.join(
-        @projects_datapath.datapath.path
-      )
+      ["", nil].each do |value|
+        @projects_datapath.sub_directory = value
+        expect(@projects_datapath.full_path).to eq File.join(
+          @projects_datapath.datapath.path
+        )
+      end
+    end
+  end
+
+  describe "validations" do
+    context "#datapath_id_exists" do
+      before do
+        datapath = FactoryGirl.create(:datapath)
+        @invalid_projects_datapath = FactoryGirl.build(:projects_datapath, datapath: datapath)
+        datapath.destroy
+      end
+
+      it "should require a valid datapath" do
+        expect(@invalid_projects_datapath).not_to be_valid
+      end
+
+      it "should add datapath_id errors to error messages" do
+        @invalid_projects_datapath.valid?
+        expect(@invalid_projects_datapath.errors[:datapath_id]).to be_present
+      end
     end
   end
 end

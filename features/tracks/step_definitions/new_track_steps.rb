@@ -8,7 +8,7 @@ def build_track_with_path
   build_track
   # TODO: path should go to tmp/tests/....
   cp_track @track[:path]
- end
+end
 
 def fill_track_form(track=nil)
   track ||= @track

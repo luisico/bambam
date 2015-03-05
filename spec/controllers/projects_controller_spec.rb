@@ -1,11 +1,15 @@
 require 'spec_helper'
 
-describe ProjectsController do
-  describe "GET 'index'" do
-    before { @projects = FactoryGirl.create_list(:project, 3) }
+# TODO: add specs for html/js only requests
 
-    context "as admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+describe ProjectsController do
+  before { @manager = FactoryGirl.create(:manager) }
+
+  describe "GET 'index'" do
+    before { @projects = FactoryGirl.create_list(:project, 3, owner: @manager) }
+
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :index
@@ -15,7 +19,7 @@ describe ProjectsController do
 
       it "should return all projects" do
         get :index
-        expect(assigns(:projects)).to eq @projects
+        expect(assigns(:projects).sort).to eq @projects.sort
       end
     end
 
@@ -63,10 +67,10 @@ describe ProjectsController do
   end
 
   describe "GET 'show'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :show, id: @project
@@ -89,9 +93,9 @@ describe ProjectsController do
       context "and project user" do
         before do
           @project.users << @user
-          @regular_users = [@project.owner, @user]
-          @read_only_users = FactoryGirl.create_list(:user, 2, projects: [@project])
-          @read_only_users.each {|u| u.projects_users.first.update_attributes(read_only: true)}
+          FactoryGirl.create_list(:user, 2, projects: [@project]).each do |u|
+            u.projects_users.first.update_attributes(read_only: true)
+          end
         end
 
         it "should be successful" do
@@ -104,23 +108,13 @@ describe ProjectsController do
           get :show, id: @project
           expect(assigns(:project)).to eq @project
         end
-
-        it "should return the regular project users" do
-          get :show, id: @project
-          expect(assigns(:regular_users)).to eq @regular_users
-        end
-
-        it "should return the read-only project users" do
-          get :show, id: @project
-          expect(assigns(:read_only_users)).to eq @read_only_users
-        end
       end
 
       context "not project user" do
         it "should redirect to projects page" do
           get :show, id: FactoryGirl.create(:project)
           expect(response).not_to be_success
-          expect(response).to redirect_to projects_path
+          expect(response).to redirect_to projects_url
         end
       end
     end
@@ -135,11 +129,8 @@ describe ProjectsController do
   end
 
   describe "GET 'new'" do
-    context "as an admin" do
-      before do
-        @admin = FactoryGirl.create(:admin)
-        sign_in @admin
-     end
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
         get :new
@@ -155,12 +146,7 @@ describe ProjectsController do
 
       it "should assign ownership to signed in user" do
         get :new
-        expect(assigns(:project).owner).to eq @admin
-      end
-
-      it "should add signed in user to users" do
-        get :new
-        expect(assigns(:project).users).to include @admin
+        expect(assigns(:project).owner).to eq @manager
       end
     end
 
@@ -169,7 +155,7 @@ describe ProjectsController do
         sign_in FactoryGirl.create(:user)
         get :new
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
     end
 
@@ -183,19 +169,19 @@ describe ProjectsController do
   end
 
   describe "GET 'edit'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should be successful" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(response).to be_success
         expect(response).to render_template :edit
       end
 
       it "should return the project" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(assigns(:project)).to eq @project
       end
     end
@@ -207,15 +193,10 @@ describe ProjectsController do
         sign_in user
       end
 
-      it "should be successful" do
-        get :edit, id: @project
-        expect(response).to be_success
-        expect(response).to render_template :edit
-      end
-
-      it "should return the project" do
-        get :edit, id: @project
-        expect(assigns(:project)).to eq @project
+      it "should not be successful" do
+        get :edit, id: @project, format: :js
+        expect(response).not_to be_success
+        expect(response.status).to eq 403
       end
     end
 
@@ -223,17 +204,17 @@ describe ProjectsController do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
-        get :edit, id: FactoryGirl.create(:project)
+        get :edit, id: FactoryGirl.create(:project), format: :js
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response.status).to eq 403
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :edit, id: @project
+        get :edit, id: @project, format: :js
         expect(response).not_to be_success
-        expect(response).to redirect_to new_user_session_url
+        expect(response.status).to eq 401
       end
     end
   end
@@ -241,33 +222,41 @@ describe ProjectsController do
   describe "Post 'create'" do
     before { @project_attr = FactoryGirl.attributes_for(:project) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       context "with valid parameters" do
-        it "should be a redirect to the new project show page" do
-          post :create, project: @project_attr
-          expect(response).to redirect_to project_path(Project.last)
+        it "should be a success" do
+          post :create, project: @project_attr, format: 'js'
+          expect(response).to be_success
+          expect(response).to render_template :create
         end
 
         it "should create a new project" do
           expect{
-            post :create, project: @project_attr
+            post :create, project: @project_attr, format: 'js'
           }.to change(Project, :count).by(1)
           expect(assigns(:project)).to eq Project.last
+        end
+
+        it "should assign ownership to signed in user" do
+          post :create, project: @project_attr, format: 'js'
+          expect(assigns(:project).owner).to eq @manager
         end
       end
 
       context "with invalid parameters" do
-        it "should render new template" do
-          post :create, project: @project_attr.merge(name: '')
+        before { @project_attr.merge!(name: '') }
+
+        it "should be a success" do
+          post :create, project: @project_attr, format: 'js'
           expect(response).to be_success
-          expect(response).to render_template :new
+          expect(response).to render_template :create
         end
 
         it "should not create a new project" do
           expect{
-            post :create, project: @project_attr.merge(name: '')
+            post :create, project: @project_attr, format: 'js'
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
         end
@@ -280,7 +269,7 @@ describe ProjectsController do
       it "should redirect to the projects page" do
         post :create, project: @project_attr
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
 
       it "should not create a new project" do
@@ -307,160 +296,151 @@ describe ProjectsController do
 
   describe "Patch 'update'" do
     before do
-      @admin = FactoryGirl.create(:admin)
-      @project = FactoryGirl.create(:project,  owner: @admin)
-      @new_project = FactoryGirl.attributes_for(:project)
+      @project = FactoryGirl.create(:project,  owner: @manager)
+      @new_project_attrs = FactoryGirl.attributes_for(:project)
     end
 
-    context "as an admin and owner of project" do
-      before { sign_in @admin }
+    context "as a manager and owner of project" do
+      before { sign_in @manager }
 
-      context 'with valid parameters' do
-        before { @user = FactoryGirl.create(:user) }
+      context "update the name" do
+        context "with valid parameters" do
+          it "should be a success without content" do
+            patch :update, id: @project, project: @new_project_attrs, format: :json
+            expect(response.status).to eq 204       # no content
+          end
 
-        it "should redirect to the updated show page" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
-          expect(response).to redirect_to @project
+          it "should update the project's name'" do
+            expect {
+              patch :update, id: @project, project: @new_project_attrs, format: :json
+              @project.reload
+            }.to change(@project, :name).to @new_project_attrs[:name]
+            expect(assigns(:project)).to eq @project
+          end
         end
 
-        it "should update the project" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [@user.id])
-          @project.reload
-          expect(assigns(:project)).to eq @project
-          expect(@project.name).to eq @new_project[:name]
-          expect(@project.users).to include @user
-        end
+        context "with invalid parameters" do
+          it "should response with unprocessable entity" do
+            patch :update, id: @project, project: {name: ''}, format: :json
+            expect(response.status).to eq 422       # unprocessable entity
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json[0]).to eq "Name #{I18n.t('errors.messages.blank')}"
+          end
 
-        it "should not change ownership" do
-          expect {
-            patch :update, id: @project, project: @new_project
-          }.not_to change(@project, :owner)
-        end
-
-         it "should add owner to users if not present" do
-          patch :update, id: @project, project: @new_project.merge(user_ids: [])
-          expect(assigns(:project).users).to include @project.owner
+          it "should not change the project's name" do
+            expect {
+              patch :update, id: @project, project: {name: ''}, format: :json
+              @project.reload
+            }.not_to change(@project, :name)
+            expect(assigns(:project)).to eq @project
+          end
         end
       end
 
-      context "with invalid parameters" do
-        it "should render the edit template" do
-          patch :update, id: @project, project: {name: ''}
-          expect(response).to be_success
-          expect(response).to render_template :edit
+      context "update the users" do
+        context "with valid parameters" do
+          before do
+            @user = FactoryGirl.create(:user)
+            @new_project_attrs = {user_ids: [@user.id]}
+          end
+
+          it "should render the update template" do
+            patch :update, id: @project, project: @new_project_attrs, format: :js
+            expect(response).to be_success
+            expect(response).to render_template :update
+          end
+
+          it "should update the project's users'" do
+            patch :update, id: @project, project: @new_project_attrs, format: :js
+            expect(@project.reload.users).to include @user
+          end
+
+          it "should not change ownership" do
+            expect {
+              patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
+              @project.reload
+            }.not_to change(@project, :owner)
+          end
         end
 
-        it "should not change the project's attributes" do
-          expect {
-            patch :update, id: @project, project: {name: ''}
-            @project.reload
-          }.not_to change(@project, :name)
-          expect(assigns(:project)).to eq @project
+        context "with invalid parameters" do
+          it "should render the edit template" do
+            patch :update, id: @project, project: {user_ids: ''}, format: :js
+            expect(response).to be_success
+            expect(response).to render_template :update
+          end
+
+          it "should not change the project's users" do
+            old_users = @project.users
+            patch :update, id: @project, project: {user_ids: ''}, format: :js
+            expect(@project.reload.users).to eq old_users
+            expect(assigns(:project)).to eq @project
+          end
         end
       end
     end
 
     context "as an admin" do
       before do
-       @other_admin = FactoryGirl.create(:admin)
-       sign_in @other_admin
-     end
+        @admin = FactoryGirl.create(:admin)
+        sign_in @admin
+      end
 
       it "should not change ownership" do
         expect {
-          patch :update, id: @project, project: @new_project
+          patch :update, id: @project, project: @new_project_attrs.merge(owner_id: FactoryGirl.create(:user).id), format: :js
+          @project.reload
         }.not_to change(@project, :owner)
       end
 
-      it "should add owner to users if not present" do
-        patch :update, id: @project, project: @new_project.merge(user_ids: [])
-        expect(assigns(:project).users).to include @project.owner
-      end
-
-      it "should not add other admin to users" do
-        patch :update, id: @project, project: @new_project.merge(user_ids: [])
-        expect(assigns(:project).users).not_to include @other_admin
-      end
-    end
-
-    context "as a signed in user and project user" do
-      before do
-        sign_in FactoryGirl.create(:user, projects: [@project])
-        @track = FactoryGirl.create(:track, project: @project)
-      end
-
-      context 'with valid parameters' do
-        it "should redirect to the updated show page" do
-          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-          expect(response).to redirect_to @project
-        end
-
-        it "should update the project" do
-          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-          @track.reload
-          expect(assigns(:project)).to eq @project
-          expect(@track.name).to eq('new_name')
-        end
-      end
-
-      context "with invalid parameters" do
-        it "should render the edit template" do
-          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
-          expect(response).to be_success
-          expect(response).to render_template :edit
-        end
-
-        it "should not change the track's attributes" do
-          expect {
-            patch :update, id: @project, project: {tracks_attributes: {"0" => {name: '', id: @track.id}}}
-            @track.reload
-          }.not_to change(@track, :name)
-          expect(assigns(:project)).to eq @project
-        end
+      it "should not add admin to users" do
+        patch :update, id: @project, project: @new_project_attrs.merge(user_ids: []), format: :js
+        expect(@project.reload.users).not_to include @admin
       end
     end
 
     context "as a signed in user" do
       before do
-        sign_in FactoryGirl.create(:user)
-        @track = FactoryGirl.create(:track, project: @project)
+        @user = FactoryGirl.create(:user)
+        sign_in @user
       end
 
       context 'with valid parameters' do
         it "should not be a success" do
-          patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
+          patch :update, id: @project, project: @new_project_attrs, format: :js
           expect(response).not_to be_success
         end
 
         it "should not change the track's attributes" do
           expect {
-            patch :update, id: @project, project: {tracks_attributes: {"0" => {name: 'new_name', id: @track.id}}}
-            @track.reload
-          }.not_to change(@track, :name)
+            patch :update, id: @project, project: @new_project_attrs, format: :js
+            @project.reload
+          }.not_to change(@project, :name)
         end
       end
     end
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        patch :update, id: @project, project: @new_project
+        patch :update, id: @project, project: @new_project_attrs
         expect(response).not_to be_success
         expect(response).to redirect_to new_user_session_url
       end
 
       it "should not change the project's attributes" do
         expect{
-          patch :update, id: @project, project: @new_project
+          patch :update, id: @project, project: @new_project_attrs
         }.not_to change(@project, :name)
       end
     end
   end
 
   describe "Delete 'destroy'" do
-    before { @project = FactoryGirl.create(:project) }
+    before { @project = FactoryGirl.create(:project, owner: @manager) }
 
-    context "as an admin" do
-      before { sign_in FactoryGirl.create(:admin) }
+    context "as a manager" do
+      before { sign_in @manager }
 
       it "should redirect to project#index" do
         delete :destroy, id: @project
@@ -480,7 +460,7 @@ describe ProjectsController do
       it "should redirect to the projects page" do
         delete :destroy, id: @project
         expect(response).not_to be_success
-        expect(response).to redirect_to projects_path
+        expect(response).to redirect_to projects_url
       end
 
       it "should not delete the project" do
@@ -501,37 +481,6 @@ describe ProjectsController do
         expect{
           delete :destroy, id: @project
         }.not_to change(Project, :count)
-      end
-    end
-  end
-
-  describe "#has_admin_attr?" do
-    context "should be true with parameter" do
-      it "users" do
-        controller.params = {project: {user_ids: [9999]}}
-        expect(controller.send(:has_admin_attr?)).to be_true
-      end
-
-      it "name" do
-        controller.params = {project: {name: 'new_name'}}
-        expect(controller.send(:has_admin_attr?)).to be_true
-      end
-
-      it "tracks with project_id" do
-        controller.params = {project: {tracks_attributes: {'0' => {name: 'new_name', project_id: [9999]}}}}
-        expect(controller.send(:has_admin_attr?)).to be_true
-      end
-    end
-
-    context "it should be false with parameter" do
-      it "tracks without project_id" do
-        controller.params = {project: {tracks_attributes: {'0' => {name: 'new_name', id: 9999}}}}
-        expect(controller.send(:has_admin_attr?)).to be_false
-      end
-
-      it "empty" do
-        controller.params = {project: {}}
-        expect(controller.send(:has_admin_attr?)).to be_false
       end
     end
   end
