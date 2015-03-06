@@ -112,11 +112,15 @@ Then /^I should be informed of a failed datapath addition$/ do
 end
 
 Then /^I should be informed of a failed datapath deletion$/ do
-  ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
-  select_node(@project_datapath.path)
-  loop until page.evaluate_script('jQuery.active').zero?
+  allow(ProjectsDatapath).to receive(:find_by_id).and_return(nil)
+  expect {
+    select_node(@project_datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+  }.not_to change(ProjectsDatapath, :count)
 
-  expect(fancytree_parent(@project_datapath.path)[:class]).to include 'error-red'
+  within(fancytree_parent(@project_datapath.path)){
+    expect(page).to have_css '.error-red'
+  }
 end
 
 Then /^I should see the status code appended to the node title$/ do
