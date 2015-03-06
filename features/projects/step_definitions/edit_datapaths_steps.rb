@@ -22,7 +22,7 @@ Given /^there (is|are) (\d+|a) datapaths in that project?$/ do |foo, n|
   expect {
     @project_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
     @project_datapaths.each do |datapath|
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath)
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath, sub_directory: '')
     end
   }.to change(Datapath, :count).by(n)
   @project_datapath = @project_datapaths.last
@@ -70,7 +70,7 @@ end
 
 Then /^I should be able to remove a datapath from the project$/ do
   expect {
-    page.execute_script("$('span.fancytree-selected').last().children('.fancytree-checkbox').click()")
+    select_node(@project_datapath.path)
     expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
 
     loop until page.evaluate_script('jQuery.active').zero?
