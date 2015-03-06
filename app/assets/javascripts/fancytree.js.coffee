@@ -55,7 +55,8 @@ class @Fancytree
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
-        $span.addClass('error-red').removeClass('fancytree-selected')
+        $span.addClass('error-red')
+        $span.parents('tr').removeClass('fancytree-selected')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })

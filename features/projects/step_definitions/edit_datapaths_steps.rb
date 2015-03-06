@@ -99,11 +99,16 @@ end
 
 Then /^I should be informed of a failed datapath addition$/ do
   ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
-  select_node(@datapath.path)
-  loop until page.evaluate_script('jQuery.active').zero?
+  expect {
+    select_node(@datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+  }.not_to change(ProjectsDatapath, :count)
 
-  expect(fancytree_parent(@datapath.path)[:class]).to include 'error-red'
-  expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
+  parent = fancytree_parent(@datapath.path)
+  within (parent) {
+    expect(page).to have_css '.error-red'
+  }
+  expect(parent[:class]).not_to include 'fancytree-selected'
 end
 
 Then /^I should be informed of a failed datapath deletion$/ do
