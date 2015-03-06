@@ -6,7 +6,7 @@ def fancytree_node(title)
 end
 
 def fancytree_parent(node_title)
-  fancytree_node(node_title).find(:xpath, '..')
+  fancytree_node(node_title).find(:xpath, '../../..')
 end
 
 def select_node(title)
