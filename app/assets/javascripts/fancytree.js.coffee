@@ -11,14 +11,7 @@ class @Fancytree
       table: {
         checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
-        indentation: 16      # indent every node level by 16px
       }
-      renderColumns: (event, data) ->
-        node = data.node
-        $tdList = $(node.tr).find(">td")
-        # (index #0 is rendered by fancytree by adding the checkbox)
-        # (index #1 is rendered by fancytree)
-        $tdList.eq(2).text(node.key)
       select: (event, data) ->
         attr = Fancytree.buildPath(event, data)
         if data.node.selected
