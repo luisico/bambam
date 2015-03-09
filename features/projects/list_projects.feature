@@ -15,6 +15,14 @@ Feature: List of projects
     When I am on the projects page
     Then I should only see a list of projects I belong to
 
+  Scenario: Managers can only view projects they own or belong to
+    Given I am signed in as a manager
+    And I own 3 projects
+    And I belong to 3 projects
+    And there are 3 projects in the system
+    When I am on the projects page
+    Then I should only see a list of projects I own or belong to
+
   Scenario: Admin can view list of all projects
     Given I am signed in as an admin
     And there are 3 projects in the system

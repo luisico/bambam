@@ -219,6 +219,12 @@ describe User do
       it { should respond_to :project_ids }
     end
 
+    context "owned_projects" do
+      it { should have_many :owned_projects }
+      it { should respond_to :owned_projects }
+      it { should respond_to :owned_project_ids }
+    end
+
     context "tracks" do
       it { should have_many :tracks }
       it { should respond_to :tracks }

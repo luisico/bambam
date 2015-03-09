@@ -11,7 +11,7 @@
         <%= link_to 'New Project', new_project_path, class: "button tiny radius", id: "new-project", remote: true %>
       </div>
     <% end %>
-    <% if current_user.projects.any? || current_user.has_role?(:admin) %>
+    <% if current_user.projects.any? || current_user.owned_projects.any? || current_user.has_role?(:admin) %>
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         <% @projects.each do |project| %>
           <li id="project_<%= project.id %>">
@@ -25,7 +25,7 @@
                 <i class="users-icon small left-buffer margin-right" title="users"></i>
                 <%= project.users.count %>
               </li>
-              <% if can? :manage, User %>
+              <% if can? :show, project.owner %>
                 <li class="sub-text text-panel-overhang">
                   <i class="admin-icon small margin-right" title="owner"></i>
                   <%= link_to project.owner.handle, project.owner, class: "text-panel-overhang" %>
