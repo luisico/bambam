@@ -6,7 +6,7 @@ def fancytree_node(title)
 end
 
 def fancytree_parent(node_title)
-  fancytree_node(node_title).find(:xpath, '..')
+  fancytree_node(node_title).find(:xpath, "ancestor::tr[contains(concat(' ', normalize-space(@class), ' '), ' fancytree-folder ')]")
 end
 
 def select_node(title)
@@ -22,7 +22,7 @@ Given /^there (is|are) (\d+|a) datapaths in that project?$/ do |foo, n|
   expect {
     @project_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
     @project_datapaths.each do |datapath|
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath)
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath, sub_directory: '')
     end
   }.to change(Datapath, :count).by(n)
   @project_datapath = @project_datapaths.last
@@ -70,7 +70,7 @@ end
 
 Then /^I should be able to remove a datapath from the project$/ do
   expect {
-    page.execute_script("$('span.fancytree-selected').last().children('.fancytree-checkbox').click()")
+    select_node(@project_datapath.path)
     expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
 
     loop until page.evaluate_script('jQuery.active').zero?
@@ -99,19 +99,28 @@ end
 
 Then /^I should be informed of a failed datapath addition$/ do
   ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
-  select_node(@datapath.path)
-  loop until page.evaluate_script('jQuery.active').zero?
+  expect {
+    select_node(@datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+  }.not_to change(ProjectsDatapath, :count)
 
-  expect(fancytree_parent(@datapath.path)[:class]).to include 'error-red'
-  expect(fancytree_parent(@datapath.path)[:class]).not_to include 'fancytree-selected'
+  parent = fancytree_parent(@datapath.path)
+  within (parent) {
+    expect(page).to have_css '.error-red'
+  }
+  expect(parent[:class]).not_to include 'fancytree-selected'
 end
 
 Then /^I should be informed of a failed datapath deletion$/ do
-  ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
-  select_node(@project_datapath.path)
-  loop until page.evaluate_script('jQuery.active').zero?
+  allow(ProjectsDatapath).to receive(:find_by_id).and_return(nil)
+  expect {
+    select_node(@project_datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+  }.not_to change(ProjectsDatapath, :count)
 
-  expect(fancytree_parent(@project_datapath.path)[:class]).to include 'error-red'
+  within(fancytree_parent(@project_datapath.path)){
+    expect(page).to have_css '.error-red'
+  }
 end
 
 Then /^I should see the status code appended to the node title$/ do

@@ -7,6 +7,11 @@ class @Fancytree
         url: "/projects_datapaths/browser?id=" + project_id
       checkbox: true
       selectMode: 2
+      extensions: ["table"]
+      table: {
+        checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
+        nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
+      }
       select: (event, data) ->
         attr = Fancytree.buildPath(event, data)
         if data.node.selected
@@ -43,7 +48,8 @@ class @Fancytree
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
-        $span.addClass('error-red').removeClass('fancytree-selected')
+        $span.addClass('error-red')
+        $span.parents('tr').removeClass('fancytree-selected')
         $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
