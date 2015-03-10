@@ -7,6 +7,7 @@ class @Fancytree
         url: "/projects_datapaths/browser?id=" + project_id
       checkbox: true
       extensions: ["table"]
+      clickFolderMode: 2
       table: {
         checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
