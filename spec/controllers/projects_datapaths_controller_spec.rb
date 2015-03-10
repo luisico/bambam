@@ -425,13 +425,19 @@ describe ProjectsDatapathsController do
       end
 
       context "regular nodes" do
-        it "hides the node checkbox" do
+        before do
           tree = [{title: '/dir1', key: 1}]
-          parent = tree.first
-          controller.instance_variable_set(:@key, 1)
+          @parent = tree.first
+        end
 
-          expect(controller.send(:add_node_to_tree, parent, '/dir2')).
+        it "hides the node checkbox for folders" do
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2')).
           to eq({:title=>"/dir2", :hideCheckbox=>true, :folder=>true})
+        end
+
+        it "shows the checkbox for files" do
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
+          to eq({:title=>"/track1.bam"})
         end
       end
     end
