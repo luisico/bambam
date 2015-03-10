@@ -6,7 +6,6 @@ class @Fancytree
       source:
         url: "/projects_datapaths/browser?id=" + project_id
       checkbox: true
-      selectMode: 2
       extensions: ["table"]
       table: {
         checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
