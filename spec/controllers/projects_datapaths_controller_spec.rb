@@ -352,8 +352,8 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object_id attribute if requested" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, 2)).
-          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :object_id=>2, :folder=>true})
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, {project_datapath_id:2})).
+          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :object_id=>{project_datapath_id:2}, :folder=>true})
         end
 
         it "does not no have a object_id attribute if it's not selected" do
@@ -402,8 +402,8 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object_id attribute if requested" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, 1)).
-          to eq({title: '/dir2', :selected=>true, :object_id=>1, :folder=>true})
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, {project_datapath_id:1})).
+          to eq({title: '/dir2', :selected=>true, :object_id=>{project_datapath_id:1}, :folder=>true})
         end
 
         it "does not no have a object_id attribute if it's not selected" do
@@ -414,30 +414,48 @@ describe ProjectsDatapathsController do
     end
 
     context "regular users" do
-      before { controller.stub(:cannot?).and_return(true) }
+      before do
+        tree = [{title: '/dir1', key: 1}]
+        @parent = tree.first
+      end
 
-      context "top level nodes" do
-        it "hides the node checkbox" do
-          controller.instance_variable_set(:@project, FactoryGirl.create(:project))
-          expect(controller.send(:add_node_to_tree, [], '/dir1')).
-          to eq({:title=>"/dir1", :hideCheckbox=>true, :folder=>true})
+      context "directories" do
+        before { controller.stub(:cannot?).and_return(true) }
+
+        context "top level nodes" do
+          it "hides the node checkbox" do
+            controller.instance_variable_set(:@project, FactoryGirl.create(:project))
+            expect(controller.send(:add_node_to_tree, [], '/dir1')).
+            to eq({:title=>"/dir1", :hideCheckbox=>true, :folder=>true})
+          end
+        end
+
+        context "regular nodes" do
+          it "hides the node checkbox for folders" do
+            expect(controller.send(:add_node_to_tree, @parent, '/dir2')).
+            to eq({:title=>"/dir2", :hideCheckbox=>true, :folder=>true})
+          end
         end
       end
 
-      context "regular nodes" do
-        before do
-          tree = [{title: '/dir1', key: 1}]
-          @parent = tree.first
-        end
-
-        it "hides the node checkbox for folders" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2')).
-          to eq({:title=>"/dir2", :hideCheckbox=>true, :folder=>true})
-        end
-
-        it "shows the checkbox for files" do
+      context "files" do
+        it "shows the checkbox for unassigned files" do
+          controller.stub(:cannot?).and_return(true)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
           to eq({:title=>"/track1.bam"})
+        end
+
+        it "shows checkbox for owned files" do
+          controller.stub(:cannot?).and_return(false)
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
+          to eq({:title=>"/track1.bam"})
+        end
+
+        it "does not show checkbox for assigned files owned by another" do
+          controller.stub(:cannot?).and_return(true, true)
+          Track.stub(:find).and_return({track: 3})
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, true, {track_id: 3})).
+          to eq({:expanded => true, selected: true, :hideCheckbox => true, object_id: {track_id: 3}, :title=>"/track1.bam"})
         end
       end
     end
