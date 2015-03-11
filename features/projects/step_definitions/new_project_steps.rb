@@ -2,7 +2,6 @@
 
 def build_project
   @project_attrs ||= FactoryGirl.attributes_for(:project)
-  # build_track_with_path
 end
 
 def fill_project_form(project=nil)
