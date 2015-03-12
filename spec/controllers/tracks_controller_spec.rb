@@ -126,45 +126,41 @@ describe TracksController do
     context "as a signed in user and project member" do
       before { sign_in FactoryGirl.create(:user, projects: [@project]) }
 
-      context "project datapath creation" do
-        context "with valid parameters" do
-          before do
-            cp_track @full_path
-            @track_attr.merge!(projects_datapath_id: @projects_datapath.id)
-          end
+      context "with valid parameters" do
+        before do
+          cp_track @full_path
+          @track_attr.merge!(projects_datapath_id: @projects_datapath.id)
+        end
 
-          it "should be a success" do
+        it "should be a success" do
+          post :create, track: @track_attr, format: :json
+          expect(response).to be_success
+          expect(response.header['Content-Type']).to include 'application/json'
+          json = JSON.parse(response.body)
+          expect(json['track_id']).to eq Track.last.id
+        end
+
+        it "should create a new project's datapath" do
+          expect{
             post :create, track: @track_attr, format: :json
-            expect(response).to be_success
-            expect(response.header['Content-Type']).to include 'application/json'
-            json = JSON.parse(response.body)
-            expect(json['track_id']).to eq Track.last.id
-          end
-
-          it "should create a new project's datapath" do
-            expect{
-              post :create, track: @track_attr, format: :json
-            }.to change(Track, :count).by(1)
-          end
+          }.to change(Track, :count).by(1)
         end
       end
 
       context "with invalid parameters" do
-        context "invalid datapath" do
-          it "should raise not found error" do
-            post :create, track: @track_attr, format: :json
-            expect(response.status).to eq 400
-            expect(response.header['Content-Type']).to include 'application/json'
-            json = JSON.parse(response.body)
-            expect(json['status']).to eq 'error'
-            expect(json['message']).to eq 'must exist in filesystem'
-          end
+        it "should raise not found error" do
+          post :create, track: @track_attr, format: :json
+          expect(response.status).to eq 400
+          expect(response.header['Content-Type']).to include 'application/json'
+          json = JSON.parse(response.body)
+          expect(json['status']).to eq 'error'
+          expect(json['message']).to eq 'must exist in filesystem'
+        end
 
-          it "should not create a new project's datapath" do
-            expect{
-              post :create, track: @track_attr, format: :json
-            }.not_to change(Track, :count)
-          end
+        it "should not create a new project's datapath" do
+          expect{
+            post :create, track: @track_attr, format: :json
+          }.not_to change(Track, :count)
         end
       end
     end
