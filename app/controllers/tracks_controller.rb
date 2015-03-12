@@ -3,7 +3,7 @@ class TracksController < ApplicationController
   authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :json, only: [:create]
+  respond_to :json, only: [:create, :destroy]
 
   def index
     @tracks = Track.accessible_by(current_ability)
