@@ -16,7 +16,7 @@ end
 
 ### Given
 
-Given /^there (is|are) (\d+|a) datapaths in that project?$/ do |foo, n|
+Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
