@@ -7,6 +7,7 @@ Feature: Show a project
     Given I am signed in as <role>
     And <project exists>
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should see the project's name
@@ -26,7 +27,7 @@ Feature: Show a project
   Scenario: User can access the tracks page
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     When I am on the project page
     And I click "tracks"
     Then I should be on the tracks page
@@ -34,7 +35,7 @@ Feature: Show a project
   Scenario: User can access a track show page
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     When I am on the project page
     And I click on the track name
     Then I should be on the show track page
@@ -44,6 +45,7 @@ Feature: Show a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should be able to designate a user read only
@@ -56,6 +58,7 @@ Feature: Show a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     And there is a read only user in that project
     When I am on the project page
@@ -81,6 +84,7 @@ Feature: Show a project
   Scenario: IGV info tooltip
     Given I am signed in as a user
     And I belong to a project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should be able to activate a tooltip on the IGV buttons
