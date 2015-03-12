@@ -140,7 +140,7 @@ describe TracksController do
           expect(json['track_id']).to eq Track.last.id
         end
 
-        it "should create a new project's datapath" do
+        it "should create a new track" do
           expect{
             post :create, track: @track_attr, format: :json
           }.to change(Track, :count).by(1)
@@ -157,7 +157,7 @@ describe TracksController do
           expect(json['message']).to eq 'must exist in filesystem'
         end
 
-        it "should not create a new project's datapath" do
+        it "should not create a new track" do
           expect{
             post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)
@@ -174,10 +174,10 @@ describe TracksController do
         expect(json['error']).to eq I18n.t('devise.failure.unauthenticated')
       end
 
-      it "should not create a new project's datapath" do
+      it "should not create a new track" do
         expect{
           post :create, track: @track_attr, format: :json
-        }.not_to change(ProjectsDatapath, :count)
+        }.not_to change(Track, :count)
       end
     end
   end
@@ -260,7 +260,7 @@ describe TracksController do
       it "should not delete the track" do
         expect{
           delete :destroy, id: @track.id, format: :json
-        }.not_to change(ProjectsDatapath, :count)
+        }.not_to change(Track, :count)
       end
     end
   end
