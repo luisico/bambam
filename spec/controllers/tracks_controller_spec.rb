@@ -117,8 +117,9 @@ describe TracksController do
     before do
       @project = FactoryGirl.create(:project)
       @projects_datapath = FactoryGirl.create(:projects_datapath, project: @project)
-      @track_attr = FactoryGirl.attributes_for(:track)
+      @track_attr = FactoryGirl.attributes_for(:track).merge!(projects_datapath_id: @projects_datapath.id)
       @full_path = File.join @projects_datapath.full_path, @track_attr[:path]
+      cp_track @full_path
     end
 
     after { File.unlink @full_path if File.exists? @full_path }
@@ -127,11 +128,6 @@ describe TracksController do
       before { sign_in FactoryGirl.create(:user, projects: [@project]) }
 
       context "with valid parameters" do
-        before do
-          cp_track @full_path
-          @track_attr.merge!(projects_datapath_id: @projects_datapath.id)
-        end
-
         it "should be a success" do
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
@@ -149,7 +145,7 @@ describe TracksController do
 
       context "with invalid parameters" do
         it "should raise not found error" do
-          post :create, track: @track_attr, format: :json
+          post :create, track: @track_attr.except(:projects_datapath_id), format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
@@ -159,7 +155,7 @@ describe TracksController do
 
         it "should not create a new track" do
           expect{
-            post :create, track: @track_attr, format: :json
+            post :create, track: @track_attr.except(:projects_datapath_id), format: :json
           }.not_to change(Track, :count)
         end
       end
