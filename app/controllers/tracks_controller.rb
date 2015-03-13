@@ -17,7 +17,7 @@ class TracksController < ApplicationController
     @track = Track.new(track_params)
     @track.owner = current_user
     if @track.save
-      render json: {track_id: @track.id}, status: 200
+      render json: @track, status: 200
     else
       message = @track.errors.collect {|name, msg| msg }.join(';')
       render json: {status: :error, message: message}, status: 400

@@ -133,7 +133,7 @@ describe TracksController do
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
-          expect(json['track_id']).to eq Track.last.id
+          expect(json['id']).to eq Track.last.id
         end
 
         it "should create a new track" do
