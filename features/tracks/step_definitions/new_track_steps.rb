@@ -9,9 +9,8 @@ end
 ### When
 
 Given /^there is a track in the first project's datapath$/ do
-  @subdir = 'my_subdir'
   @track_title = 'my_track.bam'
-  build_track_with_path(@project.projects_datapaths.first.full_path, @subdir, @track_title)
+  build_track_with_path(@project.projects_datapaths.first.full_path, @track_title)
 end
 
 ### Then
@@ -19,7 +18,6 @@ end
 Then /^I should be able to add a track to the project$/ do
   expect {
     fancytree_parent(@project.projects_datapaths.first.full_path).find('span.fancytree-expander').click
-    fancytree_parent(@subdir).find('span.fancytree-expander').click
     fancytree_parent(@track_title).find('span.fancytree-checkbox').click
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload

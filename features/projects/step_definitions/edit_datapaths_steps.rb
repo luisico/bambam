@@ -55,7 +55,7 @@ end
 
 Then /^I should( not)? be able to add a datapath to the project$/ do |negate|
   if negate
-    expect(fancytree_parent(@datapath.path)).not_to have_css('span.fancytree-checkbox')
+    expect(page).not_to have_css('span.fancytree-title', text: @datapath.path)
   else
     expect {
       select_node(@datapath.path)
