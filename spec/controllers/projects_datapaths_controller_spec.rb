@@ -223,6 +223,7 @@ describe ProjectsDatapathsController do
       @datapath1 = FactoryGirl.create(:datapath)
       controller.instance_variable_set(:@project, FactoryGirl.create(:project))
       controller.stub(:cannot?).and_return(false)
+      controller.stub(:can?).and_return(true)
     end
 
     it "creates nodes for all files and directories found recursively" do
