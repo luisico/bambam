@@ -28,7 +28,7 @@ Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
   @project_datapath = @project_datapaths.last
 end
 
-Given /^I have access to (\d+|a) additional datapaths$/ do |n|
+Given /^the project owner has access to (\d+|a) additional datapaths$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
