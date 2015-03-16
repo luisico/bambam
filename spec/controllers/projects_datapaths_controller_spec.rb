@@ -221,86 +221,111 @@ describe ProjectsDatapathsController do
   describe "#generate_tree" do
     before do
       @datapath1 = FactoryGirl.create(:datapath)
-      controller.instance_variable_set(:@project, FactoryGirl.create(:project))
-      controller.stub(:cannot?).and_return(false)
-      controller.stub(:can?).and_return(true)
+      @project = FactoryGirl.create(:project)
+      controller.instance_variable_set(:@project, @project)
     end
 
-    it "creates nodes for all files and directories found recursively" do
-      datapath2 = FactoryGirl.create(:datapath)
-      datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
-        @datapath1.path + dir
+    context "can manage the project" do
+      before do
+        controller.stub(:cannot?).and_return(false)
+        controller.stub(:can?).and_return(true)
       end
 
-      folder_path = datapath2.path + "/dir6/"
-      track_path = folder_path + "track1.bam"
-      cp_track track_path
-      datapath2_paths = [folder_path, track_path]
+      it "creates nodes for all files and directories found recursively" do
+        datapath2 = FactoryGirl.create(:datapath)
+        datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
+          @datapath1.path + dir
+        end
 
-      expect(Dir).to receive(:glob).and_return(datapath1_paths, datapath2_paths)
+        folder_path = datapath2.path + "/dir6/"
+        track_path = folder_path + "track1.bam"
+        cp_track track_path
+        datapath2_paths = [folder_path, track_path]
 
-      expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :children=>[
-          {:title=>"dir1", :folder=>true},
-          {:title=>"dir2", :folder=>true, :children=>[
-            {:title=>"dir3", :folder=>true},
-            {:title=>"dir4", :folder=>true}]},
-            {:title=>"dir5", :folder=>true, :children=>[
-              {:title=>"dir6", :folder=>true}
+        expect(Dir).to receive(:glob).and_return(datapath1_paths, datapath2_paths)
+
+        expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
+          {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :children=>[
+            {:title=>"dir1", :folder=>true},
+            {:title=>"dir2", :folder=>true, :children=>[
+              {:title=>"dir3", :folder=>true},
+              {:title=>"dir4", :folder=>true}]},
+              {:title=>"dir5", :folder=>true, :children=>[
+                {:title=>"dir6", :folder=>true}
+              ]}
+            ]},
+          {:title=>datapath2.path, :key=>datapath2.id, :folder=>true, :children=>[
+            {:title=>"dir6", :folder=>true, :children=>[
+              {:title=>"track1.bam"}
             ]}
-          ]},
-        {:title=>datapath2.path, :key=>datapath2.id, :folder=>true, :children=>[
-          {:title=>"dir6", :folder=>true, :children=>[
-            {:title=>"track1.bam"}
           ]}
-        ]}
-      ]
-      File.unlink track_path if File.exists?(track_path)
-    end
-
-    it "marks a path as empty when no tracks are found" do
-      expect(Dir).to receive(:glob).and_return [@datapath1.path]
-
-      expect(controller.send(:generate_tree, [@datapath1])).to eq [
-        {title: @datapath1.path, key: @datapath1.id, folder: true}
-      ]
-    end
-
-    it "marks project's datapaths as selected and expanded" do
-      datapath2 = FactoryGirl.create(:datapath)
-      project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
-      projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
-        FactoryGirl.create(:projects_datapath,
-          datapath: @datapath1,
-          project: project,
-          sub_directory: sub_dir)
+        ]
+        File.unlink track_path if File.exists?(track_path)
       end
-      track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
-      project.reload
 
-      controller.instance_variable_set(:@project, project)
+      it "marks a path as empty when no tracks are found" do
+        expect(Dir).to receive(:glob).and_return [@datapath1.path]
 
-      expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-        {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :folder=>true,
-          :children=>[
-            {:title=>"dir1", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.first.id}, :folder=>true,
-              :children=>[
-                {:title=>"subdir2", :expanded=>true, :folder=>true,
-                  :children=>[
-                    {:title=>"subdir3", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.last.id}, :folder=>true,
-                      :children=>[
-                        {:title=>"tracks", :expanded=>true, :folder=>true,
-                          :children=>[
-                            {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object_id=>{:track_id=>track.id}
-                          }]
-                      }]
-                  }]
-              }]
-          }]
-        },
-        {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, object_id: {projects_datapath_id: projects_datapath.id}, :folder=>true}
-      ]
+        expect(controller.send(:generate_tree, [@datapath1])).to eq [
+          {title: @datapath1.path, key: @datapath1.id, folder: true}
+        ]
+      end
+
+      it "marks project's datapaths as selected and expanded" do
+        datapath2 = FactoryGirl.create(:datapath)
+        project = FactoryGirl.create(:project)
+        projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
+        projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
+          FactoryGirl.create(:projects_datapath,
+            datapath: @datapath1,
+            project: project,
+            sub_directory: sub_dir)
+        end
+        track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
+        project.reload
+
+        controller.instance_variable_set(:@project, project)
+
+        expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
+          {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :folder=>true,
+            :children=>[
+              {:title=>"dir1", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.first.id}, :folder=>true,
+                :children=>[
+                  {:title=>"subdir2", :expanded=>true, :folder=>true,
+                    :children=>[
+                      {:title=>"subdir3", :expanded=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapaths.last.id}, :folder=>true,
+                        :children=>[
+                          {:title=>"tracks", :expanded=>true, :folder=>true,
+                            :children=>[
+                              {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object_id=>{:track_id=>track.id}
+                            }]
+                        }]
+                    }]
+                }]
+            }]
+          },
+          {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, object_id: {projects_datapath_id: projects_datapath.id}, :folder=>true}
+        ]
+      end
+    end
+
+    context "project user" do
+      it "only creates nodes that are selected or whose immediate parent is selected" do
+        projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, sub_directory: (File.join 'dir1', 'subdir1'))
+        projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
+        track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
+
+        expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath])).to eq [
+          { :title=>"subdir1", :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath1.id}, :folder=>true},
+          { :title=>projects_datapath2.full_path, :key=>projects_datapath2.datapath.id, :expanded=>true,
+            :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath2.id}, :folder=>true,
+            :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
+              :children=>[{:title=>"track1.bam", :selected=>true, :object_id=>{:track_id=>track.id}, :hideCheckbox=>true}
+              ]}
+            ]
+          }
+        ]
+      end
     end
   end
 
