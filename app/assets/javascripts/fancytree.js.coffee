@@ -82,7 +82,7 @@ class @Fancytree
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
       success:(jqXHR, textStatus, errorThrown) ->
-        node.data['object_id'] = { projects_datapath_id: jqXHR['projects_datapath_id']}
+        node.data['object'] = jqXHR
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
@@ -99,7 +99,7 @@ class @Fancytree
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/projects_datapaths/" + node.data.object_id.projects_datapath_id
+      url: "/projects_datapaths/" + node.data.object.projects_datapath.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $span = $(node.span)
