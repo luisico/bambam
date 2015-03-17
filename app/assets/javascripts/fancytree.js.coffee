@@ -65,8 +65,8 @@ class @Fancytree
     projects_datapaths = []
     for i of parent_list
       dir_array.push(parent_list[i].title)
-      if parent_list[i].data.object_id
-        projects_datapaths.push([i, parent_list[i].data.object_id.projects_datapath_id])
+      if parent_list[i].data.object
+        projects_datapaths.push([i, parent_list[i].data.object.projects_datapath.id])
     dir_array.push(data.node.title)
     track_array = dir_array.slice(Number(projects_datapaths[projects_datapaths.length-1][0])+1)
     path = track_array.join('/')
@@ -120,7 +120,7 @@ class @Fancytree
       url: "/tracks",
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
-        node.data['object_id'] = { track_id: jqXHR['id']}
+        node.data['object'] = jqXHR
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
@@ -133,11 +133,10 @@ class @Fancytree
 
   @deleteTrack: (event, data) ->
     node = data.node
-    track_id = node.data.object_id.track_id
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/tracks/" + track_id
+      url: "/tracks/" + node.data.object.track.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         return false
