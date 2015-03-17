@@ -61,6 +61,7 @@ class @Fancytree
     node = data.node
     $.ajax({
       type: "POST",
+      dataType: "json",
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir } },
       success:(jqXHR, textStatus, errorThrown) ->
@@ -80,6 +81,7 @@ class @Fancytree
     node = data.node
     $.ajax({
       type: "POST",
+      dataType: "json",
       url: "/projects_datapaths/" + node.data.object_id.projects_datapath_id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
@@ -97,6 +99,7 @@ class @Fancytree
     node = data.node
     $.ajax({
       type: "POST",
+      dataType: "json",
       url: "/tracks",
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
@@ -116,6 +119,7 @@ class @Fancytree
     track_id = node.data.object_id.track_id
     $.ajax({
       type: "POST",
+      dataType: "json",
       url: "/tracks/" + track_id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
