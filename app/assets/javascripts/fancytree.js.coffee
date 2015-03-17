@@ -12,6 +12,14 @@ class @Fancytree
         checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
       }
+      renderColumns: (event, data) ->
+        node = data.node
+        $tdList = $(node.tr).find(">td")
+        if node.folder and node.selected
+          $tdList.eq(2).text(node.data['object']['projects_datapath']['name'])
+        else if node.selected
+          $tdList.eq(2).text(node.data['object']['track']['name'])
+          $tdList.eq(3).html("<a href='/tracks/" + node.data['object']['track']['id'] + "'>link</a>")
       select: (event, data) ->
         if data.node.folder
           attr = Fancytree.buildPath(event, data)
