@@ -100,7 +100,7 @@ class @Fancytree
       url: "/tracks",
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
-        node.data['object_id'] = { track_id: jqXHR['track_id']}
+        node.data['object_id'] = { track_id: jqXHR['id']}
         $span = $(node.span)
         $span.effect("highlight", {}, 1500)
         return false
