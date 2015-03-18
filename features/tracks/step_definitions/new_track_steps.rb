@@ -38,6 +38,13 @@ Then /^I should( not)? be able to add a track to the project$/ do |negate|
   end
 end
 
+Then /^I should see the track name and link$/ do
+  within(fancytree_parent(@track_title)) {
+    expect(page).to have_css('td.track-name', text: Track.last.name)
+    expect(find_link('link')[:href]).to eq File.join '', 'tracks', Track.last.id.to_s
+  }
+end
+
 Then /^I should be the owner of that track$/ do
   owner = (@user || @manager)
   expect(@project.tracks.first.owner).to eq owner

@@ -11,6 +11,7 @@ Feature: Create a track
     And there is a track in the first project's datapath
     When I am on the project page
     Then I should be able to add a track to the project
+    And I should see the track name and link
     And I should be the owner of that track
 
   Scenario: Manager cannot add track without parent projects datapath

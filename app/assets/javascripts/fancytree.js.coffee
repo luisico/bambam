@@ -18,8 +18,11 @@ class @Fancytree
         if node.folder and node.selected
           $tdList.eq(2).text(node.data['object']['projects_datapath']['name'])
         else if node.selected
-          $tdList.eq(2).text(node.data['object']['track']['name'])
-          $tdList.eq(3).html("<a href='/tracks/" + node.data['object']['track']['id'] + "'>link</a>")
+          $tdList.eq(2).addClass('track-name').text(node.data['object']['track']['name'])
+          $tdList.eq(3).addClass('track-link').html("<a href='/tracks/" + node.data['object']['track']['id'] + "'>link</a>")
+        else
+          $tdList.eq(2).addClass('track-name')
+          $tdList.eq(3).addClass('track-link')
       select: (event, data) ->
         if data.node.folder
           attr = Fancytree.buildPath(event, data)
@@ -121,13 +124,15 @@ class @Fancytree
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
-        $span = $(node.span)
-        $span.effect("highlight", {}, 1500)
+        $tr = $(node.tr)
+        $tr.find('.track-name').text(jqXHR.track.name)
+        $tr.find('.track-link').html("<a href='/tracks/" + jqXHR.track.id + "'>link</a>")
+        $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
-        $span = $(node.span)
-        $span.addClass('error-red').removeClass('fancytree-selected')
-        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        $tr = $(node.tr)
+        $tr.addClass('error-red').removeClass('fancytree-selected')
+        $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
 
