@@ -310,20 +310,28 @@ describe ProjectsDatapathsController do
     end
 
     context "project user" do
-      it "only creates nodes that are selected or whose immediate parent is selected" do
+      it "only creates nodes where the node, a parent, or a child is selected" do
         projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, sub_directory: (File.join 'dir1', 'subdir1'))
         projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
+        projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
 
-        expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath])).to eq [
-          { :title=>"subdir1", :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath1.id}, :folder=>true},
-          { :title=>projects_datapath2.full_path, :key=>projects_datapath2.datapath.id, :expanded=>true,
-            :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath2.id}, :folder=>true,
+        expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
+          {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :hideCheckbox=>true, :folder=>true,
             :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
-              :children=>[{:title=>"track1.bam", :selected=>true, :object_id=>{:track_id=>track.id}, :hideCheckbox=>true}
-              ]}
-            ]
-          }
+              :children=>[{:title=>"subdir1", :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath1.id}, :folder=>true
+              }]
+            }]
+          },
+          {:title=>projects_datapath2.full_path, :key=>projects_datapath2.datapath.id, :expanded=>true, :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath2.id}, :folder=>true,
+            :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
+              :children=>[{:title=>"dir2", :expanded=>true, :hideCheckbox=>true, :folder=>true,
+                :children=>[{:title=>"track1.bam", :selected=>true, :object_id=>{:track_id=>track.id}, :hideCheckbox=>true
+                }]
+              }]
+            }]
+          },
+          {:title=>projects_datapath3.full_path, :key=>projects_datapath3.datapath.id, :hideCheckbox=>true, :selected=>true, :object_id=>{:projects_datapath_id=>projects_datapath3.id}, :folder=>true}
         ]
       end
     end
