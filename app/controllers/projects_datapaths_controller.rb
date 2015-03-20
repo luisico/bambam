@@ -58,18 +58,26 @@ class ProjectsDatapathsController < ApplicationController
           end
         end
 
-        if parent_selected = @project.allowed_paths.include?(datapath.path)
-          parent_object_id = { projects_datapath_id: @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first.id }
+        if datapath_selected = @project.allowed_paths.include?(datapath.path)
+          datapath_object_id = { projects_datapath_id: @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first.id }
         end
 
-        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, parent_selected, parent_object_id)
+        next unless selected_or_manager = (datapath_selected || selected_indexes.any? || (can? :manage, @project))
+
+        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, datapath_selected, datapath_object_id)
 
         components.each_with_index do |component, index|
           expanded = selected_indexes.any? && selected_indexes.last.keys.first > index
           if selected = selected_indexes.select {|hash| hash.keys.include?(index)}.any?
             object_id = selected_indexes.select {|hash| hash[index]}.first.values.first
           end
-          parent = add_node_to_tree(parent, component, expanded, nil, selected, object_id)
+          if parent
+            next unless selected_or_manager
+            parent = add_node_to_tree(parent, component, expanded, nil, selected, object_id)
+          else
+            next unless selected_or_manager
+            parent = add_node_to_tree(tree, component, expanded, nil, selected, object_id)
+          end
         end
       end
     end

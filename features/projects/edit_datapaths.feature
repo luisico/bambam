@@ -8,7 +8,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
 
@@ -16,7 +16,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to remove a datapath from the project
 
@@ -24,7 +24,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     And one of those additional datapaths has a sub-directory
     When I am on the project page
     Then I should be able to add the datapath sub-directory to the project
@@ -34,7 +34,7 @@ Feature: Edit projects datapaths
     And I own a project
     And there are 3 datapaths in that project
     And there is a datapath sub-directory in the project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to remove the datapath sub-directory from the project
 
@@ -42,7 +42,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be informed of a failed datapath addition
     And I should see the status code appended to the node title
@@ -51,7 +51,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be informed of a failed datapath deletion
     And I should see the status code appended to the node title
@@ -60,7 +60,7 @@ Feature: Edit projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
     And I should be able to immediately remove the datapath
@@ -69,6 +69,6 @@ Feature: Edit projects datapaths
     Given I am signed in as a user
     And I belong to a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should not be able to add a datapath to the project

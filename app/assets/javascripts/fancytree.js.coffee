@@ -19,6 +19,15 @@ class @Fancytree
             Fancytree.addPath(event, data, attr[0], attr[1])
           else
             Fancytree.deletePath(event, data, attr[0], attr[1])
+        else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
+          track_title = data.node.title
+          $tr = $(data.node.tr)
+          $tr.removeClass('fancytree-selected').effect('highlight', {color: 'red'}, 5000)
+          $tr.find('.fancytree-title').append(' [must select at least 1 parent directory]')
+          setTimeout (->
+            $tr.find('.fancytree-title').text(track_title)
+            return
+          ), 5000
         else
           attr = Fancytree.buildTrack(event, data)
           if data.node.selected
