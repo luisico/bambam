@@ -286,6 +286,7 @@ describe ProjectsDatapathsController do
         project.reload
 
         controller.instance_variable_set(:@project, project)
+        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
           {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :folder=>true,
@@ -298,7 +299,7 @@ describe ProjectsDatapathsController do
                         :children=>[
                           {:title=>"tracks", :expanded=>true, :folder=>true,
                             :children=>[
-                              {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object=>{track: {id: track.id, name: track.name}}
+                              {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object=>{track: {id: track.id, name: track.name, igv: 'igv_url'}}
                             }]
                         }]
                     }]
@@ -319,6 +320,8 @@ describe ProjectsDatapathsController do
         projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
 
+        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+
         expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
           {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :hideCheckbox=>true, :folder=>true,
             :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
@@ -329,7 +332,7 @@ describe ProjectsDatapathsController do
           {:title=>projects_datapath2.full_path, :key=>projects_datapath2.datapath.id, :expanded=>true, :hideCheckbox=>true, :selected=>true, :object=>{:projects_datapath=>{id: projects_datapath2.id, name: projects_datapath2.name}}, :folder=>true,
             :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
               :children=>[{:title=>"dir2", :expanded=>true, :hideCheckbox=>true, :folder=>true,
-                :children=>[{:title=>"track1.bam", :selected=>true, :object=>{:track=>{id: track.id, name: track.name}}, :hideCheckbox=>true
+                :children=>[{:title=>"track1.bam", :selected=>true, :object=>{:track=>{id: track.id, name: track.name, igv: 'igv_url'}}, :hideCheckbox=>true
                 }]
               }]
             }]

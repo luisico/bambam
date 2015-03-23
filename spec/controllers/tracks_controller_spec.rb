@@ -129,12 +129,13 @@ describe TracksController do
 
       context "with valid parameters" do
         it "should be a success" do
+          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           new_track = Track.last
-          expect(json['track']).to eq ({"id" => new_track.id, "name" => new_track.name})
+          expect(json['track']).to eq ({"id" => new_track.id, "name" => new_track.name, "igv" => 'igv_url'})
         end
 
         it "should create a new track" do

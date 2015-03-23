@@ -17,7 +17,7 @@ class TracksController < ApplicationController
     @track = Track.new(track_params)
     @track.owner = current_user
     if @track.save
-      render json: {track: {id: @track.id, name: @track.name}}, status: 200
+      render json: {track: {id: @track.id, name: @track.name, igv: view_context.link_to_igv(@track)}}, status: 200
     else
       message = @track.errors.collect {|name, msg| msg }.join(';')
       render json: {status: :error, message: message}, status: 400

@@ -56,7 +56,7 @@ class ProjectsDatapathsController < ApplicationController
             selected_indexes << { index => { projects_datapath: { id: projects_datapath.id, name: projects_datapath.name }}}
           elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
             track = @project.tracks.select {|t| t.full_path == built_path}.first
-            selected_indexes << { index => { track: { id: track.id, name: track.name }}}
+            selected_indexes << { index => { track: { id: track.id, name: track.name, igv: view_context.link_to_igv(track) }}}
           end
         end
 

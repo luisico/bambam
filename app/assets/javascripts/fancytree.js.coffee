@@ -18,8 +18,8 @@ class @Fancytree
         if node.folder and node.selected
           $tdList.eq(2).text(node.data['object']['projects_datapath']['name'])
         else if node.selected
-          $tdList.eq(2).addClass('track-name').text(node.data['object']['track']['name'])
-          $tdList.eq(3).addClass('track-link').html("<a href='/tracks/" + node.data['object']['track']['id'] + "'>link</a>")
+          $tdList.eq(2).addClass('track-name').html("<a href='/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
+          $tdList.eq(3).addClass('track-link').html(node.data.object.track.igv)
         else
           $tdList.eq(2).addClass('track-name')
           $tdList.eq(3).addClass('track-link')
@@ -125,8 +125,8 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.track-name').text(jqXHR.track.name)
-        $tr.find('.track-link').html("<a href='/tracks/" + jqXHR.track.id + "'>link</a>")
+        $tr.find('.track-name').html("<a href='/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
+        $tr.find('.track-link').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
