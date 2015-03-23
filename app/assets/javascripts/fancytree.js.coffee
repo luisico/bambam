@@ -73,7 +73,7 @@ class @Fancytree
     dir_array.push(data.node.title)
     track_array = dir_array.slice(Number(projects_datapaths[projects_datapaths.length-1][0])+1)
     path = track_array.join('/')
-    name = track_array[track_array.length-1]
+    name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
     projects_datapath_id = projects_datapaths[projects_datapaths.length-1][1]
     [path, name, projects_datapath_id]
 
