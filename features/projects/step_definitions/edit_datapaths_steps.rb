@@ -68,6 +68,13 @@ Then /^I should( not)? be able to add a datapath to the project$/ do |negate|
   end
 end
 
+Then /^I should see the datapath name$/ do
+  name = @datapath.path.split(File::SEPARATOR).pop
+  within(fancytree_parent(@datapath.path)) {
+    expect(page).to have_css('td.projects-datapath-name', text: name)
+  }
+end
+
 Then /^I should be able to remove a datapath from the project$/ do
   expect {
     select_node(@project_datapath.path)
@@ -105,9 +112,8 @@ Then /^I should be informed of a failed datapath addition$/ do
   }.not_to change(ProjectsDatapath, :count)
 
   parent = fancytree_parent(@datapath.path)
-  within (parent) {
-    expect(page).to have_css '.error-red'
-  }
+
+  expect(parent[:class]).to include 'error-red'
   expect(parent[:class]).not_to include 'fancytree-selected'
 end
 

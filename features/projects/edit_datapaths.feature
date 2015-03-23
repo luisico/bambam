@@ -11,6 +11,7 @@ Feature: Edit projects datapaths
     And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
+    And I should see the datapath name
 
   Scenario: Managers can remove a datapath from a project
     Given I am signed in as a manager
