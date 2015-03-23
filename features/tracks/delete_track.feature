@@ -11,11 +11,12 @@ Feature: Delate a track
     And <tracks exists in the project>
     When I am on the project page
     Then I <privilege> be able to delete a track from the project
+    And I <result> see the track name and link
 
     Examples:
-      | tracks exists in the project      | privilege  |
-      | I own 3 tracks in that project    | should     |
-      | there are 3 track in that project | should not |
+      | tracks exists in the project       | privilege  | result     |
+      | I own 3 tracks in that project     | should     | should not |
+      | there are 3 tracks in that project | should not | should     |
 
   Scenario: Add and immediately delete a track
     Given I am signed in

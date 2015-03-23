@@ -12,15 +12,15 @@ end
 ### Then
 
 Then /^I should( not)? be able to delete a track from the project$/ do |negate|
-  track_title = Pathname.new(@track.full_path).basename.to_s
+  @track_title = Pathname.new(@track.full_path).basename.to_s
   if negate
-    within(fancytree_parent(track_title)){
+    within(fancytree_parent(@track_title)){
       expect(page).to have_css 'span.fancytree-title'
       expect(page).not_to have_css 'span.fancytree-checkbox'
     }
   else
     expect{
-      delete_track(track_title)
+      delete_track(@track_title)
       @project.reload
     }.to change(@project.tracks, :count).by(-1)
   end

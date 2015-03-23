@@ -144,10 +144,14 @@ class @Fancytree
       url: "/tracks/" + node.data.object.track.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
+        $tr = $(node.tr)
+        $tr.find('.track-name').text('')
+        $tr.find('.track-link').html("")
+        $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
-        $span = $(node.span)
-        $span.addClass('error-red')
-        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        $tr = $(node.tr)
+        $tr.addClass('error-red')
+        $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
