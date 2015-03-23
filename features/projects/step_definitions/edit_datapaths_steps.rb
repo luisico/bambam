@@ -68,11 +68,18 @@ Then /^I should( not)? be able to add a datapath to the project$/ do |negate|
   end
 end
 
-Then /^I should see the datapath name$/ do
-  name = @datapath.path.split(File::SEPARATOR).pop
-  within(fancytree_parent(@datapath.path)) {
-    expect(page).to have_css('td.projects-datapath-name', text: name)
-  }
+Then /^I should( not)? see the datapath name$/ do |negate|
+  if negate
+    name = @projects_datapath.name
+    within(fancytree_parent(@projects_datapath.full_path)) {
+      expect(page).not_to have_css('td.projects-datapath-name', text: name)
+    }
+  else
+    name = @datapath.path.split(File::SEPARATOR).pop
+    within(fancytree_parent(@datapath.path)) {
+      expect(page).to have_css('td.projects-datapath-name', text: name)
+    }
+  end
 end
 
 Then /^I should be able to remove a datapath from the project$/ do
@@ -124,9 +131,7 @@ Then /^I should be informed of a failed datapath deletion$/ do
     loop until page.evaluate_script('jQuery.active').zero?
   }.not_to change(ProjectsDatapath, :count)
 
-  within(fancytree_parent(@projects_datapath.full_path)){
-    expect(page).to have_css '.error-red'
-  }
+  expect(fancytree_parent(@projects_datapath.full_path)[:class]).to include 'error-red'
 end
 
 Then /^I should see the status code appended to the node title$/ do

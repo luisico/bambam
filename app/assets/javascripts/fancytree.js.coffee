@@ -110,13 +110,14 @@ class @Fancytree
       url: "/projects_datapaths/" + node.data.object.projects_datapath.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
-        $span = $(node.span)
-        $span.effect("highlight", {}, 1500)
+        $tr = $(node.tr)
+        $tr.find('.projects-datapath-name').text('')
+        $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
-        $span = $(node.span)
-        $span.addClass('error-red')
-        $span.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        $tr = $(node.tr)
+        $tr.addClass('error-red')
+        $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
 
