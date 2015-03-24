@@ -12,6 +12,9 @@ FactoryGirl.define do
       unless File.exist?(full_path)
         Pathname.new(full_path).mkpath
       end
+      unless projects_datapath.project.owner.datapaths.include? projects_datapath.datapath
+        projects_datapath.project.owner.datapaths << projects_datapath.datapath
+      end
     end
   end
 end
