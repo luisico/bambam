@@ -3,7 +3,7 @@ class TracksController < ApplicationController
   authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :json, only: [:create, :destroy]
+  respond_to :json, only: [:create]
 
   def index
     @tracks = Track.accessible_by(current_ability)
@@ -27,10 +27,14 @@ class TracksController < ApplicationController
   def destroy
     @track = Track.find_by_id(params[:id])
     authorize! :destroy, @track
-    if @track && @track.destroy
-      render json: {status: :success, message: 'OK' }, status: 200
-    else
-      render json: {status: :error, message: 'file system error'}, status: 400
+    respond_to do |format|
+      if @track && @track.destroy
+        flash[:notice] = 'Track was successfully deleted.'
+        format.json { render json: {status: :success, message: 'OK' }, status: 200 }
+        format.html { redirect_to project_path(@track.project) }
+      else
+        format.json {render json: {status: :error, message: 'file system error'}, status: 400}
+      end
     end
   end
 
