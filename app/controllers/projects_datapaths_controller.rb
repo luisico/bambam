@@ -102,8 +102,10 @@ class ProjectsDatapathsController < ApplicationController
       node = {title: child}
       node.merge!(key: id) if id
       node.merge!(expanded: true) if expanded
-      node.merge!(hideCheckbox: true) if cannot? :manage, @project
-      node.except!(:hideCheckbox) if node[:title].include? ('.bam'||'.bw')
+      unless node[:title].include?('.')
+        node.merge!(hideCheckbox: true) if cannot? :manage, @project
+        node.merge!(folder: true)
+      end
       if selected
         node.merge!(selected: true)
         node.merge!(object: object)
@@ -116,8 +118,10 @@ class ProjectsDatapathsController < ApplicationController
     else
       node = node.first
       node.merge!(expanded: true) if expanded
-      node.merge!(hideCheckbox: true) if cannot? :manage, @project
-      node.except!(:hideCheckbox) if node[:title].include? ('.bam'||'.bw')
+      unless node[:title].include?('.')
+        node.merge!(hideCheckbox: true) if cannot? :manage, @project
+        node.merge!(folder: true)
+      end
       if selected
         node.merge!(selected: true)
         node.merge!(object: object)
@@ -127,7 +131,6 @@ class ProjectsDatapathsController < ApplicationController
       end
     end
 
-    node.merge!(folder: true) unless node[:title].include? ('.bam'||'.bw')
     node
   end
 end
