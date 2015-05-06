@@ -26,6 +26,12 @@ Feature: Create a track
     Then the page should have the error can't be blank
     And I should be on the edit project page
 
+  Scenario: Cannot create a track without a genome
+    When I visit the edit project page
+    And I create a track without a genome
+    Then the page should have the error can't be blank
+    And I should be on the edit project page
+
   Scenario: Cannot create a track without a path
     When I visit the edit project page
     And I create a track without a path
