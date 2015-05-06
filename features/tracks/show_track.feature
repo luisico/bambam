@@ -9,6 +9,7 @@ Feature: Show a track
     And there is a <type> track in that project
     When I am on the track page
     Then I should see the track's name
+    And I should see the track's genome
     And I should see the track's path
     And I should see the track's project
     And I should see a link to download a <type> file

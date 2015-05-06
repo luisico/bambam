@@ -4,14 +4,17 @@
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
       <div class="clearfix">
-        <h3 class="left" id="track-name">
-          <%= @track.name %>
-          <small>
-            <% if @track.project %>
-              (<%= link_to @track.project.name, @track.project %>)
-            <% end %>
-          </small>
-        </h3>
+        <div id="track-name">
+          <h3>
+            <%= @track.name %>
+            <small>
+              <% if @track.project %>
+                (<%= link_to @track.project.name, @track.project %>)
+              <% end %>
+            </small>
+          </h3>
+          <span><%= @track.genome %></span>
+        </div>
         <%= render partial: 'timestamps', locals: { record: @track } %>
       </div>
 

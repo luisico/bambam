@@ -30,3 +30,15 @@ i.large-calendar {
 .expired {
   color: red;
 }
+
+#track-name {
+  @extend .left;
+  margin-bottom: rem-calc(7);
+  h3 {
+    margin-bottom: rem-calc(4);
+  }
+  span {
+    @extend .label;
+    @extend .secondary;
+  }
+}
