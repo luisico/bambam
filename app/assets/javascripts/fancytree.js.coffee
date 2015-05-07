@@ -30,6 +30,7 @@ class @Fancytree
           attr = Fancytree.buildPath(event, data.node)
           if data.node.selected
             Fancytree.addPath(event, data.node, attr[0], attr[1], attr[2])
+            Fancytree.resetPathHierarchy(event, data.node)
           else
             Fancytree.deletePath(event, data.node, attr[0], attr[1])
         else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
@@ -118,6 +119,22 @@ class @Fancytree
         $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
+
+  @resetPathHierarchy: (event, node) ->
+    parents = node.getParentList()
+    children = Fancytree.deepChildrenList(node, [])
+    allNodes = parents.concat(children)
+    for i of allNodes
+      if allNodes[i].folder and allNodes[i].selected
+        allNodes[i].toggleSelected()
+
+  @deepChildrenList: (node, array) ->
+    node = node.getFirstChild()
+    while node
+      array.push(node)
+      Fancytree.deepChildrenList(node, array)
+      node = node.getNextSibling()
+    array
 
   @addTrack: (event, node, path, name, projects_datapath_id) ->
     $.ajax({
