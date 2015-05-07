@@ -27,11 +27,11 @@ class @Fancytree
           $tdList.eq(3).addClass('track-link')
       select: (event, data) ->
         if data.node.folder
-          attr = Fancytree.buildPath(event, data)
+          attr = Fancytree.buildPath(event, data.node)
           if data.node.selected
-            Fancytree.addPath(event, data, attr[0], attr[1], attr[2])
+            Fancytree.addPath(event, data.node, attr[0], attr[1], attr[2])
           else
-            Fancytree.deletePath(event, data, attr[0], attr[1])
+            Fancytree.deletePath(event, data.node, attr[0], attr[1])
         else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
           track_title = data.node.title
           $tr = $(data.node.tr)
@@ -49,21 +49,21 @@ class @Fancytree
             Fancytree.deleteTrack(event, data.node)
     }
 
-  @buildPath: (event, data) ->
-    parent_list = data.node.getParentList()
+  @buildPath: (event, node) ->
+    parent_list = node.getParentList()
     if parent_list.length > 0
       datapath_id = parent_list[0].key
       dir_array = []
       for i of parent_list
         dir_array.push(parent_list[i].title)
       sub_array = dir_array.slice(1)
-      sub_array.push(data.node.title)
+      sub_array.push(node.title)
       sub_dir = sub_array.join('/')
       name = sub_array.pop()
     else
-      datapath_id = data.node.key
+      datapath_id = node.key
       sub_dir = ""
-      name = data.node.title.split('/').pop()
+      name = node.title.split('/').pop()
     [datapath_id, sub_dir, name]
 
   @buildTrack: (event, node) ->
@@ -81,8 +81,7 @@ class @Fancytree
     projects_datapath_id = projects_datapaths[projects_datapaths.length-1][1]
     [path, name, projects_datapath_id]
 
-  @addPath: (event, data, datapath_id, sub_dir, name) ->
-    node = data.node
+  @addPath: (event, node, datapath_id, sub_dir, name) ->
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -102,8 +101,7 @@ class @Fancytree
         return false
     })
 
-  @deletePath: (event, data, datapath_id, sub_dir) ->
-    node = data.node
+  @deletePath: (event, node, datapath_id, sub_dir) ->
     $.ajax({
       type: "POST",
       dataType: "json",
