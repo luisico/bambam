@@ -82,8 +82,8 @@ describe Track do
     it { should have_db_column(:genome).with_options(null: false) }
     it { should validate_presence_of(:genome) }
 
-    it "should equal 'hg19' by default" do
-      track = Track.new()
+    it "should default to 'hg19'" do
+      track = Track.new
       expect(track.genome).to eq 'hg19'
     end
   end

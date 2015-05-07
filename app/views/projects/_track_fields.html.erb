@@ -17,7 +17,7 @@
 
       <%= f.label :genome, "Genome ID" %>
       <%= f.text_field :genome, class: "with-instructions" %>
-      <span class="text-color-grey small-text">A list of valid refernce genome IDs can be found <%=link_to "here", "http://www.broadinstitute.org/software/igv/genome_ids", target: "_blank" %></span><br><br>
+      <span class="text-color-grey small-text"><%=link_to "List of reference genomes for IGV", "http://www.broadinstitute.org/software/igv/genome_ids", target: "_blank" %></span><br><br>
 
       <%= f.label :path %>
       <%= f.text_field :path, class: "with-instructions" %>

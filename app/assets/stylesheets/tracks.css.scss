@@ -31,14 +31,14 @@ i.large-calendar {
   color: red;
 }
 
-#track-name {
+.track-name {
   @extend .left;
-  margin-bottom: rem-calc(7);
+  margin-bottom: rem-calc(32);
   h3 {
-    margin-bottom: rem-calc(4);
+    margin-bottom: 0;
   }
-  span {
-    @extend .label;
-    @extend .secondary;
+  .project-name {
+    font-size: rem-calc(14);
+    color: $subheader-font-color;
   }
 }

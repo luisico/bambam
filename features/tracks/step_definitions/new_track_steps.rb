@@ -12,7 +12,7 @@ def build_track_with_path
 def fill_track_form(track=nil)
   track ||= @track
   fill_in 'Name', with: track[:name]
-  fill_in 'Genome', with: track[:genome]
+  fill_in 'Genome ID', with: track[:genome]
   fill_in 'Path', with: track[:path]
 end
 
