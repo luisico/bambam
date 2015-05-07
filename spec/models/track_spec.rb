@@ -77,6 +77,17 @@ describe Track do
     end
   end
 
+  describe "genome" do
+    it { should respond_to :genome }
+    it { should have_db_column(:genome).with_options(null: false) }
+    it { should validate_presence_of(:genome) }
+
+    it "should default to 'hg19'" do
+      track = Track.new
+      expect(track.genome).to eq 'hg19'
+    end
+  end
+
   describe "project_id" do
     it {should belong_to :project}
     it {should respond_to :project}

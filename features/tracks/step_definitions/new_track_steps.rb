@@ -12,6 +12,7 @@ def build_track_with_path
 def fill_track_form(track=nil)
   track ||= @track
   fill_in 'Name', with: track[:name]
+  fill_in 'Genome ID', with: track[:genome]
   fill_in 'Path', with: track[:path]
 end
 
@@ -31,6 +32,17 @@ When /^I create a track without a name$/ do
     link_to_add_track.click
     within('.new-record') {
       fill_track_form @track.merge(name: '')
+    }
+    click_button 'Update Project'
+  }.not_to change(Track, :count)
+end
+
+When /^I create a track without a genome$/ do
+  expect{
+    build_track
+    link_to_add_track.click
+    within('.new-record') {
+      fill_track_form @track.merge(genome: '')
     }
     click_button 'Update Project'
   }.not_to change(Track, :count)

@@ -15,6 +15,10 @@
       <%= f.text_field :name, class: "with-instructions" %>
       <span class="text-color-grey small-text">The track name should be short, as it will be used as the title of the track in IGV or the UCSC browser</span><br><br>
 
+      <%= f.label :genome, "Genome ID" %>
+      <%= f.text_field :genome, class: "with-instructions" %>
+      <span class="text-color-grey small-text"><%=link_to "List of reference genomes for IGV", "http://www.broadinstitute.org/software/igv/genome_ids", target: "_blank" %></span><br><br>
+
       <%= f.label :path %>
       <%= f.text_field :path, class: "with-instructions" %>
       <span class="text-color-grey small-text">Enter the full path to the track. This must begin with:
