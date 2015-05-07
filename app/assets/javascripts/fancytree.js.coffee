@@ -112,6 +112,7 @@ class @Fancytree
         $tr = $(node.tr)
         $tr.find('.projects-datapath-name').text('')
         $tr.effect("highlight", {}, 1500)
+        delete node.data.object.projects_datapath
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
