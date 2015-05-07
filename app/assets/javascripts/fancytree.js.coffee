@@ -73,13 +73,13 @@ class @Fancytree
     projects_datapaths = []
     for i of parent_list
       dir_array.push(parent_list[i].title)
-      if parent_list[i].data.object
-        projects_datapaths.push([i, parent_list[i].data.object.projects_datapath.id])
+      if parent_list[i].selected
+        projects_datapath = [i, parent_list[i].data.object.projects_datapath.id]
     dir_array.push(node.title)
-    track_array = dir_array.slice(Number(projects_datapaths[projects_datapaths.length-1][0])+1)
+    track_array = dir_array.slice(Number(projects_datapath[0])+1)
     path = track_array.join('/')
     name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
-    projects_datapath_id = projects_datapaths[projects_datapaths.length-1][1]
+    projects_datapath_id = projects_datapath[1]
     [path, name, projects_datapath_id]
 
   @addPath: (event, node, datapath_id, sub_dir, name) ->
