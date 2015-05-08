@@ -203,7 +203,7 @@ describe User do
           @other_share_link = FactoryGirl.create(:share_link)
         end
 
-        it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
+        it { should be_able_to(:manage, ShareLink, track: {project: {user_ids: @user.id}}) }
 
         it { should_not be_able_to(:manage, @other_share_link) }
       end

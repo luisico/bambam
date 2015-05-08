@@ -33,7 +33,7 @@ Given /^there (is|are) (\d+|a) projects? in the system$/ do |foo, n|
 end
 
 Given /^there are (\d+) additional users of that project$/ do |n|
-  FactoryGirl.create_list(:user, n.to_i, :projects => [@project])
+  FactoryGirl.create_list(:user, n.to_i, projects: [@project])
 end
 
 ### When

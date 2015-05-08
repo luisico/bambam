@@ -1,13 +1,13 @@
 class User < ActiveRecord::Base
   rolify
   has_many :memberships, dependent: :destroy
-  has_many :groups, :through => :memberships
+  has_many :groups, through: :memberships
   has_many :projects_users, dependent: :destroy
-  has_many :projects, :through => :projects_users
+  has_many :projects, through: :projects_users
   has_many :owned_projects, foreign_key: :owner_id, class_name: 'Project'
   has_many :tracks, foreign_key: :owner_id
   has_many :datapaths_users, dependent: :destroy
-  has_many :datapaths, :through => :datapaths_users
+  has_many :datapaths, through: :datapaths_users
 
 
   # Authentication
