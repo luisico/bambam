@@ -393,13 +393,8 @@ describe ProjectsDatapathsController do
 
         it "has a object attribute if requested" do
           projects_datapath = FactoryGirl.create(:projects_datapath)
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, projects_datapath)).
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, projects_datapath)).
             to eq({title: "/dir1", key: 1, expanded: true, selected: true, object: {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, folder: true})
-        end
-
-        it "does not no have a object_id attribute if it's not selected" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, false, 2)).
-            to eq({title: "/dir1", key: 1, expanded: true, folder: true})
         end
       end
     end
@@ -444,13 +439,8 @@ describe ProjectsDatapathsController do
 
         it "has a object attribute if requested" do
           projects_datapath = FactoryGirl.create(:projects_datapath)
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, projects_datapath)[:object]).
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, projects_datapath)[:object]).
             to eq({projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}})
-        end
-
-        it "does not no have a object_id attribute if it's not selected" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, false, 1)).
-          to eq({title: '/dir2', folder: true})
         end
       end
     end
@@ -497,7 +487,7 @@ describe ProjectsDatapathsController do
           controller.stub(:cannot?).and_return(true, true)
           controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
           track = FactoryGirl.create(:track)
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, true, Track.last)).
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, Track.last)).
             to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, title: "/track1.bam"})
         end
       end

@@ -49,13 +49,14 @@ class ProjectsDatapathsController < ApplicationController
         selected_components = select_components(datapath, components)
 
         # Select main datapath if allowed
-        if selected_datapath = @project.allowed_paths.include?(datapath.path)
+        # TODO: database select?
+        if @project.allowed_paths.include?(datapath.path)
           datapath_object = @project.projects_datapaths.select{ |pd| pd.full_path == datapath.path }.first
         end
 
-        next unless selected_or_manager = (selected_datapath || selected_components.any? || (can? :manage, @project))
+        next unless selected_or_manager = (!datapath_object.nil? || selected_components.any? || (can? :manage, @project))
 
-        parent = add_node_to_tree(tree, datapath.path, selected_components.any?, datapath.id, selected_datapath, datapath_object)
+        parent = add_node_to_tree(tree, datapath.path, selected_components.any?, datapath.id, datapath_object)
 
         components.each_with_index do |component, index|
           expanded = selected_components.any? && selected_components.last.keys.first > index
@@ -64,10 +65,10 @@ class ProjectsDatapathsController < ApplicationController
           end
           if parent
             next unless selected_or_manager
-            parent = add_node_to_tree(parent, component, expanded, nil, selected, object)
+            parent = add_node_to_tree(parent, component, expanded, nil, object)
           else
             next unless selected_or_manager
-            parent = add_node_to_tree(tree, component, expanded, nil, selected, object)
+            parent = add_node_to_tree(tree, component, expanded, nil, object)
           end
         end
       end
@@ -95,7 +96,7 @@ class ProjectsDatapathsController < ApplicationController
     selected_components
   end
 
-  def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false, object=nil)
+  def add_node_to_tree(tree, child, expanded=false, id=nil, object=nil)
     if tree.is_a? Array
       parent = tree
     else
@@ -115,19 +116,19 @@ class ProjectsDatapathsController < ApplicationController
     end
 
     node.merge!(expanded: true) if expanded
+
     unless node[:title].include?('.')
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
       node.merge!(folder: true)
     end
-    if selected
+
+    if object
       node.merge!(selected: true)
-      if object
-        object_properties = {id: object.id, name: object.name}
-        object_properties.merge!(igv: view_context.link_to_igv(object)) if object.is_a?(Track)
-        node.merge!(object: {object.class.to_s.underscore.to_sym => object_properties})
-        if object.is_a?(Track)
-          node.merge!(hideCheckbox: true) if cannot? :destroy, object
-        end
+      object_properties = {id: object.id, name: object.name}
+      object_properties.merge!(igv: view_context.link_to_igv(object)) if object.is_a?(Track)
+      node.merge!(object: {object.class.to_s.underscore.to_sym => object_properties})
+      if object.is_a?(Track)
+        node.merge!(hideCheckbox: true) if cannot? :destroy, object
       end
     end
 
