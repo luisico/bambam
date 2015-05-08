@@ -30,7 +30,6 @@ class @Fancytree
           attr = Fancytree.buildPath(event, data.node)
           if data.node.selected
             Fancytree.addPath(event, data.node, attr[0], attr[1], attr[2])
-            Fancytree.resetPathHierarchy(event, data.node)
           else
             Fancytree.deletePath(event, data.node, attr[0], attr[1])
         else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
@@ -90,6 +89,7 @@ class @Fancytree
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir, name: name } },
       success:(jqXHR, textStatus, errorThrown) ->
+        Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
         $tr = $(node.tr)
         $tr.find('.projects-datapath-name').text(jqXHR.projects_datapath.name)
@@ -122,14 +122,14 @@ class @Fancytree
         return false
     })
 
-  @resetPathHierarchy: (event, node) ->
+  @resetPathHierarchy: (event, node, projects_datapath_id) ->
     parents = node.getParentList()
     children = Fancytree.deepChildrenList(node, [])
     allNodes = parents.concat(children)
     for i of allNodes
       if allNodes[i].folder and allNodes[i].selected
         allNodes[i].toggleSelected()
-    Fancytree.transitionChildTracks(event, children)
+    Fancytree.transitionChildTracks(event, projects_datapath_id, children)
 
   @deepChildrenList: (node, array) ->
     node = node.getFirstChild()
@@ -178,18 +178,18 @@ class @Fancytree
         return false
     })
 
-  @transitionChildTracks: (event, children) ->
+  @transitionChildTracks: (event, projects_datapath_id, children) ->
     for i of children
       if children[i].folder != true and children[i].selected
         track_id = children[i].data.object.track.id
         path = Fancytree.buildTrack(event, children[i], "isTransitionTrack")[0]
-        parents = children[i].getParentList()
-        for i of parents
-          if parents[i].selected
-            console.log(parents[i])
-            # parents[i].data.object.projects_datapath.id
-        console.log(track_id)
-        console.log(path)
+        Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
 
   @updateTrack: (event, track_id, path, projects_datapath_id) ->
     console.log([track_id, path, projects_datapath_id])
+    $.ajax({
+      data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
+      type: 'PATCH',
+      dataType: "json",
+      url: '/tracks/' + track_id
+    });
