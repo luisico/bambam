@@ -36,28 +36,32 @@
             </div>
           </div>
         </div>
-        <div class="small-12 medium-6 columns">
-          <h4 id="project-tracks"><i class="track-icon large margin-right"></i>Tracks
-            <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
-          </h4>
-          <div id="project-tracks-list">
-            <%= render @project.tracks %>
-          </div>
-        </div>
       </div>
 
       <div class="row">
         <div class="small-12 columns project-datapaths">
-          <h4><i class="datapath-icon large margin-right"></i>
-            Datapaths
+          <h4>
+            <% if can? :manage, @project %>
+              <i class="datapath-icon large margin-right"></i>
+              <i class="track-icon large margin-right"></i>
+              Datapaths & Tracks
+            <% else %>
+              <i class="track-icon large margin-right"></i>
+              Tracks
+            <% end %>
+            <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
           </h4>
           <table id="track-tree" data-project=<%= @project.id %>>
             <colgroup>
               <col width="30px"></col>
               <col width="*"></col>
+              <col width="*"></col>
+              <col width="*"></col>
             </colgroup>
             <thead>
               <tr>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
               </tr>

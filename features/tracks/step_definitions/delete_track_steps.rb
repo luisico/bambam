@@ -12,15 +12,15 @@ end
 ### Then
 
 Then /^I should( not)? be able to delete a track from the project$/ do |negate|
-  track_title = Pathname.new(@track.full_path).basename.to_s
+  @track_title = Pathname.new(@track.full_path).basename.to_s
   if negate
-    within(fancytree_parent(track_title)){
+    within(fancytree_parent(@track_title)){
       expect(page).to have_css 'span.fancytree-title'
       expect(page).not_to have_css 'span.fancytree-checkbox'
     }
   else
     expect{
-      delete_track(track_title)
+      delete_track(@track_title)
       @project.reload
     }.to change(@project.tracks, :count).by(-1)
   end
@@ -36,11 +36,14 @@ Then /^I should be able to immediately delete the track$/ do
   }.to change(@project.tracks, :count).by(-1)
 end
 
-# Then /^I should( not)? be able to delete a track from the track edit panel$/ do |negate|
-#   if negate
-#     expect(page).not_to have_link deleted_track_name
-#   else
-#     click_link deleted_track_name
-#     delete_track(deleted_track_name)
-#   end
-# end
+Then /^I should( not)? be able to delete a track from the track show page$/ do |negate|
+  if negate
+    expect(page).not_to have_link 'Delete'
+  else
+    project = @track.project
+    expect {
+      click_link 'Delete'
+    }.to change(Track, :count).by(-1)
+    expect(current_path).to eq project_path(project)
+  end
+end

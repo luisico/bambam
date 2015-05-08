@@ -20,12 +20,12 @@ Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
   expect {
-    @project_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
-    @project_datapaths.each do |datapath|
+    owner_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
+    @projects_datapaths = owner_datapaths.collect do |datapath|
       FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath, sub_directory: '')
     end
   }.to change(Datapath, :count).by(n)
-  @project_datapath = @project_datapaths.last
+  @projects_datapath = @projects_datapaths.last
 end
 
 Given /^the project owner has access to (\d+|a) additional datapaths$/ do |n|
@@ -45,7 +45,7 @@ Given /^one of those additional datapaths has a sub\-directory$/ do
 end
 
 Given /^there is a datapath sub\-directory in the project$/ do
-  sub_dir = FactoryGirl.create(:projects_datapath, project: @project, datapath: @project_datapath)
+  sub_dir = FactoryGirl.create(:projects_datapath, project: @project, datapath: @projects_datapath.datapath)
   @basename = Pathname.new(sub_dir.full_path).basename.to_s
 end
 
@@ -68,10 +68,24 @@ Then /^I should( not)? be able to add a datapath to the project$/ do |negate|
   end
 end
 
+Then /^I should( not)? see the datapath name$/ do |negate|
+  if negate
+    name = @projects_datapath.name
+    within(fancytree_parent(@projects_datapath.full_path)) {
+      expect(page).not_to have_css('td.projects-datapath-name', text: name)
+    }
+  else
+    name = @datapath.path.split(File::SEPARATOR).pop
+    within(fancytree_parent(@datapath.path)) {
+      expect(page).to have_css('td.projects-datapath-name', text: name)
+    }
+  end
+end
+
 Then /^I should be able to remove a datapath from the project$/ do
   expect {
-    select_node(@project_datapath.path)
-    expect(fancytree_parent(@project_datapath.path)[:class]).not_to include 'fancytree-selected'
+    select_node(@projects_datapath.full_path)
+    expect(fancytree_parent(@projects_datapath.full_path)[:class]).not_to include 'fancytree-selected'
 
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
@@ -105,22 +119,19 @@ Then /^I should be informed of a failed datapath addition$/ do
   }.not_to change(ProjectsDatapath, :count)
 
   parent = fancytree_parent(@datapath.path)
-  within (parent) {
-    expect(page).to have_css '.error-red'
-  }
+
+  expect(parent[:class]).to include 'error-red'
   expect(parent[:class]).not_to include 'fancytree-selected'
 end
 
 Then /^I should be informed of a failed datapath deletion$/ do
   allow(ProjectsDatapath).to receive(:find_by_id).and_return(nil)
   expect {
-    select_node(@project_datapath.path)
+    select_node(@projects_datapath.full_path)
     loop until page.evaluate_script('jQuery.active').zero?
   }.not_to change(ProjectsDatapath, :count)
 
-  within(fancytree_parent(@project_datapath.path)){
-    expect(page).to have_css '.error-red'
-  }
+  expect(fancytree_parent(@projects_datapath.full_path)[:class]).to include 'error-red'
 end
 
 Then /^I should see the status code appended to the node title$/ do

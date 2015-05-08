@@ -38,6 +38,7 @@ Feature: Show a track
       | bam  | bai |
       | bw   | bw  |
 
+  @javascript
   Scenario Outline: Back button
     Given I am signed in
     And I belong to a project

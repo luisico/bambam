@@ -5,19 +5,19 @@
 Given /^there (is|are) (\d+|a) tracks? in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
 
-  projects_datapath = FactoryGirl.create(:projects_datapath, project: @project, datapath: @project_datapath)
+  projects_datapath = @projects_datapath || FactoryGirl.create(:projects_datapath, project: @project)
   expect {
     FactoryGirl.create_list(:track, n, projects_datapath: projects_datapath)
   }.to change(Track, :count).by(n)
-  @track = @project.tracks.last
   @project.reload
+  @track = @project.tracks.last
 end
 
 Given /^I own (\d+|a) tracks? in that project$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   owner = (@user || @manager)
 
-  projects_datapath = FactoryGirl.create(:projects_datapath, project: @project, datapath: @project_datapath)
+  projects_datapath = @projects_datapath || FactoryGirl.create(:projects_datapath, project: @project)
   expect {
     FactoryGirl.create_list(:track, n, projects_datapath: projects_datapath, owner: owner)
   }.to change(Track, :count).by(n)

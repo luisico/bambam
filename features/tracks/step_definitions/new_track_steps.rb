@@ -38,6 +38,20 @@ Then /^I should( not)? be able to add a track to the project$/ do |negate|
   end
 end
 
+Then /^I should( not)? see the track name and link$/ do |negate|
+  if negate
+    within(fancytree_parent(@track_title)) {
+      expect(page).not_to have_link(@track.name)
+      expect(page).not_to have_css('.fi-eye')
+    }
+  else
+    within(fancytree_parent(@track_title)) {
+      expect(page).to have_link(Track.last.name)
+      expect(page).to have_css('.fi-eye')
+    }
+  end
+end
+
 Then /^I should be the owner of that track$/ do
   owner = (@user || @manager)
   expect(@project.tracks.first.owner).to eq owner

@@ -37,7 +37,7 @@
         <h5>Server path</h5>
         <p class="clipboard-box" id="track-server-path">
           <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_path"></i>
-          <span id="clip_track_path"><%= @track.path %></span>
+          <span id="clip_track_path"><%= @track.full_path %></span>
         </p>
       </div>
 
@@ -62,7 +62,9 @@
         </div>
       </div>
     </div>
-
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
+    <% if can? :destroy, @track %>
+      <%= link_to 'Delete', @track, method: :delete, data: { confirm: 'Are you sure? Clicking this button will permanently delete this track' }, class: 'button tiny radius [secondary alert success] right', id: "delete-track" %>
+    <% end %>
   </div>
 </div>

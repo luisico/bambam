@@ -11,11 +11,12 @@ Feature: Delate a track
     And <tracks exists in the project>
     When I am on the project page
     Then I <privilege> be able to delete a track from the project
+    And I <result> see the track name and link
 
     Examples:
-      | tracks exists in the project      | privilege  |
-      | I own 3 tracks in that project    | should     |
-      | there are 3 track in that project | should not |
+      | tracks exists in the project       | privilege  | result     |
+      | I own 3 tracks in that project     | should     | should not |
+      | there are 3 tracks in that project | should not | should     |
 
   Scenario: Add and immediately delete a track
     Given I am signed in
@@ -26,14 +27,15 @@ Feature: Delate a track
     Then I should be able to add a track to the project
     And I should be able to immediately delete the track
 
-#   Scenario Outline: Delete a track from the track edit panel
-#     Given I am signed in
-#     And I belong to a project
-#     And <tracks exists in the project>
-#     When I visit the edit project page
-#     Then I <privilege> be able to delete a track from the track edit panel
+  Scenario Outline: Delete a track from the track track show page
+    Given I am signed in as <user type>
+    And I <association> a project
+    And <tracks exists in the project>
+    When I am on the track page
+    Then I <privilege> be able to delete a track from the track show page
 
-#     Examples:
-#       | tracks exists in the project      | privilege  |
-#       | I own 3 tracks in that project    | should     |
-#       | there are 3 track in that project | should not |
+    Examples:
+      | user type | association | tracks exists in the project      | privilege  |
+      | a user    | belong to   | I own 3 tracks in that project    | should     |
+      | a user    | belong to   | there are 3 track in that project | should not |
+      | a manager | own         | there are 3 track in that project | should     |

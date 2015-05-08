@@ -129,11 +129,13 @@ describe TracksController do
 
       context "with valid parameters" do
         it "should be a success" do
+          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
-          expect(json['id']).to eq Track.last.id
+          new_track = Track.last
+          expect(json['track']).to eq ({"id" => new_track.id, "name" => new_track.name, "igv" => 'igv_url'})
         end
 
         it "should create a new track" do
@@ -143,19 +145,21 @@ describe TracksController do
         end
       end
 
-      context "with invalid parameters" do
-        it "should raise not found error" do
-          post :create, track: @track_attr.except(:projects_datapath_id), format: :json
+      context "failed creation" do
+        it "should raise file system error" do
+          Track.any_instance.stub(:save).and_return(false)
+          post :create, track: @track_attr, format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           expect(json['status']).to eq 'error'
-          expect(json['message']).to eq 'must exist in filesystem'
+          expect(json['message']).to eq 'file system error'
         end
 
         it "should not create a new track" do
+          Track.any_instance.stub(:save).and_return(false)
           expect{
-            post :create, track: @track_attr.except(:projects_datapath_id), format: :json
+            post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)
         end
       end
@@ -186,36 +190,68 @@ describe TracksController do
         sign_in user
       end
 
-      context "with valid parameters" do
-        it "should be a success" do
-          delete :destroy, id: @track, format: :js
-          expect(response).to be_success
-          expect(response.header['Content-Type']).to include 'application/json'
-          json = JSON.parse(response.body)
-          expect(json['status']).to eq 'success'
-          expect(json['message']).to eq 'OK'
+      context "format json" do
+        context "successful deletion" do
+          it "should be a success" do
+            delete :destroy, id: @track, format: :json
+            expect(response).to be_success
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json['status']).to eq 'success'
+            expect(json['message']).to eq 'OK'
+          end
+
+          it "should destroy the track" do
+            expect{
+              delete :destroy, id: @track, format: :json
+            }.to change(Track, :count).by(-1)
+          end
         end
 
-        it "should destroy the track" do
-          expect{
-            delete :destroy, id: @track, format: :js
-          }.to change(Track, :count).by(-1)
-        end
-      end
-
-      context "with invalid parameters" do
-        context "non-existance track" do
-          it "should raise record not found error" do
-            delete :destroy, id: 9999, format: :js
-            expect(response.status).to eq 403
+        context "failed deletion" do
+          it "should raise file system error" do
+            Track.any_instance.stub(:destroy).and_return(false)
+            delete :destroy, id: @track, format: :json
+            expect(response.status).to eq 400
             json = JSON.parse(response.body)
             expect(json['status']).to eq 'error'
-            expect(json['message']).to eq "You don't have permission to destroy "
+            expect(json['message']).to eq "file system error"
           end
 
           it "should not destroy the track" do
+            Track.any_instance.stub(:destroy).and_return(false)
             expect{
-              delete :destroy, id: 9999, format: :js
+              delete :destroy, id: @track, format: :json
+            }.not_to change(Track, :count)
+          end
+        end
+      end
+
+      context "format html" do
+        context "successful deletion" do
+          it "should be a success" do
+            delete :destroy, id: @track
+            expect(response).to redirect_to project_path(@track.project)
+          end
+
+          it "should destroy the track" do
+            expect{
+              delete :destroy, id: @track
+            }.to change(Track, :count).by(-1)
+          end
+        end
+
+        context "failed deletion" do
+          it "should rediret to the projects page" do
+            Track.any_instance.stub(:destroy).and_return(false)
+            delete :destroy, id: @track
+            expect(response).to redirect_to projects_path
+          end
+
+          it "should not destroy the track" do
+            Track.any_instance.stub(:destroy).and_return(false)
+            expect{
+              delete :destroy, id: @track
             }.not_to change(Track, :count)
           end
         end
@@ -229,14 +265,14 @@ describe TracksController do
       end
 
       it "should return forbidden reponse" do
-        delete :destroy, id: @track.id, format: :js
+        delete :destroy, id: @track.id
         expect(response).not_to be_success
-        expect(response.status).to be 403
+        expect(response.status).to be 302
       end
 
       it "should not delete the track" do
         expect {
-          delete :destroy, id: @track.id, format: :js
+          delete :destroy, id: @track.id
         }.not_to change(Track, :count)
       end
     end
