@@ -99,35 +99,29 @@ class ProjectsDatapathsController < ApplicationController
     node = parent.select{|c| c[:title] == child}
 
     if node.empty?
+      started_empty = true
       node = {title: child}
       node.merge!(key: id) if id
-      node.merge!(expanded: true) if expanded
-      node.merge!(hideCheckbox: true) if cannot? :manage, @project
-      node.except!(:hideCheckbox) if node[:title].include? ('.bam'||'.bw')
-      if selected
-        node.merge!(selected: true)
-        node.merge!(object: object)
-        if track = object[:track]
-          node.merge!(hideCheckbox: true) if cannot? :destroy, Track.find(track[:id])
-        end
-      end
-
-      parent << node
     else
+      started_empty = false
       node = node.first
-      node.merge!(expanded: true) if expanded
+    end
+
+    node.merge!(expanded: true) if expanded
+    unless node[:title].include?('.')
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
-      node.except!(:hideCheckbox) if node[:title].include? ('.bam'||'.bw')
-      if selected
-        node.merge!(selected: true)
-        node.merge!(object: object)
-        if track = object[:track]
-          node.merge!(hideCheckbox: true) if cannot? :destroy, Track.find(track[:id])
-        end
+      node.merge!(folder: true)
+    end
+    if selected
+      node.merge!(selected: true)
+      node.merge!(object: object)
+      if track = object[:track]
+        node.merge!(hideCheckbox: true) if cannot? :destroy, Track.find(track[:id])
       end
     end
 
-    node.merge!(folder: true) unless node[:title].include? ('.bam'||'.bw')
+    parent << node if started_empty
+
     node
   end
 end
