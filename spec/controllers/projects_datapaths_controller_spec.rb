@@ -233,11 +233,11 @@ describe ProjectsDatapathsController do
       end
 
       it "creates nodes for all files and directories found recursively" do
-        datapath2 = FactoryGirl.create(:datapath)
         datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
           @datapath1.path + dir
         end
 
+        datapath2 = FactoryGirl.create(:datapath)
         folder_path = datapath2.path + "/dir6/"
         track_path = folder_path + "track1.bam"
         cp_track track_path
@@ -277,10 +277,7 @@ describe ProjectsDatapathsController do
         project = FactoryGirl.create(:project)
         projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
         projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
-          FactoryGirl.create(:projects_datapath,
-            datapath: @datapath1,
-            project: project,
-            sub_directory: sub_dir)
+          FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: project, sub_directory: sub_dir)
         end
         track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
         project.reload

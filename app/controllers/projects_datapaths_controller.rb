@@ -44,6 +44,7 @@ class ProjectsDatapathsController < ApplicationController
       globs = formats.map{ |f| File.join(datapath.path, "**", f) }
 
       Dir.glob(globs).each do |node|
+        # TOOD: sub only from beginning of string
         components = node.sub(dirname, '').split(File::SEPARATOR)[2..-1]
 
         selected_components = select_components(datapath, components)
@@ -56,13 +57,16 @@ class ProjectsDatapathsController < ApplicationController
 
         next unless selected_or_manager = (!datapath_object.nil? || selected_components.any? || (can? :manage, @project))
 
+        # Add first component for tree
         parent = add_node_to_tree(tree, datapath.path, selected_components.any?, datapath.id, datapath_object)
 
+        # Add components to tree. marking them as expanded and/or selected
         components.each_with_index do |component, index|
           expanded = selected_components.any? && selected_components.last.keys.first > index
-          if selected = selected_components.select {|hash| hash.keys.include?(index)}.any?
-            object = selected_components.select {|hash| hash[index]}.first.values.first
+          if selected_components.select{ |c| c.keys.include?(index) }.any?
+            object = selected_components.select{ |c| c[index] }.first.values.first
           end
+
           if parent
             next unless selected_or_manager
             parent = add_node_to_tree(parent, component, expanded, nil, object)
@@ -85,9 +89,10 @@ class ProjectsDatapathsController < ApplicationController
     components.each_with_index do |component, index|
       built_path = File.join built_path, component
       if @project.allowed_paths.include?(built_path)
-        projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first
+        projects_datapath = @project.projects_datapaths.where(datapath: datapath, sub_directory: built_path.sub("#{datapath.path}/", '')).first
         selected_components << {index => projects_datapath}
       elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
+        # TODO: database select?
         track = @project.tracks.select {|t| t.full_path == built_path}.first
         selected_components << {index => track}
       end
