@@ -67,19 +67,20 @@ class @Fancytree
       name = node.title.split('/').pop()
     [datapath_id, sub_dir, name]
 
-  @buildTrack: (event, node) ->
+  @buildTrack: (event, node, isTransitionTrack) ->
     parent_list = node.getParentList()
     dir_array = []
-    projects_datapaths = []
     for i of parent_list
       dir_array.push(parent_list[i].title)
       if parent_list[i].selected
-        projects_datapath = [i, parent_list[i].data.object.projects_datapath.id]
+        if isTransitionTrack
+        else
+          projects_datapath_id = parent_list[i].data.object.projects_datapath.id
+        projects_datapath_index = i
     dir_array.push(node.title)
-    track_array = dir_array.slice(Number(projects_datapath[0])+1)
+    track_array = dir_array.slice(Number(projects_datapath_index)+1)
     path = track_array.join('/')
     name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
-    projects_datapath_id = projects_datapath[1]
     [path, name, projects_datapath_id]
 
   @addPath: (event, node, datapath_id, sub_dir, name) ->
@@ -128,6 +129,7 @@ class @Fancytree
     for i of allNodes
       if allNodes[i].folder and allNodes[i].selected
         allNodes[i].toggleSelected()
+    Fancytree.transitionChildTracks(event, children)
 
   @deepChildrenList: (node, array) ->
     node = node.getFirstChild()
@@ -175,3 +177,19 @@ class @Fancytree
         $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
+
+  @transitionChildTracks: (event, children) ->
+    for i of children
+      if children[i].folder != true and children[i].selected
+        track_id = children[i].data.object.track.id
+        path = Fancytree.buildTrack(event, children[i], "isTransitionTrack")[0]
+        parents = children[i].getParentList()
+        for i of parents
+          if parents[i].selected
+            console.log(parents[i])
+            # parents[i].data.object.projects_datapath.id
+        console.log(track_id)
+        console.log(path)
+
+  @updateTrack: (event, track_id, path, projects_datapath_id) ->
+    console.log([track_id, path, projects_datapath_id])
