@@ -42,3 +42,12 @@ i.large-calendar {
     color: $subheader-font-color;
   }
 }
+
+.label.genome {
+  @extend .secondary;
+  @extend .round;
+  margin-left: rem-calc(5);
+  padding: rem-calc(1 6 2);
+  font-size: rem-calc(10);
+  vertical-align: super;
+}
