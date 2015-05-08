@@ -20,6 +20,15 @@ class TracksController < ApplicationController
     end
   end
 
+  def update
+    track = Track.find(params[:id])
+    if track.update_attributes(track_params)
+      render json: {status: :success, message: 'OK' }, status: 200
+    else
+      render json: {status: :error, message: 'Record not saved'}, status: 400
+    end
+  end
+
   def destroy
     respond_to do |format|
       if @track.destroy
