@@ -291,11 +291,11 @@ describe ProjectsDatapathsController do
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, folder: true,
             children: [
-              {title: "dir1", expanded: true, selected: true, object: {projects_datapath: {id: projects_datapaths.first.id, name: projects_datapaths.first.name}}, folder: true,
+              {title: "dir1", expanded: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapaths.first.id, name: projects_datapaths.first.name}},
                 children: [
                   {title: "subdir2", expanded: true, folder: true,
                     children: [
-                      {title: "subdir3", expanded: true, selected: true, object: {projects_datapath: {id: projects_datapaths.last.id, name: projects_datapaths.last.name}}, folder: true,
+                      {title: "subdir3", expanded: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapaths.last.id, name: projects_datapaths.last.name}},
                         children: [
                           {title: "tracks", expanded: true, folder: true,
                             children: [
@@ -325,11 +325,11 @@ describe ProjectsDatapathsController do
         expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, hideCheckbox: true, folder: true,
             children: [{title: "dir1", expanded: true, hideCheckbox: true, folder: true,
-              children: [{title: "subdir1", hideCheckbox: true, selected: true, object: {projects_datapath: {id: projects_datapath1.id, name: projects_datapath1.name}}, folder: true
+              children: [{title: "subdir1", hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath1.id, name: projects_datapath1.name}}
               }]
             }]
           },
-          {title: projects_datapath2.full_path, key: projects_datapath2.datapath.id, expanded: true, hideCheckbox: true, selected: true, object: {projects_datapath: {id: projects_datapath2.id, name: projects_datapath2.name}}, folder: true,
+          {title: projects_datapath2.full_path, key: projects_datapath2.datapath.id, expanded: true, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath2.id, name: projects_datapath2.name}},
             children: [{title: "dir1", expanded: true, hideCheckbox: true, folder: true,
               children: [{title: "dir2", expanded: true, hideCheckbox: true, folder: true,
                 children: [{title: "track1.bam", selected: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, hideCheckbox: true
@@ -337,7 +337,7 @@ describe ProjectsDatapathsController do
               }]
             }]
           },
-          {title: projects_datapath3.full_path, key: projects_datapath3.datapath.id, hideCheckbox: true, selected: true, object: {projects_datapath: {id: projects_datapath3.id, name: projects_datapath3.name}}, folder: true}
+          {title: projects_datapath3.full_path, key: projects_datapath3.datapath.id, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath3.id, name: projects_datapath3.name}}}
         ]
       end
     end
@@ -392,13 +392,14 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object attribute if requested" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, {project_datapath: {id:2}})).
-          to eq({title: "/dir1", key: 1, expanded: true, selected: true, object: {project_datapath: {id:2}}, folder: true})
+          projects_datapath = FactoryGirl.create(:projects_datapath)
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, projects_datapath)).
+            to eq({title: "/dir1", key: 1, expanded: true, selected: true, object: {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, folder: true})
         end
 
         it "does not no have a object_id attribute if it's not selected" do
           expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, false, 2)).
-          to eq({title: "/dir1", key: 1, expanded: true, folder: true})
+            to eq({title: "/dir1", key: 1, expanded: true, folder: true})
         end
       end
     end
@@ -442,8 +443,9 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object attribute if requested" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, {project_datapath: {id:1}})).
-          to eq({title: '/dir2', selected: true, object: {project_datapath: {id: 1}}, folder: true})
+          projects_datapath = FactoryGirl.create(:projects_datapath)
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, projects_datapath)[:object]).
+            to eq({projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}})
         end
 
         it "does not no have a object_id attribute if it's not selected" do
@@ -493,9 +495,10 @@ describe ProjectsDatapathsController do
 
         it "does not show checkbox for assigned files owned by another" do
           controller.stub(:cannot?).and_return(true, true)
-          Track.stub(:find).and_return({track: 3})
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, true, {track: {id: 3}})).
-          to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: 3}}, title: "/track1.bam"})
+          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          track = FactoryGirl.create(:track)
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, true, Track.last)).
+            to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, title: "/track1.bam"})
         end
       end
     end

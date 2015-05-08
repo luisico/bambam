@@ -50,8 +50,7 @@ class ProjectsDatapathsController < ApplicationController
 
         # Select main datapath if allowed
         if selected_datapath = @project.allowed_paths.include?(datapath.path)
-          projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first
-          datapath_object = {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}
+          datapath_object = @project.projects_datapaths.select{ |pd| pd.full_path == datapath.path }.first
         end
 
         next unless selected_or_manager = (selected_datapath || selected_components.any? || (can? :manage, @project))
@@ -86,10 +85,10 @@ class ProjectsDatapathsController < ApplicationController
       built_path = File.join built_path, component
       if @project.allowed_paths.include?(built_path)
         projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first
-        selected_components << { index => { projects_datapath: { id: projects_datapath.id, name: projects_datapath.name }}}
+        selected_components << {index => projects_datapath}
       elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
         track = @project.tracks.select {|t| t.full_path == built_path}.first
-        selected_components << { index => { track: { id: track.id, name: track.name, igv: view_context.link_to_igv(track) }}}
+        selected_components << {index => track}
       end
     end
 
@@ -122,9 +121,13 @@ class ProjectsDatapathsController < ApplicationController
     end
     if selected
       node.merge!(selected: true)
-      node.merge!(object: object)
-      if track = object[:track]
-        node.merge!(hideCheckbox: true) if cannot? :destroy, Track.find(track[:id])
+      if object
+        object_properties = {id: object.id, name: object.name}
+        object_properties.merge!(igv: view_context.link_to_igv(object)) if object.is_a?(Track)
+        node.merge!(object: {object.class.to_s.underscore.to_sym => object_properties})
+        if object.is_a?(Track)
+          node.merge!(hideCheckbox: true) if cannot? :destroy, object
+        end
       end
     end
 
