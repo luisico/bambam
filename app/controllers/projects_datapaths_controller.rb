@@ -66,14 +66,7 @@ class ProjectsDatapathsController < ApplicationController
           if selected_components.select{ |c| c.keys.include?(index) }.any?
             object = selected_components.select{ |c| c[index] }.first.values.first
           end
-
-          if parent
-            next unless selected_or_manager
-            parent = add_node_to_tree(parent, component, expanded, nil, object)
-          else
-            next unless selected_or_manager
-            parent = add_node_to_tree(tree, component, expanded, nil, object)
-          end
+          parent = add_node_to_tree(parent ? parent : tree, component, expanded, nil, object)
         end
       end
     end
