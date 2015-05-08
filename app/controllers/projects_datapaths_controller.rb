@@ -40,39 +40,28 @@ class ProjectsDatapathsController < ApplicationController
     tree = []
 
     datapaths.each do |datapath|
-      common = File.dirname(datapath.path)
+      dirname = File.dirname(datapath.path)
       globs = formats.map{ |f| File.join(datapath.path, "**", f) }
 
-      nodes = Dir.glob(globs)
-      nodes.each do |node|
-        components = node.sub!(common, '').split(File::SEPARATOR)[2..-1]
-        built_path = datapath.path
-        selected_indexes = []
+      Dir.glob(globs).each do |node|
+        components = node.sub(dirname, '').split(File::SEPARATOR)[2..-1]
 
-        components.each_with_index do |component, index|
-          built_path = File.join built_path, component
-          if @project.allowed_paths.include?(built_path)
-            projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first
-            selected_indexes << { index => { projects_datapath: { id: projects_datapath.id, name: projects_datapath.name }}}
-          elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
-            track = @project.tracks.select {|t| t.full_path == built_path}.first
-            selected_indexes << { index => { track: { id: track.id, name: track.name, igv: view_context.link_to_igv(track) }}}
-          end
-        end
+        selected_components = select_components(datapath, components)
 
-        if datapath_selected = @project.allowed_paths.include?(datapath.path)
+        # Select main datapath if allowed
+        if selected_datapath = @project.allowed_paths.include?(datapath.path)
           projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == datapath.path}.first
-          datapath_object = { projects_datapath: { id: projects_datapath.id, name: projects_datapath.name }}
+          datapath_object = {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}
         end
 
-        next unless selected_or_manager = (datapath_selected || selected_indexes.any? || (can? :manage, @project))
+        next unless selected_or_manager = (selected_datapath || selected_components.any? || (can? :manage, @project))
 
-        parent = add_node_to_tree(tree, datapath.path, selected_indexes.any?, datapath.id, datapath_selected, datapath_object)
+        parent = add_node_to_tree(tree, datapath.path, selected_components.any?, datapath.id, selected_datapath, datapath_object)
 
         components.each_with_index do |component, index|
-          expanded = selected_indexes.any? && selected_indexes.last.keys.first > index
-          if selected = selected_indexes.select {|hash| hash.keys.include?(index)}.any?
-            object = selected_indexes.select {|hash| hash[index]}.first.values.first
+          expanded = selected_components.any? && selected_components.last.keys.first > index
+          if selected = selected_components.select {|hash| hash.keys.include?(index)}.any?
+            object = selected_components.select {|hash| hash[index]}.first.values.first
           end
           if parent
             next unless selected_or_manager
@@ -86,6 +75,25 @@ class ProjectsDatapathsController < ApplicationController
     end
 
     tree
+  end
+
+  def select_components(datapath, components)
+    # Select allowed datapaths and tracks
+    selected_components = []
+
+    built_path = datapath.path
+    components.each_with_index do |component, index|
+      built_path = File.join built_path, component
+      if @project.allowed_paths.include?(built_path)
+        projects_datapath = @project.projects_datapaths.select {|pd| pd.full_path == built_path}.first
+        selected_components << { index => { projects_datapath: { id: projects_datapath.id, name: projects_datapath.name }}}
+      elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
+        track = @project.tracks.select {|t| t.full_path == built_path}.first
+        selected_components << { index => { track: { id: track.id, name: track.name, igv: view_context.link_to_igv(track) }}}
+      end
+    end
+
+    selected_components
   end
 
   def add_node_to_tree(tree, child, expanded=false, id=nil, selected=false, object=nil)
