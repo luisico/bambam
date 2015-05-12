@@ -25,6 +25,18 @@ class @Fancytree
         else
           $tdList.eq(2).addClass('track-name')
           $tdList.eq(3).addClass('track-link')
+      beforeSelect: (event, data) ->
+        if data.node.selected and data.node.folder
+          selectedParents = data.node.getParentList().filter((x) -> x.selected == true)
+          selectedChildFolders = Fancytree.deepChildrenList(data.node, []).filter((x) -> x.selected == true and x.folder == true)
+          selectedChildTracks = Fancytree.deepChildrenList(data.node, []).filter((x) -> x.selected == true and x.folder != true)
+          if selectedParents.length == 0 and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
+            if confirm("Deselecting this folder will permanently delete all child tracks. Are you sure you want to continue?")
+              for i of selectedChildTracks
+                selectedChildTracks[i].toggleSelected()
+              true
+            else
+              false
       select: (event, data) ->
         if data.node.folder
           attr = Fancytree.buildPath(event, data.node)
