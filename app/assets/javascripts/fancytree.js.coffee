@@ -32,15 +32,6 @@ class @Fancytree
             Fancytree.addPath(event, data.node, attr[0], attr[1], attr[2])
           else
             Fancytree.deletePath(event, data.node, attr[0], attr[1])
-        else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
-          track_title = data.node.title
-          $tr = $(data.node.tr)
-          $tr.removeClass('fancytree-selected').effect('highlight', {color: 'red'}, 5000)
-          $tr.find('.fancytree-title').append(' [must select at least 1 parent directory]')
-          setTimeout (->
-            $tr.find('.fancytree-title').text(track_title)
-            return
-          ), 5000
         else
           attr = Fancytree.buildTrack(event, data.node)
           if data.node.selected
@@ -104,6 +95,8 @@ class @Fancytree
     })
 
   @deletePath: (event, node, datapath_id, sub_dir) ->
+    if node.getParentList().filter((x) -> x.selected).length == 0 and Fancytree.deepChildrenList(node,[]).filter((x) -> x.folder and x.selected).length == 0
+      Fancytree.resetTrackCheckboxes(event, node, true)
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -126,10 +119,13 @@ class @Fancytree
     parents = node.getParentList()
     children = Fancytree.deepChildrenList(node, [])
     allNodes = parents.concat(children)
-    for i of allNodes
-      if allNodes[i].folder and allNodes[i].selected
-        allNodes[i].toggleSelected()
-    Fancytree.transitionChildTracks(event, projects_datapath_id, children)
+    existingProjectsDatapath = allNodes.filter((x) -> x.folder and x.selected)[0]
+    if existingProjectsDatapath
+      existingProjectsDatapath.toggleSelected()
+      if children.filter((x) -> x.folder != true and x.selected).length > 0
+        Fancytree.transitionChildTracks(event, projects_datapath_id, children)
+    else
+      Fancytree.resetTrackCheckboxes(event, node, false)
 
   @deepChildrenList: (node, array) ->
     node = node.getFirstChild()
@@ -193,3 +189,15 @@ class @Fancytree
       dataType: "json",
       url: '/tracks/' + track_id
     });
+
+  @resetTrackCheckboxes: (event, node, remove) ->
+    childTracks = Fancytree.deepChildrenList(node,[]).filter((x) -> x.folder != true)
+    if childTracks.length > 0
+      for i of childTracks
+        tr = $(childTracks[i].tr)
+        if remove
+          childTracks[i].hideCheckbox = true
+          tr.find('td span').first().removeClass('fancytree-checkbox')
+        else
+          childTracks[i].hideCheckbox = false
+          tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
