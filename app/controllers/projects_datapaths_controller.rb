@@ -64,7 +64,7 @@ class ProjectsDatapathsController < ApplicationController
         components.each_with_index do |component, index|
           expanded = !selected_components.empty? && selected_components.to_a.last.first > index
           object = selected_components[index]
-          parent = add_node_to_tree(parent ? parent : tree, component, expanded, nil, object)
+          parent = add_node_to_tree(parent ? parent : tree, component, expanded, nil, object, selected_components.empty? && datapath_object.nil?)
         end
       end
     end
@@ -92,7 +92,7 @@ class ProjectsDatapathsController < ApplicationController
     selected_components
   end
 
-  def add_node_to_tree(tree, child, expanded=false, id=nil, object=nil)
+  def add_node_to_tree(tree, child, expanded=false, id=nil, object=nil, selected_components_empty=true)
     if tree.is_a? Array
       parent = tree
     else
@@ -116,6 +116,10 @@ class ProjectsDatapathsController < ApplicationController
     unless node[:title].include?('.')
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
       node.merge!(folder: true)
+    end
+
+    if node[:title].include?('.')
+      node.merge!(hideCheckbox: true) if selected_components_empty
     end
 
     if object

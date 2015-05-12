@@ -257,7 +257,7 @@ describe ProjectsDatapathsController do
             ]},
           {title: datapath2.path, key: datapath2.id, folder: true, children: [
             {title: "dir6", folder: true, children: [
-              {title: "track1.bam"}
+              {title: "track1.bam", hideCheckbox: true}
             ]}
           ]}
         ]
@@ -470,13 +470,13 @@ describe ProjectsDatapathsController do
       context "files" do
         it "shows the checkbox for unassigned files" do
           controller.stub(:cannot?).and_return(true)
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
           to eq({title: "/track1.bam"})
         end
 
         it "shows checkbox for owned files" do
           controller.stub(:cannot?).and_return(false)
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
           to eq({title: "/track1.bam"})
         end
 
