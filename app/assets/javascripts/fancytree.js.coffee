@@ -129,13 +129,18 @@ class @Fancytree
 
   @resetPathHierarchy: (event, node, projects_datapath_id) ->
     parents = node.getParentList()
+    oldSelectedParent = parents.filter((x) -> x.folder and x.selected)[0]
     children = Fancytree.deepChildrenList(node, [])
-    allNodes = parents.concat(children)
-    existingProjectsDatapath = allNodes.filter((x) -> x.folder and x.selected)[0]
-    if existingProjectsDatapath
-      existingProjectsDatapath.toggleSelected()
-      if children.filter((x) -> x.folder != true and x.selected).length > 0
-        Fancytree.transitionChildTracks(event, projects_datapath_id, children)
+    selectedChildFolders = children.filter((x) -> x.folder and x.selected)
+    if oldSelectedParent
+      oldSelectedParent.toggleSelected()
+      childTracks = children.filter((x) -> x.folder != true and x.selected)
+      Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks)
+    else if selectedChildFolders.length > 0
+      for i of selectedChildFolders
+        selectedChildFolders[i].toggleSelected()
+        childTracks = Fancytree.deepChildrenList(selectedChildFolders[i], []).filter((x) -> x.folder != true and x.selected)
+        Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks)
     else
       Fancytree.resetTrackCheckboxes(event, node, false)
 
@@ -186,12 +191,11 @@ class @Fancytree
         return false
     })
 
-  @transitionChildTracks: (event, projects_datapath_id, children) ->
-    for i of children
-      if children[i].folder != true and children[i].selected
-        track_id = children[i].data.object.track.id
-        path = Fancytree.buildTrack(event, children[i], "isTransitionTrack")[0]
-        Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
+  @transitionChildTracks: (event, projects_datapath_id, childTracks) ->
+    for i of childTracks
+      track_id = childTracks[i].data.object.track.id
+      path = Fancytree.buildTrack(event, childTracks[i], "isTransitionTrack")[0]
+      Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
 
   @updateTrack: (event, track_id, path, projects_datapath_id) ->
     console.log([track_id, path, projects_datapath_id])
