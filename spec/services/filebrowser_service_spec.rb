@@ -75,7 +75,7 @@ describe FilebrowserService do
     it "returns an array in fancytree format" do
       expect(subject).to receive(:entries).and_return ['dir1/', 'track1']
       expect(subject.to_fancytree).to eq [
-        {title: "dir1", folder: true},
+        {title: "dir1", folder: true, lazy: true},
         {title: "track1"}
       ]
     end

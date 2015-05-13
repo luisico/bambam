@@ -23,11 +23,12 @@ class FilebrowserService
       if m = entry.match(/(.*)\/$/)
         # Directories
         node = {title: m[1]}
-        node.merge!(folder: true)
+        node.merge!(folder: true, lazy: true)
       else
         # Files
         node = {title: entry}
       end
+
       fancytree << node
     end
 
