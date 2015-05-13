@@ -1,5 +1,6 @@
 jQuery ->
-  Fancytree.applyFancytree()
+  #Fancytree.applyFancytree()
+  Filebrowser.load()
 
   $("#project_user_ids").select2({
     placeholder: "Add a user"
