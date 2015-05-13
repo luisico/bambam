@@ -117,7 +117,8 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
         $tr.find('.projects-datapath-name').text('')
-        $tr.effect("highlight", {}, 1500)
+        if $tr.is(':visible')
+          $tr.effect("highlight", {}, 1500)
         delete node.data.object.projects_datapath
         return false
       error:(jqXHR, textStatus, errorThrown) ->
@@ -186,7 +187,8 @@ class @Fancytree
         $tr = $(node.tr)
         $tr.find('.track-name').text('')
         $tr.find('.track-link').html("")
-        $tr.effect("highlight", {}, 1500)
+        if $tr.is(':visible')
+          $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
