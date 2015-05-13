@@ -23,8 +23,22 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def browser
-    @project = Project.find(params[:id])
-    tree = generate_tree @project.owner.datapaths
+    @project = Project.find(params[:project])
+    # tree = generate_tree @project.owner.datapaths
+
+    tree = []
+    if params[:mode]
+      if params[:mode] == "children"
+        tree = FilebrowserService.new(params[:path]).to_fancytree
+      end
+    else
+      @project.owner.datapaths.each do |datapath|
+        node = {title: datapath.path, folder: true, lazy: true}
+        tree << node
+      end
+    end
+
+    pp tree
     respond_with tree
   end
 
