@@ -6,5 +6,13 @@ class CreateDatapathsUsers < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    project_owners = Project.all.collect {|p| p.owner}.uniq
+
+    project_owners.each do |user|
+      Datapath.all.each do |datapath|
+        DatapathsUser.create(datapath: datapath, user: user)
+      end
+    end
   end
 end
