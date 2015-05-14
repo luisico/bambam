@@ -32,7 +32,7 @@ describe TracksHelper do
 
       it "genome is properly encoded" do
         query = URI(helper.igv_url(@track)).query
-        encoded = ERB::Util.url_encode 'hg19'
+        encoded = ERB::Util.url_encode @track.genome
         expect(query).to match /genome=#{encoded}/
       end
 

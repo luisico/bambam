@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :track do
     sequence(:name) {|n| "track#{n}"}
     sequence(:path) {|n| File.join("tracks", "track#{n}.bam") }
+    genome "hg19"
     projects_datapath
     owner
 
