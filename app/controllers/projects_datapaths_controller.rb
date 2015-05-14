@@ -39,8 +39,14 @@ class ProjectsDatapathsController < ApplicationController
 
       else
         datapaths.each do |datapath|
+          # Main project datapaths
           node = {title: datapath.path, folder: true, lazy: true}
           tree << node
+
+          # Selected projects_datapaths
+          @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
+            add_path(node, projects_datapath.sub_directory)
+          end
         end
       end
 
@@ -52,6 +58,17 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   private
+
+  def add_path(parent, path)
+    parent[:expanded] = true
+    parent[:children] ||= []
+
+    head, tail = path.split(File::SEPARATOR, 2)
+    node = {title: head, folder: true, lazy: true}
+    parent[:children] << node
+
+    add_path(node, tail) if tail
+  end
 
   def projects_datapath_params
     params.require(:projects_datapath).permit(:project_id, :datapath_id, :path, :name)
