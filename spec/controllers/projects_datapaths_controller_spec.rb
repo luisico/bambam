@@ -407,7 +407,8 @@ RSpec.describe ProjectsDatapathsController do
       datapath = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project)
       projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'subdir')
-      track = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'track.bam')
+      track1 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track1.bam')
+      track2 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track2.bam')
 
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
@@ -415,7 +416,9 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
           {title: 'subdir', folder: true, lazy: true, expanded: true, children: [
-            {title: 'track.bam'}
+            {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
+              {title: 'track1.bam'}, {title: 'track2.bam'}
+            ]}
           ]}
         ]}
       ]
@@ -458,10 +461,25 @@ RSpec.describe ProjectsDatapathsController do
 
     it "adds multiple paths to a node" do
       node = {}
-      result = {expanded: true, children: [{title: 'path1', folder: true, lazy: true,
-        expanded: true, children: [{title: 'path2', folder: true, lazy: true}]
-      }]}
+      result = {expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, children: [
+          {title: 'path2', folder: true, lazy: true}
+        ]}
+      ]}
       controller.send :add_path, node, 'path1/path2'
+      expect(node).to eq result
+    end
+
+    it "adds multiple subpaths to a node" do
+      node = {}
+      result = {expanded: true, children: [
+        {title: 'path', folder: true, lazy: true, expanded: true, children: [
+          {title: 'path1', folder: true, lazy: true},
+          {title: 'path2', folder: true, lazy: true}
+        ]}
+      ]}
+      controller.send :add_path, node, 'path/path1'
+      controller.send :add_path, node, 'path/path2'
       expect(node).to eq result
     end
 
