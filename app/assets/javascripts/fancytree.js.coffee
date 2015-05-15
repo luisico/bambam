@@ -4,7 +4,7 @@ class @Fancytree
   @applyFancytree: ->
     $('#track-tree').fancytree {
       source:
-        url: "/projects_datapaths/browser?id=" + project_id
+        url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/browser?id=" + project_id
       checkbox: true
       extensions: ["table"]
       clickFolderMode: 2
@@ -20,7 +20,7 @@ class @Fancytree
         else if node.folder
           $tdList.eq(2).addClass('projects-datapath-name')
         else if node.selected
-          $tdList.eq(2).addClass('track-link').html("<a href='/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
+          $tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
           $tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
           $tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
         else
@@ -109,7 +109,7 @@ class @Fancytree
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/projects_datapaths",
+      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir, name: name } },
       success:(jqXHR, textStatus, errorThrown) ->
         Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
@@ -133,7 +133,7 @@ class @Fancytree
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/projects_datapaths/" + node.data.object.projects_datapath.id
+      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + node.data.object.projects_datapath.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
@@ -193,12 +193,12 @@ class @Fancytree
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/tracks",
+      url: RAILS_RELATIVE_URL_ROOT + "/tracks",
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.track-link').html("<a href='/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
+        $tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
         $tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
         $tr.find('.track-igv').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
@@ -214,7 +214,7 @@ class @Fancytree
     $.ajax({
       type: "POST",
       dataType: "json",
-      url: "/tracks/" + node.data.object.track.id
+      url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
@@ -242,7 +242,7 @@ class @Fancytree
       data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
       type: 'PATCH',
       dataType: "json",
-      url: '/tracks/' + track_id
+      url: RAILS_RELATIVE_URL_ROOT + '/tracks/' + track_id
     });
 
   @resetTrackCheckboxes: (event, tracks, remove) ->
