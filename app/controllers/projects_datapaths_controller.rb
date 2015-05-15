@@ -34,16 +34,7 @@ class ProjectsDatapathsController < ApplicationController
           status = 403
         end
       else
-        datapaths.each do |datapath|
-          # Main project datapaths
-          node = {title: datapath.path, folder: true, lazy: true}
-          tree << node
-
-          # Selected projects_datapaths
-          @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
-            add_path(node, projects_datapath.sub_directory)
-          end
-        end
+        tree = top_level_tree
       end
 
     else
@@ -57,6 +48,22 @@ class ProjectsDatapathsController < ApplicationController
 
   def allowed_datapaths
     can?(:manage, @project) ? @project.owner.datapaths : @project.datapaths
+  end
+
+  def top_level_tree
+    tree = []
+    allowed_datapaths.each do |datapath|
+      # Main project datapaths
+      node = {title: datapath.path, folder: true, lazy: true}
+      tree << node
+
+      # Selected projects_datapaths
+      @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
+        add_path(node, projects_datapath.sub_directory)
+      end
+    end
+
+    tree
   end
 
   def add_path(parent, path)
