@@ -27,16 +27,12 @@ class ProjectsDatapathsController < ApplicationController
     status = 200
 
     if @project = Project.find(params[:project])
-
-      datapaths = can?(:manage, @project) ? @project.owner.datapaths : @project.datapaths
-
       if params[:mode] && params[:mode] == "children"
-        if datapaths.any? {|datapath| params[:path].match datapath.path}
+        if allowed_datapaths.any? {|datapath| params[:path].match datapath.path}
           tree = FilebrowserService.new(params[:path]).to_fancytree
         else
           status = 403
         end
-
       else
         datapaths.each do |datapath|
           # Main project datapaths
@@ -58,6 +54,10 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   private
+
+  def allowed_datapaths
+    can?(:manage, @project) ? @project.owner.datapaths : @project.datapaths
+  end
 
   def add_path(parent, path)
     parent[:expanded] = true
