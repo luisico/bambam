@@ -378,6 +378,32 @@ RSpec.describe ProjectsDatapathsController do
     end
   end
 
+
+  describe "#allowed_datapaths" do
+    before do
+      @project = FactoryGirl.create(:project)
+      @owner = @project.owner
+      @owner.datapaths << FactoryGirl.create_list(:datapath, 2)
+      @project.datapaths << @owner.datapaths.first
+
+      controller.instance_variable_set(:@project, @project)
+    end
+
+    context "as project manager" do
+      it "should return all owner's datapaths" do
+        sign_in @owner
+        expect(controller.send :allowed_datapaths).to eq @owner.datapaths
+      end
+    end
+
+    context "as regular user" do
+      it "should only return allowed project's datapaths" do
+        sign_in FactoryGirl.create(:user)
+        expect(controller.send :allowed_datapaths).to eq @project.datapaths
+      end
+    end
+  end
+
   describe "#add_node_to_tree" do
     context "top level nodes" do
       before do
