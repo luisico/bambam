@@ -113,7 +113,7 @@ class ProjectsDatapathsController < ApplicationController
 
     node.merge!(expanded: true) if expanded
 
-    unless node[:title].include?('.')
+    unless node[:title].match(/\.(bam|bw)$/)
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
       node.merge!(folder: true)
     end
