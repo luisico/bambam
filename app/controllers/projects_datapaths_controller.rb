@@ -72,13 +72,18 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def add_path(parent, path, is_track=false)
-    parent[:expanded] = true
-    parent[:children] ||= []
-
     head, tail = path.split(File::SEPARATOR, 2)
+
     node = {title: head}
     node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
-    parent[:children] << node
+
+    parent[:expanded] = true
+    parent[:children] ||= []
+    if new_parent = parent[:children].select{|child| child[:title] == head}.first
+      node = new_parent
+    else
+      parent[:children] << node
+    end
 
     add_path(node, tail, is_track) if tail
     node
