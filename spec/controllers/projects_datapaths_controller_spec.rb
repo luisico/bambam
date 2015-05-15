@@ -378,6 +378,31 @@ RSpec.describe ProjectsDatapathsController do
     end
   end
 
+  describe "#top_level_tree" do
+    it "should add allowed datapaths" do
+      datapaths = FactoryGirl.create_list(:datapath, 2)
+      project = FactoryGirl.create(:project)
+      controller.instance_variable_set(:@project, project)
+      expect(controller).to receive(:allowed_datapaths).and_return(datapaths)
+
+      expect(controller.send :top_level_tree).to eq [{title: datapaths[0].path, folder: true, lazy: true}, {title: datapaths[1].path, folder: true, lazy: true}]
+    end
+
+    it "should add selected projects_datapaths" do
+      datapath = FactoryGirl.create(:datapath)
+      project = FactoryGirl.create(:project)
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'subdir')
+
+      controller.instance_variable_set(:@project, project)
+      expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
+
+      expect(controller.send :top_level_tree).to eq [
+        {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
+          {title: 'subdir', folder: true, lazy: true}
+        ]}
+      ]
+    end
+  end
 
   describe "#allowed_datapaths" do
     before do
@@ -401,6 +426,24 @@ RSpec.describe ProjectsDatapathsController do
         sign_in FactoryGirl.create(:user)
         expect(controller.send :allowed_datapaths).to eq @project.datapaths
       end
+    end
+  end
+
+  describe "#add_path" do
+    it "adds a path to a node" do
+      node = {}
+      result = {expanded: true, children: [{title: 'path', folder: true, lazy: true}]}
+      controller.send :add_path, node, 'path'
+      expect(node).to eq result
+    end
+
+    it "adds multiple paths to a node" do
+      node = {}
+      result = {expanded: true, children: [{title: 'path1', folder: true, lazy: true,
+        expanded: true, children: [{title: 'path2', folder: true, lazy: true}]
+      }]}
+      controller.send :add_path, node, 'path1/path2'
+      expect(node).to eq result
     end
   end
 
