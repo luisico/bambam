@@ -402,6 +402,25 @@ RSpec.describe ProjectsDatapathsController do
         ]}
       ]
     end
+
+    it "should add selected tracks" do
+      datapath = FactoryGirl.create(:datapath)
+      project = FactoryGirl.create(:project)
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'subdir')
+      track = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'track.bam')
+
+      controller.instance_variable_set(:@project, project)
+      expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
+
+      expect(controller.send :top_level_tree).to eq [
+        {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
+          {title: 'subdir', folder: true, lazy: true, expanded: true, children: [
+            {title: 'track.bam'}
+          ]}
+        ]}
+      ]
+    end
+  end
   end
 
   describe "#allowed_datapaths" do
@@ -443,6 +462,17 @@ RSpec.describe ProjectsDatapathsController do
         expanded: true, children: [{title: 'path2', folder: true, lazy: true}]
       }]}
       controller.send :add_path, node, 'path1/path2'
+      expect(node).to eq result
+    end
+
+    it "add path with a track to a node" do
+      node = {}
+      result = {expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, children: [
+          {title: 'track.bam'}
+        ]}
+      ]}
+      controller.send :add_path, node, 'path1/track.bam', true
       expect(node).to eq result
     end
   end

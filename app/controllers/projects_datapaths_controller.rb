@@ -59,22 +59,29 @@ class ProjectsDatapathsController < ApplicationController
 
       # Selected projects_datapaths
       @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
-        add_path(node, projects_datapath.sub_directory)
+        pd_node = add_path(node, projects_datapath.sub_directory)
+
+        # Tracks
+        projects_datapath.tracks.each do |track|
+          add_path(pd_node, track.path, true)
+        end
       end
     end
 
     tree
   end
 
-  def add_path(parent, path)
+  def add_path(parent, path, is_track=false)
     parent[:expanded] = true
     parent[:children] ||= []
 
     head, tail = path.split(File::SEPARATOR, 2)
-    node = {title: head, folder: true, lazy: true}
+    node = {title: head}
+    node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
     parent[:children] << node
 
-    add_path(node, tail) if tail
+    add_path(node, tail, is_track) if tail
+    node
   end
 
   def projects_datapath_params
