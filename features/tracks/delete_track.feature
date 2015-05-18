@@ -24,6 +24,7 @@ Feature: Delate a track
     And there are 3 datapaths in that project
     And there is a track in the first project's datapath
     When I am on the project page
+    And I expand the first project's datapath
     Then I should be able to add a track to the project
     And I should be able to immediately delete the track
 

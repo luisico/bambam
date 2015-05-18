@@ -14,6 +14,10 @@ def select_node(title)
   fancytree_parent(title).find('span.fancytree-checkbox').click
 end
 
+def expand_node(title)
+  fancytree_parent(title).find('span.fancytree-expander').click
+end
+
 ### Given
 
 Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
