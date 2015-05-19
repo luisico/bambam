@@ -25,6 +25,14 @@ Given /^I own (\d+|a) tracks? in that project$/ do |n|
   @project.reload
 end
 
+Given /^there (is|are) (\d+|a) project tracks? in that sub\-directory$/ do |foo, n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+
+  expect {
+    @tracks = FactoryGirl.create_list(:track, n, projects_datapath: @project.projects_datapaths.last, owner: @manager)
+  }.to change(Track, :count).by(n)
+end
+
 ### When
 
 ### Then
