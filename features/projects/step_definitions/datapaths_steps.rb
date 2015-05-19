@@ -56,6 +56,14 @@ Given /^there is a datapath sub\-directory in the project$/ do
   }.to change(@project.projects_datapaths, :count).by(1)
 end
 
+Given /^there is another datapath sub\-directory in the project$/ do
+  @dir2 = 'dir2'
+  @basename2 = 'subdir_2'
+  expect {
+    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, sub_directory: File.join(@dir2, @basename2))
+  }.to change(@project.projects_datapaths, :count).by(1)
+end
+
 ### When
 
 ### Then

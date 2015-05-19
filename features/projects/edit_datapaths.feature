@@ -38,3 +38,15 @@ Feature: Edit projects datapaths
     Then the sub-directory should be selected
     And the parent datapath should not be selected
     And the track should be transitioned to the selected sub-directory
+
+  Scenario: Managers can converge multiple child sub-directories to a single parent
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And the project owner has access to 3 additional datapaths
+    And there is a datapath sub-directory in the project
+    And there is another datapath sub-directory in the project
+    When I am on the project page
+    And I select the last additional datapath
+    Then the parent datapath should be selected
+    And both of the child sub-directories should not be selected

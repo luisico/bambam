@@ -24,6 +24,15 @@ When /^I select the sub\-directory$/ do
   expect(@project.projects_datapaths).not_to include @datapath
 end
 
+When /^I select the last additional datapath$/ do
+  expect {
+    select_node(@datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.projects_datapaths, :count).by(-1)
+  expect(@project.projects_datapaths.last.datapath).to eq @datapath
+end
+
 ### Then
 
 Then /^I should be able to immediately remove the datapath$/ do
@@ -50,4 +59,9 @@ Then /^the sub\-directory should( not)? be selected$/ do |negate|
   else
     expect(fancytree_parent(@basename)[:class]).to include 'fancytree-selected'
   end
+end
+
+Then /^both of the child sub\-directories should not be selected$/ do
+  expect(fancytree_parent(@basename)[:class]).not_to include 'fancytree-selected'
+  expect(fancytree_parent(@basename2)[:class]).not_to include 'fancytree-selected'
 end
