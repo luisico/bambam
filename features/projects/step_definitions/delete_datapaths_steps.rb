@@ -14,7 +14,7 @@ end
 
 Then /^I should be able to remove the datapath sub\-directory from the project$/ do
   expect {
-    fancytree_parent(@basename).find('span.fancytree-checkbox').click
+    select_node(@basename)
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.to change(@project.datapaths, :count).by(-1)

@@ -49,8 +49,11 @@ Given /^one of those additional datapaths has a sub\-directory$/ do
 end
 
 Given /^there is a datapath sub\-directory in the project$/ do
-  sub_dir = FactoryGirl.create(:projects_datapath, project: @project, datapath: @projects_datapath.datapath)
-  @basename = Pathname.new(sub_dir.full_path).basename.to_s
+  @dir = 'my_dir'
+  @basename = 'my_subdir'
+  expect {
+    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, sub_directory: File.join(@dir, @basename))
+  }.to change(@project.projects_datapaths, :count).by(1)
 end
 
 ### When

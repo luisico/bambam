@@ -17,8 +17,8 @@ Feature: Delete projects datapaths
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And there is a datapath sub-directory in the project
     And the project owner has access to 3 additional datapaths
+    And there is a datapath sub-directory in the project
     When I am on the project page
     Then I should be able to remove the datapath sub-directory from the project
 
