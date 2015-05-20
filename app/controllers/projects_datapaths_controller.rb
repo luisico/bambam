@@ -76,6 +76,7 @@ class ProjectsDatapathsController < ApplicationController
 
     node = {title: head}
     node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
+    node.merge!(selected: true) unless tail
 
     parent[:expanded] = true
     parent[:children] ||= []
