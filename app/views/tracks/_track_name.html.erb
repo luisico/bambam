@@ -1,0 +1,17 @@
+<%= link_to object do %>
+  <%= best_in_place_if can?(:manage, object), object, :name,
+    {
+      inner_class: 'small-margin-bottom' ,
+      ok_button: 'save',
+      ok_button_class: 'button tiny radius',
+      cancel_button: 'cancel',
+      cancel_button_class: 'button tiny radius margin-left',
+      activator: "#bip-track-name-#{object.id}"
+    }
+  %>
+<% end %>
+<% if can? :manage, object %>
+  <%= link_to "#", id: "bip-track-name-#{object.id}" do %>
+    <i class="fi-pencil"></i>
+  <% end %>
+<% end %>

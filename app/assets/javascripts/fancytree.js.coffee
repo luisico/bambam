@@ -1,5 +1,6 @@
 class @Fancytree
   project_id = $('#track-tree').data('project')
+  $('.best_in_place').best_in_place()
 
   @applyFancytree: ->
     $('#track-tree').fancytree {
@@ -20,7 +21,7 @@ class @Fancytree
         else if node.folder
           $tdList.eq(2).addClass('projects-datapath-name')
         else if node.selected
-          $tdList.eq(2).addClass('track-name').html("<a href='/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
+          $tdList.eq(2).addClass('track-name').html(node.data.object.track.bip)
           $tdList.eq(3).addClass('track-link').html(node.data.object.track.igv)
         else
           $tdList.eq(2).addClass('track-name')
@@ -166,7 +167,7 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.track-name').html("<a href='/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
+        $tr.find('.track-name').html(jqXHR.track.bip)
         $tr.find('.track-link').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
         return false

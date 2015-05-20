@@ -3,7 +3,7 @@ class TracksController < ApplicationController
   load_and_authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :json, only: [:create]
+  respond_to :json, only: [:create, :update]
 
   def index
   end
@@ -14,18 +14,27 @@ class TracksController < ApplicationController
   def create
     @track.owner = current_user
     if @track.save
-      render json: {track: {id: @track.id, name: @track.name, igv: view_context.link_to_igv(@track)}}, status: 200
+      render json: {
+        track: {
+          id: @track.id, name: @track.name, igv: view_context.link_to_igv(@track),
+          bip: render_to_string(partial: "tracks/track_name", locals: {object: @track})
+        }
+      }, status: 200
     else
       render json: {status: :error, message: 'file system error'}, status: 400
     end
   end
 
   def update
-    track = Track.find(params[:id])
-    if track.update_attributes(track_params)
-      render json: {status: :success, message: 'OK' }, status: 200
-    else
-      render json: {status: :error, message: 'Record not saved'}, status: 400
+    @track = Track.find(params[:id])
+    respond_to do |format|
+      if @track.update(track_params)
+        # format.js { status: :success, message: 'OK' }, status: 200
+        format.json { respond_with_bip(@track) }
+      else
+        # format.js { status: :error, message: 'Record not saved'}, status: 400
+        format.json { respond_with_bip(@track) }
+      end
     end
   end
 
