@@ -1,15 +1,14 @@
-<%= link_to object do %>
-  <%= best_in_place_if can?(:manage, object), object, :name,
-    {
-      inner_class: 'small-margin-bottom' ,
-      ok_button: 'save',
-      ok_button_class: 'button tiny radius',
-      cancel_button: 'cancel',
-      cancel_button_class: 'button tiny radius margin-left',
-      activator: "#bip-track-name-#{object.id}"
-    }
-  %>
-<% end %>
+<%= best_in_place_if can?(:manage, object), object, :name,
+  { display_with: lambda { |v| link_to object.name, send("#{object.class.to_s.downcase}_path", object) },
+    inner_class: 'small-margin-bottom' ,
+    ok_button: 'save',
+    ok_button_class: 'button tiny radius',
+    cancel_button: 'cancel',
+    cancel_button_class: 'button tiny radius margin-left',
+    activator: "#bip-track-name-#{object.id}"
+  }
+%>
+
 <% if can? :manage, object %>
   <%= link_to "#", id: "bip-track-name-#{object.id}" do %>
     <i class="fi-pencil"></i>
