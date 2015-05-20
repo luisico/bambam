@@ -33,6 +33,10 @@ Given /^there (is|are) (\d+|a) project tracks? in that sub\-directory$/ do |foo,
   }.to change(Track, :count).by(n)
 end
 
+Given /^there is another track in a seperate sub\-directory$/ do
+  @track2 = FactoryGirl.create(:track, projects_datapath: @projects_datapath, path: "track_s2/track2.bam")
+end
+
 ### When
 
 ### Then

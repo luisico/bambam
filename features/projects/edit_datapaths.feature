@@ -50,3 +50,14 @@ Feature: Edit projects datapaths
     And I select the last additional datapath
     Then the parent datapath should be selected
     And both of the child sub-directories should not be selected
+
+  Scenario: Managers can auto-move orphan tracks to new parent
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And the project owner has access to 3 additional datapaths
+    And there is a track in that project
+    And there is another track in a seperate sub-directory
+    When I am on the project page
+    And I select the immediate parent of the first track
+    Then the second track will be automatically transitioned
