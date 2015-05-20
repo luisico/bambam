@@ -25,70 +25,74 @@ class @Fancytree
         else
           $tdList.eq(2).addClass('track-name')
           $tdList.eq(3).addClass('track-link')
+      beforeSelect: (event, data) ->
+        if data.node.selected and data.node.folder
+          selectedParents = data.node.getParentList().filter((x) -> x.selected == true)
+          selectedChildFolders = Fancytree.deepChildrenList(data.node, []).filter((x) -> x.selected == true and x.folder == true)
+          selectedChildTracks = Fancytree.deepChildrenList(data.node, []).filter((x) -> x.selected == true and x.folder != true)
+          if selectedParents.length == 0 and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
+            if confirm("Deselecting this folder will permanently delete all child tracks. Are you sure you want to continue?")
+              for i of selectedChildTracks
+                selectedChildTracks[i].toggleSelected()
+              true
+            else
+              false
       select: (event, data) ->
         if data.node.folder
-          attr = Fancytree.buildPath(event, data)
+          attr = Fancytree.buildPath(event, data.node)
           if data.node.selected
-            Fancytree.addPath(event, data, attr[0], attr[1], attr[2])
+            Fancytree.addPath(event, data.node, attr[0], attr[1], attr[2])
           else
-            Fancytree.deletePath(event, data, attr[0], attr[1])
-        else if data.node.getParentList().filter((x) -> x.selected == true).length == 0
-          track_title = data.node.title
-          $tr = $(data.node.tr)
-          $tr.removeClass('fancytree-selected').effect('highlight', {color: 'red'}, 5000)
-          $tr.find('.fancytree-title').append(' [must select at least 1 parent directory]')
-          setTimeout (->
-            $tr.find('.fancytree-title').text(track_title)
-            return
-          ), 5000
+            Fancytree.deletePath(event, data.node, attr[0], attr[1])
         else
-          attr = Fancytree.buildTrack(event, data)
+          attr = Fancytree.buildTrack(event, data.node)
           if data.node.selected
-            Fancytree.addTrack(event, data, attr[0], attr[1], attr[2])
+            Fancytree.addTrack(event, data.node, attr[0], attr[1], attr[2])
           else
-            Fancytree.deleteTrack(event, data)
+            Fancytree.deleteTrack(event, data.node)
     }
 
-  @buildPath: (event, data) ->
-    parent_list = data.node.getParentList()
+  @buildPath: (event, node) ->
+    parent_list = node.getParentList()
     if parent_list.length > 0
       datapath_id = parent_list[0].key
       dir_array = []
       for i of parent_list
         dir_array.push(parent_list[i].title)
       sub_array = dir_array.slice(1)
-      sub_array.push(data.node.title)
+      sub_array.push(node.title)
       sub_dir = sub_array.join('/')
       name = sub_array.pop()
     else
-      datapath_id = data.node.key
+      datapath_id = node.key
       sub_dir = ""
-      name = data.node.title.split('/').pop()
+      name = node.title.split('/').pop()
     [datapath_id, sub_dir, name]
 
-  @buildTrack: (event, data) ->
-    parent_list = data.node.getParentList()
+  @buildTrack: (event, node, isTransitionTrack) ->
+    parent_list = node.getParentList()
     dir_array = []
-    projects_datapaths = []
     for i of parent_list
       dir_array.push(parent_list[i].title)
-      if parent_list[i].data.object
-        projects_datapaths.push([i, parent_list[i].data.object.projects_datapath.id])
-    dir_array.push(data.node.title)
-    track_array = dir_array.slice(Number(projects_datapaths[projects_datapaths.length-1][0])+1)
+      if parent_list[i].selected
+        if isTransitionTrack
+        else
+          projects_datapath_id = parent_list[i].data.object.projects_datapath.id
+        projects_datapath_index = i
+    dir_array.push(node.title)
+    track_array = dir_array.slice(Number(projects_datapath_index)+1)
     path = track_array.join('/')
     name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
-    projects_datapath_id = projects_datapaths[projects_datapaths.length-1][1]
     [path, name, projects_datapath_id]
 
-  @addPath: (event, data, datapath_id, sub_dir, name) ->
-    node = data.node
+  @addPath: (event, node, datapath_id, sub_dir, name) ->
     $.ajax({
       type: "POST",
       dataType: "json",
       url: "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir, name: name } },
       success:(jqXHR, textStatus, errorThrown) ->
+        Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
         $tr = $(node.tr)
         $tr.find('.projects-datapath-name').text(jqXHR.projects_datapath.name)
@@ -102,8 +106,9 @@ class @Fancytree
         return false
     })
 
-  @deletePath: (event, data, datapath_id, sub_dir) ->
-    node = data.node
+  @deletePath: (event, node, datapath_id, sub_dir) ->
+    if node.getParentList().filter((x) -> x.selected).length == 0 and Fancytree.deepChildrenList(node,[]).filter((x) -> x.folder and x.selected).length == 0
+      Fancytree.resetTrackCheckboxes(event, node, true)
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -112,7 +117,9 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
         $tr.find('.projects-datapath-name').text('')
-        $tr.effect("highlight", {}, 1500)
+        if $tr.is(':visible')
+          $tr.effect("highlight", {}, 1500)
+        delete node.data.object.projects_datapath
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
@@ -121,8 +128,36 @@ class @Fancytree
         return false
     })
 
-  @addTrack: (event, data, path, name, projects_datapath_id) ->
-    node = data.node
+  @resetPathHierarchy: (event, node, projects_datapath_id) ->
+    parents = node.getParentList()
+    oldSelectedParent = parents.filter((x) -> x.folder and x.selected)[0]
+    children = Fancytree.deepChildrenList(node, [])
+    selectedChildFolders = children.filter((x) -> x.folder and x.selected)
+    if oldSelectedParent
+      childTracks = children.filter((x) -> x.folder != true and x.selected)
+      Fancytree.resolveOrphanTracks(event, oldSelectedParent, childTracks)
+      oldSelectedParent.toggleSelected()
+      Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks)
+    else if selectedChildFolders.length > 0
+      for i of selectedChildFolders
+        selectedChildFolders[i].toggleSelected()
+        childTracks = Fancytree.deepChildrenList(selectedChildFolders[i], []).filter((x) -> x.folder != true and x.selected)
+        Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks)
+    else if children.filter((x) -> x.folder != true and x.selected).length > 0
+      childTracks = children.filter((x) -> x.folder != true and x.selected)
+      Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks)
+    else
+      Fancytree.resetTrackCheckboxes(event, node, false)
+
+  @deepChildrenList: (node, array) ->
+    node = node.getFirstChild()
+    while node
+      array.push(node)
+      Fancytree.deepChildrenList(node, array)
+      node = node.getNextSibling()
+    array
+
+  @addTrack: (event, node, path, name, projects_datapath_id) ->
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -142,8 +177,7 @@ class @Fancytree
         return false
     })
 
-  @deleteTrack: (event, data) ->
-    node = data.node
+  @deleteTrack: (event, node) ->
     $.ajax({
       type: "POST",
       dataType: "json",
@@ -153,7 +187,8 @@ class @Fancytree
         $tr = $(node.tr)
         $tr.find('.track-name').text('')
         $tr.find('.track-link').html("")
-        $tr.effect("highlight", {}, 1500)
+        if $tr.is(':visible')
+          $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
@@ -161,3 +196,40 @@ class @Fancytree
         $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
         return false
     })
+
+  @transitionChildTracks: (event, projects_datapath_id, childTracks) ->
+    for i of childTracks
+      track_id = childTracks[i].data.object.track.id
+      path = Fancytree.buildTrack(event, childTracks[i], "isTransitionTrack")[0]
+      Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
+
+  @updateTrack: (event, track_id, path, projects_datapath_id) ->
+    $.ajax({
+      data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
+      type: 'PATCH',
+      dataType: "json",
+      url: '/tracks/' + track_id
+    });
+
+  @resetTrackCheckboxes: (event, node, remove) ->
+    childTracks = Fancytree.deepChildrenList(node,[]).filter((x) -> x.folder != true)
+    if childTracks.length > 0
+      for i of childTracks
+        tr = $(childTracks[i].tr)
+        if remove
+          childTracks[i].hideCheckbox = true
+          tr.find('td span').first().removeClass('fancytree-checkbox')
+        else
+          childTracks[i].hideCheckbox = false
+          tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
+
+  @resolveOrphanTracks: (event, oldSelectedParent, childTracks) ->
+    oldSelectedParentTracks = Fancytree.deepChildrenList(oldSelectedParent, []).filter((x) -> x.selected == true and x.folder != true)
+    orpanTracks = $(oldSelectedParentTracks).not(childTracks).get()
+    if orpanTracks.length > 0
+      newProjectsDatapaths = []
+      for i of orpanTracks
+        newProjectsDatapaths.push(orpanTracks[i].getParentList()[1])
+      uniqueNewProjectsDatapaths = newProjectsDatapaths.filter((elem, pos) -> newProjectsDatapaths.indexOf(elem) == pos)
+      for i of uniqueNewProjectsDatapaths
+        uniqueNewProjectsDatapaths[i].toggleSelected()

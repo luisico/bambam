@@ -182,6 +182,82 @@ describe TracksController do
     end
   end
 
+  describe "Patch 'update'" do
+    before do
+      @track = FactoryGirl.create(:track)
+      @new_track_attrs = {name: "new_name"}
+    end
+
+    context "as an admin" do
+      before { sign_in @admin }
+
+      context "update the track" do
+        context "with valid parameters" do
+          it "should be a success without content" do
+            patch :update, id: @track, track: @new_track_attrs, format: :json
+            expect(response).to be_success
+          end
+
+          it "should update the track's attributes'" do
+            expect {
+              patch :update, id: @track, track: @new_track_attrs, format: :json
+              @track.reload
+            }.to change(@track, :name).to @new_track_attrs[:name]
+          end
+        end
+
+        context "with invalid parameters" do
+          it "should response with unprocessable entity" do
+            patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
+            expect(response.status).to eq 400
+            expect(response.header['Content-Type']).to include 'application/json'
+            json = JSON.parse(response.body)
+            expect(json["message"]).to eq 'Record not saved'
+          end
+
+          it "should not change the track's attributes" do
+            expect {
+              patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
+              @track.reload
+            }.not_to change(@track, :name)
+          end
+        end
+      end
+    end
+
+    context "as a signed in user" do
+      before { sign_in FactoryGirl.create(:user) }
+
+      context 'with valid parameters' do
+        it "should not be a success" do
+          patch :update, id: @track, track: @new_track_attrs, format: :js
+          expect(response).not_to be_success
+        end
+
+        it "should not change the track's attributes" do
+          expect {
+            patch :update, id: @track, track: @new_track_attrs, format: :js
+            @track.reload
+          }.not_to change(@track, :name)
+        end
+      end
+    end
+
+    context "as a visitor" do
+      it "should redirect to the sign in page" do
+        patch :update, id: @track, track: @new_track_attrs
+        expect(response).not_to be_success
+        expect(response).to redirect_to new_user_session_url
+      end
+
+      it "should not change the track's attributes" do
+        expect{
+          patch :update, id: @track, track: @new_track_attrs
+        }.not_to change(@track, :name)
+      end
+    end
+  end
+
   describe "Delete 'destroy'" do
     context "as a signed in user and track owner" do
       before do

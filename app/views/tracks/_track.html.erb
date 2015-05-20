@@ -16,8 +16,8 @@
   <% end %>
   <% if @projects_and_tracks %>
     <li class="text-color-grey pointer">
-      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, :radius => 5) %> data-truncated=true>
-        <%= excerpt(track.path, @q, :radius => 5) %>
+      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
+        <%= excerpt(track.path, @q, radius: 5) %>
       </i>
     <li>
       <i class="fi-clock medium margin-right text-color-grey" title="updated">

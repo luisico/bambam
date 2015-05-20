@@ -6,8 +6,6 @@ end
 
 ### Given
 
-### When
-
 Given /^there is a track in the first project's datapath$/ do
   @track_title = 'my_track.bam'
   build_track_with_path(@project.projects_datapaths.first.full_path, @track_title)
@@ -18,24 +16,44 @@ Given /^there is a track in the last available datapath$/ do
   build_track_with_path(@datapath.path, @track_title)
 end
 
+### When
+
+When /^I expand the first project's datapath$/ do
+  expand_node(@project.projects_datapaths.first.full_path)
+  expect(page).to have_css 'span.fancytree-title', text: @track_title
+end
+
+When /^I expand the last available datapath$/ do
+  expand_node(@datapath.path)
+  expect(page).to have_css 'span.fancytree-title', text: @track_title
+end
+
+When /^I select the track parent datapath$/ do
+  expect {
+    select_node(@datapath.path)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.projects_datapaths, :count).by(1)
+
+end
+
+When /^I deselect the first project's datapath$/ do
+  expect{
+    select_node(@project.projects_datapaths.first.full_path)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.projects_datapaths, :count).by(-1)
+end
+
+
 ### Then
 
-Then /^I should( not)? be able to add a track to the project$/ do |negate|
-  if negate
-    expect {
-      fancytree_parent(@datapath.path).find('span.fancytree-expander').click
-      fancytree_parent(@track_title).find('span.fancytree-checkbox').click
-      loop until page.evaluate_script('jQuery.active').zero?
-      @project.reload
-    }.not_to change(@project.tracks, :count)
-  else
-    expect {
-      fancytree_parent(@project.projects_datapaths.first.full_path).find('span.fancytree-expander').click
-      fancytree_parent(@track_title).find('span.fancytree-checkbox').click
-      loop until page.evaluate_script('jQuery.active').zero?
-      @project.reload
-    }.to change(@project.tracks, :count).by(1)
-  end
+Then /^I should be able to add a track to the project$/ do
+  expect {
+    select_node(@track_title)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.to change(@project.tracks, :count).by(1)
 end
 
 Then /^I should( not)? see the track name and link$/ do |negate|
@@ -65,6 +83,14 @@ Then /^the page should have the error can't be blank$/ do
   expect(page).to have_content "can't be blank"
 end
 
-Then /^I should be informed of the failed track addition$/ do
-  expect(fancytree_parent(@track_title)).to have_content 'must select at least 1 parent'
+Then /^I should( not)? see a checkbox next to the track$/ do |negate|
+  if negate
+    within(fancytree_parent(@track_title)) {
+      expect(page).not_to have_css('span.fancytree-checkbox')
+    }
+  else
+    within(fancytree_parent(@track_title)) {
+      expect(page).to have_css('span.fancytree-checkbox')
+    }
+  end
 end

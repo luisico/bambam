@@ -233,11 +233,11 @@ describe ProjectsDatapathsController do
       end
 
       it "creates nodes for all files and directories found recursively" do
-        datapath2 = FactoryGirl.create(:datapath)
         datapath1_paths =  %w(/dir1/ /dir2/dir3/ /dir2/dir4/ /dir5/dir6/).collect do |dir|
           @datapath1.path + dir
         end
 
+        datapath2 = FactoryGirl.create(:datapath)
         folder_path = datapath2.path + "/dir6/"
         track_path = folder_path + "track1.bam"
         cp_track track_path
@@ -246,18 +246,18 @@ describe ProjectsDatapathsController do
         expect(Dir).to receive(:glob).and_return(datapath1_paths, datapath2_paths)
 
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-          {:title=>@datapath1.path, :key=>@datapath1.id, :folder=>true, :children=>[
-            {:title=>"dir1", :folder=>true},
-            {:title=>"dir2", :folder=>true, :children=>[
-              {:title=>"dir3", :folder=>true},
-              {:title=>"dir4", :folder=>true}]},
-              {:title=>"dir5", :folder=>true, :children=>[
-                {:title=>"dir6", :folder=>true}
+          {title: @datapath1.path, key: @datapath1.id, folder: true, children: [
+            {title: "dir1", folder: true},
+            {title: "dir2", folder: true, children: [
+              {title: "dir3", folder: true},
+              {title: "dir4", folder: true}]},
+              {title: "dir5", folder: true, children: [
+                {title: "dir6", folder: true}
               ]}
             ]},
-          {:title=>datapath2.path, :key=>datapath2.id, :folder=>true, :children=>[
-            {:title=>"dir6", :folder=>true, :children=>[
-              {:title=>"track1.bam"}
+          {title: datapath2.path, key: datapath2.id, folder: true, children: [
+            {title: "dir6", folder: true, children: [
+              {title: "track1.bam", hideCheckbox: true}
             ]}
           ]}
         ]
@@ -277,10 +277,7 @@ describe ProjectsDatapathsController do
         project = FactoryGirl.create(:project)
         projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
         projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
-          FactoryGirl.create(:projects_datapath,
-            datapath: @datapath1,
-            project: project,
-            sub_directory: sub_dir)
+          FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: project, sub_directory: sub_dir)
         end
         track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
         project.reload
@@ -289,24 +286,24 @@ describe ProjectsDatapathsController do
         controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
-          {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :folder=>true,
-            :children=>[
-              {:title=>"dir1", :expanded=>true, :selected=>true, :object=>{projects_datapath: {id: projects_datapaths.first.id, name: projects_datapaths.first.name}}, :folder=>true,
-                :children=>[
-                  {:title=>"subdir2", :expanded=>true, :folder=>true,
-                    :children=>[
-                      {:title=>"subdir3", :expanded=>true, :selected=>true, :object=>{projects_datapath: {id: projects_datapaths.last.id, name: projects_datapaths.last.name}}, :folder=>true,
-                        :children=>[
-                          {:title=>"tracks", :expanded=>true, :folder=>true,
-                            :children=>[
-                              {:title=>Pathname.new(track.path).basename.to_s, :selected=>true, :object=>{track: {id: track.id, name: track.name, igv: 'igv_url'}}
+          {title: @datapath1.path, key: @datapath1.id, expanded: true, folder: true,
+            children: [
+              {title: "dir1", expanded: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapaths.first.id, name: projects_datapaths.first.name}},
+                children: [
+                  {title: "subdir2", expanded: true, folder: true,
+                    children: [
+                      {title: "subdir3", expanded: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapaths.last.id, name: projects_datapaths.last.name}},
+                        children: [
+                          {title: "tracks", expanded: true, folder: true,
+                            children: [
+                              {title: Pathname.new(track.path).basename.to_s, selected: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}
                             }]
                         }]
                     }]
                 }]
             }]
           },
-          {:title=>datapath2.path, :key=>datapath2.id, :selected=>true, :object => {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, :folder=>true}
+          {title: datapath2.path, key: datapath2.id, selected: true, object:  {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, folder: true}
         ]
       end
     end
@@ -323,21 +320,21 @@ describe ProjectsDatapathsController do
         controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
-          {:title=>@datapath1.path, :key=>@datapath1.id, :expanded=>true, :hideCheckbox=>true, :folder=>true,
-            :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
-              :children=>[{:title=>"subdir1", :hideCheckbox=>true, :selected=>true, :object=>{:projects_datapath=>{id: projects_datapath1.id, name: projects_datapath1.name}}, :folder=>true
+          {title: @datapath1.path, key: @datapath1.id, expanded: true, hideCheckbox: true, folder: true,
+            children: [{title: "dir1", expanded: true, hideCheckbox: true, folder: true,
+              children: [{title: "subdir1", hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath1.id, name: projects_datapath1.name}}
               }]
             }]
           },
-          {:title=>projects_datapath2.full_path, :key=>projects_datapath2.datapath.id, :expanded=>true, :hideCheckbox=>true, :selected=>true, :object=>{:projects_datapath=>{id: projects_datapath2.id, name: projects_datapath2.name}}, :folder=>true,
-            :children=>[{:title=>"dir1", :expanded=>true, :hideCheckbox=>true, :folder=>true,
-              :children=>[{:title=>"dir2", :expanded=>true, :hideCheckbox=>true, :folder=>true,
-                :children=>[{:title=>"track1.bam", :selected=>true, :object=>{:track=>{id: track.id, name: track.name, igv: 'igv_url'}}, :hideCheckbox=>true
+          {title: projects_datapath2.full_path, key: projects_datapath2.datapath.id, expanded: true, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath2.id, name: projects_datapath2.name}},
+            children: [{title: "dir1", expanded: true, hideCheckbox: true, folder: true,
+              children: [{title: "dir2", expanded: true, hideCheckbox: true, folder: true,
+                children: [{title: "track1.bam", selected: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, hideCheckbox: true
                 }]
               }]
             }]
           },
-          {:title=>projects_datapath3.full_path, :key=>projects_datapath3.datapath.id, :hideCheckbox=>true, :selected=>true, :object=>{:projects_datapath=>{id: projects_datapath3.id, name: projects_datapath3.name}}, :folder=>true}
+          {title: projects_datapath3.full_path, key: projects_datapath3.datapath.id, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath3.id, name: projects_datapath3.name}}}
         ]
       end
     end
@@ -392,13 +389,9 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object attribute if requested" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, true, {project_datapath: {id:2}})).
-          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :selected=>true, :object=>{project_datapath: {id:2}}, :folder=>true})
-        end
-
-        it "does not no have a object_id attribute if it's not selected" do
-          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, false, 2)).
-          to eq({:title=>"/dir1", :key=>1, :expanded=>true, :folder=>true})
+          projects_datapath = FactoryGirl.create(:projects_datapath)
+          expect(controller.send(:add_node_to_tree, [], '/dir1', true, 1, projects_datapath)).
+            to eq({title: "/dir1", key: 1, expanded: true, selected: true, object: {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, folder: true})
         end
       end
     end
@@ -442,13 +435,9 @@ describe ProjectsDatapathsController do
         end
 
         it "has a object attribute if requested" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, true, {project_datapath: {id:1}})).
-          to eq({title: '/dir2', :selected=>true, :object=>{project_datapath: {id:1}}, :folder=>true})
-        end
-
-        it "does not no have a object_id attribute if it's not selected" do
-          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, false, 1)).
-          to eq({title: '/dir2', :folder=>true})
+          projects_datapath = FactoryGirl.create(:projects_datapath)
+          expect(controller.send(:add_node_to_tree, @parent, '/dir2', false, nil, projects_datapath)[:object]).
+            to eq({projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}})
         end
       end
     end
@@ -466,14 +455,14 @@ describe ProjectsDatapathsController do
           it "hides the node checkbox" do
             controller.instance_variable_set(:@project, FactoryGirl.create(:project))
             expect(controller.send(:add_node_to_tree, [], '/dir1')).
-            to eq({:title=>"/dir1", :hideCheckbox=>true, :folder=>true})
+            to eq({title: "/dir1", hideCheckbox: true, folder: true})
           end
         end
 
         context "regular nodes" do
           it "hides the node checkbox for folders" do
             expect(controller.send(:add_node_to_tree, @parent, '/dir2')).
-            to eq({:title=>"/dir2", :hideCheckbox=>true, :folder=>true})
+            to eq({title: "/dir2", hideCheckbox: true, folder: true})
           end
         end
       end
@@ -481,21 +470,22 @@ describe ProjectsDatapathsController do
       context "files" do
         it "shows the checkbox for unassigned files" do
           controller.stub(:cannot?).and_return(true)
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
-          to eq({:title=>"/track1.bam"})
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
+          to eq({title: "/track1.bam"})
         end
 
         it "shows checkbox for owned files" do
           controller.stub(:cannot?).and_return(false)
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam')).
-          to eq({:title=>"/track1.bam"})
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
+          to eq({title: "/track1.bam"})
         end
 
         it "does not show checkbox for assigned files owned by another" do
           controller.stub(:cannot?).and_return(true, true)
-          Track.stub(:find).and_return({track: 3})
-          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, true, {track: {id: 3}})).
-          to eq({:expanded => true, selected: true, :hideCheckbox => true, object: {track: {id: 3}}, :title=>"/track1.bam"})
+          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          track = FactoryGirl.create(:track)
+          expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, Track.last)).
+            to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, title: "/track1.bam"})
         end
       end
     end

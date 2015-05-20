@@ -9,7 +9,7 @@ Bambam::Application.routes.draw do
   end
   resources :users, only: [:index, :show]
 
-  resources :tracks, only: [:index, :show, :create, :destroy]
+  resources :tracks, except: [:new, :edit]
 
   resources :projects_datapaths, only: [:create, :destroy] do
     get 'browser', on: :collection

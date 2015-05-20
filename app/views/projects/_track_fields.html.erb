@@ -28,7 +28,7 @@
 
       <% if current_user.has_role?(:admin) && @project.id %>
         <%= f.label :project_id, "Assign track to a project" %>
-        <%= f.collection_select :project_id, Project.all, :id, :name, {:selected => @project.id} %>
+        <%= f.collection_select :project_id, Project.all, :id, :name, {selected: @project.id} %>
       <% end %>
 
       <%= f.hidden_field :_destroy %>
