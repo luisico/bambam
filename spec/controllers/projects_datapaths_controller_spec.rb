@@ -398,7 +398,7 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true}
+          {title: 'subdir', folder: true, lazy: true, selected: true}
         ]}
       ]
     end
@@ -415,15 +415,14 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, expanded: true, children: [
+          {title: 'subdir', folder: true, lazy: true, selected: true, expanded: true, children: [
             {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-              {title: 'track1.bam'}, {title: 'track2.bam'}
+              {title: 'track1.bam', selected: true}, {title: 'track2.bam', selected: true}
             ]}
           ]}
         ]}
       ]
     end
-  end
   end
 
   describe "#allowed_datapaths" do
@@ -454,7 +453,7 @@ RSpec.describe ProjectsDatapathsController do
   describe "#add_path" do
     it "adds a path to a node" do
       node = {}
-      result = {expanded: true, children: [{title: 'path', folder: true, lazy: true}]}
+      result = {expanded: true, children: [{title: 'path', folder: true, lazy: true, selected: true}]}
       controller.send :add_path, node, 'path'
       expect(node).to eq result
     end
@@ -463,7 +462,7 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
       result = {expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
-          {title: 'path2', folder: true, lazy: true}
+          {title: 'path2', folder: true, lazy: true, selected: true}
         ]}
       ]}
       controller.send :add_path, node, 'path1/path2'
@@ -474,8 +473,8 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
       result = {expanded: true, children: [
         {title: 'path', folder: true, lazy: true, expanded: true, children: [
-          {title: 'path1', folder: true, lazy: true},
-          {title: 'path2', folder: true, lazy: true}
+          {title: 'path1', folder: true, lazy: true, selected: true},
+          {title: 'path2', folder: true, lazy: true, selected: true}
         ]}
       ]}
       controller.send :add_path, node, 'path/path1'
@@ -487,7 +486,7 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
       result = {expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
-          {title: 'track.bam'}
+          {title: 'track.bam', selected: true}
         ]}
       ]}
       controller.send :add_path, node, 'path1/track.bam', true
