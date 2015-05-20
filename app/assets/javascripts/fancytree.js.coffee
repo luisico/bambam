@@ -204,7 +204,6 @@ class @Fancytree
       Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
 
   @updateTrack: (event, track_id, path, projects_datapath_id) ->
-    console.log([track_id, path, projects_datapath_id])
     $.ajax({
       data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
       type: 'PATCH',
