@@ -1,6 +1,6 @@
 <ul class="width-limited-inline-list">
   <li><%= link_to_igv(track) %></li>
-  <li><%= link_to track.name, track %></li>
+  <li><%= link_to track.name, track, id: "track_#{track.id}" %></li>
   <% unless (@project || @projects_and_tracks) %>
     <li>
       <span>

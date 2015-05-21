@@ -9,7 +9,7 @@
 %>
 
 <% if can? :read, object %>
-  <%= link_to object do %>
+  <%= link_to object, id: "#{object.class.to_s.downcase}_#{object.id}" do %>
     <i class='show-record'></i>
   <% end %>
 <% end %>

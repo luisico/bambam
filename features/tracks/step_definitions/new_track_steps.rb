@@ -59,12 +59,14 @@ end
 Then /^I should( not)? see the track name and link$/ do |negate|
   if negate
     within(fancytree_parent(@track_title)) {
-      expect(page).not_to have_link(@track.name)
+      expect(page).not_to have_css('.track-name', text: @track.name)
+      expect(page).not_to have_css('.show-record')
       expect(page).not_to have_css('.fi-eye')
     }
   else
     within(fancytree_parent(@track_title)) {
-      expect(page).to have_link(Track.last.name)
+      expect(page).to have_css('.track-name', text: Track.last.name)
+      expect(page).to have_css('.show-record')
       expect(page).to have_css('.fi-eye')
     }
   end

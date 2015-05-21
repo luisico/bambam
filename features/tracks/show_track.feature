@@ -39,19 +39,14 @@ Feature: Show a track
       | bw   | bw  |
 
   @javascript
-  Scenario Outline: Back button
+  Scenario: Back button
     Given I am signed in
     And I belong to a project
     And there is a bam track in that project
-    When I am on the <source> page
+    When I am on the tracks page
     And I click on the track name
     And I click "Back"
-    Then I should be on the <source> page
-
-    Examples:
-      | source  |
-      | tracks  |
-      | project |
+    Then I should be on the tracks page
 
   @javascript
   Scenario: IGV info tooltip

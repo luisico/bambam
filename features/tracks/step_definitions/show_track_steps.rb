@@ -16,7 +16,7 @@ end
 ### When
 
 When /^I click on the track name$/ do
-  click_link @track.name
+  find("#track_#{@track.id}").click
   expect(current_path).to eq track_path(@track)
 end
 
