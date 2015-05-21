@@ -260,3 +260,8 @@ span.select2-hidden-accessible {
 .error-red {
   background-color: red !important;
 }
+
+.show-record {
+  @extend .fi-magnifying-glass;
+  @extend .small;
+}

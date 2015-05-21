@@ -1,0 +1,15 @@
+<%= best_in_place_if can?(:update, object), object, :name,
+  {
+    inner_class: 'small-margin-bottom' ,
+    ok_button: 'save',
+    ok_button_class: 'button tiny radius',
+    cancel_button: 'cancel',
+    cancel_button_class: 'button tiny radius margin-left'
+  }
+%>
+
+<% if can? :read, object %>
+  <%= link_to object do %>
+    <i class='show-record'></i>
+  <% end %>
+<% end %>

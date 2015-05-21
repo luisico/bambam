@@ -125,7 +125,10 @@ class ProjectsDatapathsController < ApplicationController
     if object
       node.merge!(selected: true)
       object_properties = {id: object.id, name: object.name}
-      object_properties.merge!(igv: view_context.link_to_igv(object)) if object.is_a?(Track)
+      if object.is_a?(Track)
+        object_properties.merge!(igv: view_context.link_to_igv(object))
+        object_properties.merge!(bip: render_to_string(partial: "tracks/track_name", locals: {object: object}))
+      end
       node.merge!(object: {object.class.to_s.underscore.to_sym => object_properties})
       if object.is_a?(Track)
         node.merge!(hideCheckbox: true) if cannot? :destroy, object
