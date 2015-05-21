@@ -3,7 +3,7 @@ class TracksController < ApplicationController
   load_and_authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :json, only: [:create]
+  respond_to :json, only: [:create, :update]
 
   def index
   end
@@ -21,11 +21,25 @@ class TracksController < ApplicationController
   end
 
   def update
-    track = Track.find(params[:id])
-    if track.update_attributes(track_params)
-      render json: {status: :success, message: 'OK' }, status: 200
-    else
-      render json: {status: :error, message: 'Record not saved'}, status: 400
+    @track = Track.find(params[:id])
+    respond_to do |format|
+      if @track.update(track_params)
+        format.json do
+          if track_params[:name]
+            respond_with_bip(@track)
+          else
+            render json: {status: :success, message: 'OK' }, status: 200
+          end
+        end
+      else
+        format.json do
+          if track_params[:name]
+            respond_with_bip(@track)
+          else
+            render json: {status: :error, message: 'Record not saved'}, status: 400
+          end
+        end
+      end
     end
   end
 

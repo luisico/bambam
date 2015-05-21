@@ -5,7 +5,8 @@
     <div class="panel">
       <div class="clearfix">
         <h3 class="left" id="track-name">
-          <%= @track.name %>
+          <%= best_in_place_if can?(:update, @track), @track, :name,
+              {ok_button: 'save', cancel_button: 'cancel'} %>
           <small>
             (<%= link_to @track.project.name, @track.project %>,
             owner:
