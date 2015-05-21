@@ -22,23 +22,15 @@ class TracksController < ApplicationController
 
   def update
     @track = Track.find(params[:id])
-    respond_to do |format|
+
+    if track_params[:name]
+      @track.update(track_params)
+      respond_with_bip(@track)
+    else
       if @track.update(track_params)
-        format.json do
-          if track_params[:name]
-            respond_with_bip(@track)
-          else
-            render json: {status: :success, message: 'OK' }, status: 200
-          end
-        end
+        render json: {status: :success, message: 'OK' }, status: 200
       else
-        format.json do
-          if track_params[:name]
-            respond_with_bip(@track)
-          else
-            render json: {status: :error, message: 'Record not saved'}, status: 400
-          end
-        end
+        render json: {status: :error, message: 'Record not saved'}, status: 400
       end
     end
   end
