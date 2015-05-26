@@ -39,6 +39,15 @@ Then /^I should( not)? be able to update the track name$/ do |negate|
   end
 end
 
+Then /^I should not be able to set track name to blank$/ do
+  expect{
+    bip_text(@track, :name, '')
+    expect(page).to have_css 'small.error', text: I18n.t('errors.messages.blank')
+    loop until page.evaluate_script('jQuery.active').zero?
+    @track.reload
+  }.not_to change(@track, :name)
+end
+
 # Then /^I should be able to verify track properties$/ do
 #   track = @project.tracks.last
 #   click_link track.name

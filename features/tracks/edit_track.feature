@@ -16,6 +16,13 @@ Feature: Edit track information
       | I own a track in that project    | should     |
       | there is a track in that project | should not |
 
+  Scenario: User not allowed to set track name to blank
+    Given I am signed in
+    And I belong to a project
+    And I own a track in that project
+    When I am on the track page
+    Then I should not be able to set track name to blank
+
 #   Scenario: Manager can edit tracks in their project
 #     Given I am signed in as a manager
 #     And I own a project
