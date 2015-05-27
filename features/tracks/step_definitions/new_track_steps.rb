@@ -75,14 +75,6 @@ Then /^I should be the owner of that track$/ do
   expect(@project.tracks.first.owner).to eq owner
 end
 
-Then /^I should be on the track show page$/ do
-  expect(current_path).to eq track_path(Track.last)
-end
-
-Then /^the page should have the error can't be blank$/ do
-  expect(page).to have_content "can't be blank"
-end
-
 Then /^I should( not)? see a checkbox next to the track$/ do |negate|
   if negate
     within(fancytree_parent(@track_title)) {
