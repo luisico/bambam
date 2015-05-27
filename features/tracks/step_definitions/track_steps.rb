@@ -39,6 +39,10 @@ end
 
 ### When
 
+When /^I visit the track page$/ do
+  visit track_path(@track)
+end
+
 ### Then
 
 Then /^I should be able to activate a tooltip on the IGV button(s)?$/ do |plural|

@@ -193,33 +193,70 @@ describe TracksController do
 
       context "update the track" do
         context "with valid parameters" do
-          it "should be a success without content" do
-            patch :update, id: @track, track: @new_track_attrs, format: :json
-            expect(response).to be_success
+          context "name" do
+            it "should be a success" do
+              patch :update, id: @track, track: @new_track_attrs, format: :json
+              expect(response).to be_success
+            end
+
+            it "should update attribute'" do
+              expect {
+                patch :update, id: @track, track: @new_track_attrs, format: :json
+                @track.reload
+              }.to change(@track, :name).to @new_track_attrs[:name]
+            end
           end
 
-          it "should update the track's attributes'" do
-            expect {
-              patch :update, id: @track, track: @new_track_attrs, format: :json
-              @track.reload
-            }.to change(@track, :name).to @new_track_attrs[:name]
+          context "owner" do
+            before do
+              @owner = FactoryGirl.create(:user)
+              @track.project.users << @owner
+            end
+
+            it "should be a success" do
+              patch :update, id: @track, track: {owner_id: @owner.id}, format: :json
+              expect(response).to be_success
+            end
+
+            it "should update the track's owner'" do
+              expect {
+                patch :update, id: @track, track: {owner_id: @owner.id}, format: :json
+                @track.reload
+              }.to change(@track, :owner).to @owner
+            end
           end
         end
 
         context "with invalid parameters" do
-          it "should response with unprocessable entity" do
-            patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
-            expect(response.status).to eq 400
-            expect(response.header['Content-Type']).to include 'application/json'
-            json = JSON.parse(response.body)
-            expect(json["message"]).to eq 'Record not saved'
+          context "name" do
+            it "should not be a success" do
+              patch :update, id: @track, track: {name: ""}, format: :json
+              expect(response.status).to eq 422
+            end
+
+            it "should not update attribute" do
+              expect {
+                patch :update, id: @track, track: {name: ""}, format: :json
+                @track.reload
+              }.not_to change(@track, :name)
+            end
           end
 
-          it "should not change the track's attributes" do
-            expect {
+          context "projects_datapath_id" do
+            it "should response with unprocessable entity" do
               patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
-              @track.reload
-            }.not_to change(@track, :name)
+              expect(response.status).to eq 400
+              expect(response.header['Content-Type']).to include 'application/json'
+              json = JSON.parse(response.body)
+              expect(json["message"]).to eq 'Record not saved'
+            end
+
+            it "should not change the track's projects datapath" do
+              expect {
+                patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
+                @track.reload
+              }.not_to change(@track, :projects_datapath)
+            end
           end
         end
       end
