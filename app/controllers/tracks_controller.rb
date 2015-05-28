@@ -1,6 +1,7 @@
 class TracksController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
+   skip_authorize_resource :only => :update
 
   respond_to :html, only: [:index, :show]
   respond_to :json, only: [:create, :update]
@@ -21,12 +22,14 @@ class TracksController < ApplicationController
   end
 
   def update
-    @track = Track.find(params[:id])
-
     if track_params[:name]
+      authorize! :update, @track
       @track.update(track_params)
       respond_with_bip(@track)
     else
+      projects_datapath = ProjectsDatapath.find_by_id(track_params[:projects_datapath_id]) if track_params[:projects_datapath_id]
+      project = projects_datapath.try(:project)
+      authorize! :manage, project
       if @track.update(track_params)
         render json: {status: :success, message: 'OK' }, status: 200
       else

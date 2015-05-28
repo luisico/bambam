@@ -207,22 +207,24 @@ describe TracksController do
             end
           end
 
-          context "owner" do
+          context "projects_datapath_id" do
             before do
-              @owner = FactoryGirl.create(:user)
-              @track.project.users << @owner
+              items = @track.projects_datapath.sub_directory.split(File::SEPARATOR)
+              @projects_datapath = FactoryGirl.create(:projects_datapath, datapath: @track.datapath, sub_directory: File.join(items[0...-1]), project: @track.project)
+              @path = File.join(items[-1], @track.path)
             end
 
             it "should be a success" do
-              patch :update, id: @track, track: {owner_id: @owner.id}, format: :json
+              patch :update, id: @track, track: {projects_datapath_id: @projects_datapath.id, path: @path}, format: :json
               expect(response).to be_success
             end
 
-            it "should update the track's owner'" do
+            it "should update the track's projects_datapath'" do
               expect {
-                patch :update, id: @track, track: {owner_id: @owner.id}, format: :json
+                patch :update, id: @track, track: {projects_datapath_id: @projects_datapath.id, path: @path}, format: :json
                 @track.reload
-              }.to change(@track, :owner).to @owner
+              }.to change(@track, :projects_datapath).to @projects_datapath
+              expect(@track.path).to eq @path
             end
           end
         end
@@ -245,10 +247,10 @@ describe TracksController do
           context "projects_datapath_id" do
             it "should response with unprocessable entity" do
               patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
-              expect(response.status).to eq 400
+              expect(response.status).to eq 403
               expect(response.header['Content-Type']).to include 'application/json'
               json = JSON.parse(response.body)
-              expect(json["message"]).to eq 'Record not saved'
+              expect(json["message"]).to include "You don't have permission"
             end
 
             it "should not change the track's projects datapath" do

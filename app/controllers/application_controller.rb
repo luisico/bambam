@@ -14,6 +14,9 @@ class ApplicationController < ActionController::Base
       format.js {
         render json: {status: :error, message: "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, status: 403
       }
+      format.json {
+        render json: {status: :error, message: "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, status: 403
+      }
     end
   end
 
