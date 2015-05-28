@@ -185,7 +185,7 @@ describe TracksController do
   describe "Patch 'update'" do
     before do
       @track = FactoryGirl.create(:track)
-      @new_track_attrs = {name: "new_name"}
+      @new_track_attrs = {name: "new_name", genome: "new_genome"}
     end
 
     context "as an admin" do
@@ -193,17 +193,17 @@ describe TracksController do
 
       context "update the track" do
         context "with valid parameters" do
-          context "name" do
+          context "name and genome" do
             it "should be a success" do
               patch :update, id: @track, track: @new_track_attrs, format: :json
               expect(response).to be_success
             end
 
-            it "should update attribute'" do
-              expect {
-                patch :update, id: @track, track: @new_track_attrs, format: :json
-                @track.reload
-              }.to change(@track, :name).to @new_track_attrs[:name]
+            it "should update attributes'" do
+              patch :update, id: @track, track: @new_track_attrs, format: :json
+              @track.reload
+              expect(@track.name).to eq @new_track_attrs[:name]
+              expect(@track.genome).to eq @new_track_attrs[:genome]
             end
           end
 

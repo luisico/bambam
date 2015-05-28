@@ -8,7 +8,10 @@
           <h3>
             <%= best_in_place_if can?(:update, @track), @track, :name,
               {ok_button: 'save', cancel_button: 'cancel'} %>
-            <span class="label genome"><%= @track.genome %></span>
+            <span class="label genome">
+              <%= best_in_place_if can?(:update, @track), @track, :genome,
+                {ok_button: 'save', cancel_button: 'cancel'} %>
+            </span>
           </h3>
           <div class="project-name">
             <% if @track.project %>

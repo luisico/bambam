@@ -22,7 +22,7 @@ class TracksController < ApplicationController
   end
 
   def update
-    if track_params[:name]
+    if track_params[:name] || track_params[:genome]
       authorize! :update, @track
       @track.update(track_params)
       respond_with_bip(@track)
@@ -54,6 +54,6 @@ class TracksController < ApplicationController
   private
 
   def track_params
-    params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id)
+    params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id, :genome)
   end
 end
