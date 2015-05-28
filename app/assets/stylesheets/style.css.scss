@@ -260,3 +260,13 @@ span.select2-hidden-accessible {
 .error-red {
   background-color: red !important;
 }
+
+#timestamps {
+  font-size: rem-calc(12);
+  line-height: 1;
+  color: $subheader-font-color;
+  @extend .right;
+  time:before {
+    margin-right: rem-calc(5);
+  }
+}
