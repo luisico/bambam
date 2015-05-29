@@ -64,15 +64,13 @@ class @Fancytree
 
       select: (event, data) ->
         if data.node.folder
-          attr = Fancytree.buildPath(data.node)
           if data.node.selected
-            Fancytree.addPath(data.node, attr[0], attr[1], attr[2])
+            Fancytree.addPath(data.node)
           else
-            Fancytree.deletePath(data.node, attr[0], attr[1])
+            Fancytree.deletePath(data.node)
         else
-          attr = Fancytree.buildTrack(data.node)
           if data.node.selected
-            Fancytree.addTrack(data.node, attr[0], attr[1], attr[2])
+            Fancytree.addTrack(data.node)
           else
             Fancytree.deleteTrack(data.node)
     }
@@ -108,9 +106,10 @@ class @Fancytree
     track_array = dir_array.slice(Number(projects_datapath_index)+1)
     path = track_array.join('/')
     name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
-    [path, name, projects_datapath_id]
+    [projects_datapath_id, path, name]
 
-  @addPath: (node, datapath_id, path, name) ->
+  @addPath: (node) ->
+    [datapath_id, path, name] = Fancytree.buildPath(node)
     $.ajax
       type: "POST",
       dataType: "json",
@@ -134,7 +133,8 @@ class @Fancytree
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @deletePath: (node, datapath_id, path) ->
+  @deletePath: (node) ->
+    [datapath_id, path, name] = Fancytree.buildPath(node)
     children = Fancytree.deepChildrenList(node, [])
     if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(children).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
@@ -200,7 +200,8 @@ class @Fancytree
       node = node.getNextSibling()
     array
 
-  @addTrack: (node, path, name, projects_datapath_id) ->
+  @addTrack: (node) ->
+    [projects_datapath_id, path, name] = Fancytree.buildTrack(node)
     $.ajax
       type: "POST",
       dataType: "json",
@@ -253,7 +254,7 @@ class @Fancytree
   @transitionChildTracks: (projects_datapath_id, childTracks) ->
     for i of childTracks
       track_id = childTracks[i].data.object.track.id
-      path = Fancytree.buildTrack(childTracks[i], "isTransitionTrack")[0]
+      path = Fancytree.buildTrack(childTracks[i], "isTransitionTrack")[2]
       Fancytree.updateTrack(childTracks[i], track_id, path, projects_datapath_id)
 
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
