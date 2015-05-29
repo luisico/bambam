@@ -27,8 +27,6 @@ projects_datapath4 = FactoryGirl.create(:projects_datapath, project: project2, d
 FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath1, owner: users[0])
 FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath2, owner: users[1])
 track = FactoryGirl.create(:track, projects_datapath: projects_datapath3, owner: users[1])
+FactoryGirl.create(:track, projects_datapath: projects_datapath3, owner: users[1],
+ name: 'track_sibling.bam', path: File.join(track.path.split(File::SEPARATOR)[0...-1], 'sibling', 'track_sibling.bam'))
 FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath4, owner: users[2])
-
-# Track sibling folder
-sibling_folder = File.join(File.dirname(track.full_path), "sibling")
-Dir.mkdir(sibling_folder) unless File.exist?(sibling_folder)
