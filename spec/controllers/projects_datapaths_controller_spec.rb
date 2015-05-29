@@ -296,7 +296,7 @@ describe ProjectsDatapathsController do
                         children: [
                           {title: "tracks", expanded: true, folder: true,
                             children: [
-                              {title: Pathname.new(track.path).basename.to_s, selected: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}
+                              {title: Pathname.new(track.path).basename.to_s, selected: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}
                             }]
                         }]
                     }]
@@ -329,7 +329,7 @@ describe ProjectsDatapathsController do
           {title: projects_datapath2.full_path, key: projects_datapath2.datapath.id, expanded: true, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath2.id, name: projects_datapath2.name}},
             children: [{title: "dir1", expanded: true, hideCheckbox: true, folder: true,
               children: [{title: "dir2", expanded: true, hideCheckbox: true, folder: true,
-                children: [{title: "track1.bam", selected: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, hideCheckbox: true
+                children: [{title: "track1.bam", selected: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}, hideCheckbox: true
                 }]
               }]
             }]
@@ -485,7 +485,7 @@ describe ProjectsDatapathsController do
           controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
           track = FactoryGirl.create(:track)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, Track.last)).
-            to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, igv: 'igv_url'}}, title: "/track1.bam"})
+            to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}, title: "/track1.bam"})
         end
       end
     end
