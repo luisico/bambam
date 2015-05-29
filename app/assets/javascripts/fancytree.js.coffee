@@ -156,7 +156,14 @@ class @Fancytree
       Fancytree.resolveOrphanTracks(event, selectedParent, selectedChildTracks)
       selectedParent.toggleSelected()
       Fancytree.transitionChildTracks(event, projects_datapath_id, selectedChildTracks)
-      siblingTracks = Fancytree.siblingTracks(event, node)
+      siblings = Fancytree.siblingFolders(event, node).concat(Fancytree.siblingTracks(event, node))
+      for i of siblings
+        if siblings[i].folder == true && siblings[i] != node
+          siblingChildren = Fancytree.deepChildrenList(siblings[i], [])
+          if Fancytree.selectedChildFolders(event,siblingChildren).length == 0
+            Fancytree.resetTrackCheckboxes(event, Fancytree.childTracks(event, siblings[i]), true)
+        else if siblings[i].folder != true
+          Fancytree.resetTrackCheckboxes(event, [siblings[i]], true)
       parentNodes =  node.getParentList()
       for i of parentNodes
         Fancytree.resetTrackCheckboxes(event, Fancytree.siblingTracks(event, parentNodes[i]), true)
@@ -267,6 +274,9 @@ class @Fancytree
 
   @siblingTracks: (event, node) ->
     node.getParent().children.filter((x) -> x.folder != true)
+
+  @siblingFolders: (event, node) ->
+    node.getParent().children.filter((x) -> x.folder == true)
 
   @selectedParent: (event, node) ->
     node.getParentList().filter((x) -> x.folder and x.selected)[0]
