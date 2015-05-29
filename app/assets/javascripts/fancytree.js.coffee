@@ -63,16 +63,11 @@ class @Fancytree
               false
 
       select: (event, data) ->
-        if data.node.folder
-          if data.node.selected
-            Fancytree.addPath(data.node)
-          else
-            Fancytree.deletePath(data.node)
+        node = data.node
+        if node.folder
+          if node.selected then Fancytree.addPath(node) else Fancytree.deletePath(node)
         else
-          if data.node.selected
-            Fancytree.addTrack(data.node)
-          else
-            Fancytree.deleteTrack(data.node)
+          if node.selected then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
     }
 
   @buildPath: (node) ->
