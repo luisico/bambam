@@ -40,6 +40,13 @@ class @Fancytree
               false
         else if data.node.folder
           selectedSiblingTracks = Fancytree.siblingTracks(event, data.node).filter((x) -> x.selected == true)
+          array = []
+          parentList = data.node.getParentList()
+          for i of parentList
+            siblingTracks = Fancytree.siblingTracks(event, parentList[i]).filter((x) -> x.selected == true)
+            array.push(siblingTracks)
+          selectedSiblingTracksOfParents = [].concat.apply([],array)
+          selectedSiblingTracks = selectedSiblingTracks.concat(selectedSiblingTracksOfParents)
           if selectedSiblingTracks.length > 0
             if confirm("Selecting this folder will permanently delete all sibling tracks. Are you sure you want to continue?")
               for i of selectedSiblingTracks
@@ -150,15 +157,15 @@ class @Fancytree
       selectedParent.toggleSelected()
       Fancytree.transitionChildTracks(event, projects_datapath_id, selectedChildTracks)
       siblingTracks = Fancytree.siblingTracks(event, node)
-      Fancytree.resetTrackCheckboxes(event, siblingTracks, true)
+      parentNodes =  node.getParentList()
+      for i of parentNodes
+        Fancytree.resetTrackCheckboxes(event, Fancytree.siblingTracks(event, parentNodes[i]), true)
     else if selectedChildFolders.length > 0
       for i of selectedChildFolders
         selectedChildFolders[i].toggleSelected()
         childTracks = Fancytree.childTracks(event, selectedChildFolders[i])
         Fancytree.transitionChildTracks(event, projects_datapath_id, childTracks.filter((x) -> x.selected))
-        Fancytree.resetTrackCheckboxes(event, childTracks, false)
-        siblingTracks = Fancytree.siblingTracks(event, selectedChildFolders[i])
-        Fancytree.resetTrackCheckboxes(event, siblingTracks, false)
+      Fancytree.resetTrackCheckboxes(event, children.filter((x) -> x.folder != true), false)
     else if selectedChildTracks.length > 0
       Fancytree.transitionChildTracks(event, projects_datapath_id, selectedChildTracks)
     else
