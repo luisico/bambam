@@ -28,5 +28,7 @@ FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath1, owner:
 FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath2, owner: users[1])
 track = FactoryGirl.create(:track, projects_datapath: projects_datapath3, owner: users[1])
 FactoryGirl.create(:track, projects_datapath: projects_datapath3, owner: users[1],
- name: 'track_sibling.bam', path: File.join(track.path.split(File::SEPARATOR)[0...-1], 'sibling', 'track_sibling.bam'))
+  name: 'track_sibling1.bam', path: File.join(track.path.split(File::SEPARATOR)[0...-2], 'track_sibling1.bam'))
+FactoryGirl.create(:track, projects_datapath: projects_datapath3, owner: users[1],
+  name: 'track_sibling2.bam', path: File.join(track.path.split(File::SEPARATOR)[0...-1], 'sibling', 'track_sibling2.bam'))
 FactoryGirl.create_list(:track, 3, projects_datapath: projects_datapath4, owner: users[2])
