@@ -250,7 +250,8 @@ class @Fancytree
     orpanTracks = $(selectedParentChildTracks).not(childTracks).get()
     newProjectsDatapaths = []
     for i of orpanTracks
-      newProjectsDatapaths.push(orpanTracks[i].getParentList()[1])
+      orphanTrackParentList = orpanTracks[i].getParentList()
+      newProjectsDatapaths.push(orphanTrackParentList[orphanTrackParentList.length - 1])
     uniqueNewProjectsDatapaths = newProjectsDatapaths.filter((elem, pos) -> newProjectsDatapaths.indexOf(elem) == pos)
     for i of uniqueNewProjectsDatapaths
       uniqueNewProjectsDatapaths[i].toggleSelected()
