@@ -71,20 +71,12 @@ class @Fancytree
     }
 
   @buildPath: (node) ->
-    parent_list = node.getParentList()
-    if parent_list.length > 0
-      datapath_id = parent_list[0].key
-      dir_array = []
-      for i of parent_list
-        dir_array.push(parent_list[i].title)
-      sub_array = dir_array.slice(1)
-      sub_array.push(node.title)
-      path = sub_array.join('/')
-      name = sub_array.pop()
-    else
-      datapath_id = node.key
-      path = ""
-      name = node.title.split('/').pop()
+    parents = node.getParentList(false, true)
+    datapath_id = parents[0].key
+    path = $.map(parents, (val, i) ->
+      val.title
+    ).slice(1).join('/')
+    name = node.title.split('/').pop()
     [datapath_id, path, name]
 
   @buildTrack: (node, isTransitionTrack) ->
