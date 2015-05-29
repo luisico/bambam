@@ -111,7 +111,7 @@ class @Fancytree
     [path, name, projects_datapath_id]
 
   @addPath: (node, datapath_id, path, name) ->
-    $.ajax({
+    $.ajax
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths",
@@ -133,13 +133,12 @@ class @Fancytree
         $tr.removeClass('fancytree-selected')
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-    })
 
   @deletePath: (node, datapath_id, path) ->
     children = Fancytree.deepChildrenList(node, [])
     if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(children).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
-    $.ajax({
+    $.ajax
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + node.data.object.projects_datapath.id
@@ -160,7 +159,6 @@ class @Fancytree
         $tr.addClass('error-red')
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-    })
 
   @resetPathHierarchy: (node, projects_datapath_id) ->
     selectedParent = Fancytree.selectedParent(node)
@@ -203,7 +201,7 @@ class @Fancytree
     array
 
   @addTrack: (node, path, name, projects_datapath_id) ->
-    $.ajax({
+    $.ajax
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/tracks",
@@ -226,10 +224,9 @@ class @Fancytree
         $tr.addClass('error-red').removeClass('fancytree-selected')
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-    })
 
   @deleteTrack: (node) ->
-    $.ajax({
+    $.ajax
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id
@@ -252,7 +249,6 @@ class @Fancytree
         $tr.addClass('error-red')
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-    })
 
   @transitionChildTracks: (projects_datapath_id, childTracks) ->
     for i of childTracks
@@ -261,7 +257,7 @@ class @Fancytree
       Fancytree.updateTrack(childTracks[i], track_id, path, projects_datapath_id)
 
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
-    $.ajax({
+    $.ajax
       data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
       type: 'PATCH',
       dataType: "json",
@@ -280,7 +276,6 @@ class @Fancytree
         $tr.addClass('error-red')
         $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-    });
 
   @resetTrackCheckboxes: (tracks, remove) ->
     for i of tracks
