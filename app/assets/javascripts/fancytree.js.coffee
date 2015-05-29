@@ -79,20 +79,16 @@ class @Fancytree
     name = node.title.split('/').pop()
     [datapath_id, path, name]
 
-  @buildTrack: (node, isTransitionTrack) ->
-    parent_list = node.getParentList()
-    dir_array = []
-    for i of parent_list
-      dir_array.push(parent_list[i].title)
-      if parent_list[i].selected
-        if isTransitionTrack
-        else
-          projects_datapath_id = parent_list[i].data.object.projects_datapath.id
-        projects_datapath_index = i
-    dir_array.push(node.title)
-    track_array = dir_array.slice(Number(projects_datapath_index)+1)
-    path = track_array.join('/')
-    name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
+  @buildTrack: (node) ->
+    parents = node.getParentList(false, true)
+    selected = $.grep(parents, (val, i) ->
+      val.isSelected()
+    )[0]
+    projects_datapath_id = selected.data.object.projects_datapath.id if selected.data.object and selected.data.object.projects_datapath
+    path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) ->
+      val.title
+    ).join('/')
+    name = node.title.replace(/\.[^/.]+$/, "")
     [projects_datapath_id, path, name]
 
   @addPath: (node) ->
@@ -241,7 +237,7 @@ class @Fancytree
   @transitionChildTracks: (projects_datapath_id, childTracks) ->
     for i of childTracks
       track_id = childTracks[i].data.object.track.id
-      path = Fancytree.buildTrack(childTracks[i], "isTransitionTrack")[2]
+      path = Fancytree.buildTrack(childTracks[i])[1]
       Fancytree.updateTrack(childTracks[i], track_id, path, projects_datapath_id)
 
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
