@@ -1,16 +1,19 @@
-<div class="datapath" id='datapath-<%= datapath.id %>'>
-  <ul class="no-bullet">
-    <li id='datapath-path-<%= datapath.id %>'>
-      <%= datapath.path %>
-      <%= link_to "edit", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-datapath-link margin-left" %>
+<li id="datapath-<%= datapath.id %>" class="datapath">
+  <div class="panel">
+    <div class="right">
+      <%= link_to "", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-icon edit-datapath-link margin-left" %>
       <%= link_to "", datapath, method: :delete, data: {confirm: "WARNING!!!\nThis action cannot be undone. Deleting this datapath will also permenately delete all associated tracks. Are you sure you want to continue?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
-      <% if datapath.users.any? %>
-        <ul class="datapath-users" id="datapath-users-<%= datapath.id %>">
-          <% datapath.users.each do |user| %>
-            <li><%= user.handle %></li>
-          <% end %>
-        </ul>
-      <% end %>
-    </li>
-  </ul>
-</div>
+    </div>
+    <h5 id="datapath-path-<%= datapath.id %>" class=""><%= datapath.path %></h5>
+
+    <% if datapath.users.any? %>
+      <ul class="datapath-users inline-list" id="datapath-users-<%= datapath.id %>">
+        <% datapath.users.each do |user| %>
+          <li><span class="label secondary round"><%= user.handle %></span></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <span class="no-datapath-users">No managers assigned</span>
+    <% end %>
+  </div>
+</li>
