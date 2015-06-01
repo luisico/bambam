@@ -35,9 +35,8 @@ class @Fancytree
         node = data.node
         if node.selected and node.folder
           selectedParent = Fancytree.selectedParent(node)
-          children = Fancytree.deepChildrenList(node)
-          selectedChildFolders = Fancytree.selectedChildFolders(children)
-          selectedChildTracks = Fancytree.selectedChildTracks(children)
+          selectedChildFolders = Fancytree.selectedChildFolders(node)
+          selectedChildTracks = Fancytree.selectedChildTracks(node)
           if selectedParent == undefined and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
             if confirm("Deselecting this folder will permanently delete all child tracks. Are you sure you want to continue?")
               for i of selectedChildTracks
@@ -119,8 +118,7 @@ class @Fancytree
 
   @deletePath: (node) ->
     [datapath_id, path, name] = Fancytree.buildPath(node)
-    children = Fancytree.deepChildrenList(node)
-    if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(children).length == 0
+    if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(node).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
     $.ajax
       type: "POST",
@@ -146,9 +144,8 @@ class @Fancytree
 
   @resetPathHierarchy: (node, projects_datapath_id) ->
     selectedParent = Fancytree.selectedParent(node)
-    children = Fancytree.deepChildrenList(node)
-    selectedChildFolders = Fancytree.selectedChildFolders(children)
-    selectedChildTracks = Fancytree.selectedChildTracks(children)
+    selectedChildFolders = Fancytree.selectedChildFolders(node)
+    selectedChildTracks = Fancytree.selectedChildTracks(node)
     if selectedParent
       Fancytree.resolveOrphanTracks(selectedParent, selectedChildTracks)
       selectedParent.toggleSelected()
@@ -156,8 +153,7 @@ class @Fancytree
       siblings = Fancytree.siblingFolders(node).concat(Fancytree.siblingTracks(node))
       for i of siblings
         if siblings[i].folder == true && siblings[i].selected != true
-          siblingChildren = Fancytree.deepChildrenList(siblings[i])
-          if Fancytree.selectedChildFolders(siblingChildren).length == 0
+          if Fancytree.selectedChildFolders(siblings[i]).length == 0
             Fancytree.resetTrackCheckboxes(Fancytree.childTracks(siblings[i]), true)
         else if siblings[i].folder != true
           Fancytree.resetTrackCheckboxes([siblings[i]], true)
@@ -169,6 +165,7 @@ class @Fancytree
         selectedChildFolders[i].toggleSelected()
         childTracks = Fancytree.childTracks(selectedChildFolders[i])
         Fancytree.transitionChildTracks(projects_datapath_id, childTracks.filter((x) -> x.selected))
+      children = Fancytree.deepChildrenList(node)
       Fancytree.resetTrackCheckboxes(children.filter((x) -> x.folder != true), false)
     else if selectedChildTracks.length > 0
       Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
@@ -273,8 +270,7 @@ class @Fancytree
         tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
 
   @resolveOrphanTracks: (selectedParent, childTracks) ->
-    selectedParentChildren = Fancytree.deepChildrenList(selectedParent)
-    selectedParentChildTracks = Fancytree.selectedChildTracks(selectedParentChildren)
+    selectedParentChildTracks = Fancytree.selectedChildTracks(selectedParent)
     orpanTracks = $(selectedParentChildTracks).not(childTracks).get()
     newProjectsDatapaths = []
     for i of orpanTracks
@@ -290,10 +286,12 @@ class @Fancytree
   @childTracks: (node) ->
     Fancytree.deepChildrenList(node).filter((x) -> x.folder != true)
 
-  @selectedChildTracks: (children) ->
+  @selectedChildTracks: (node) ->
+    children = Fancytree.deepChildrenList(node)
     children.filter((x) -> x.selected == true and x.folder != true)
 
-  @selectedChildFolders: (children) ->
+  @selectedChildFolders: (node) ->
+    children = Fancytree.deepChildrenList(node)
     children.filter((x) -> x.selected == true and x.folder == true)
 
   @siblingTracks: (node) ->
