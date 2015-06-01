@@ -5,11 +5,11 @@ ruby '2.0.0'
 gem 'rails', '~> 4.0.13'
 
 # Env variables (must be at top)
-gem 'dotenv-rails', '~> 0.10.0', group: [:development, :test]
+gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
 
 # Database
-gem 'pg', '~> 0.17.1'
-gem 'ransack'
+gem 'pg', '~> 0.18.2'
+gem 'ransack', '~> 1.6.6'
 
 # Factories
 gem 'factory_girl_rails', '~> 4.4.0'
@@ -17,18 +17,18 @@ gem 'factory_girl_rails', '~> 4.4.0'
 # Authentication / Authorization
 gem 'devise', '3.5.1'
 gem 'devise_invitable', '1.4.2'
-gem 'rolify', '~> 3.4.0'
-gem 'cancancan', '~> 1.9.2'
+gem 'rolify', '~> 4.0.0'
+gem 'cancancan', '~> 1.10.1'
 
 # Assets
 gem 'sass-rails', '~> 4.0.2'
-gem 'uglifier', '~> 2.5.0'
+gem 'uglifier', '~> 2.7.1'
 gem 'coffee-rails', '~> 4.0.1'
 gem 'jquery-rails', '~> 3.1.0'
 gem 'jquery-ui-sass-rails', github: 'jhilden/jquery-ui-sass-rails'
 gem 'turbolinks', '~> 2.2.1 '
 gem 'foundation-rails', '~> 5.2.2'
-gem 'local_time'
+gem 'local_time', '~> 1.0.2'
 gem 'foundation-icons-sass-rails'
 gem 'best_in_place', '~> 3.0.3'
 
@@ -36,11 +36,11 @@ gem 'best_in_place', '~> 3.0.3'
 gem 'jbuilder', '~> 1.5.2'
 
 group :development do
-  gem 'better_errors', '~> 1.1.0'
+  gem 'better_errors', '~> 2.1.1'
   gem 'binding_of_caller', '~> 0.7.1'
   gem 'guard-rspec', '~> 4.2.7'
   gem 'guard-cucumber', '~> 1.4.1'
-  gem 'rb-inotify', '~> 0.9.3', require: false
+  gem 'rb-inotify', '~> 0.9.5', require: false
   gem 'spring', '~> 1.1.1'
   gem 'spring-commands-rspec', '~> 1.0.1'
   gem 'spring-commands-cucumber', '~> 1.0.1'
@@ -56,16 +56,16 @@ group :test do
   gem 'capybara', '~> 2.2.1'
   gem 'poltergeist', '~> 1.6.0'
   gem 'selenium-webdriver', '~> 2.40.0'
-  gem 'database_cleaner', '~> 1.2.0'
+  gem 'database_cleaner', '~> 1.4.1'
   gem 'email_spec', '~> 1.5.0'
-  gem 'launchy', '~> 2.4.2'
+  gem 'launchy', '~> 2.4.3'
 end
 
 group :development, :test do
-  gem 'pry-rails', '~> 0.3.2'
+  gem 'pry-rails', '~> 0.3.4'
   gem 'rspec-rails', '~> 2.14.1'
   gem 'shoulda-matchers', '~> 2.4.0'
-  gem 'quiet_assets', '~> 1.0.2'
+  gem 'quiet_assets', '~> 1.1.0'
   gem 'mailcatcher', github: 'sj26/mailcatcher', ref:  '272b4fa855'
   gem 'foreman', '~> 0.63.0'
 end
