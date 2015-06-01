@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', '~> 4.0.5'
+gem 'rails', '~> 4.0.13'
 
 # Env variables (must be at top)
 gem 'dotenv-rails', '~> 0.10.0', group: [:development, :test]
