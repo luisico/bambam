@@ -32,9 +32,10 @@ class @Fancytree
           $tdList.eq(4).addClass('track-igv')
 
       beforeSelect: (event, data) ->
-        if data.node.selected and data.node.folder
-          selectedParent = Fancytree.selectedParent(data.node)
-          children = Fancytree.deepChildrenList(data.node, [])
+        node = data.node
+        if node.selected and node.folder
+          selectedParent = Fancytree.selectedParent(node)
+          children = Fancytree.deepChildrenList(node, [])
           selectedChildFolders = Fancytree.selectedChildFolders(children)
           selectedChildTracks = Fancytree.selectedChildTracks(children)
           if selectedParent == undefined and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
@@ -44,10 +45,10 @@ class @Fancytree
               true
             else
               false
-        else if data.node.folder
-          selectedSiblingTracks = Fancytree.siblingTracks(data.node).filter((x) -> x.selected == true)
+        else if node.folder
+          selectedSiblingTracks = Fancytree.siblingTracks(node).filter((x) -> x.selected == true)
           array = []
-          parentList = data.node.getParentList()
+          parentList = node.getParentList()
           for i of parentList
             siblingTracks = Fancytree.siblingTracks(parentList[i]).filter((x) -> x.selected == true)
             array.push(siblingTracks)
