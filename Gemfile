@@ -12,7 +12,7 @@ gem 'pg', '~> 0.18.2'
 gem 'ransack', '~> 1.6.6'
 
 # Factories
-gem 'factory_girl_rails', '~> 4.4.0'
+gem 'factory_girl_rails', '~> 4.5.0'
 
 # Authentication / Authorization
 gem 'devise', '3.5.1'
