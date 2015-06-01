@@ -33,7 +33,7 @@ gem 'foundation-icons-sass-rails'
 gem 'best_in_place', '~> 3.0.3'
 
 # JSON APIs
-gem 'jbuilder', '~> 1.5.2'
+gem 'jbuilder', '~> 2.2.16'
 
 group :development do
   gem 'better_errors', '~> 2.1.1'
@@ -41,8 +41,8 @@ group :development do
   gem 'guard-rspec', '~> 4.2.7'
   gem 'guard-cucumber', '~> 1.4.1'
   gem 'rb-inotify', '~> 0.9.5', require: false
-  gem 'spring', '~> 1.1.1'
-  gem 'spring-commands-rspec', '~> 1.0.1'
+  gem 'spring', '~> 1.3.6'
+  gem 'spring-commands-rspec', '~> 1.0.4'
   gem 'spring-commands-cucumber', '~> 1.0.1'
 end
 
@@ -71,7 +71,7 @@ end
 group :production, :staging do
   gem 'therubyracer', platforms: :ruby
   gem 'nokogiri', '~> 1.6.1'
-  gem 'puma', '~> 2.8.2'
+  gem 'puma', '~> 2.11.3'
 end
 
 gem 'exception_notification', '~> 4.0.1'
