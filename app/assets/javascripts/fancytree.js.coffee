@@ -261,7 +261,10 @@ class @Fancytree
       newProjectsDatapaths.push(orphanTrackParentList[orphanTrackParentList.length - 1])
     uniqueNewProjectsDatapaths = newProjectsDatapaths.filter((elem, pos) -> newProjectsDatapaths.indexOf(elem) == pos)
     for i of uniqueNewProjectsDatapaths
-      uniqueNewProjectsDatapaths[i].toggleSelected()
+      parents = uniqueNewProjectsDatapaths[i].getParentList()
+      overlap = parents.filter((n) -> uniqueNewProjectsDatapaths.indexOf(n) != -1)
+      unless overlap.length > 0
+        uniqueNewProjectsDatapaths[i].toggleSelected()
 
   @childTracks: (event, node) ->
     Fancytree.deepChildrenList(node, []).filter((x) -> x.folder != true)
