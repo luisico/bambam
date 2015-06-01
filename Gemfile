@@ -66,8 +66,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
   gem 'shoulda-matchers', '~> 2.4.0'
   gem 'quiet_assets', '~> 1.1.0'
-  gem 'mailcatcher', github: 'sj26/mailcatcher', ref:  '272b4fa855'
-  gem 'foreman', '~> 0.63.0'
 end
 
 group :production, :staging do
@@ -77,3 +75,7 @@ group :production, :staging do
 end
 
 gem 'exception_notification', '~> 4.0.1'
+
+# Gems to install outside the Gemfile
+# foreman
+# mailcatcher

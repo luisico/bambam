@@ -3,7 +3,7 @@ require 'active_support/inflector'
 # Switch off notifications
 notification :off
 
-guard :rspec, all_after_pass: false, all_on_start: false, cmd: 'foreman run spring rspec' do
+guard :rspec, all_after_pass: false, all_on_start: false, cmd: 'spring rspec' do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
@@ -27,7 +27,7 @@ guard :rspec, all_after_pass: false, all_on_start: false, cmd: 'foreman run spri
   watch(%r{^spec/factories/(.+)\.rb$})                { |m| ["spec/models/#{m[1].singularize}_spec.rb", "spec/controllers/#{m[1]}_controller_spec.rb", "spec/features/#{m[1]}_spec.rb"] }
 end
 
-guard :cucumber, all_after_pass: false, all_on_start: false, cli: '--profile guard', command_prefix: 'foreman run spring', bundler: false  do
+guard :cucumber, all_after_pass: false, all_on_start: false, cli: '--profile guard', command_prefix: 'spring', bundler: false  do
   watch(%r{^features/.+\.feature$})
   watch(%r{^features/support/.+$})                           { 'features' }
   watch(%r{^features/step_definitions/(.+)_steps\.rb$})      { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'features' }
