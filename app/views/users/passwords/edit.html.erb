@@ -12,11 +12,15 @@
 
       <div>
         <%= f.label :password, 'New password' %>
-        <%= f.password_field :password, autofocus: true %></div>
+        <% if @minimum_password_length %>
+          <small>(<%= @minimum_password_length %> characters minimum)</small>
+        <% end %>
+        <%= f.password_field :password, autofocus: true, autocomplete: 'off' %>
+      </div>
 
       <div>
         <%= f.label :password_confirmation, 'Confirm new password' %>
-        <%= f.password_field :password_confirmation %>
+        <%= f.password_field :password_confirmation, autocomplete: 'off' %>
       </div>
 
       <div>

@@ -15,16 +15,16 @@
 
         <div>
           <label><i>(leave next two fields blank if you don't want to change your password)</i></label>
-          <%= f.password_field :password, autocomplete: "off", placeholder: 'Password' %>
+          <%= f.password_field :password, autocomplete: 'off', placeholder: 'Password' %>
         </div>
 
         <div>
-          <%= f.password_field :password_confirmation, placeholder: "Password confirmation" %>
+          <%= f.password_field :password_confirmation, autocomplete: 'off', placeholder: "Password confirmation" %>
         </div>
 
         <div>
           <label><i>(we need your current password to confirm your changes)</i></label>
-          <%= f.password_field :current_password, placeholder: 'Current password' %>
+          <%= f.password_field :current_password, autocomplete: 'off', placeholder: 'Current password' %>
         </div>
 
         <div>
