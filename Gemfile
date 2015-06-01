@@ -16,7 +16,7 @@ gem 'factory_girl_rails', '~> 4.4.0'
 
 # Authentication / Authorization
 gem 'devise', '3.5.1'
-gem 'devise_invitable', github: 'scambra/devise_invitable'
+gem 'devise_invitable', '1.4.2'
 gem 'rolify', '~> 3.4.0'
 gem 'cancancan', '~> 1.9.2'
 
