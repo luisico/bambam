@@ -158,7 +158,7 @@ class @Fancytree
       Fancytree.transitionChildTracks(event, projects_datapath_id, selectedChildTracks)
       siblings = Fancytree.siblingFolders(event, node).concat(Fancytree.siblingTracks(event, node))
       for i of siblings
-        if siblings[i].folder == true && siblings[i] != node
+        if siblings[i].folder == true && siblings[i].selected != true
           siblingChildren = Fancytree.deepChildrenList(siblings[i], [])
           if Fancytree.selectedChildFolders(event,siblingChildren).length == 0
             Fancytree.resetTrackCheckboxes(event, Fancytree.childTracks(event, siblings[i]), true)
