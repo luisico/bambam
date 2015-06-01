@@ -21,7 +21,7 @@ class @Fancytree
           $tdList.eq(2).addClass('projects-datapath-name')
         else if node.selected
           $tdList.eq(2).addClass('track-name').html("<a href='/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
-          $tdList.eq(3).addClass('track-genome').html(node.data.object.track.genome)
+          $tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
           $tdList.eq(4).addClass('track-link').html(node.data.object.track.igv)
         else
           $tdList.eq(2).addClass('track-name')
@@ -199,7 +199,7 @@ class @Fancytree
         node.data['object'] = jqXHR
         $tr = $(node.tr)
         $tr.find('.track-name').html("<a href='/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
-        $tr.find('.track-genome').html(jqXHR.track.genome)
+        $tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
         $tr.find('.track-link').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
         return false
