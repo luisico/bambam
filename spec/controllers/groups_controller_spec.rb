@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe GroupsController do
+RSpec.describe GroupsController do
   describe "filters" do
     it { is_expected.to use_before_filter :authenticate_user! }
   end

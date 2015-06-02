@@ -1,7 +1,7 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'cancan/matchers'
 
-describe User do
+RSpec.describe User do
   describe "abilities" do
     subject { @ability }
 

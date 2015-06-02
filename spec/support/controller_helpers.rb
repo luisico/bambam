@@ -1,9 +1,11 @@
-module Controller
-  module TestHelpers
-    def stub_sign_in
-      user = double('user')
-      request.env['warden'].stub :authenticate! => user
-      controller.stub :current_user => user
+module ControllerHelpers
+  def stub_sign_in(user = double('user'))
+    if user.nil?
+      allow(request.env['warden']).to receive(:authenticate!).and_throw(:warden, {:scope => :user})
+      allow(controller).to receive(:current_user).and_return(nil)
+    else
+      allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+      allow(controller).to receive(:current_user).and_return(user)
     end
   end
 end

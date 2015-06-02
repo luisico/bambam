@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Role do
+RSpec.describe Role do
   before { @role = FactoryGirl.build(:role) }
 
   subject { @role }

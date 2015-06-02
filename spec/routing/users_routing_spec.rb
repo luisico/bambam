@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "Users" do
+RSpec.describe "Users" do
   describe "routes through devise" do
     it "routes to sessions" do
       # For sign_out :get is used in test environtment, :delete is used in production

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ExceptionsController do
+RSpec.describe ExceptionsController do
   describe "not found exception" do
     it "renders the template" do
       skip

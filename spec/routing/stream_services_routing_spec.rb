@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe 'StreamServices' do
+RSpec.describe 'StreamServices' do
   describe "routes to" do
     it "stream" do
       assert_routing({ path: '/stream/track/1',         method: :get }, { controller: 'stream_services', action: 'show', id: '1' })

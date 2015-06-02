@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 # TODO: add specs for html/js only requests
 
-describe ProjectsController do
+RSpec.describe ProjectsController do
   describe "filters" do
     it { is_expected.to use_before_filter :authenticate_user! }
   end

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Datapath do
+RSpec.describe Datapath do
   before { @datapath = FactoryGirl.build(:datapath) }
   after { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 

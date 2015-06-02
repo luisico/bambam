@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Membership do
+RSpec.describe Membership do
   before { @membership = FactoryGirl.build(:membership) }
 
   subject { @membership }

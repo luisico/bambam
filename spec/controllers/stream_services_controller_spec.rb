@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe StreamServicesController do
+RSpec.describe StreamServicesController do
   describe 'show' do
     context "as a sign_in user" do
       before { stub_sign_in }

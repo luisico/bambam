@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Group do
+RSpec.describe Group do
   before { @group = FactoryGirl.build(:group) }
 
   subject { @group }

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ApplicationController do
+RSpec.describe ApplicationController do
   describe "filters" do
     it { is_expected.to use_before_filter :configure_permitted_parameters }
   end

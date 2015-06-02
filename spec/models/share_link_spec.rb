@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ShareLink do
+RSpec.describe ShareLink do
   describe "database fields" do
     it_behaves_like "timestampable table"
     it { is_expected.to have_db_column(:access_token) }

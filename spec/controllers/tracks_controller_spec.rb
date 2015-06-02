@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
+
 # TODO fix authorization on this controller
-describe TracksController do
+
+RSpec.describe TracksController do
   describe "filters" do
     it { is_expected.to use_before_filter :authenticate_user! }
   end
@@ -133,7 +135,7 @@ describe TracksController do
 
       context "with valid parameters" do
         it "should be a success" do
-          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'

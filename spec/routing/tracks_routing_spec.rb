@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "Tracks" do
+RSpec.describe "Tracks" do
   describe "routes to" do
     it "the index and show actions" do
       assert_routing({ path: '/tracks', method: :get },        { controller: 'tracks', action: 'index' })

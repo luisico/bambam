@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe TracksHelper do
+RSpec.describe TracksHelper do
   describe "#igv_url" do
     before { @track = FactoryGirl.create(:track) }
 

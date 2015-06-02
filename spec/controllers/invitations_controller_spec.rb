@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Users::InvitationsController do
+RSpec.describe Users::InvitationsController do
   before { @request.env["devise.mapping"] = Devise.mappings[:user] }
 
   describe "GET 'new'" do

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe DatapathsUser do
+RSpec.describe DatapathsUser do
   before { @datapaths_user = FactoryGirl.build(:datapaths_user) }
 
   subject { @datapaths_user }

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ProjectsUsersController do
+RSpec.describe ProjectsUsersController do
   describe "filters" do
     it { is_expected.to use_before_filter :authenticate_user! }
   end

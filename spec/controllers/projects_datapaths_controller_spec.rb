@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ProjectsDatapathsController do
+RSpec.describe ProjectsDatapathsController do
   describe "filters" do
     it { is_expected.to use_before_filter :authenticate_user! }
   end
@@ -288,7 +288,7 @@ describe ProjectsDatapathsController do
         project.reload
 
         controller.instance_variable_set(:@project, project)
-        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+        allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, folder: true,
@@ -322,7 +322,7 @@ describe ProjectsDatapathsController do
         projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
 
-        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+        allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, hideCheckbox: true, folder: true,
@@ -487,7 +487,7 @@ describe ProjectsDatapathsController do
 
         it "does not show checkbox for assigned files owned by another" do
           allow(controller).to receive(:cannot?).and_return(true, true)
-          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
           track = FactoryGirl.create(:track)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, Track.last)).
             to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}, title: "/track1.bam"})

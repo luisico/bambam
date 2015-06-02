@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Project do
+RSpec.describe Project do
   before { @project = FactoryGirl.build(:project) }
 
   subject { @project }

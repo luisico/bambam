@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Track do
+RSpec.describe Track do
   before { @track = FactoryGirl.build(:track) }
 
   subject { @track }

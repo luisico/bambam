@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ProjectsDatapath do
+RSpec.describe ProjectsDatapath do
   before { @projects_datapath = FactoryGirl.build(:projects_datapath) }
 
   subject { @projects_datapath }

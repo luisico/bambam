@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe 'Application' do
+RSpec.describe 'Application' do
   describe "root" do
     it "routes to sign in form" do
       expect(get("/")).to route_to("devise/sessions#new")
