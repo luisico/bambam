@@ -271,7 +271,7 @@ GEM
     thread_safe (0.3.5)
     tilt (1.4.1)
     timers (1.1.0)
-    turbolinks (2.2.1)
+    turbolinks (2.5.3)
       coffee-rails
     tzinfo (0.3.44)
     uglifier (2.7.1)
@@ -332,5 +332,5 @@ DEPENDENCIES
   spring-commands-cucumber (~> 1.0.1)
   spring-commands-rspec (~> 1.0.4)
   therubyracer
-  turbolinks (~> 2.2.1)
+  turbolinks (~> 2.5.3)
   uglifier (~> 2.7.1)
