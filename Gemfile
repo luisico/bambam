@@ -38,8 +38,8 @@ gem 'jbuilder', '~> 2.2.16'
 group :development do
   gem 'better_errors', '~> 2.1.1'
   gem 'binding_of_caller', '~> 0.7.1'
-  gem 'guard-rspec', '~> 4.2.7'
-  gem 'guard-cucumber', '~> 1.4.1'
+  gem 'guard-rspec', '~> 4.5.1'
+  gem 'guard-cucumber', '~> 1.6.0'
   gem 'rb-inotify', '~> 0.9.5', require: false
   gem 'spring', '~> 1.3.6'
   gem 'spring-commands-rspec', '~> 1.0.4'
@@ -63,7 +63,7 @@ end
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.4'
-  gem 'rspec-rails', '~> 2.14.1'
+  gem 'rspec-rails', '~> 2.99'
   gem 'shoulda-matchers', '~> 2.8.0', require: false
   gem 'quiet_assets', '~> 1.1.0'
 end
