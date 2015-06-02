@@ -1,6 +1,10 @@
 require 'spec_helper'
 # TODO fix authorization on this controller
 describe TracksController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before { @admin = FactoryGirl.create(:admin) }
 
   describe "GET 'index'" do

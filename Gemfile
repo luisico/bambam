@@ -64,7 +64,7 @@ end
 group :development, :test do
   gem 'pry-rails', '~> 0.3.4'
   gem 'rspec-rails', '~> 2.14.1'
-  gem 'shoulda-matchers', '~> 2.4.0'
+  gem 'shoulda-matchers', '~> 2.8.0', require: false
   gem 'quiet_assets', '~> 1.1.0'
 end
 

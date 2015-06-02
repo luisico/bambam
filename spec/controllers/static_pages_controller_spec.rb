@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe StaticPagesController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   describe "GET 'help'" do
     context "as user" do
       before { sign_in FactoryGirl.create(:user) }

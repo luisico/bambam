@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe ShareLinksController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before do
     @project = FactoryGirl.create(:project)
     @track = FactoryGirl.create(:track, project: @project)
@@ -77,6 +81,8 @@ describe ShareLinksController do
     context "as a signed in user and project member" do
       before { sign_in @user }
 
+      it { should permit(:expires_at, :track_id, :notes).for(:create, params: {format: :js}) }
+
       context "with valid parameters" do
         it "should be a success" do
           post :create, share_link: @share_link_attr, format: 'js'
@@ -135,6 +141,8 @@ describe ShareLinksController do
 
     context "as a signed in user and project member" do
       before { sign_in @user }
+
+      it { should permit(:expires_at, :track_id, :notes).for(:update, params: {id: @share_link, format: :js}) }
 
       context 'with valid parameters' do
         it "should redirect to the updated show page" do

@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe ProjectsUsersController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   describe "Patch 'update'" do
     before do
       @admin = FactoryGirl.create(:admin)
@@ -10,6 +14,8 @@ describe ProjectsUsersController do
 
     context "as an admin and owner of project" do
       before { sign_in @admin }
+
+      it { should permit(:read_only).for(:update, params: {id: @projects_user, format: :js}) }
 
       context 'with valid parameters' do
         it "should be a success" do

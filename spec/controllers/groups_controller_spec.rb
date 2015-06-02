@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe GroupsController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   describe "GET 'show'" do
     before { @group = FactoryGirl.create(:group) }
 
@@ -151,6 +155,8 @@ describe GroupsController do
         sign_in @admin
       end
 
+      it { should permit(:name, member_ids: []).for(:create) }
+
       context "with valid parameters" do
         it "should be a redirect to the new group show page" do
           post :create, group: @group_attr
@@ -230,6 +236,8 @@ describe GroupsController do
 
     context "as an admin and owner of group" do
       before { sign_in @admin }
+
+      it { should permit(:name, member_ids: []).for(:update, params: {id: @group}) }
 
       context 'with valid parameters' do
         before { @new_group = FactoryGirl.attributes_for(:group) }

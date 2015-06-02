@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe ProjectsDatapathsController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "Post 'create'" do
@@ -10,6 +14,7 @@ describe ProjectsDatapathsController do
       before { sign_in @manager }
 
       context "project datapath creation" do
+        it { should permit(:project_id, :datapath_id, :sub_directory, :name).for(:create, params: {format: :json}) }
 
         context "with valid parameters" do
           before { @projects_datapath_attr.merge!(datapath_id: FactoryGirl.create(:datapath).id) }

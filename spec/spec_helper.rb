@@ -7,6 +7,9 @@ require 'rspec/autorun'
 # Email spec
 require 'email_spec'
 
+# Shoulda matchers
+require 'shoulda/matchers'
+
 # Define file path for path related specs
 TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 

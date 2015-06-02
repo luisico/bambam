@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe ApplicationController do
+  describe "filters" do
+    it { should use_before_filter :configure_permitted_parameters }
+  end
+
   describe "CanCan AccessDenied exceptions" do
     controller do
       def index

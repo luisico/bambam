@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe DatapathsController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before { @admin = FactoryGirl.create(:admin) }
 
   describe "GET 'index'" do
@@ -167,6 +171,8 @@ describe DatapathsController do
     context "as an admin" do
       before { sign_in FactoryGirl.create(:admin) }
 
+      it { should permit(:path, user_ids: []).for(:create, params: {format: :js}) }
+
       context "with valid parameters" do
         it "should be a success" do
           post :create, datapath: @datapath_attr, format: 'js'
@@ -247,6 +253,8 @@ describe DatapathsController do
 
     context "as an admin" do
       before { sign_in @admin }
+
+      it { should permit(:path, user_ids: []).for(:update, params: {id: @datapath, format: :js}) }
 
       context 'with valid parameters' do
         it "should be a success" do

@@ -32,7 +32,7 @@ describe ProjectsDatapath do
 
   describe "sub_directory" do
     it { should respond_to :sub_directory }
-    it { should ensure_exclusion_of(:sub_directory).in_array([nil]) }
+    it { should validate_exclusion_of(:sub_directory).in_array([nil]) }
 
     it "should be invalid when nil" do
       @projects_datapath.sub_directory = nil

@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe UsersController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before do
     @admin = FactoryGirl.create(:admin)
     @users = FactoryGirl.create_list(:user, 3)

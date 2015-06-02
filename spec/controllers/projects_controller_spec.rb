@@ -3,6 +3,10 @@ require 'spec_helper'
 # TODO: add specs for html/js only requests
 
 describe ProjectsController do
+  describe "filters" do
+    it { should use_before_filter :authenticate_user! }
+  end
+
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "GET 'index'" do
@@ -225,6 +229,8 @@ describe ProjectsController do
     context "as a manager" do
       before { sign_in @manager }
 
+      it { should permit(:name).for(:create, params: {format: :js}) }
+
       context "with valid parameters" do
         it "should be a success" do
           post :create, project: @project_attr, format: 'js'
@@ -304,6 +310,8 @@ describe ProjectsController do
       before { sign_in @manager }
 
       context "update the name" do
+        it { should permit(:name, user_ids: []).for(:update, params: {id: @project, project: @new_project_attrs, format: :json}) }
+
         context "with valid parameters" do
           it "should be a success without content" do
             patch :update, id: @project, project: @new_project_attrs, format: :json
@@ -339,6 +347,8 @@ describe ProjectsController do
       end
 
       context "update the users" do
+        it { should permit(:name, user_ids: []).for(:update, params: {id: @project, project: @new_project_attrs, format: :js}) }
+
         context "with valid parameters" do
           before do
             @user = FactoryGirl.create(:user)
