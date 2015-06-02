@@ -46,7 +46,7 @@ When /^I create a group with multiple members$/ do
       fill_in_select2("group_member_ids", with: User.all[-2].handle)
     end
   }.to change(Group, :count).by(1)
-  Group.last.members.count.should == 3
+  expect(Group.last.members.count).to eq 3
 end
 
 ### Then
