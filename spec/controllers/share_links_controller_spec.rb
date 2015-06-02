@@ -61,8 +61,8 @@ RSpec.describe ShareLinksController do
 
       it "should not respond html" do
         expect {
-          xhr :get, :edit, id: 1, format: :html
-        }.to raise_error ActiveRecord::RecordNotFound
+          xhr :get, :edit, id: @share_link, format: :html
+        }.to raise_error ActionView::MissingTemplate
       end
     end
 
@@ -184,8 +184,8 @@ RSpec.describe ShareLinksController do
 
       it "should not respond html" do
         expect {
-          patch :update, id: 1, share_link: @new_share_link, format: :html
-        }.to raise_error
+          patch :update, id: @share_link, share_link: @new_share_link, format: :html
+        }.to raise_error ActionView::MissingTemplate
       end
     end
 
