@@ -27,5 +27,5 @@ TAGS
 # Ignore environment variables
 /.env
 
-# Ignore other unneeded files.
+# Ignore other unneeded files
 .DS_Store

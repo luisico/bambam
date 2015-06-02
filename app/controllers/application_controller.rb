@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
-  before_filter :configure_permitted_parameters, if: :devise_controller?
-
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  # Redirect cancan exceptions to tracks page and show a flash message
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  # Redirect cancan exceptions and show a flash message
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.html {
@@ -34,6 +34,7 @@ class ApplicationController < ActionController::Base
     authorize!(:create, User) && super
   end
 
+  # Extra fields for Devise
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:invite) << :manager
     devise_parameter_sanitizer.for(:accept_invitation) << [:first_name, :last_name]

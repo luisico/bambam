@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TracksController do
   describe "filters" do
-    it { is_expected.to use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_action :authenticate_user! }
   end
 
   before { @admin = FactoryGirl.create(:admin) }

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SearchController do
   describe "filters" do
-    it { is_expected.to use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_action :authenticate_user! }
   end
 
   describe "Get 'search'" do

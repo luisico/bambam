@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ApplicationController do
   describe "filters" do
-    it { is_expected.to use_before_filter :configure_permitted_parameters }
+    it { is_expected.to use_before_action :configure_permitted_parameters }
   end
 
   describe "CanCan AccessDenied exceptions" do
