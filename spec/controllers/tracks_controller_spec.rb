@@ -128,7 +128,7 @@ RSpec.describe TracksController do
       cp_track @full_path
     end
 
-    after { File.unlink @full_path if File.exists? @full_path }
+    after { File.unlink @full_path if File.exist? @full_path }
 
     context "as a signed in user and project member" do
       before { sign_in FactoryGirl.create(:user, projects: [@project]) }

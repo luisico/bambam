@@ -266,7 +266,7 @@ RSpec.describe ProjectsDatapathsController do
             ]}
           ]}
         ]
-        File.unlink track_path if File.exists?(track_path)
+        File.unlink track_path if File.exist?(track_path)
       end
 
       it "marks a path as empty when no tracks are found" do
@@ -316,7 +316,7 @@ RSpec.describe ProjectsDatapathsController do
     context "project user" do
       it "only creates nodes where the node, a parent, or a child is selected" do
         projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, sub_directory: (File.join 'dir1', 'subdir1'))
-        FileUtils.mkdir(File.join(@datapath1.path, 'not_shown_dir')) unless File.exists?(File.join(@datapath1.path, 'unshown_dir'))
+        FileUtils.mkdir(File.join(@datapath1.path, 'not_shown_dir')) unless File.exist?(File.join(@datapath1.path, 'unshown_dir'))
         cp_track File.join @datapath1.path, 'not_shown_track.bam'
         projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
