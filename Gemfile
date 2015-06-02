@@ -21,13 +21,13 @@ gem 'rolify', '~> 4.0.0'
 gem 'cancancan', '~> 1.10.1'
 
 # Assets
-gem 'sass-rails', '~> 4.0.2'
+gem 'sass-rails', '~> 4.0.5'
 gem 'uglifier', '~> 2.7.1'
 gem 'coffee-rails', '~> 4.0.1'
-gem 'jquery-rails', '~> 3.1.0'
+gem 'jquery-rails', '~> 3.1.2'
 gem 'jquery-ui-sass-rails', github: 'jhilden/jquery-ui-sass-rails'
 gem 'turbolinks', '~> 2.5.3 '
-gem 'foundation-rails', '~> 5.2.2'
+gem 'foundation-rails', '~> 5.2.3.0'
 gem 'local_time', '~> 1.0.2'
 gem 'foundation-icons-sass-rails'
 gem 'best_in_place', '~> 3.0.3'
@@ -74,7 +74,7 @@ group :production, :staging do
   gem 'puma', '~> 2.11.3'
 end
 
-gem 'exception_notification', '~> 4.0.1'
+gem 'exception_notification', '~> 4.1.0'
 
 # Gems to install outside the Gemfile
 # foreman
