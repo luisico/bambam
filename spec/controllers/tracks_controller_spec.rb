@@ -2,7 +2,7 @@ require 'spec_helper'
 # TODO fix authorization on this controller
 describe TracksController do
   describe "filters" do
-    it { should use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_filter :authenticate_user! }
   end
 
   before { @admin = FactoryGirl.create(:admin) }
@@ -151,7 +151,7 @@ describe TracksController do
 
       context "failed creation" do
         it "should raise file system error" do
-          Track.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Track).to receive(:save).and_return(false)
           post :create, track: @track_attr, format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
@@ -161,7 +161,7 @@ describe TracksController do
         end
 
         it "should not create a new track" do
-          Track.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Track).to receive(:save).and_return(false)
           expect{
             post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)
@@ -329,7 +329,7 @@ describe TracksController do
 
         context "failed deletion" do
           it "should raise file system error" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             delete :destroy, id: @track, format: :json
             expect(response.status).to eq 400
             json = JSON.parse(response.body)
@@ -338,7 +338,7 @@ describe TracksController do
           end
 
           it "should not destroy the track" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track, format: :json
             }.not_to change(Track, :count)
@@ -362,13 +362,13 @@ describe TracksController do
 
         context "failed deletion" do
           it "should rediret to the projects page" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             delete :destroy, id: @track
             expect(response).to redirect_to projects_path
           end
 
           it "should not destroy the track" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track
             }.not_to change(Track, :count)

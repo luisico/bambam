@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ShareLinksController do
   describe "filters" do
-    it { should use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_filter :authenticate_user! }
   end
 
   before do
@@ -81,7 +81,7 @@ describe ShareLinksController do
     context "as a signed in user and project member" do
       before { sign_in @user }
 
-      it { should permit(:expires_at, :track_id, :notes).for(:create, params: {format: :js}) }
+      it { is_expected.to permit(:expires_at, :track_id, :notes).for(:create, params: {format: :js}) }
 
       context "with valid parameters" do
         it "should be a success" do
@@ -142,7 +142,7 @@ describe ShareLinksController do
     context "as a signed in user and project member" do
       before { sign_in @user }
 
-      it { should permit(:expires_at, :track_id, :notes).for(:update, params: {id: @share_link, format: :js}) }
+      it { is_expected.to permit(:expires_at, :track_id, :notes).for(:update, params: {id: @share_link, format: :js}) }
 
       context 'with valid parameters' do
         it "should redirect to the updated show page" do

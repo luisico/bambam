@@ -7,20 +7,20 @@ describe ProjectsUser do
 
   describe "database fields" do
     it_behaves_like "timestampable table"
-    it { should have_db_column(:user_id) }
-    it { should have_db_column(:project_id) }
-    it { should have_db_column(:read_only) }
+    it { is_expected.to have_db_column(:user_id) }
+    it { is_expected.to have_db_column(:project_id) }
+    it { is_expected.to have_db_column(:read_only) }
   end
 
   describe "user_id" do
-    it { should belong_to :user }
-    it { should respond_to :user }
-    it { should respond_to :user_id }
+    it { is_expected.to belong_to :user }
+    it { is_expected.to respond_to :user }
+    it { is_expected.to respond_to :user_id }
   end
 
   describe "project_id" do
-    it { should belong_to :project }
-    it { should respond_to :project }
-    it { should respond_to :project_id }
+    it { is_expected.to belong_to :project }
+    it { is_expected.to respond_to :project }
+    it { is_expected.to respond_to :project_id }
   end
 end

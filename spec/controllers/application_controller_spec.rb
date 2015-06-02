@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ApplicationController do
   describe "filters" do
-    it { should use_before_filter :configure_permitted_parameters }
+    it { is_expected.to use_before_filter :configure_permitted_parameters }
   end
 
   describe "CanCan AccessDenied exceptions" do
@@ -19,7 +19,7 @@ describe ApplicationController do
   end
 
   describe "Exception Notification" do
-    pending "should send an email"
+    skip "should send an email"
   end
 
   describe "Basic Authentication" do

@@ -7,20 +7,20 @@ describe Track do
 
   describe "database fields" do
     it_behaves_like "timestampable table"
-    it { should have_db_column(:name).with_options(null: false) }
-    it { should have_db_index(:name).unique(false) }
-    it { should have_db_column(:path).with_options(null:false) }
-    it { should have_db_column(:projects_datapath_id).with_options(null:false) }
-    it { should have_db_column(:owner_id).with_options(null: false) }
+    it { is_expected.to have_db_column(:name).with_options(null: false) }
+    it { is_expected.to have_db_index(:name).unique(false) }
+    it { is_expected.to have_db_column(:path).with_options(null:false) }
+    it { is_expected.to have_db_column(:projects_datapath_id).with_options(null:false) }
+    it { is_expected.to have_db_column(:owner_id).with_options(null: false) }
   end
 
   describe "name" do
-    it { should respond_to :name }
-    it { should validate_presence_of(:name) }
+    it { is_expected.to respond_to :name }
+    it { is_expected.to validate_presence_of(:name) }
   end
 
   describe "path" do
-    it { should respond_to :path }
+    it { is_expected.to respond_to :path }
 
     context 'is validated' do
       after { File.unlink(@track.path) if File.exist?(@track.path) }
@@ -56,7 +56,7 @@ describe Track do
         end
 
         it "when it is not included in allowed paths" do
-          pending "test removed"
+          skip "test removed"
         end
 
         it "when it does not have a valid file extenstion" do
@@ -69,21 +69,21 @@ describe Track do
 
       context "env var ALLOWED_TRACK_PATHS" do
         it "should be splitted if for paths" do
-          pending "Works, but don't know how to change ENV dynamically in rspec"
+          skip "Works, but don't know how to change ENV dynamically in rspec"
         end
       end
     end
   end
 
   describe "projects_datapath_id" do
-    it { should belong_to :projects_datapath }
-    it { should respond_to :projects_datapath_id }
+    it { is_expected.to belong_to :projects_datapath }
+    it { is_expected.to respond_to :projects_datapath_id }
   end
 
   describe "delegated methods" do
     context "project" do
       # TODO add delegate_method matchers when shoulda-matchers gem is updated
-      it { should respond_to :project }
+      it { is_expected.to respond_to :project }
       it "should change projects_datapath project when track project is changed" do
         @track.save
         expect {
@@ -95,7 +95,7 @@ describe Track do
 
     context "project_id" do
       # TODO add delegate_method matchers when shoulda-matchers gem is updated
-      it { should respond_to :project_id }
+      it { is_expected.to respond_to :project_id }
       it "should change projects_datapath project when track project_id is changed" do
         @track.save
         expect {
@@ -107,7 +107,7 @@ describe Track do
 
     context "datapath" do
       # TODO add delegate_method matchers when shoulda-matchers gem is updated
-      it {should respond_to :datapath}
+      it {is_expected.to respond_to :datapath}
       it "should change projects_datapath datapath when track datapath is changed" do
         @track.save
         expect {
@@ -119,7 +119,7 @@ describe Track do
 
     context "datapath_id" do
       # TODO add delegate_method matchers when shoulda-matchers gem is updated
-      it {should respond_to :datapath_id}
+      it {is_expected.to respond_to :datapath_id}
       it "should change projects_datapath datapath when track datapath_id is changed" do
         @track.save
         expect {
@@ -131,9 +131,9 @@ describe Track do
   end
 
   describe "genome" do
-    it { should respond_to :genome }
-    it { should have_db_column(:genome).with_options(null: false) }
-    it { should validate_presence_of(:genome) }
+    it { is_expected.to respond_to :genome }
+    it { is_expected.to have_db_column(:genome).with_options(null: false) }
+    it { is_expected.to validate_presence_of(:genome) }
 
     it "should default to 'hg19'" do
       track = Track.new
@@ -142,15 +142,15 @@ describe Track do
   end
 
   describe "owner_id" do
-    it {should belong_to :owner}
-    it {should respond_to :owner}
-    it { should validate_presence_of(:owner_id) }
+    it {is_expected.to belong_to :owner}
+    it {is_expected.to respond_to :owner}
+    it { is_expected.to validate_presence_of(:owner_id) }
   end
 
   describe "share_links" do
-    it { should have_many :share_links }
-    it { should respond_to :share_links }
-    it { should respond_to :share_link_ids }
+    it { is_expected.to have_many :share_links }
+    it { is_expected.to respond_to :share_links }
+    it { is_expected.to respond_to :share_link_ids }
   end
 
   describe "#full_path" do

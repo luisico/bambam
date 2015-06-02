@@ -3,19 +3,19 @@ require 'spec_helper'
 describe ShareLink do
   describe "database fields" do
     it_behaves_like "timestampable table"
-    it { should have_db_column(:access_token) }
-    it { should have_db_column(:expires_at) }
-    it { should have_db_column(:track_id) }
-    it { should have_db_column(:notes) }
+    it { is_expected.to have_db_column(:access_token) }
+    it { is_expected.to have_db_column(:expires_at) }
+    it { is_expected.to have_db_column(:track_id) }
+    it { is_expected.to have_db_column(:notes) }
   end
 
   describe "access_token" do
-    it { should respond_to :access_token }
-    it { should validate_presence_of(:access_token) }
+    it { is_expected.to respond_to :access_token }
+    it { is_expected.to validate_presence_of(:access_token) }
   end
 
   describe "expires_at" do
-    it { should respond_to :expires_at }
+    it { is_expected.to respond_to :expires_at }
 
     it "should validate expiration date is not in the past" do
       share_link = FactoryGirl.build(:share_link)
@@ -25,13 +25,13 @@ describe ShareLink do
   end
 
   describe "track_id" do
-    it { should belong_to :track }
-    it { should respond_to :track }
-    it { should validate_presence_of(:track_id) }
+    it { is_expected.to belong_to :track }
+    it { is_expected.to respond_to :track }
+    it { is_expected.to validate_presence_of(:track_id) }
   end
 
   describe "notes" do
-    it { should respond_to :notes }
+    it { is_expected.to respond_to :notes }
   end
 
   describe "#expired?" do

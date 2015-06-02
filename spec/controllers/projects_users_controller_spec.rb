@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ProjectsUsersController do
   describe "filters" do
-    it { should use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_filter :authenticate_user! }
   end
 
   describe "Patch 'update'" do
@@ -15,7 +15,7 @@ describe ProjectsUsersController do
     context "as an admin and owner of project" do
       before { sign_in @admin }
 
-      it { should permit(:read_only).for(:update, params: {id: @projects_user, format: :js}) }
+      it { is_expected.to permit(:read_only).for(:update, params: {id: @projects_user, format: :js}) }
 
       context 'with valid parameters' do
         it "should be a success" do

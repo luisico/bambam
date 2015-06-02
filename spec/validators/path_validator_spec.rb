@@ -46,7 +46,7 @@ describe ActiveModel::Validations::PathValidator do
       before { subject.path = blank_value }
 
       context "does not allow #{blank_value.inspect} values without full_path" do
-        it { should_not be_valid }
+        it { is_expected.not_to be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -120,7 +120,7 @@ describe ActiveModel::Validations::PathValidator do
       context "without an existing path" do
         before { subject.path = 'non_existing_path' }
 
-        it { should_not be_valid }
+        it { is_expected.not_to be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -139,7 +139,7 @@ describe ActiveModel::Validations::PathValidator do
         expect(File).to receive(:exist?).and_return(true)
       end
 
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
 
       it "should add :exist translation to errors" do
         expect{
@@ -165,12 +165,12 @@ describe ActiveModel::Validations::PathValidator do
     context "options" do
       it ":allow_empty defaults to 'false'" do
         validator = subject._validators[:path].first
-        expect(validator.send(:allow_empty?)).to be_false
+        expect(validator.send(:allow_empty?)).to be false
       end
 
       it ":allow_directory defaults to 'true'" do
         validator = subject._validators[:path].first
-        expect(validator.send(:allow_directory?)).to be_true
+        expect(validator.send(:allow_directory?)).to be true
       end
     end
   end

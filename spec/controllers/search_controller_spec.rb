@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchController do
   describe "filters" do
-    it { should use_before_filter :authenticate_user! }
+    it { is_expected.to use_before_filter :authenticate_user! }
   end
 
   describe "Get 'search'" do

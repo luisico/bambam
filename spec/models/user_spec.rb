@@ -7,9 +7,19 @@ describe User do
 
   describe "mixes in from Devise" do
     devise_modules = [:database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :invitable, :registerable]
-    its("devise_modules.sort") { should eq devise_modules.sort }
+
+    describe '#devise_modules' do
+      subject { super().devise_modules }
+      describe '#sort' do
+        subject { super().sort }
+        it { is_expected.to eq devise_modules.sort }
+      end
+    end
     devise_modules.each do |devise_module|
-      its(:devise_modules) { should include devise_module }
+      describe '#devise_modules' do
+        subject { super().devise_modules }
+        it { is_expected.to include devise_module }
+      end
     end
 
     Devise::Models.check_fields!(User)
@@ -17,72 +27,72 @@ describe User do
     it_behaves_like "timestampable table"
 
     context "database authenticatable" do
-      it { should have_db_column :email }
-      it { should have_db_column :encrypted_password }
-      it { should have_db_index(:email).unique(true) }
-      it { should respond_to :email }
-      it { should respond_to :encrypted_password}
-      it { should respond_to :password }
-      it { should respond_to :password_confirmation }
+      it { is_expected.to have_db_column :email }
+      it { is_expected.to have_db_column :encrypted_password }
+      it { is_expected.to have_db_index(:email).unique(true) }
+      it { is_expected.to respond_to :email }
+      it { is_expected.to respond_to :encrypted_password}
+      it { is_expected.to respond_to :password }
+      it { is_expected.to respond_to :password_confirmation }
     end
 
     context "recoverable" do
-      it { should have_db_column :reset_password_token }
-      it { should have_db_column :reset_password_sent_at }
-      it { should have_db_index(:reset_password_token).unique(true) }
-      it { should respond_to :reset_password_token }
-      it { should respond_to :reset_password_sent_at }
+      it { is_expected.to have_db_column :reset_password_token }
+      it { is_expected.to have_db_column :reset_password_sent_at }
+      it { is_expected.to have_db_index(:reset_password_token).unique(true) }
+      it { is_expected.to respond_to :reset_password_token }
+      it { is_expected.to respond_to :reset_password_sent_at }
     end
 
     context "rememberable" do
-      it { should have_db_column :remember_created_at }
-      it { should respond_to :remember_created_at }
+      it { is_expected.to have_db_column :remember_created_at }
+      it { is_expected.to respond_to :remember_created_at }
     end
 
     context "trackable" do
-      it { should have_db_column :sign_in_count }
-      it { should have_db_column :current_sign_in_at }
-      it { should have_db_column :last_sign_in_at }
-      it { should have_db_column :current_sign_in_ip }
-      it { should have_db_column :last_sign_in_ip }
-      it { should respond_to :sign_in_count }
-      it { should respond_to :current_sign_in_at }
-      it { should respond_to :last_sign_in_at }
-      it { should respond_to :current_sign_in_ip }
-      it { should respond_to :last_sign_in_ip }
+      it { is_expected.to have_db_column :sign_in_count }
+      it { is_expected.to have_db_column :current_sign_in_at }
+      it { is_expected.to have_db_column :last_sign_in_at }
+      it { is_expected.to have_db_column :current_sign_in_ip }
+      it { is_expected.to have_db_column :last_sign_in_ip }
+      it { is_expected.to respond_to :sign_in_count }
+      it { is_expected.to respond_to :current_sign_in_at }
+      it { is_expected.to respond_to :last_sign_in_at }
+      it { is_expected.to respond_to :current_sign_in_ip }
+      it { is_expected.to respond_to :last_sign_in_ip }
     end
 
     context "invitable" do
-      it { should have_db_column :invitation_token }
-      it { should have_db_column :invitation_created_at }
-      it { should have_db_column :invitation_sent_at }
-      it { should have_db_column :invitation_accepted_at }
-      it { should have_db_column :invitation_limit }
-      it { should have_db_column :invited_by_type }
-      it { should have_db_column :invited_by_id }
-      it { should have_db_index(:invitation_token) }
-      it { should have_db_index(:invited_by_id) }
-      it { should respond_to :invitation_token }
-      it { should respond_to :invitation_created_at }
-      it { should respond_to :invitation_sent_at }
-      it { should respond_to :invitation_accepted_at }
-      it { should respond_to :invitation_limit }
-      it { should respond_to :invited_by }
+      it { is_expected.to have_db_column :invitation_token }
+      it { is_expected.to have_db_column :invitation_created_at }
+      it { is_expected.to have_db_column :invitation_sent_at }
+      it { is_expected.to have_db_column :invitation_accepted_at }
+      it { is_expected.to have_db_column :invitation_limit }
+      it { is_expected.to have_db_column :invited_by_type }
+      it { is_expected.to have_db_column :invited_by_id }
+      it { is_expected.to have_db_index(:invitation_token) }
+      it { is_expected.to have_db_index(:invited_by_id) }
+      it { is_expected.to respond_to :invitation_token }
+      it { is_expected.to respond_to :invitation_created_at }
+      it { is_expected.to respond_to :invitation_sent_at }
+      it { is_expected.to respond_to :invitation_accepted_at }
+      it { is_expected.to respond_to :invitation_limit }
+      it { is_expected.to respond_to :invited_by }
     end
   end
 
   describe "mixes in from rolify" do
-    it { should have_and_belong_to_many :roles }
-    it { should respond_to :add_role }
-    it { should respond_to :has_role? }
+    it { is_expected.to have_and_belong_to_many :roles }
+    it { is_expected.to respond_to :add_role }
+    it { is_expected.to respond_to :has_role? }
   end
 
   describe "user name fields" do
-    it { should have_db_column :first_name }
-    it { should respond_to :first_name }
-    it { should have_db_column :last_name }
-    it { should respond_to :last_name }
-    it { should respond_to :handle }
+    it { is_expected.to have_db_column :first_name }
+    it { is_expected.to respond_to :first_name }
+    it { is_expected.to have_db_column :last_name }
+    it { is_expected.to respond_to :last_name }
+    it { is_expected.to respond_to :handle }
 
     describe "#handle" do
       it "returns first name if there is only a first name" do
@@ -124,24 +134,24 @@ describe User do
     end
   end
 
-  it { should be_valid }
+  it { is_expected.to be_valid }
 
   describe "email" do
     context "when blank" do
-      it { should_not allow_value(' ').for(:email) }
+      it { is_expected.not_to allow_value(' ').for(:email) }
     end
 
     context "when format is invalid" do
       addresses = %w[user@foo,com user_at_foo.org example.user@foo.]
       addresses.each do |address|
-        it { should_not allow_value(address).for(:email) }
+        it { is_expected.not_to allow_value(address).for(:email) }
       end
     end
 
     context "when format is valid" do
       addresses = %w[user@foo.com A_USER@f.b.org frst.1st@foo.jp a+b@baz.cn]
       addresses.each do |address|
-        it { should allow_value(address).for(:email) }
+        it { is_expected.to allow_value(address).for(:email) }
       end
     end
 
@@ -150,7 +160,7 @@ describe User do
         user_with_same_email = @user.dup
         user_with_same_email.save
       end
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context "when already taken regardless of case" do
@@ -159,29 +169,32 @@ describe User do
         user_with_same_email.email = @user.email.upcase
         user_with_same_email.save
       end
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
     end
   end
 
   describe "password" do
     context "when blank" do
       before { @user.password = @user.password_confirmation = ' '}
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context "when doesn't match confirmation" do
       before { @user.password_confirmation = "mismatch" }
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context "when too short" do
       before { @user.password = @user.password_confirmation = 'a' * 7 }
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
     end
   end
 
   describe "password encryption" do
-    its(:encrypted_password) { should_not be_blank }
+    describe '#encrypted_password' do
+      subject { super().encrypted_password }
+      it { is_expected.not_to be_blank }
+    end
   end
 
   describe "filter all users" do
@@ -196,51 +209,51 @@ describe User do
 
   describe "associations" do
     context "memberships" do
-      it { should have_many :memberships }
-      it { should respond_to :memberships }
-      it { should respond_to :membership_ids }
+      it { is_expected.to have_many :memberships }
+      it { is_expected.to respond_to :memberships }
+      it { is_expected.to respond_to :membership_ids }
     end
 
     context "groups" do
-      it { should have_many :groups }
-      it { should respond_to :groups }
-      it { should respond_to :group_ids }
+      it { is_expected.to have_many :groups }
+      it { is_expected.to respond_to :groups }
+      it { is_expected.to respond_to :group_ids }
     end
 
     context "projects_users" do
-      it { should have_many :projects_users }
-      it { should respond_to :projects_users }
-      it { should respond_to :projects_user_ids }
+      it { is_expected.to have_many :projects_users }
+      it { is_expected.to respond_to :projects_users }
+      it { is_expected.to respond_to :projects_user_ids }
     end
 
     context "projects" do
-      it { should have_many :projects }
-      it { should respond_to :projects }
-      it { should respond_to :project_ids }
+      it { is_expected.to have_many :projects }
+      it { is_expected.to respond_to :projects }
+      it { is_expected.to respond_to :project_ids }
     end
 
     context "owned_projects" do
-      it { should have_many :owned_projects }
-      it { should respond_to :owned_projects }
-      it { should respond_to :owned_project_ids }
+      it { is_expected.to have_many :owned_projects }
+      it { is_expected.to respond_to :owned_projects }
+      it { is_expected.to respond_to :owned_project_ids }
     end
 
     context "tracks" do
-      it { should have_many :tracks }
-      it { should respond_to :tracks }
-      it { should respond_to :track_ids }
+      it { is_expected.to have_many :tracks }
+      it { is_expected.to respond_to :tracks }
+      it { is_expected.to respond_to :track_ids }
     end
 
     context "datapaths" do
-      it { should have_many :datapaths }
-      it { should respond_to :datapaths }
-      it { should respond_to :datapath_ids }
+      it { is_expected.to have_many :datapaths }
+      it { is_expected.to respond_to :datapaths }
+      it { is_expected.to respond_to :datapath_ids }
     end
 
     context "datapaths_users" do
-      it { should have_many :datapaths_users }
-      it { should respond_to :datapaths_users }
-      it { should respond_to :datapaths_user_ids }
+      it { is_expected.to have_many :datapaths_users }
+      it { is_expected.to respond_to :datapaths_users }
+      it { is_expected.to respond_to :datapaths_user_ids }
     end
   end
 
