@@ -16,15 +16,17 @@ class @Fancytree
         node = data.node
         $tdList = $(node.tr).find(">td")
         if node.folder and node.selected
-          $tdList.eq(2).addClass('projects-datapath-name').text(node.data.object.projects_datapath.name)
+          $tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
         else if node.folder
           $tdList.eq(2).addClass('projects-datapath-name')
         else if node.selected
           $tdList.eq(2).addClass('track-name').html("<a href='/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
-          $tdList.eq(3).addClass('track-link').html(node.data.object.track.igv)
+          $tdList.eq(3).addClass('track-genome').html(node.data.object.track.genome)
+          $tdList.eq(4).addClass('track-link').html(node.data.object.track.igv)
         else
           $tdList.eq(2).addClass('track-name')
-          $tdList.eq(3).addClass('track-link')
+          $tdList.eq(3).addClass('track-genome')
+          $tdList.eq(4).addClass('track-link')
       beforeSelect: (event, data) ->
         if data.node.selected and data.node.folder
           selectedParent = Fancytree.selectedParent(event, data.node)
@@ -113,7 +115,7 @@ class @Fancytree
         Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').text(jqXHR.projects_datapath.name)
+        $tr.find('.projects-datapath-name').html(jqXHR.projects_datapath.name)
         $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
@@ -135,7 +137,7 @@ class @Fancytree
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').text('')
+        $tr.find('.projects-datapath-name').html('')
         if $tr.is(':visible')
           $tr.effect("highlight", {}, 1500)
         delete node.data.object.projects_datapath
@@ -197,6 +199,7 @@ class @Fancytree
         node.data['object'] = jqXHR
         $tr = $(node.tr)
         $tr.find('.track-name').html("<a href='/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
+        $tr.find('.track-genome').html(jqXHR.track.genome)
         $tr.find('.track-link').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
         return false
@@ -215,7 +218,8 @@ class @Fancytree
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
-        $tr.find('.track-name').text('')
+        $tr.find('.track-name').html('')
+        $tr.find('.track-genome').html('')
         $tr.find('.track-link').html("")
         if $tr.is(':visible')
           $tr.effect("highlight", {}, 1500)

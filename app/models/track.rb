@@ -7,7 +7,7 @@ class Track < ActiveRecord::Base
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
 
-  validates_presence_of :name, :owner_id
+  validates_presence_of :name, :owner_id, :genome
   #TODO adding presence validation on project_id breaks nested updated.
   validates_path_of :path
   validates :path, format: { with: /\A.*\.(bw|bam)\z/,

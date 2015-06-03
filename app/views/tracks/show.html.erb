@@ -4,19 +4,21 @@
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
       <div class="clearfix">
-        <h3 class="left" id="track-name">
-          <%= best_in_place_if can?(:update, @track), @track, :name,
+        <div class="track-name">
+          <h3>
+            <%= best_in_place_if can?(:update, @track), @track, :name,
               {ok_button: 'save', cancel_button: 'cancel'} %>
-          <small>
-            (<%= link_to @track.project.name, @track.project %>,
-            owner:
-            <% if can? :show, @track.owner %>
-              <%= link_to @track.owner.handle, @track.owner %>
-            <% else %>
-              <%= @track.owner.handle%>
-            <% end %>)
-          </small>
-        </h3>
+            <span class="label genome">
+              <%= best_in_place_if can?(:update, @track), @track, :genome,
+                {ok_button: 'save', cancel_button: 'cancel'} %>
+            </span>
+          </h3>
+          <div class="project-name">
+            <% if @track.project %>
+              in project <%= link_to @track.project.name, @track.project %>
+            <% end %>
+          </div>
+        </div>
         <%= render partial: 'timestamps', locals: { record: @track } %>
       </div>
 

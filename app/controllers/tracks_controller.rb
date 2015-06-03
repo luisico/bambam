@@ -15,14 +15,14 @@ class TracksController < ApplicationController
   def create
     @track.owner = current_user
     if @track.save
-      render json: {track: {id: @track.id, name: @track.name, igv: view_context.link_to_igv(@track)}}, status: 200
+      render json: {track: {id: @track.id, name: @track.name, genome: @track.genome, igv: view_context.link_to_igv(@track)}}, status: 200
     else
       render json: {status: :error, message: 'file system error'}, status: 400
     end
   end
 
   def update
-    if track_params[:name]
+    if track_params[:name] || track_params[:genome]
       authorize! :update, @track
       @track.update(track_params)
       respond_with_bip(@track)
@@ -54,6 +54,6 @@ class TracksController < ApplicationController
   private
 
   def track_params
-    params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id)
+    params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id, :genome)
   end
 end
