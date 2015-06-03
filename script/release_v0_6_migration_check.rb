@@ -4,12 +4,12 @@
 # Methods
 
 def run_check_on(migration, failures)
-  print migration
   if failures.any?
-    print "  ERROR\n"
+    print "ERROR"
   else
-    print "  OK\n"
+    print "OK   "
   end
+  puts " ... #{migration}"
 end
 
 # Header
@@ -57,3 +57,8 @@ run_check_on(
     track.full_path == File.join(track.projects_datapath.full_path, track.path)
   end
 )
+
+puts "\nRemember to manually assign roles for managers and admins. Current roles are:"
+User.all.each do |user|
+  puts "#{user.id} - #{user.handle}: #{user.roles_name.join(', ')}"
+end
