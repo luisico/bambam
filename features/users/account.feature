@@ -8,6 +8,16 @@ Feature: Update account information
     When I visit the edit account page
     Then I should be able to edit my email
 
+   Scenario: User can change their first name
+    Given I am signed in
+    When I visit the edit account page
+    Then I should be able to edit my first name
+
+  Scenario: User can change their last name
+    Given I am signed in
+    When I visit the edit account page
+    Then I should be able to edit my last name
+
   Scenario: User can change the password
     Given I am signed in
     When I visit the edit account page

@@ -33,6 +33,24 @@ Then /^I should be able to edit my email$/ do
   expect(page).to have_css('.alert-box', text: I18n.t('devise.registrations.updated'))
 end
 
+Then /^I should be able to edit my first name$/ do
+  expect {
+    fill_in 'First name', with: 'new_first_name'
+    update_account
+    @user.reload
+  }.to change(@user, :first_name)
+  expect(page).to have_css('.alert-box', text: I18n.t('devise.registrations.updated'))
+end
+
+Then /^I should be able to edit my last name$/ do
+  expect {
+    fill_in 'Last name', with: 'new_last_name'
+    update_account
+    @user.reload
+  }.to change(@user, :last_name)
+  expect(page).to have_css('.alert-box', text: I18n.t('devise.registrations.updated'))
+end
+
 Then /^I should be able to edit my password$/ do
   new_password = 'new_password'
   expect {

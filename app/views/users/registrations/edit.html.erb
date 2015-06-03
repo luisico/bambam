@@ -14,6 +14,14 @@
         </div>
 
         <div>
+          <%= f.text_field :first_name, autofocus: true, placeholder: 'First name' %>
+        </div>
+
+        <div>
+          <%= f.text_field :last_name, autofocus: true, placeholder: 'Last name' %>
+        </div>
+
+        <div>
           <label><i>(leave next two fields blank if you don't want to change your password)</i></label>
           <%= f.password_field :password, autocomplete: 'off', placeholder: 'Password' %>
         </div>
