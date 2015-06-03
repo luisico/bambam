@@ -22,7 +22,7 @@ describe Track do
   describe "path" do
     it { should respond_to :path }
 
-    context 'is validated with full_path' do
+    context 'is validated' do
       after { File.unlink(@track.path) if File.exist?(@track.path) }
 
       it "should be valid when it exists with a .bam file extension" do
@@ -36,7 +36,7 @@ describe Track do
         File.unlink track.path
       end
 
-      it "stips leading and trailing whitespace from path" do
+      it "strips leading and trailing whitespace from path" do
         track = FactoryGirl.build(:track, path: File.join('tmp', 'mytrack.bam'))
         cp_track track.path
         track.path = File.join(' tmp', 'mytrack.bam ')
@@ -127,6 +127,17 @@ describe Track do
           @track.save
         }.to change(@track.projects_datapath, :datapath)
       end
+    end
+  end
+
+  describe "genome" do
+    it { should respond_to :genome }
+    it { should have_db_column(:genome).with_options(null: false) }
+    it { should validate_presence_of(:genome) }
+
+    it "should default to 'hg19'" do
+      track = Track.new
+      expect(track.genome).to eq 'hg19'
     end
   end
 

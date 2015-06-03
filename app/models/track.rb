@@ -7,21 +7,16 @@ class Track < ActiveRecord::Base
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
 
-  validates_presence_of :name, :owner_id
+  validates_presence_of :name, :owner_id, :genome
   #TODO adding presence validation on project_id breaks nested updated.
-  validates_path_of :full_path
+  validates_path_of :path
   validates :path, format: { with: /\A.*\.(bw|bam)\z/,
     message: "file must have extension .bw or .bam" }
 
-  before_validation :strip_whitespace
-  after_save        :update_projects_datapath
+  after_save :update_projects_datapath
 
   def full_path
-    File.join datapath.path, projects_datapath.sub_directory, path
-  end
-
-  def strip_whitespace
-    self.path = self.path.strip
+    File.join projects_datapath.full_path, path
   end
 
   protected

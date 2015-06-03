@@ -12,7 +12,10 @@ class ApplicationController < ActionController::Base
         redirect_to projects_path, alert: exception.message
       }
       format.js {
-        render json: {:status => :error, :message => "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, :status => 403
+        render json: {status: :error, message: "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, status: 403
+      }
+      format.json {
+        render json: {status: :error, message: "You don't have permission to #{exception.action} #{exception.subject.to_s.pluralize}"}, status: 403
       }
     end
   end

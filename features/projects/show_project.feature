@@ -3,13 +3,16 @@ Feature: Show a project
   As a user
   I want to be able to access a page with the proper information about a project
 
+  @javascript
   Scenario Outline: Show a project's information
     Given I am signed in as <role>
     And <project exists>
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should see the project's name
+    And I should see a section titled "<title>"
     And I should see the project's tracks
     And I should see the project's users <privilege> profile links
     And I should see the project's owner
@@ -17,24 +20,25 @@ Feature: Show a project
     And I <privilege2> see a "Delete" button
 
     Examples:
-      | role      | project exists        | privilege | privilege2 |
-      | an admin  | I belong to a project | with      | should     |
-      | a manager | I belong to a project | with      | should not |
-      | a manager | I own a project       | with      | should     |
-      | a user    | I belong to a project | without   | should not |
+      | role      | title                 | project exists        | privilege | privilege2 |
+      | an admin  | Datapaths & Tracks    | I belong to a project | with      | should     |
+      | a manager | Tracks                | I belong to a project | with      | should not |
+      | a manager | Datapaths & Tracks    | I own a project       | with      | should     |
+      | a user    | Tracks                | I belong to a project | without   | should not |
 
   Scenario: User can access the tracks page
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     When I am on the project page
     And I click "tracks"
     Then I should be on the tracks page
 
+  @javascript
   Scenario: User can access a track show page
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     When I am on the project page
     And I click on the track name
     Then I should be on the show track page
@@ -44,6 +48,7 @@ Feature: Show a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should be able to designate a user read only
@@ -56,6 +61,7 @@ Feature: Show a project
     Given I am signed in as a manager
     And I own a project
     And there are 3 additional users of that project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     And there is a read only user in that project
     When I am on the project page
@@ -81,6 +87,7 @@ Feature: Show a project
   Scenario: IGV info tooltip
     Given I am signed in as a user
     And I belong to a project
+    And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should be able to activate a tooltip on the IGV buttons

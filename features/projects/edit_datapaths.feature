@@ -4,63 +4,11 @@ Feature: Edit projects datapaths
   As a manager
   I can update the projects datapaths
 
-  Scenario: Managers can add a datapath to a project
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
-    When I am on the project page
-    Then I should be able to add a datapath to the project
-
-  Scenario: Managers can remove a datapath from a project
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
-    When I am on the project page
-    Then I should be able to remove a datapath from the project
-
-  Scenario: Managers can add a datapath sub-directory to the project
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
-    And one of those additional datapaths has a sub-directory
-    When I am on the project page
-    Then I should be able to add the datapath sub-directory to the project
-
-  Scenario: Managers can remove a datapath sub-directory from the project
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And there is a datapath sub-directory in the project
-    And I have access to 3 additional datapaths
-    When I am on the project page
-    Then I should be able to remove the datapath sub-directory from the project
-
-  Scenario: Managers are informed about a failed datapath addition
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
-    When I am on the project page
-    Then I should be informed of a failed datapath addition
-    And I should see the status code appended to the node title
-
-  Scenario: Managers are informed about a failed datapath deletion
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
-    When I am on the project page
-    Then I should be informed of a failed datapath deletion
-    And I should see the status code appended to the node title
-
   Scenario: Managers can add and immediately remove datapath
     Given I am signed in as a manager
     And I own a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be able to add a datapath to the project
     And I should be able to immediately remove the datapath
@@ -69,6 +17,47 @@ Feature: Edit projects datapaths
     Given I am signed in as a user
     And I belong to a project
     And there are 3 datapaths in that project
-    And I have access to 3 additional datapaths
+    And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should not be able to add a datapath to the project
+
+  Scenario: Managers cannot add more than one datapath to a folder hierarchy
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And the project owner has access to 3 additional datapaths
+    And there is a datapath sub-directory in the project
+    And there is a project track in that sub-directory
+    When I am on the project page
+    And I select the parent datapath
+    Then the parent datapath should be selected
+    And the sub-directory should not be selected
+    And the track should be transitioned to the selected datapath
+
+    When I select the sub-directory
+    Then the sub-directory should be selected
+    And the parent datapath should not be selected
+    And the track should be transitioned to the selected sub-directory
+
+  Scenario: Managers can converge multiple child sub-directories to a single parent
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And the project owner has access to 3 additional datapaths
+    And there is a datapath sub-directory in the project
+    And there is another datapath sub-directory in the project
+    When I am on the project page
+    And I select the last additional datapath
+    Then the parent datapath should be selected
+    And both of the child sub-directories should not be selected
+
+  Scenario: Managers can auto-move orphan tracks to new parent
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And the project owner has access to 3 additional datapaths
+    And there is a track in that project
+    And there is another track in a seperate sub-directory
+    When I am on the project page
+    And I select the immediate parent of the first track
+    Then the second track will be automatically transitioned

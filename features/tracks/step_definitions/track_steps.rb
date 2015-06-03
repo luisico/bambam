@@ -4,20 +4,44 @@
 
 Given /^there (is|are) (\d+|a) tracks? in that project$/ do |foo, n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  @project ||= @projects.last
-  FactoryGirl.create_list(:track, n.to_i, :project => @project)
+
+  projects_datapath = @projects_datapath || FactoryGirl.create(:projects_datapath, project: @project)
+  expect {
+    FactoryGirl.create_list(:track, n, projects_datapath: projects_datapath)
+  }.to change(Track, :count).by(n)
+  @project.reload
   @track = @project.tracks.last
 end
 
 Given /^I own (\d+|a) tracks? in that project$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   owner = (@user || @manager)
-  @project ||= @projects.last
-  FactoryGirl.create_list(:track, n.to_i, :project => @project, owner: owner)
+
+  projects_datapath = @projects_datapath || FactoryGirl.create(:projects_datapath, project: @project)
+  expect {
+    FactoryGirl.create_list(:track, n, projects_datapath: projects_datapath, owner: owner)
+  }.to change(Track, :count).by(n)
   @track = @project.tracks.last
+  @project.reload
+end
+
+Given /^there (is|are) (\d+|a) project tracks? in that sub\-directory$/ do |foo, n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+
+  expect {
+    @tracks = FactoryGirl.create_list(:track, n, projects_datapath: @project.projects_datapaths.last, owner: @manager)
+  }.to change(Track, :count).by(n)
+end
+
+Given /^there is another track in a seperate sub\-directory$/ do
+  @track2 = FactoryGirl.create(:track, projects_datapath: @projects_datapath, path: "track_s2/track2.bam")
 end
 
 ### When
+
+When /^I visit the track page$/ do
+  visit track_path(@track)
+end
 
 ### Then
 

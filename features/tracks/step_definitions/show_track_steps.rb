@@ -42,8 +42,12 @@ Then /^I should see the track's name$/ do
   expect(page).to have_content @track.name
 end
 
+Then /^I should see the track's genome$/ do
+  expect(page).to have_content @track.genome
+end
+
 Then /^I should see the track's path$/ do
-  expect(page).to have_content @track.path
+  expect(page).to have_content @track.full_path
 end
 
 Then /^I should see the track's project$/ do

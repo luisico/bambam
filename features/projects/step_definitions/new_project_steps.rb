@@ -2,7 +2,6 @@
 
 def build_project
   @project_attrs ||= FactoryGirl.attributes_for(:project)
-  # build_track_with_path
 end
 
 def fill_project_form(project=nil)
@@ -37,7 +36,7 @@ end
 
 Then /^I should not be able to create a new project without a name$/ do
   expect {
-    fill_project_form({:name=>""})
+    fill_project_form({name: ""})
     submit_project_form("can't be blank")
   }.not_to change(Project, :count)
 end

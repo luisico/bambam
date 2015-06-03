@@ -69,7 +69,8 @@ describe User do
 
       context "projects and tracks" do
         before do
-          @project = FactoryGirl.create(:project, owner: @manager, users: [FactoryGirl.create(:user)])
+          @project_user = FactoryGirl.create(:user)
+          @project = FactoryGirl.create(:project, owner: @manager, users: [@project_user])
           @project_as_user = FactoryGirl.create(:project, users: [@manager])
           @other_project = FactoryGirl.create(:project)
         end
@@ -89,7 +90,8 @@ describe User do
         end
 
         context "tracks" do
-          it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project)) }
+          it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project, owner: @project_user)) }
+          it { should     be_able_to(:manage, FactoryGirl.create(:track, projects_datapath: FactoryGirl.create(:projects_datapath, project: @project))) }
           it { should_not be_able_to(:manage, FactoryGirl.create(:track)) }
 
           it { should     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
@@ -203,7 +205,7 @@ describe User do
           @other_share_link = FactoryGirl.create(:share_link)
         end
 
-        it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
+        it { should be_able_to(:manage, ShareLink, track: {project: {user_ids: @user.id}}) }
 
         it { should_not be_able_to(:manage, @other_share_link) }
       end

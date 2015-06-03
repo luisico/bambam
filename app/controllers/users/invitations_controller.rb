@@ -10,8 +10,8 @@ class Users::InvitationsController < Devise::InvitationsController
     self.resource = invite_resource
     if resource.errors.empty?
       yield resource if block_given?
-      set_flash_message :notice, :send_instructions, :email => self.resource.email if self.resource.invitation_sent_at
-      respond_with resource, :location => after_invite_path_for(resource)
+      set_flash_message(:notice, :send_instructions, email: self.resource.email) if self.resource.invitation_sent_at
+      respond_with resource, location: after_invite_path_for(resource)
     else
       @users = User.order('created_at DESC')
       @groups = Group.all
