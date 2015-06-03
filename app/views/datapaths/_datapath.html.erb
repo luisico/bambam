@@ -3,7 +3,7 @@
     <li id='datapath-path-<%= datapath.id %>'>
       <%= datapath.path %>
       <%= link_to "edit", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-datapath-link margin-left" %>
-      <%= link_to "", datapath, method: :delete, data: {confirm: "Are you sure?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
+      <%= link_to "", datapath, method: :delete, data: {confirm: "WARNING!!!\nThis action cannot be undone. Deleting this datapath will also permenately delete all associated tracks. Are you sure you want to continue?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
       <% if datapath.users.any? %>
         <ul class="datapath-users" id="datapath-users-<%= datapath.id %>">
           <% datapath.users.each do |user| %>
