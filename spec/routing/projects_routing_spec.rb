@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "Projects" do
+RSpec.describe "Projects" do
   describe "routes to" do
     it "a complete set of restful actions" do
       assert_routing({ path: '/projects', method: :get },       { controller: 'projects', action: 'index' })

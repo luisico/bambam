@@ -78,5 +78,5 @@ Then /^I should see a signed out message$/ do
 end
 
 Then /^I should see an invalid sign in message$/ do
-  expect(page).to have_css '.alert-box', text: I18n.t('devise.failure.invalid')
+  expect(page).to have_css '.alert-box', text: I18n.t('devise.failure.invalid', authentication_keys: 'email')
 end

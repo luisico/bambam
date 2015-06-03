@@ -1,9 +1,12 @@
 require File.expand_path('../boot', __FILE__)
 
+require "rails"
 # Pick the frameworks you want:
+require "active_model/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
+require "action_view/railtie"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
@@ -17,13 +20,12 @@ module Bambam
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Don't generate RSpec tests for views and helpers
+    # Configure generators
     config.generators do |g|
-      g.view_specs false
       g.helper false
-      g.helper_specs false
-      g.javascript_engine :js
       g.stylesheet_engine :sass
+      g.view_specs false
+      g.helper_specs false
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl
     end

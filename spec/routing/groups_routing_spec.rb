@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "Groups" do
+RSpec.describe "Groups" do
   describe "routes to" do
     it "a complete set of restful actions" do
       assert_routing({ path: '/groups/1', method: :get },     { controller: 'groups', action: 'show', id: '1' })

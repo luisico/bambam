@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe StreamServicesController do
+RSpec.describe StreamServicesController do
   describe 'show' do
     context "as a sign_in user" do
       before { stub_sign_in }
@@ -184,33 +184,33 @@ describe StreamServicesController do
 
     it "should be true with valid access token" do
       controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
-      expect(controller.send(:has_access_token?)).to be_true
+      expect(controller.send(:has_access_token?)).to be true
     end
 
     it "should be false with invalid access token" do
       controller.params = {access_token: "invalid_token", id: "#{@track.id}"}
-      expect(controller.send(:has_access_token?)).to be_false
+      expect(controller.send(:has_access_token?)).to be false
     end
 
     it "should be false with expired access token" do
       @share_link.update_attribute(:expires_at, DateTime.yesterday)
       controller.params = {access_token: @share_link.access_token, id: "#{@track.id}"}
-      expect(controller.send(:has_access_token?)).to be_false
+      expect(controller.send(:has_access_token?)).to be false
     end
 
     it "should be false with no access token" do
       controller.params = { id: "#{@track.id}" }
-      expect(controller.send(:has_access_token?)).to be_false
+      expect(controller.send(:has_access_token?)).to be false
     end
 
     it "should be false with non-existant track" do
       controller.params = {access_token: @share_link.access_token, id: "9999"}
-      expect(controller.send(:has_access_token?)).to be_false
+      expect(controller.send(:has_access_token?)).to be false
     end
 
     it "should be false with different track" do
       controller.params = {access_token: @share_link.access_token, id: "#{FactoryGirl.create(:track).id}"}
-      expect(controller.send(:has_access_token?)).to be_false
+      expect(controller.send(:has_access_token?)).to be false
     end
   end
 

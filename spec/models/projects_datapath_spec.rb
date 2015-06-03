@@ -1,22 +1,22 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ProjectsDatapath do
+RSpec.describe ProjectsDatapath do
   before { @projects_datapath = FactoryGirl.build(:projects_datapath) }
 
   subject { @projects_datapath }
 
   describe "database fields" do
     it_behaves_like "timestampable table"
-    it { should have_db_column(:project_id) }
-    it { should have_db_column(:datapath_id) }
-    it { should have_db_column(:sub_directory).with_options(null: false) }
-    it { should have_db_column(:name) }
+    it { is_expected.to have_db_column(:project_id) }
+    it { is_expected.to have_db_column(:datapath_id) }
+    it { is_expected.to have_db_column(:sub_directory).with_options(null: false) }
+    it { is_expected.to have_db_column(:name) }
   end
 
   describe "project_id" do
-    it { should belong_to :project }
-    it { should respond_to :project }
-    it { should respond_to :project_id }
+    it { is_expected.to belong_to :project }
+    it { is_expected.to respond_to :project }
+    it { is_expected.to respond_to :project_id }
     it "should touch the project" do
       expect {
         @projects_datapath.save
@@ -25,14 +25,14 @@ describe ProjectsDatapath do
   end
 
   describe "datapath_id" do
-    it { should belong_to :datapath }
-    it { should respond_to :datapath }
-    it { should respond_to :datapath_id }
+    it { is_expected.to belong_to :datapath }
+    it { is_expected.to respond_to :datapath }
+    it { is_expected.to respond_to :datapath_id }
   end
 
   describe "sub_directory" do
-    it { should respond_to :sub_directory }
-    it { should ensure_exclusion_of(:sub_directory).in_array([nil]) }
+    it { is_expected.to respond_to :sub_directory }
+    it { is_expected.to validate_exclusion_of(:sub_directory).in_array([nil]) }
 
     it "should be invalid when nil" do
       @projects_datapath.sub_directory = nil
@@ -46,13 +46,13 @@ describe ProjectsDatapath do
   end
 
   describe "name" do
-    it { should respond_to :name }
+    it { is_expected.to respond_to :name }
   end
 
   describe "tracks" do
-    it { should have_many :tracks }
-    it { should respond_to :tracks }
-    it { should respond_to :track_ids }
+    it { is_expected.to have_many :tracks }
+    it { is_expected.to respond_to :tracks }
+    it { is_expected.to respond_to :track_ids }
   end
 
   describe "#full_path" do

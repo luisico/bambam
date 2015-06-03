@@ -1,6 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe SearchController do
+RSpec.describe SearchController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   describe "Get 'search'" do
     context "as a signed in user" do
       before do

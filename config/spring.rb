@@ -3,7 +3,7 @@ Spring.after_fork do
   I18n.reload!
 
   # Reload routes
-  Bambam::Application.reload_routes!
+  Rails.application.reload_routes!
 
   # Reload factories
   require 'factory_girl_rails'

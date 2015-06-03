@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe ApplicationHelper do
+RSpec.describe ApplicationHelper do
   describe "#avatar_url" do
     before do
       @user = FactoryGirl.create(:user)

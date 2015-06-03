@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "ProjectsDatapaths" do
+RSpec.describe "ProjectsDatapaths" do
   describe "routes to" do
     it "the index and show actions" do
       assert_routing({ path: '/projects_datapaths', method: :post },       { controller: 'projects_datapaths', action: 'create' })

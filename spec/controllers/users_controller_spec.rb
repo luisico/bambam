@@ -1,6 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe UsersController do
+RSpec.describe UsersController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   before do
     @admin = FactoryGirl.create(:admin)
     @users = FactoryGirl.create_list(:user, 3)

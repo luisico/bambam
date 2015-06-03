@@ -1,6 +1,12 @@
-require 'spec_helper'
+require 'rails_helper'
+
 # TODO fix authorization on this controller
-describe TracksController do
+
+RSpec.describe TracksController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   before { @admin = FactoryGirl.create(:admin) }
 
   describe "GET 'index'" do
@@ -122,14 +128,14 @@ describe TracksController do
       cp_track @full_path
     end
 
-    after { File.unlink @full_path if File.exists? @full_path }
+    after { File.unlink @full_path if File.exist? @full_path }
 
     context "as a signed in user and project member" do
       before { sign_in FactoryGirl.create(:user, projects: [@project]) }
 
       context "with valid parameters" do
         it "should be a success" do
-          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
@@ -147,7 +153,7 @@ describe TracksController do
 
       context "failed creation" do
         it "should raise file system error" do
-          Track.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Track).to receive(:save).and_return(false)
           post :create, track: @track_attr, format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
@@ -157,7 +163,7 @@ describe TracksController do
         end
 
         it "should not create a new track" do
-          Track.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Track).to receive(:save).and_return(false)
           expect{
             post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)
@@ -325,7 +331,7 @@ describe TracksController do
 
         context "failed deletion" do
           it "should raise file system error" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             delete :destroy, id: @track, format: :json
             expect(response.status).to eq 400
             json = JSON.parse(response.body)
@@ -334,7 +340,7 @@ describe TracksController do
           end
 
           it "should not destroy the track" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track, format: :json
             }.not_to change(Track, :count)
@@ -358,13 +364,13 @@ describe TracksController do
 
         context "failed deletion" do
           it "should rediret to the projects page" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             delete :destroy, id: @track
             expect(response).to redirect_to projects_path
           end
 
           it "should not destroy the track" do
-            Track.any_instance.stub(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track
             }.not_to change(Track, :count)

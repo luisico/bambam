@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "ShareLinks" do
+RSpec.describe "ShareLinks" do
   describe "routes to" do
     it "a complete set of restful actions" do
       assert_routing({ path: '/share_links/new', method: :get },   { controller: 'share_links', action: 'new' })

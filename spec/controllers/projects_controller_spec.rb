@@ -1,8 +1,12 @@
-require 'spec_helper'
+require 'rails_helper'
 
 # TODO: add specs for html/js only requests
 
-describe ProjectsController do
+RSpec.describe ProjectsController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "GET 'index'" do
@@ -175,13 +179,13 @@ describe ProjectsController do
       before { sign_in @manager }
 
       it "should be successful" do
-        get :edit, id: @project, format: :js
+        xhr :get, :edit, id: @project, format: :js
         expect(response).to be_success
         expect(response).to render_template :edit
       end
 
       it "should return the project" do
-        get :edit, id: @project, format: :js
+        xhr :get, :edit, id: @project, format: :js
         expect(assigns(:project)).to eq @project
       end
     end
@@ -194,7 +198,7 @@ describe ProjectsController do
       end
 
       it "should not be successful" do
-        get :edit, id: @project, format: :js
+        xhr :get, :edit, id: @project, format: :js
         expect(response).not_to be_success
         expect(response.status).to eq 403
       end
@@ -204,7 +208,7 @@ describe ProjectsController do
       before { sign_in FactoryGirl.create(:user) }
 
       it "should be denied" do
-        get :edit, id: FactoryGirl.create(:project), format: :js
+        xhr :get, :edit, id: FactoryGirl.create(:project), format: :js
         expect(response).not_to be_success
         expect(response.status).to eq 403
       end
@@ -212,7 +216,7 @@ describe ProjectsController do
 
     context "as a visitor" do
       it "should redirect to the sign in page" do
-        get :edit, id: @project, format: :js
+        xhr :get, :edit, id: @project, format: :js
         expect(response).not_to be_success
         expect(response.status).to eq 401
       end
@@ -225,22 +229,24 @@ describe ProjectsController do
     context "as a manager" do
       before { sign_in @manager }
 
+      it { is_expected.to permit(:name).for(:create, params: {format: :js}) }
+
       context "with valid parameters" do
         it "should be a success" do
-          post :create, project: @project_attr, format: 'js'
+          post :create, project: @project_attr, format: :js
           expect(response).to be_success
           expect(response).to render_template :create
         end
 
         it "should create a new project" do
           expect{
-            post :create, project: @project_attr, format: 'js'
+            post :create, project: @project_attr, format: :js
           }.to change(Project, :count).by(1)
           expect(assigns(:project)).to eq Project.last
         end
 
         it "should assign ownership to signed in user" do
-          post :create, project: @project_attr, format: 'js'
+          post :create, project: @project_attr, format: :js
           expect(assigns(:project).owner).to eq @manager
         end
       end
@@ -249,14 +255,14 @@ describe ProjectsController do
         before { @project_attr.merge!(name: '') }
 
         it "should be a success" do
-          post :create, project: @project_attr, format: 'js'
+          post :create, project: @project_attr, format: :js
           expect(response).to be_success
           expect(response).to render_template :create
         end
 
         it "should not create a new project" do
           expect{
-            post :create, project: @project_attr, format: 'js'
+            post :create, project: @project_attr, format: :js
           }.not_to change(Project, :count)
           expect(assigns(:project)).to be_new_record
         end
@@ -304,6 +310,8 @@ describe ProjectsController do
       before { sign_in @manager }
 
       context "update the name" do
+        it { is_expected.to permit(:name, user_ids: []).for(:update, params: {id: @project, project: @new_project_attrs, format: :json}) }
+
         context "with valid parameters" do
           it "should be a success without content" do
             patch :update, id: @project, project: @new_project_attrs, format: :json
@@ -339,6 +347,8 @@ describe ProjectsController do
       end
 
       context "update the users" do
+        it { is_expected.to permit(:name, user_ids: []).for(:update, params: {id: @project, project: @new_project_attrs, format: :js}) }
+
         context "with valid parameters" do
           before do
             @user = FactoryGirl.create(:user)

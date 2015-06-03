@@ -1,6 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe StaticPagesController do
+RSpec.describe StaticPagesController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   describe "GET 'help'" do
     context "as user" do
       before { sign_in FactoryGirl.create(:user) }

@@ -1,6 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ProjectsDatapathsController do
+RSpec.describe ProjectsDatapathsController do
+  describe "filters" do
+    it { is_expected.to use_before_action :authenticate_user! }
+  end
+
   before { @manager = FactoryGirl.create(:manager) }
 
   describe "Post 'create'" do
@@ -10,6 +14,7 @@ describe ProjectsDatapathsController do
       before { sign_in @manager }
 
       context "project datapath creation" do
+        it { is_expected.to permit(:project_id, :datapath_id, :sub_directory, :name).for(:create, params: {format: :json}) }
 
         context "with valid parameters" do
           before { @projects_datapath_attr.merge!(datapath_id: FactoryGirl.create(:datapath).id) }
@@ -228,8 +233,8 @@ describe ProjectsDatapathsController do
 
     context "can manage the project" do
       before do
-        controller.stub(:cannot?).and_return(false)
-        controller.stub(:can?).and_return(true)
+        allow(controller).to receive(:cannot?).and_return(false)
+        allow(controller).to receive(:can?).and_return(true)
       end
 
       it "creates nodes for all files and directories found recursively" do
@@ -261,7 +266,7 @@ describe ProjectsDatapathsController do
             ]}
           ]}
         ]
-        File.unlink track_path if File.exists?(track_path)
+        File.unlink track_path if File.exist?(track_path)
       end
 
       it "marks a path as empty when no tracks are found" do
@@ -283,7 +288,7 @@ describe ProjectsDatapathsController do
         project.reload
 
         controller.instance_variable_set(:@project, project)
-        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+        allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, datapath2])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, folder: true,
@@ -311,13 +316,13 @@ describe ProjectsDatapathsController do
     context "project user" do
       it "only creates nodes where the node, a parent, or a child is selected" do
         projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, sub_directory: (File.join 'dir1', 'subdir1'))
-        FileUtils.mkdir(File.join(@datapath1.path, 'not_shown_dir')) unless File.exists?(File.join(@datapath1.path, 'unshown_dir'))
+        FileUtils.mkdir(File.join(@datapath1.path, 'not_shown_dir')) unless File.exist?(File.join(@datapath1.path, 'unshown_dir'))
         cp_track File.join @datapath1.path, 'not_shown_track.bam'
         projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
         track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
 
-        controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+        allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         expect(controller.send(:generate_tree, [@datapath1, projects_datapath2.datapath, projects_datapath3.datapath])).to eq [
           {title: @datapath1.path, key: @datapath1.id, expanded: true, hideCheckbox: true, folder: true,
@@ -343,7 +348,7 @@ describe ProjectsDatapathsController do
   describe "#add_node_to_tree" do
     context "top level nodes" do
       before do
-        controller.stub(:cannot?).and_return(false)
+        allow(controller).to receive(:cannot?).and_return(false)
         @datapath = FactoryGirl.create(:datapath)
       end
 
@@ -401,7 +406,7 @@ describe ProjectsDatapathsController do
         tree = [{title: '/dir1', key: 1}]
         @parent = tree.first
         controller.instance_variable_set(:@key, 1)
-        controller.stub(:cannot?).and_return(false)
+        allow(controller).to receive(:cannot?).and_return(false)
       end
 
       it "returns the node" do
@@ -449,7 +454,7 @@ describe ProjectsDatapathsController do
       end
 
       context "directories" do
-        before { controller.stub(:cannot?).and_return(true) }
+        before { allow(controller).to receive(:cannot?).and_return(true) }
 
         context "top level nodes" do
           it "hides the node checkbox" do
@@ -469,20 +474,20 @@ describe ProjectsDatapathsController do
 
       context "files" do
         it "shows the checkbox for unassigned files" do
-          controller.stub(:cannot?).and_return(true)
+          allow(controller).to receive(:cannot?).and_return(true)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
           to eq({title: "/track1.bam"})
         end
 
         it "shows checkbox for owned files" do
-          controller.stub(:cannot?).and_return(false)
+          allow(controller).to receive(:cannot?).and_return(false)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
           to eq({title: "/track1.bam"})
         end
 
         it "does not show checkbox for assigned files owned by another" do
-          controller.stub(:cannot?).and_return(true, true)
-          controller.stub_chain(:view_context, :link_to_igv).and_return('igv_url')
+          allow(controller).to receive(:cannot?).and_return(true, true)
+          allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
           track = FactoryGirl.create(:track)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', true, nil, Track.last)).
             to eq({expanded: true, selected: true, hideCheckbox: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}, title: "/track1.bam"})

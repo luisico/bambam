@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 def with_file(path, empty=false)
   pathname = Pathname.new(path)
@@ -22,7 +22,7 @@ ensure
   dirname.cleanpath.rmtree
 end
 
-describe ActiveModel::Validations::PathValidator do
+RSpec.describe ActiveModel::Validations::PathValidator do
   before(:all) do
     class ValidatableA
       include ActiveModel::Validations
@@ -39,14 +39,20 @@ describe ActiveModel::Validations::PathValidator do
       class Validatable < ValidatableA
         validates_path_of :path
       end
+      class ValidatableWithFullPath < Validatable
+        def full_path; end
+      end
     end
-    after(:all) { Object.send(:remove_const, :Validatable) }
+    after(:all) do
+      Object.send(:remove_const, :Validatable)
+      Object.send(:remove_const, :ValidatableWithFullPath)
+    end
 
     [nil, ''].each do |blank_value|
       before { subject.path = blank_value }
 
       context "does not allow #{blank_value.inspect} values without full_path" do
-        it { should_not be_valid }
+        it { is_expected.not_to be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -57,6 +63,8 @@ describe ActiveModel::Validations::PathValidator do
       end
 
       context "allows #{blank_value.inspect} values with full_path" do
+        subject { ValidatableWithFullPath.new }
+
         it "should be valid" do
           allow(subject).to receive(:full_path).and_return File.join(TEST_BASE, 'dir', 'file1')
           with_file(subject.full_path) {
@@ -97,6 +105,8 @@ describe ActiveModel::Validations::PathValidator do
       end
 
       context "when blank" do
+        subject { ValidatableWithFullPath.new }
+
         [nil, ''].each do |blank_value|
           it "should not change the path value" do
             allow(subject).to receive(:full_path).and_return 'full/path'
@@ -120,7 +130,7 @@ describe ActiveModel::Validations::PathValidator do
       context "without an existing path" do
         before { subject.path = 'non_existing_path' }
 
-        it { should_not be_valid }
+        it { is_expected.not_to be_valid }
 
         it "should add :exist translation to errors" do
           expect{
@@ -139,7 +149,7 @@ describe ActiveModel::Validations::PathValidator do
         expect(File).to receive(:exist?).and_return(true)
       end
 
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
 
       it "should add :exist translation to errors" do
         expect{
@@ -150,10 +160,14 @@ describe ActiveModel::Validations::PathValidator do
     end
 
     context "#full_path" do
-      it "returns full_path on a record object with full_path method" do
-        validator = subject._validators[:path].first
-        allow(subject).to receive(:full_path).and_return 'full/path'
-        expect(validator.send(:full_path, subject, 'subdir1')).to eq 'full/path'
+      context "" do
+        subject { ValidatableWithFullPath.new }
+
+        it "returns full_path on a record object with full_path method" do
+          validator = subject._validators[:path].first
+          allow(subject).to receive(:full_path).and_return 'full/path'
+          expect(validator.send(:full_path, subject, 'subdir1')).to eq 'full/path'
+        end
       end
 
       it "returns value for record object without full_path method" do
@@ -165,12 +179,12 @@ describe ActiveModel::Validations::PathValidator do
     context "options" do
       it ":allow_empty defaults to 'false'" do
         validator = subject._validators[:path].first
-        expect(validator.send(:allow_empty?)).to be_false
+        expect(validator.send(:allow_empty?)).to be false
       end
 
       it ":allow_directory defaults to 'true'" do
         validator = subject._validators[:path].first
-        expect(validator.send(:allow_directory?)).to be_true
+        expect(validator.send(:allow_directory?)).to be true
       end
     end
   end

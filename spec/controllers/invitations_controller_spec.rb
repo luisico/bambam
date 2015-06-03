@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Users::InvitationsController do
+RSpec.describe Users::InvitationsController do
   before { @request.env["devise.mapping"] = Devise.mappings[:user] }
 
   describe "GET 'new'" do
@@ -192,7 +192,7 @@ describe Users::InvitationsController do
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by(1)
-        expect(User.last.has_role? :manager).to be_true
+        expect(User.last.has_role? :manager).to be true
       end
 
       it "doesn't add role when not requested" do
@@ -200,7 +200,7 @@ describe Users::InvitationsController do
         expect {
           controller.send(:invite_resource)
         }.to change(User, :count).by(1)
-        expect(User.last.has_role? :manager).to be_false
+        expect(User.last.has_role? :manager).to be false
       end
     end
 

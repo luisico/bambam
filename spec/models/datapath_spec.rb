@@ -1,19 +1,19 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Datapath do
+RSpec.describe Datapath do
   before { @datapath = FactoryGirl.build(:datapath) }
   after { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 
   subject { @datapath }
 
   describe "database fields" do
-    it { should have_db_column(:path).with_options(null: false) }
-    it { should have_db_index(:path).unique(true) }
+    it { is_expected.to have_db_column(:path).with_options(null: false) }
+    it { is_expected.to have_db_index(:path).unique(true) }
   end
 
   describe "path" do
-    it { should respond_to :path }
-    it { should validate_uniqueness_of(:path) }
+    it { is_expected.to respond_to :path }
+    it { is_expected.to validate_uniqueness_of(:path) }
 
     context "is validated" do
       it "should be valid when it exists as an empty directory" do
@@ -49,27 +49,27 @@ describe Datapath do
   end
 
   describe "datapaths_users" do
-    it { should have_many :datapaths_users }
-    it { should respond_to :datapaths_users }
-    it { should respond_to :datapaths_user_ids }
+    it { is_expected.to have_many :datapaths_users }
+    it { is_expected.to respond_to :datapaths_users }
+    it { is_expected.to respond_to :datapaths_user_ids }
   end
 
   describe "users" do
-    it { should have_many(:users).through(:datapaths_users) }
-    it { should respond_to :users }
-    it { should respond_to :user_ids }
+    it { is_expected.to have_many(:users).through(:datapaths_users) }
+    it { is_expected.to respond_to :users }
+    it { is_expected.to respond_to :user_ids }
   end
 
   describe "projects_datapaths" do
-    it { should have_many :projects_datapaths }
-    it { should respond_to :projects_datapaths }
-    it { should respond_to :projects_datapath_ids }
+    it { is_expected.to have_many :projects_datapaths }
+    it { is_expected.to respond_to :projects_datapaths }
+    it { is_expected.to respond_to :projects_datapath_ids }
   end
 
   describe "projects" do
-    it { should have_many(:projects).through(:projects_datapaths) }
-    it { should respond_to :projects }
-    it { should respond_to :project_ids }
+    it { is_expected.to have_many(:projects).through(:projects_datapaths) }
+    it { is_expected.to respond_to :projects }
+    it { is_expected.to respond_to :project_ids }
   end
 
   describe "when datapath destroyed" do

@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "StaticPages" do
+RSpec.describe "StaticPages" do
   describe "routes to" do
     it "static pages" do
       assert_routing({ path: '/help', method: :get }, { controller: 'static_pages', action: 'help' })

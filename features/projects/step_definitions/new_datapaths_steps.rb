@@ -33,7 +33,7 @@ Then /^I should be able to add the datapath sub\-directory to the project$/ do
 end
 
 Then /^I should be informed of a failed datapath addition$/ do
-  ProjectsDatapath.any_instance.stub(:valid?).and_return(false)
+  allow_any_instance_of(ProjectsDatapath).to receive(:valid?).and_return(false)
   expect {
     select_node(@datapath.path)
     loop until page.evaluate_script('jQuery.active').zero?

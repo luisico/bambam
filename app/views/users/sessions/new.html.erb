@@ -11,7 +11,7 @@
       </div>
 
       <div>
-        <%= f.password_field :password, placeholder: 'Password' %>
+        <%= f.password_field :password, autocomplete: 'off', placeholder: 'Password' %>
       </div>
 
       <% if devise_mapping.rememberable? -%>

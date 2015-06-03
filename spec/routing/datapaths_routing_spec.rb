@@ -1,6 +1,6 @@
-require "spec_helper"
+require 'rails_helper'
 
-describe "Datapaths" do
+RSpec.describe "Datapaths" do
   describe "routes to" do
     it "all restful actions except show" do
       assert_routing({ path: '/datapaths', method: :get },        { controller: 'datapaths', action: 'index' })

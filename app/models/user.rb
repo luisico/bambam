@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  rolify
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships
   has_many :projects_users, dependent: :destroy
@@ -9,10 +8,11 @@ class User < ActiveRecord::Base
   has_many :datapaths_users, dependent: :destroy
   has_many :datapaths, through: :datapaths_users
 
-
   # Authentication
   devise :database_authenticatable, :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  rolify
 
   scope :all_except, ->(user) { where.not(id: user) }
 
@@ -24,4 +24,7 @@ class User < ActiveRecord::Base
   def handle_with_email
     self.handle.eql?(self.email) ? self.email : "#{self.handle} [#{self.email}]"
   end
+
+  # Hack: https://github.com/scambra/devise_invitable/issues/554
+  def after_password_reset; end
 end
