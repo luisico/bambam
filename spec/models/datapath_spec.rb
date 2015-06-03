@@ -104,6 +104,7 @@ describe Datapath do
       it "should not destroy un-associated tracks" do
         track = FactoryGirl.create(:track)
         @datapath.destroy
+        expect(Track.count).to eq 1
         expect(Track.first).to eq track
       end
     end
