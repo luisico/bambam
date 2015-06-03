@@ -8,5 +8,11 @@ class CreateProjectsDatapaths < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    Project.all.each do |project|
+      project.owner.datapaths.each do |datapath|
+        ProjectsDatapath.create(project: project, datapath: datapath, name: Pathname.new(datapath.path).basename.to_s)
+      end
+    end
   end
 end

@@ -5,6 +5,7 @@ class AddOwnerToTracks < ActiveRecord::Migration
     if Track.count > 0
       if admin = User.with_role(:admin).first
         Track.reset_column_information
+        Track.skip_callback(:save, :after, :update_projects_datapath)
         Track.all.each{ |t| t.update!(owner: admin) }
       end
     end
