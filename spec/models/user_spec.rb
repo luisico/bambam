@@ -188,7 +188,7 @@ describe User do
     context "by user" do
       before { @users = FactoryGirl.create_list(:user, 3) }
       it "returns all users except indicated user" do
-        expect(User.all_except(@user)).to eq @users
+        expect(User.all_except(@user).sort).to eq @users.sort
         expect(User.all_except(@user)).not_to include @user
       end
     end
@@ -217,6 +217,12 @@ describe User do
       it { should have_many :projects }
       it { should respond_to :projects }
       it { should respond_to :project_ids }
+    end
+
+    context "owned_projects" do
+      it { should have_many :owned_projects }
+      it { should respond_to :owned_projects }
+      it { should respond_to :owned_project_ids }
     end
 
     context "tracks" do

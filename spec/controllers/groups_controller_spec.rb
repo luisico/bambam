@@ -277,10 +277,10 @@ describe GroupsController do
 
     context "as an admin" do
       before do
-       @user = FactoryGirl.create(:admin)
-       sign_in @user
-       @new_group = FactoryGirl.attributes_for(:group)
-     end
+        @user = FactoryGirl.create(:admin)
+        sign_in @user
+        @new_group = FactoryGirl.attributes_for(:group)
+      end
 
       it "should not change ownership" do
         expect {
@@ -301,9 +301,9 @@ describe GroupsController do
 
     context "as a user" do
       before do
-       sign_in FactoryGirl.create(:user)
-       @new_group = FactoryGirl.attributes_for(:group)
-     end
+        sign_in FactoryGirl.create(:user)
+        @new_group = FactoryGirl.attributes_for(:group)
+      end
 
       it "should be denied" do
         patch :update, id: @group, group: @new_group

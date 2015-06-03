@@ -12,7 +12,7 @@ class StreamServicesController < ApplicationController
   def show
     begin
       track = Track.find(params[:id])
-      path = find_path_with_format(track.path, params[:format])
+      path = find_path_with_format(track.full_path, params[:format])
 
       if request.head?
         response.header["Content-Length"] = File.size(path)

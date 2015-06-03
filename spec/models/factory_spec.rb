@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'validate FactoryGirl factories' do
   FactoryGirl.factories.each do |factory|
     context "with factory for :#{factory.name}" do
-      unless factory.name == :track
+      unless factory.name =~ /^seeded_/
         subject { FactoryGirl.build(factory.name) }
 
         it "is valid" do

@@ -4,11 +4,12 @@
 
 Given /^there is a (bam|bw) track in that project$/ do |type|
   @project ||= @projects.last
+  projects_datapath = FactoryGirl.create(:projects_datapath, project: @project)
   if type == 'bam'
-    @track = FactoryGirl.create(:test_track, project: @project)
-    cp_track Pathname.new(@track.path).sub_ext('.bai'), 'bai'
+    @track = FactoryGirl.create(:track, projects_datapath: projects_datapath)
+    cp_track Pathname.new(@track.full_path).sub_ext('.bai'), 'bai'
   elsif type== 'bw'
-    @track = FactoryGirl.create(:test_track, path: File.join("tmp", "tests", "bw_track.bw"), project: @project)
+    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "bw_track.bw"), projects_datapath: projects_datapath)
   end
 end
 
@@ -41,8 +42,12 @@ Then /^I should see the track's name$/ do
   expect(page).to have_content @track.name
 end
 
+Then /^I should see the track's genome$/ do
+  expect(page).to have_content @track.genome
+end
+
 Then /^I should see the track's path$/ do
-  expect(page).to have_content @track.path
+  expect(page).to have_content @track.full_path
 end
 
 Then /^I should see the track's project$/ do

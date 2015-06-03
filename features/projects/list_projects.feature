@@ -15,6 +15,14 @@ Feature: List of projects
     When I am on the projects page
     Then I should only see a list of projects I belong to
 
+  Scenario: Managers can only view projects they own or belong to
+    Given I am signed in as a manager
+    And I own 3 projects
+    And I belong to 3 projects
+    And there are 3 projects in the system
+    When I am on the projects page
+    Then I should only see a list of projects I own or belong to
+
   Scenario: Admin can view list of all projects
     Given I am signed in as an admin
     And there are 3 projects in the system
@@ -28,11 +36,12 @@ Feature: List of projects
     And I click on the project name
     Then I should be on the project page
 
+  @javascript
   Scenario Outline: Admin and managers can access the new project page
     Given I am signed in as <role>
     When I am on the projects page
     And I click "New Project"
-    Then I should be on the new project page
+    Then I should see a new project form
 
     Examples:
       | role      |

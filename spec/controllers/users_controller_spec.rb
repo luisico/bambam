@@ -44,7 +44,7 @@ describe UsersController do
         projects = FactoryGirl.create_list(:project, 3)
         manager_projects = FactoryGirl.create_list(:project, 3, owner: @manager)
         get :index
-        expect(assigns(:projects)).to eq manager_projects
+        expect(assigns(:projects).sort).to eq manager_projects.sort
       end
 
       it "should return only groups manager owns or is a member of" do

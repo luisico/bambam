@@ -1,7 +1,7 @@
 ### Methods
 
 def build_datapath
-  @datapath_attrs ||= FactoryGirl.attributes_for(:test_datapath)
+  @datapath_attrs ||= FactoryGirl.attributes_for(:datapath)
   Pathname.new(@datapath_attrs[:path]).mkpath unless File.exist?(@datapath_attrs[:path])
 end
 
@@ -25,7 +25,7 @@ When /^I create a new datapath$/ do
 end
 
 When /^I create a new datapath with an invalid path$/ do
-   expect {
+  expect {
     @datapath_attrs = {path:"my/invalid/datapath" }
     create_datapath
   }.not_to change(Datapath, :count)

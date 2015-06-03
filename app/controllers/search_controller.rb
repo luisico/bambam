@@ -12,7 +12,7 @@ class SearchController < ApplicationController
     users = User.search(email_or_first_name_or_last_name_cont: @q).result
     users_projects = []
     users.each do |user|
-      users_projects << user.projects.select{|p| can? :user_access, p}
+      users_projects << user.projects.select{|p| can? :read, p}
     end
 
     projects = projects | users_projects.flatten.uniq
@@ -24,8 +24,8 @@ class SearchController < ApplicationController
       end
     end
 
-    tracks = Track.accessible_by(current_ability).search(name_or_path_cont: @q).
-      result.order('tracks.project_id ASC')
+    tracks = Track.accessible_by(current_ability).search(name_or_path_cont: @q).result.
+      order('tracks.projects_datapath_id ASC')
     tracks.each { |track| @projects_and_tracks[track.project][:tracks] << track }
 
     @groups_and_users = {}

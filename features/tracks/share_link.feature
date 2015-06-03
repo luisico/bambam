@@ -54,7 +54,7 @@ Feature: Create link to share track
   Scenario: Show a track's share link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to view the share link
@@ -63,7 +63,7 @@ Feature: Create link to share track
   Scenario: Show a track's UCSC track line
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to view the UCSC track line
@@ -72,7 +72,7 @@ Feature: Create link to share track
   Scenario: Delete a share link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has 2 share links
     When I am on the track page
     Then I should be able to delete the share link
@@ -81,7 +81,7 @@ Feature: Create link to share track
   Scenario: Delete a share link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to delete the share link
@@ -90,7 +90,7 @@ Feature: Create link to share track
   Scenario: Renew a share link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to renew the share link
@@ -99,7 +99,7 @@ Feature: Create link to share track
   Scenario: Renew two share links at once
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has 2 share links
     When I am on the track page
     Then I should be able to renew two share links at once
@@ -107,7 +107,7 @@ Feature: Create link to share track
   Scenario: Cancel the renewal of a shareable link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to cancel the renewal the share link
@@ -115,7 +115,7 @@ Feature: Create link to share track
   Scenario: Cannot renew a share link with expired date
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should not be able to renew the share link with expired date
@@ -123,7 +123,7 @@ Feature: Create link to share track
   Scenario Outline: Renew a share link with date short link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     When I am on the track page
     Then I should be able to renew the link with date that expires in "<time>"
@@ -137,7 +137,7 @@ Feature: Create link to share track
   Scenario: Show/hide expired links
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     And that track has an expired share link
     When I am on the track page
@@ -146,7 +146,7 @@ Feature: Create link to share track
   Scenario: Delete last expired share link
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has a share link
     And that track has an expired share link
     When I am on the track page
@@ -156,7 +156,7 @@ Feature: Create link to share track
   Scenario: Share links are rendered in ascending order
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has 5 share links
     And that track has an expired share link
     When I am on the track page
@@ -165,7 +165,7 @@ Feature: Create link to share track
   Scenario: Updated share link gets placed in correct order
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has 3 share links
     And that track has an expired share link
     When I am on the track page
@@ -176,7 +176,7 @@ Feature: Create link to share track
   Scenario: New share link gets placed in correct order
     Given I am signed in
     And I belong to a project
-    And there is a track in that project
+    And there is a bam track in that project
     And that track has 2 share links
     When I am on the track page
     Then I should be able to create a shareable link with 2 days expiration date

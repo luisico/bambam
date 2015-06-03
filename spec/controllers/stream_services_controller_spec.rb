@@ -12,24 +12,24 @@ describe StreamServicesController do
         end
 
         it "should respond not found when file is not found" do
-          track = FactoryGirl.create(:test_track)
-          File.unlink track.path
+          track = FactoryGirl.create(:track)
+          File.unlink track.full_path
           get :show, id: track
           expect(response).to be_not_found
         end
 
         it "should respond forbidden when the format is non-standard" do
-          track = FactoryGirl.create(:test_track)
+          track = FactoryGirl.create(:track)
           get :show, id: track, format: 'non'
           expect(response).to be_forbidden
-          File.unlink track.path
+          File.unlink track.full_path
         end
 
         it "should respond not found when file is empty" do
-          track = FactoryGirl.create(:test_track)
-          Pathname.new(track.path).truncate(0)
+          track = FactoryGirl.create(:track)
+          Pathname.new(track.full_path).truncate(0)
           get :show, id: track
-          File.unlink(track.path)
+          File.unlink(track.full_path)
 
           expect(response).to be_not_found
         end
@@ -37,7 +37,8 @@ describe StreamServicesController do
 
       context "with valid record and file" do
         before(:all) do
-          @path = 'tmp/mytrack.bam'
+          @track = FactoryGirl.create(:track)
+          @path = @track.full_path
           @text = ['word1', 'word2', 'word3', 'word4']
           File.open(@path, 'wb') { |f| f.write @text.pack('A*A*A*A*') }
         end
@@ -45,7 +46,6 @@ describe StreamServicesController do
         after(:all) { File.unlink(@path) if File.exist?(@path) }
 
         before do
-          @track = FactoryGirl.create(:test_track, path: @path)
           headers = {
             'Accept' => 'text/plain',
             'User-Agent' => 'IGV Version 2.3.32 (37)03/17/2014 08:51 PM',
@@ -156,7 +156,7 @@ describe StreamServicesController do
         expect(controller).to receive(:has_access_token?).and_return(true)
         expect(controller).not_to receive(:authenticate_user!)
 
-        track = FactoryGirl.create(:test_track)
+        track = FactoryGirl.create(:track)
         share_link = FactoryGirl.create(:share_link, track_id: track.id)
 
         get :show, id: track.id, access_token: share_link.access_token
@@ -178,7 +178,7 @@ describe StreamServicesController do
 
   describe "#has_access_token?" do
     before do
-      @track = FactoryGirl.create(:test_track)
+      @track = FactoryGirl.create(:track)
       @share_link = FactoryGirl.create(:share_link, track_id: @track.id)
     end
 
@@ -209,7 +209,7 @@ describe StreamServicesController do
     end
 
     it "should be false with different track" do
-      controller.params = {access_token: @share_link.access_token, id: "#{FactoryGirl.create(:test_track).id}"}
+      controller.params = {access_token: @share_link.access_token, id: "#{FactoryGirl.create(:track).id}"}
       expect(controller.send(:has_access_token?)).to be_false
     end
   end

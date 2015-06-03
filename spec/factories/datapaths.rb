@@ -2,16 +2,14 @@
 
 FactoryGirl.define do
   factory :datapath do
-    sequence(:path) {|n| File.join("tmp", "datapaths", "datapath#{n}") }
+    sequence(:path) {|n| File.join("tmp", "tests", "datapath#{n}") }
 
-    factory :test_datapath do
-      sequence(:path) {|n| File.join("tmp", "tests", "datapath#{n}") }
+    factory :seeded_datapath do
+      sequence(:path) {|n| File.join("tmp", "datapaths", "datapath#{n}") }
     end
 
     after(:build) do |datapath|
-      unless File.exist?(datapath.path)
-        Pathname.new(datapath.path).mkpath
-      end
+      Pathname.new(datapath.path).mkpath unless File.exist?(datapath.path)
     end
   end
 end

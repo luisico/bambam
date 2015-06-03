@@ -4,7 +4,7 @@ describe DatapathsController do
   before { @admin = FactoryGirl.create(:admin) }
 
   describe "GET 'index'" do
-    before { @datapaths = FactoryGirl.create_list(:test_datapath, 3) }
+    before { @datapaths = FactoryGirl.create_list(:datapath, 3) }
 
     context "as an admin" do
       before { sign_in @admin }
@@ -104,7 +104,7 @@ describe DatapathsController do
   end
 
   describe "GET 'edit'" do
-    before { @datapath = FactoryGirl.create(:test_datapath) }
+    before { @datapath = FactoryGirl.create(:datapath) }
 
     context "as an admin" do
       before { sign_in @admin }
@@ -160,7 +160,7 @@ describe DatapathsController do
 
   describe "Post 'create'" do
     before do
-      @datapath_attr = FactoryGirl.attributes_for(:test_datapath)
+      @datapath_attr = FactoryGirl.attributes_for(:datapath)
       Pathname.new(@datapath_attr[:path]).mkpath unless File.exist?(@datapath_attr[:path])
     end
 
@@ -240,9 +240,9 @@ describe DatapathsController do
 
   describe "Patch 'update'" do
     before do
-     @datapath = FactoryGirl.create(:test_datapath)
-     @new_datapath_attrs = FactoryGirl.attributes_for(:test_datapath)
-     Pathname.new(@new_datapath_attrs[:path]).mkpath unless File.exist?(@new_datapath_attrs[:path])
+      @datapath = FactoryGirl.create(:datapath)
+      @new_datapath_attrs = FactoryGirl.attributes_for(:datapath)
+      Pathname.new(@new_datapath_attrs[:path]).mkpath unless File.exist?(@new_datapath_attrs[:path])
     end
 
     context "as an admin" do
@@ -335,7 +335,7 @@ describe DatapathsController do
   end
 
   describe "Delete 'destroy'" do
-    before { @datapath = FactoryGirl.create(:test_datapath) }
+    before { @datapath = FactoryGirl.create(:datapath) }
 
     context "as an admin" do
       before { sign_in @admin}

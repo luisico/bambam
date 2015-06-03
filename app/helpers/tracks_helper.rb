@@ -20,7 +20,7 @@ module TracksHelper
       path: '/load',
       query: {
         file: stream_services_track_url(track, format: format),
-        genome: 'hg19',
+        genome: track.genome,
         name: track.name,
         merge: true
       }.to_query

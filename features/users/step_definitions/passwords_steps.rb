@@ -16,7 +16,7 @@ end
 
 When /^I follow the reset password link$/ do
   open_last_email
-  visit_in_email edit_user_password_path({:reset_password_token => @user.reset_password_token})
+  visit_in_email edit_user_password_path({reset_password_token: @user.reset_password_token})
 end
 
 When /^I change my password$/ do

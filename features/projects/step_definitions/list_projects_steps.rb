@@ -53,6 +53,17 @@ Then /^I should only see a list of projects I belong to$/ do
   end
 end
 
+Then /^I should only see a list of projects I own or belong to$/ do
+  expect(Project.count).to be > 0
+  Project.all.each do |project|
+    if project.users.include?(@manager) || project.owner == @manager
+      project_details project, true
+    else
+      expect(page).not_to have_css "#project_#{project.id}"
+    end
+  end
+end
+
 Then /^I should see a special message$/ do
   if @user.invited_by
     expect(page).to have_content "Please contact #{@admin.email} to be added to a project"

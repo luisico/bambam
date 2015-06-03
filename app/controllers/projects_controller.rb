@@ -2,47 +2,38 @@ class ProjectsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
 
-  respond_to :html
+  respond_to :html, only: [:index, :show]
+  respond_to :js, :json, only: [:new, :create, :edit, :update]
 
   def index
   end
 
   def show
     @project = Project.includes(:projects_users, :users).find(params[:id])
-    @regular_users = @project.users.where( projects_users: { read_only: false })
-    @read_only_users = @project.users.where( projects_users: { read_only: true })
   end
 
   def new
-    @project = Project.new(owner: current_user, users: [current_user])
+    @project = Project.new(owner: current_user)
   end
 
   def edit
   end
 
   def create
-    @project.owner ||= current_user
-    @project.users << @project.owner unless @project.users.include?(@project.owner)
-    if @project.save
-      redirect_to @project, notice: 'Project was successfully created.'
-    else
-      render action: 'new'
-    end
+    @project.save
   end
 
   def update
-    if params[:project]
-      authorize! :manage, @project if has_admin_attr?
-      if params['project']['user_ids']
-        params['project']['user_ids'] << @project.owner.id unless params['project']['user_ids'].include?(@project.owner.id)
-      end
-      if @project.update(project_params)
-        redirect_to @project, notice: 'Project was successfully updated.'
-      else
-        render action: 'edit'
-      end
-    else
-      redirect_to @project, notice: 'Nothing was changed in the project.'
+    # TODO: move to projects_users controller? And keep here only basic project changes (ie: name)
+    # TODO: blank users should give an error?
+    if params['project']['user_ids']
+      params['project']['user_ids'] = [] if params['project']['user_ids'].blank?
+    end
+
+    respond_to do |format|
+      @project.update(update_params)
+      format.js
+      format.json { respond_with_bip(@project) }
     end
   end
 
@@ -53,13 +44,11 @@ class ProjectsController < ApplicationController
 
   private
 
-  def has_admin_attr?
-    params[:project].include?(:name) || params[:project].include?(:user_ids) ||
-      (params[:project][:tracks_attributes] &&
-      params[:project][:tracks_attributes].map {|k, v| v[:project_id]}.any?)
+  def create_params
+    params.require(:project).permit(:name).merge(owner_id: current_user.id)
   end
 
-  def project_params
-    params.require(:project).permit(:name, :user_ids => [], :tracks_attributes => [:id, :name, :path, :project_id, :owner_id, :_destroy])
+  def update_params
+    params.require(:project).permit(:name, user_ids: [])
   end
 end

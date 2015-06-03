@@ -12,7 +12,7 @@ FactoryGirl.define do
     end
 
     # TODO: remove :owner alias
-    factory :admin,  :aliases => [:owner] do
+    factory :admin,  aliases: [:owner] do
       sequence(:email) {|n| "admin#{n}@example.com"}
       sequence(:first_name) {|n| "Firstname#{n}"}
       sequence(:last_name) {|n| "Admin#{n}"}

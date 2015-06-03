@@ -44,7 +44,7 @@ When /^an (admin|manager) user invites me$/ do |role|
   else
     @manager = FactoryGirl.create(:manager)
   end
-    @invitee = @visitor
+  @invitee = @visitor
 
   expect {
     @user = User.invite!({email: @invitee[:email]}, @manager)

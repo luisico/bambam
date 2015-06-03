@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ShareLinksController do
   before do
     @project = FactoryGirl.create(:project)
-    @track = FactoryGirl.create(:test_track, project: @project)
+    @track = FactoryGirl.create(:track, project: @project)
     @user = FactoryGirl.create(:user, projects: [@project])
   end
 
@@ -129,8 +129,8 @@ describe ShareLinksController do
 
   describe "Patch 'update'" do
     before do
-     @share_link = FactoryGirl.create(:share_link, track: @track)
-     @new_share_link = FactoryGirl.attributes_for(:share_link)
+      @share_link = FactoryGirl.create(:share_link, track: @track)
+      @new_share_link = FactoryGirl.attributes_for(:share_link)
     end
 
     context "as a signed in user and project member" do

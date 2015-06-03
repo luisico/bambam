@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Datapath do
-  before { @datapath = FactoryGirl.build(:test_datapath) }
+  before { @datapath = FactoryGirl.build(:datapath) }
   after { Pathname.new(TEST_BASE).exist? && Pathname.new(TEST_BASE).rmtree }
 
   subject { @datapath }
@@ -28,7 +28,7 @@ describe Datapath do
       end
 
       it "stips leading and trailing whitespace from path" do
-        datapath = FactoryGirl.build(:test_datapath, path: File.join('tmp', 'tests', 'mydatapath'))
+        datapath = FactoryGirl.build(:datapath, path: File.join('tmp', 'tests', 'mydatapath'))
         datapath.path = File.join(' tmp', 'tests', 'mydatapath ')
         expect(datapath).to be_valid
       end
@@ -40,7 +40,7 @@ describe Datapath do
         end
 
         it "when it exists as a file" do
-          track = FactoryGirl.create(:test_track)
+          track = FactoryGirl.create(:track)
           @datapath.path = track.path
           expect(@datapath).not_to be_valid
         end
@@ -55,15 +55,28 @@ describe Datapath do
   end
 
   describe "users" do
-    it { should have_many :users }
+    it { should have_many(:users).through(:datapaths_users) }
     it { should respond_to :users }
     it { should respond_to :user_ids }
+  end
+
+  describe "projects_datapaths" do
+    it { should have_many :projects_datapaths }
+    it { should respond_to :projects_datapaths }
+    it { should respond_to :projects_datapath_ids }
+  end
+
+  describe "projects" do
+    it { should have_many(:projects).through(:projects_datapaths) }
+    it { should respond_to :projects }
+    it { should respond_to :project_ids }
   end
 
   describe "when datapath destroyed" do
     before do
       @datapath.users << FactoryGirl.create(:manager)
       @datapath.save!
+      FactoryGirl.create_list(:track, 3, datapath: @datapath)
     end
 
     it "should destroy the datapath" do
@@ -77,6 +90,23 @@ describe Datapath do
 
     it "should not destroy the user" do
       expect { @datapath.destroy }.not_to change(User, :count)
+    end
+
+    it "should destroy associated projects datapaths" do
+      expect { @datapath.destroy }.to change(ProjectsDatapath, :count).by(-3)
+    end
+
+    context "#destroy_associated_tracks" do
+      it "should destroy associated tracks" do
+        expect { @datapath.destroy }.to change(Track, :count).by(-3)
+      end
+
+      it "should not destroy un-associated tracks" do
+        track = FactoryGirl.create(:track)
+        @datapath.destroy
+        expect(Track.count).to eq 1
+        expect(Track.first).to eq track
+      end
     end
 
     it "should not remove the actual directory" do

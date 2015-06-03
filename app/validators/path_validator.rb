@@ -3,39 +3,40 @@ module ActiveModel
 
     class PathValidator < EachValidator
       def validate_each(record, attr_name, value)
-        if value.blank?
+        # Check value is not blank unless record responds to full_path
+        if value.blank? && full_path(record, value).blank?
           record.errors.add(attr_name, :blank)
           return
         end
 
-        #verify the true path and remove any trailing slashes
-        value.replace Pathname.new(value).cleanpath.to_s.strip
+        # Verify the true path and remove any trailing slashes
+        value.replace(Pathname.new(value).cleanpath.to_s.strip) if value.present?
 
         if allowed_paths && !value.to_s.starts_with?(*allowed_paths)
           record.errors.add(attr_name, :inclusion)
           return
         end
 
-        unless File.exist?(value)
+        unless File.exist?(full_path(record, value))
           record.errors.add(attr_name, :exist)
           return
         end
 
-        if File.file?(value)
+        if File.file?(full_path(record, value))
           if !allow_file?
             record.errors.add(attr_name, :file)
             return
-          elsif !allow_empty? && File.zero?(value)
+          elsif !allow_empty? && File.zero?(full_path(record, value))
             record.errors.add(attr_name, :empty)
           end
 
-        elsif File.directory?(value)
+        elsif File.directory?(full_path(record, value))
           if !allow_directory?
             record.errors.add(attr_name, :directory)
             return
           end
 
-          if !allow_empty? && Dir[File.join value, '*'].empty?
+          if !allow_empty? && Dir[File.join full_path(record, value), '*'].empty?
             record.errors.add(attr_name, :empty)
           end
 
@@ -60,6 +61,14 @@ module ActiveModel
 
       def allowed_paths
         options[:within] || options[:in]
+      end
+
+      def full_path(record, value)
+        begin
+          record.full_path
+        rescue NoMethodError
+          value
+        end
       end
     end
 

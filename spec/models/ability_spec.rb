@@ -38,6 +38,10 @@ describe User do
       context "datapaths" do
         it { should be_able_to(:manage, Datapath) }
       end
+
+      context "projects_datapaths" do
+        it { should be_able_to(:manage, ProjectsDatapath) }
+      end
     end
 
     describe "as manager" do
@@ -55,31 +59,59 @@ describe User do
         it { should_not be_able_to(:cancel, @user) }
       end
 
-      context "projects" do
-        it { should     be_able_to(:manage, FactoryGirl.create(:project, owner: @manager)) }
-        it { should_not be_able_to(:manage, FactoryGirl.create(:project)) }
-      end
-
       context "groups" do
         it { should     be_able_to(:manage, FactoryGirl.create(:group, owner: @manager)) }
         it { should_not be_able_to(:manage, FactoryGirl.create(:group)) }
+
+        it { should     be_able_to(:read, FactoryGirl.create(:group, members: [@manager])) }
+        it { should_not be_able_to(:read, FactoryGirl.create(:group)) }
       end
 
-      context "tracks" do
-        before { @project = FactoryGirl.create(:project, owner: @manager) }
-
-        it { should     be_able_to(:manage, FactoryGirl.create(:test_track, project: @project)) }
-        it { should_not be_able_to(:manage, FactoryGirl.create(:test_track)) }
-      end
-
-      context "projects_user" do
+      context "projects and tracks" do
         before do
-          @project = FactoryGirl.create(:project, owner: @manager)
+          @project_user = FactoryGirl.create(:user)
+          @project = FactoryGirl.create(:project, owner: @manager, users: [@project_user])
+          @project_as_user = FactoryGirl.create(:project, users: [@manager])
           @other_project = FactoryGirl.create(:project)
         end
 
-        it { should     be_able_to(:update, @project.projects_users.first) }
-        it { should_not be_able_to(:update, @other_project.projects_users.first) }
+        context "projects" do
+          it { should     be_able_to(:manage, @project) }
+          it { should_not be_able_to(:manage, @other_project) }
+
+          it { should     be_able_to(:read, @project_as_user) }
+          it { should_not be_able_to(:read, @other_project) }
+        end
+
+        context "projects_user" do
+          it { should     be_able_to(:update, @project.projects_users.first) }
+          it { should_not be_able_to(:update, @project_as_user.projects_users.first) }
+          it { should_not be_able_to(:update, @other_project.projects_users.first) }
+        end
+
+        context "tracks" do
+          it { should     be_able_to(:manage, FactoryGirl.create(:track, project: @project, owner: @project_user)) }
+          it { should     be_able_to(:manage, FactoryGirl.create(:track, projects_datapath: FactoryGirl.create(:projects_datapath, project: @project))) }
+          it { should_not be_able_to(:manage, FactoryGirl.create(:track)) }
+
+          it { should     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
+          it { should_not be_able_to(:read, FactoryGirl.create(:track)) }
+        end
+
+        context "projects_datapaths" do
+          before do
+            @projects_datapath_as_owner = FactoryGirl.create(:projects_datapath, project: @project)
+            @projects_datapath_as_user = FactoryGirl.create(:projects_datapath, project: @project_as_user)
+            @other_projects_datapath = FactoryGirl.create(:projects_datapath)
+          end
+
+          it { should     be_able_to(:manage, @projects_datapath_as_owner) }
+
+          it { should_not be_able_to(:manage, @projects_datapath_as_user) }
+          it { should     be_able_to(:browser, @projects_datapath_as_user) }
+
+          it { should_not be_able_to(:browser, @other_projects_datapath)}
+        end
       end
 
       context "datapaths" do
@@ -131,7 +163,7 @@ describe User do
           @other_user_project = FactoryGirl.create(:project, owner: @other_user)
         end
 
-        it { should be_able_to(:user_access, @user_on_project) }
+        it { should be_able_to(:read, @user_on_project) }
         it { should_not be_able_to(:manage, @user_on_project) }
 
         it { should_not be_able_to(:read, @other_user_project) }
@@ -143,9 +175,9 @@ describe User do
           @project = FactoryGirl.create(:project, users: [@user])
           @other_project = FactoryGirl.create(:project)
 
-          @my_track = FactoryGirl.create(:test_track, owner: @user, project: @project)
-          @project_track = FactoryGirl.create(:test_track, project: @project)
-          @other_project_track = FactoryGirl.create(:test_track, project: @other_project)
+          @my_track = FactoryGirl.create(:track, owner: @user, project: @project)
+          @project_track = FactoryGirl.create(:track, project: @project)
+          @other_project_track = FactoryGirl.create(:track, project: @other_project)
         end
 
         it { should     be_able_to(:read, @my_track) }
@@ -160,20 +192,20 @@ describe User do
         it { should_not be_able_to(:destroy, @project_track) }
         it { should_not be_able_to(:destroy, @other_project_track) }
 
-        it { should     be_able_to(:create, FactoryGirl.build(:test_track, project: @project)) }
-        it { should_not be_able_to(:create, FactoryGirl.build(:test_track, project: @other_project)) }
+        it { should     be_able_to(:create, FactoryGirl.build(:track, project: @project)) }
+        it { should_not be_able_to(:create, FactoryGirl.build(:track, project: @other_project)) }
 
       end
 
       context "share_links" do
         before do
           @user_on_project = FactoryGirl.create(:project, users: [@user])
-          @track = FactoryGirl.create(:test_track, project: @user_on_project)
+          @track = FactoryGirl.create(:track, project: @user_on_project)
           @share_link = FactoryGirl.create(:share_link, track: @track)
           @other_share_link = FactoryGirl.create(:share_link)
         end
 
-        it { should be_able_to(:manage, ShareLink, :track => {:project => {:user_ids => @user.id }}) }
+        it { should be_able_to(:manage, ShareLink, track: {project: {user_ids: @user.id}}) }
 
         it { should_not be_able_to(:manage, @other_share_link) }
       end
@@ -184,6 +216,19 @@ describe User do
 
       context "datapaths" do
         it { should_not be_able_to(:manage, Datapath) }
+      end
+
+      context "projects_datapaths" do
+        before do
+          project = FactoryGirl.create(:project, users: [@user])
+          @projects_datapath_as_user = FactoryGirl.create(:projects_datapath, project: project)
+          @projects_datapath = FactoryGirl.create(:projects_datapath)
+        end
+
+        it { should_not be_able_to(:manage, @projects_datapath_as_user) }
+        it { should     be_able_to(:browser, @projects_datapath_as_user) }
+
+        it { should_not be_able_to(:browser, @projects_datapath) }
       end
     end
   end

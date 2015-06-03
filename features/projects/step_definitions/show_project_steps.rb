@@ -24,11 +24,20 @@ Then /^I should see the project's name$/ do
   expect(page).to have_content @project.name
 end
 
+Then /^I should see a section titled "(.*?)"$/ do |title|
+  within(find('.project-datapaths')) {
+    expect(page).to have_content title
+  }
+end
+
 Then /^I should see the project's tracks$/ do
   project = @project || Project.last
   project.tracks.each do |track|
-    expect(page).to have_link track.name
-    expect(page).to have_selector(:xpath, "//a[contains(@href, 'http://localhost:60151/load') and text()='igv']")
+    within(find('.project-datapaths')){
+      expect(page).to have_link track.name
+      expect(page).to have_content track.genome
+      expect(page).to have_selector(:xpath, "//a[contains(@href, 'http://localhost:60151/load') and text()='igv']")
+    }
   end
 end
 
@@ -56,8 +65,8 @@ end
 
 Then /^I should see the project's owner$/ do
   project = @project || Project.last
-  within("#user-#{project.owner.id}") do
-    expect(page).to have_css('.admin-icon')
+  within("#project-name") do
+    expect(page).to have_content @project.owner.handle
   end
 end
 
@@ -69,7 +78,7 @@ Then /^I should be able to designate a user read only$/ do
   @projects_user = @project.projects_users.first
   expect {
     within("#edit_projects_user_#{@projects_user.id}") {
-    find('label', text: "set read-only").click
+      find('label', text: "set read-only").click
     }
     expect(page).to have_content "restore access"
     @projects_user.reload

@@ -7,77 +7,36 @@ Feature: Delate a track
   Scenario Outline: Delete a track
     Given I am signed in
     And I belong to a project
+    And there are 3 datapaths in that project
     And <tracks exists in the project>
-    When I visit the edit project page
+    When I am on the project page
     Then I <privilege> be able to delete a track from the project
+    And I <result> see the track name and link
 
     Examples:
-      | tracks exists in the project      | privilege  |
-      | I own 3 tracks in that project    | should     |
-      | there are 3 track in that project | should not |
+      | tracks exists in the project       | privilege  | result     |
+      | I own 3 tracks in that project     | should     | should not |
+      | there are 3 tracks in that project | should not | should     |
 
-  Scenario: Manager can delete any track in their project
-    Given I am signed in as a manager
-    And I own a project
-    And there are 3 tracks in that project
-    When I visit the edit project page
-    Then I should be able to delete a track from the project
-
-  Scenario: Admin can delete any track
-    Given I am signed in as an admin
-    And there is a project in the system
-    And there are 3 tracks in that project
-    When I visit the edit project page
-    Then I should be able to delete a track from the project
-
-  Scenario Outline: Delete a track from the track edit panel
+  Scenario: Add and immediately delete a track
     Given I am signed in
     And I belong to a project
+    And there are 3 datapaths in that project
+    And there is a track in the first project's datapath
+    When I am on the project page
+    And I expand the first project's datapath
+    Then I should be able to add a track to the project
+    And I should be able to immediately delete the track
+
+  Scenario Outline: Delete a track from the track track show page
+    Given I am signed in as <user type>
+    And I <association> a project
     And <tracks exists in the project>
-    When I visit the edit project page
-    Then I <privilege> be able to delete a track from the track edit panel
+    When I am on the track page
+    Then I <privilege> be able to delete a track from the track show page
 
     Examples:
-      | tracks exists in the project      | privilege  |
-      | I own 3 tracks in that project    | should     |
-      | there are 3 track in that project | should not |
-
-  Scenario Outline: User can delete multiple tracks
-    Given I am signed in as a user
-    And I belong to a project
-    And <tracks exists in the project>
-    When I visit the edit project page
-    Then I <privilege> be able to delete a track from the project
-
-    Examples:
-      | tracks exists in the project      | privilege  |
-      | I own 3 tracks in that project    | should     |
-      | there are 3 track in that project | should not |
-
-  Scenario: Admin can delete multiple tracks
-    Given I am signed in as an admin
-    And I belong to a project
-    And there are 3 tracks in that project
-    When I visit the edit project page
-    Then I should be able to delete a track from the project
-
-  Scenario: User can restore track after deletion
-    Given I am signed in as a user
-    And I belong to a project
-    And I own 3 tracks in that project
-    When I visit the edit project page
-    Then I should be able to restore a deleted track
-
-  Scenario: User must restore track before editing
-    Given I am signed in as a user
-    And I belong to a project
-    And I own 3 tracks in that project
-    When I visit the edit project page
-    Then I should not be able to edit a deleted track
-
-  Scenario: Admin can restore track after deletion
-    Given I am signed in as a admin
-    And I belong to a project
-    And there are 3 tracks in that project
-    When I visit the edit project page
-    Then I should be able to restore a deleted track
+      | user type | association | tracks exists in the project      | privilege  |
+      | a user    | belong to   | I own 3 tracks in that project    | should     |
+      | a user    | belong to   | there are 3 track in that project | should not |
+      | a manager | own         | there are 3 track in that project | should     |
