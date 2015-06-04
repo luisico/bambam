@@ -3,4 +3,5 @@
   $('#create-new-project').append('<%= j render("form") %>');
 <% else %>
   window.location = '<%= project_path(@project) %>'
+  <% flash[:notice] = 'Project was successfully created.'%>
 <% end %>
