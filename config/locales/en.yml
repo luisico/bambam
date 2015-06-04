@@ -13,3 +13,4 @@ en:
       directory: cannot be a directory
       ftype: must be a file or directory
       file: cannot be a file
+      symlink: cannot be a symlink

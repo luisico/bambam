@@ -22,6 +22,11 @@ module ActiveModel
           return
         end
 
+        if File.symlink?(full_path(record, value))
+          record.errors.add(attr_name, :symlink)
+          return
+        end
+
         if File.file?(full_path(record, value))
           if !allow_file?
             record.errors.add(attr_name, :file)

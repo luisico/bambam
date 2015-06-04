@@ -1,17 +1,23 @@
 require 'rails_helper'
 
-def with_file(path, empty=false)
+def with_file(path, empty=false, symlink=false)
   pathname = Pathname.new(path)
   dirname = pathname.dirname
   cp_track pathname
   pathname.truncate(0) if empty
+  File.symlink(path, symlink) if symlink
   yield if block_given?
 ensure
+  File.unlink(symlink) if symlink
   dirname.rmtree
 end
 
 def with_empty_file(path)
-  with_file(path, true, &Proc.new)
+  with_file(path, true, false, &Proc.new)
+end
+
+def with_symlink(path, symlink)
+  with_file(path, false, symlink, &Proc.new)
 end
 
 def with_directory(path)
@@ -101,6 +107,28 @@ RSpec.describe ActiveModel::Validations::PathValidator do
           expect{
             subject.valid?
           }.to change(subject, :path).to(TEST_BASE)
+        end
+      end
+
+      context "disallow symlinks" do
+        before do
+          @file = File.join TEST_BASE, 'dir1', 'file1'
+          subject.path = File.join TEST_BASE, 'dir1', 'symlink'
+        end
+
+        it "should be invalid" do
+          with_symlink(@file, subject.path) do
+            expect(subject).not_to be_valid
+          end
+        end
+
+        it "should add :symlink translation to errors" do
+          with_symlink(@file, subject.path) do
+            expect{
+              subject.valid?
+            }.to change(subject.errors, :size).by(1)
+            expect(subject.errors[:path]).to include I18n.t('errors.messages.symlink')
+          end
         end
       end
 
