@@ -1,5 +1,5 @@
-<% if current_user.has_role? :admin %>
-  <%= render partial: "tour_link", locals: {tour_name: "tour_admin_project_index"} %>
+<% if current_user.has_role? :manager %>
+  <%= render partial: "tour_link", locals: {tour_name: "tour_project_index_manager"} %>
 <% else %>
   <%= render partial: "tour_link", locals: {tour_name: "tour_project_index"} %>
 <% end %>
