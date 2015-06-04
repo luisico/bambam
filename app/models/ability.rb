@@ -31,9 +31,15 @@ class Ability
       can :read, Group, :memberships => { :user_id => user.id }
 
       can :read, Project, :projects_users => { :user_id => user.id }
+      can :update_tracks, Project, :projects_users => { :user_id => user.id, read_only: false }
 
       can :read, Track, :projects_datapath => { :project => { :projects_users => { :user_id => user.id } } }
-      can [:update, :destroy], Track, owner: user
+
+      can [:update, :destroy], Track do |track|
+        projects_users = track.project.projects_users.where(user: user).first
+        track.owner == user && !(projects_users.present? && projects_users.read_only)
+      end
+
       can :create, Track do |track|
         track.project.users.include?(user)
       end

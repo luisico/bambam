@@ -55,7 +55,10 @@ class ProjectsDatapathsController < ApplicationController
           datapath_object = @project.projects_datapaths.select{ |pd| pd.full_path == datapath.path }.first
         end
 
-        next unless selected_or_manager = (!datapath_object.nil? || !selected_components.empty? || (can? :manage, @project))
+        next unless !datapath_object.nil? || !selected_components.empty? || (can? :manage, @project)
+
+        # Skip unselected tracks for read only users
+        next if !can?(:update_tracks, @project) && node.match(/\.(bam|bw)$/) && !selected_components.any?{|i,c| c.is_a?(Track)}
 
         # Add first component for tree
         parent = add_node_to_tree(tree, datapath.path, selected_components.any?, datapath.id, datapath_object)
@@ -113,13 +116,11 @@ class ProjectsDatapathsController < ApplicationController
 
     node.merge!(expanded: true) if expanded
 
-    unless node[:title].match(/\.(bam|bw)$/)
+    if node[:title].match(/\.(bam|bw)$/)
+      node.merge!(hideCheckbox: true) if selected_components_empty
+    else
       node.merge!(hideCheckbox: true) if cannot? :manage, @project
       node.merge!(folder: true)
-    end
-
-    if node[:title].include?('.')
-      node.merge!(hideCheckbox: true) if selected_components_empty
     end
 
     if object
@@ -128,7 +129,7 @@ class ProjectsDatapathsController < ApplicationController
       object_properties.merge!(genome: object.genome, igv: view_context.link_to_igv(object)) if object.is_a?(Track)
       node.merge!(object: {object.class.to_s.underscore.to_sym => object_properties})
       if object.is_a?(Track)
-        node.merge!(hideCheckbox: true) if cannot? :destroy, object
+        node.merge!(hideCheckbox: true) if cannot? :update, object
       end
     end
 

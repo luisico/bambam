@@ -234,7 +234,8 @@ RSpec.describe ProjectsDatapathsController do
     context "can manage the project" do
       before do
         allow(controller).to receive(:cannot?).and_return(false)
-        allow(controller).to receive(:can?).and_return(true)
+        allow(controller).to receive(:can?).with(:manage, kind_of(Project)).and_return(true)
+        allow(controller).to receive(:can?).with(:update_tracks, kind_of(Project)).and_return(true)
       end
 
       it "creates nodes for all files and directories found recursively" do
@@ -256,10 +257,10 @@ RSpec.describe ProjectsDatapathsController do
             {title: "dir2", folder: true, children: [
               {title: "dir3", folder: true},
               {title: "dir4", folder: true}]},
-              {title: "dir5", folder: true, children: [
-                {title: "dir6", folder: true}
-              ]}
-            ]},
+            {title: "dir5", folder: true, children: [
+              {title: "dir6", folder: true}
+            ]}
+          ]},
           {title: datapath2.path, key: datapath2.id, folder: true, children: [
             {title: "dir6", folder: true, children: [
               {title: "track1.bam", hideCheckbox: true}
@@ -302,11 +303,11 @@ RSpec.describe ProjectsDatapathsController do
                           {title: "tracks", expanded: true, folder: true,
                             children: [
                               {title: Pathname.new(track.path).basename.to_s, selected: true, object: {track: {id: track.id, name: track.name, genome: track.genome, igv: 'igv_url'}}
-                            }]
-                        }]
-                    }]
-                }]
-            }]
+                              }]
+                          }]
+                      }]
+                  }]
+              }]
           },
           {title: datapath2.path, key: datapath2.id, selected: true, object:  {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, folder: true}
         ]
@@ -341,6 +342,36 @@ RSpec.describe ProjectsDatapathsController do
           },
           {title: projects_datapath3.full_path, key: projects_datapath3.datapath.id, hideCheckbox: true, folder: true, selected: true, object: {projects_datapath: {id: projects_datapath3.id, name: projects_datapath3.name}}}
         ]
+      end
+    end
+
+    context "read only users" do
+      it "skips unselected tracks" do
+        allow(controller).to receive(:cannot?).and_return(false)
+        allow(controller).to receive(:can?).with(:manage, kind_of(Project)).and_return(true)
+        allow(controller).to receive(:can?).with(:update_tracks, kind_of(Project)).and_return(false)
+        allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
+
+        folder_path = @datapath1.path + "/dir1/"
+        projects_datapath = FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath1, sub_directory: "dir1")
+        selected_track = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: "track1.bam")
+        track_path = folder_path + "track2.bam"
+        cp_track track_path
+        datapath1_paths = [folder_path, selected_track.full_path, track_path]
+
+        expect(Dir).to receive(:glob).and_return(datapath1_paths)
+
+        expect(controller.send(:generate_tree, [@datapath1])).to eq [
+          {title: @datapath1.path, key: @datapath1.id, expanded: true, folder: true, children: [
+            {title: "dir1", folder: true, selected: true, object: {projects_datapath: {id: projects_datapath.id, name: projects_datapath.name}}, expanded: true,
+              children: [
+                {title: "track1.bam", selected: true, object: {track: {id: selected_track.id, name: selected_track.name, genome: selected_track.genome, igv: 'igv_url'}}}
+              ]}
+          ]}
+        ]
+
+        File.unlink selected_track.path if File.exist?(selected_track.path)
+        File.unlink track_path if File.exist?(track_path)
       end
     end
   end
@@ -460,14 +491,14 @@ RSpec.describe ProjectsDatapathsController do
           it "hides the node checkbox" do
             controller.instance_variable_set(:@project, FactoryGirl.create(:project))
             expect(controller.send(:add_node_to_tree, [], '/dir1')).
-            to eq({title: "/dir1", hideCheckbox: true, folder: true})
+              to eq({title: "/dir1", hideCheckbox: true, folder: true})
           end
         end
 
         context "regular nodes" do
           it "hides the node checkbox for folders" do
             expect(controller.send(:add_node_to_tree, @parent, '/dir2')).
-            to eq({title: "/dir2", hideCheckbox: true, folder: true})
+              to eq({title: "/dir2", hideCheckbox: true, folder: true})
           end
         end
       end
@@ -476,13 +507,13 @@ RSpec.describe ProjectsDatapathsController do
         it "shows the checkbox for unassigned files" do
           allow(controller).to receive(:cannot?).and_return(true)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
-          to eq({title: "/track1.bam"})
+            to eq({title: "/track1.bam"})
         end
 
         it "shows checkbox for owned files" do
           allow(controller).to receive(:cannot?).and_return(false)
           expect(controller.send(:add_node_to_tree, @parent, '/track1.bam', false, nil, nil, false)).
-          to eq({title: "/track1.bam"})
+            to eq({title: "/track1.bam"})
         end
 
         it "does not show checkbox for assigned files owned by another" do

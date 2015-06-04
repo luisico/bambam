@@ -195,6 +195,17 @@ RSpec.describe User do
         it { is_expected.to     be_able_to(:create, FactoryGirl.build(:track, project: @project)) }
         it { is_expected.not_to be_able_to(:create, FactoryGirl.build(:track, project: @other_project)) }
 
+        context "for read only users" do
+          before do
+            @project.projects_users.where(user: @user, project: @project).first.update(read_only: true)
+          end
+
+          it { is_expected.not_to be_able_to(:update, @my_track) }
+          it { is_expected.not_to be_able_to(:update, @project_track) }
+          it { is_expected.not_to be_able_to(:destroy, @my_track) }
+          it { is_expected.not_to be_able_to(:destroy, @project_track) }
+          it { is_expected.not_to be_able_to(:update_tracks, @project) }
+        end
       end
 
       context "share_links" do
