@@ -10,7 +10,7 @@ var tour_project_show_manager = {
     },
     {
       title: "Project name and owner",
-      content: "Name of project and project owner.<br/><br/><i class='fi-target-two'></i> Click on project name to edit. Unique and memorable names work best.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "Name of project and project owner.<br/><br/><i class='fi-target-two'> Detour: </i>Click on project name to edit. Unique and memorable names work best.",
       target: "#project-name",
       placement: 'bottom'
     },
@@ -34,7 +34,7 @@ var tour_project_show_manager = {
     },
     {
       title: "Edit Users",
-      content: "<i class='fi-target-two'></i> Click here to add/remove users from project.",
+      content: "<i class='fi-target-two'> Detour: </i> Click here to add/remove users from project.",
       target: "#edit-users",
       placement: 'bottom',
       multipage: true,
@@ -48,7 +48,7 @@ var tour_project_show_manager = {
     },
     {
       title: "Add/remove users",
-      content: "<i class='fi-target-two'></i> Click 'x' next to user name to remove user from project. Type into box to search for and add new user.",
+      content: "Click 'x' next to user name to remove user from project. Type into box to search for and add new user.",
       target: ".select2-choices",
       placement: 'bottom',
       multipage: true,

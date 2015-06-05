@@ -17,7 +17,7 @@ var tour_project_index_manager = {
     },
     {
       title: "New project button",
-      content: "Click here to create a new project",
+      content: "<i class='fi-target-two'> Detour: </i> Click here to create a new project",
       target: "#new-project",
       placement: "bottom",
       ctaLabel: "Done",
