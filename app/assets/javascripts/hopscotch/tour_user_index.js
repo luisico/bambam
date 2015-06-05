@@ -4,15 +4,16 @@ var tour_user_index = {
   steps: [
     {
       title: "Tour: Users page",
-      content: "Invite new users.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "Invite new users, see list of existing users and create groups.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
       target: "#invite-user",
       placement: 'right'
     },
     {
-      title: "Invitation form",
-      content: "Enter an email above and check box to give invitee ability to invite others.",
-      target: "#manager",
-      placement: 'bottom'
+      title: "Invite new users",
+      content: "Invite new users by entering their email address",
+      target: "#invite-user",
+      placement: 'right',
+      arrowOffset: 'center'
     },
     {
       title: "Add invitee to existing projects",
