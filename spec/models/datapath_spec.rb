@@ -52,6 +52,25 @@ RSpec.describe Datapath do
     it { is_expected.to have_many :datapaths_users }
     it { is_expected.to respond_to :datapaths_users }
     it { is_expected.to respond_to :datapaths_user_ids }
+
+    it "should be destroyed when a user is removed, but the actual user" do
+      @datapath.save
+      FactoryGirl.create(:projects_datapath, datapath: @datapath)
+
+      datapaths_user = DatapathsUser.last
+
+      # @datapath.update(user_ids: [""])
+      # expect(datapaths_user).to receive(:destroy)
+      # expect(datapaths_user.user).not_to receive(:destroy)
+
+      # Following is necessary because expect to receive(:destroy) is not working
+      expect {
+        @datapath.update(user_ids: [""])
+      }.to change(ProjectsDatapath, :count).by(-1)
+      expect(User.all).to include datapaths_user.user
+
+      # Note: there are more tests relevant to this in datapaths_controller_spec.rb
+    end
   end
 
   describe "users" do

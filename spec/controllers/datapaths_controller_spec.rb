@@ -268,6 +268,36 @@ RSpec.describe DatapathsController do
           expect(assigns(:datapath)).to eq @datapath
           expect(@datapath.path).to eq @new_datapath_attrs[:path]
         end
+
+        context "managers" do
+          it "can be added" do
+            pd = FactoryGirl.create(:projects_datapath)
+            expect {
+              patch :update, id: @datapath, datapath: {user_ids: [pd.project.owner.id]}, format: :js
+            }.to change(DatapathsUser, :count).by(1)
+          end
+
+          it "can be removed" do
+            pd = FactoryGirl.create(:projects_datapath, datapath: @datapath)
+            expect {
+              patch :update, id: @datapath, datapath: {user_ids: [""]}, format: :js
+            }.to change(ProjectsDatapath, :count).by(-1)
+          end
+
+          it "should destroy associated projects_datapaths when removed" do
+            FactoryGirl.create(:projects_datapath, datapath: @datapath)
+            expect {
+              patch :update, id: @datapath, datapath: {user_ids: [""]}, format: :js
+            }.to change(ProjectsDatapath, :count).by(-1)
+          end
+
+          it "should not destroy associated managers when removed" do
+            FactoryGirl.create(:projects_datapath, datapath: @datapath)
+            expect {
+              patch :update, id: @datapath, datapath: {user_ids: [""]}, format: :js
+            }.not_to change(User, :count)
+          end
+        end
       end
 
       context "with invalid parameters" do
