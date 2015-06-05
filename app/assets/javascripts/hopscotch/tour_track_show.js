@@ -4,8 +4,8 @@ var tour_track_show = {
   steps: [
     {
       title: "Tour: Track page",
-      content: "Name of track and link to associated project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
-      target: "#track-name",
+      content: "Name of track, reference genome and link to associated project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      target: ".track-name",
       placement: 'bottom'
     },
     {
