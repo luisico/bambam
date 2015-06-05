@@ -4,7 +4,13 @@ var tour_track_show_update = {
   steps: [
     {
       title: "Tour: Track page",
-      content: "Name of track and link to associated project. Click on track name to edit.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "View detailed information on track and share links.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      target: ".track-name",
+      placement: 'right'
+    },
+    {
+      title: "Track name",
+      content: "Click on name of track to edit.",
       target: ".track-name",
       placement: 'bottom'
     },
@@ -21,8 +27,14 @@ var tour_track_show_update = {
       placement: 'left'
     },
     {
-      title: "IGV and download links",
-      content: "Click to open track in IGV or download track file(s). For link to work, IGV must already be open on your computer.",
+      title: "IGV",
+      content: "Click to open track in IGV. For link to work, IGV must already be open on your computer.",
+      target: ".fi-eye",
+      placement: 'bottom'
+    },
+    {
+      title: "Track download links",
+      content: "Click links to download track file(s).",
       target: "#track-download-links",
       placement: 'bottom',
       arrowOffset: 'center'
