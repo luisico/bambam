@@ -1,7 +1,7 @@
 class TracksController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-   skip_authorize_resource :only => :update
+  skip_authorize_resource only: :update
 
   respond_to :html, only: [:index, :show]
   respond_to :json, only: [:create, :update]

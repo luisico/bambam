@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { :invitations => 'users/invitations' }, skip: [:registrations]
+  devise_for :users, controllers: {invitations: 'users/invitations'}, skip: [:registrations]
   devise_scope :user do
     get 'users/sign_up' => 'users#new',                             as: 'user_sign_up'
     get 'users/cancel'  => 'users#cancel',                          as: 'user_cancel'
