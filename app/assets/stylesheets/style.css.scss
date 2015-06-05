@@ -202,6 +202,12 @@ input.with-instructions {
   color: #A8A8A8 !important;
 }
 
+.subhead-note {
+  @extend .text-color-grey;
+  @extend .medium-text;
+  @extend .large-margin-bottom;
+}
+
 .tour-link {
   margin-bottom: 5px;
   a {
