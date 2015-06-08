@@ -35,3 +35,8 @@ Feature: Top navigation
     When I visit the datapaths page
     Then I should be denied access
     And I should be redirected to the projects page
+
+  Scenario: User can access tracks page from home button
+    Given I am signed in
+    When I click on "Tracks" in the top nav
+    Then I should be on the tracks page
