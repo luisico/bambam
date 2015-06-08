@@ -1,9 +1,54 @@
-.fancytree-ext-table {
+table#track-tree {
+  width: 100%;
+  table-layout: fixed;
+
   thead {
     display: none;
   }
-}
 
-table#track-tree tr td {
-  font-size: rem-calc(14)
+  tr td {
+    font-size: rem-calc(14);
+    padding: rem-calc(2 5);
+    border: none;
+
+    &:nth-of-type(1) {
+      padding: 0;
+    }
+
+    &:nth-of-type(2) {
+      width: 40%;
+      max-width: 40%;
+      word-wrap: break-word;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &:nth-of-type(3) {
+      width: 40%;
+      max-width: 40%;
+      word-wrap: break-word;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &:nth-of-type(4) {
+      .label.genome {
+        vertical-align: unset;
+      }
+    }
+
+    &:nth-of-type(5) {
+      padding: rem-calc(0 5px) !important;
+      .service.button {
+        padding: 0px 7px 0px 2px;
+        width: 50px;
+        .has-tip-icon {
+          right: -4px;
+          top: -3px;
+        }
+      }
+    }
+  }
 }
