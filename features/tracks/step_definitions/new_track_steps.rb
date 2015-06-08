@@ -45,6 +45,23 @@ When /^I deselect the first project's datapath$/ do
   }.to change(@project.projects_datapaths, :count).by(-1)
 end
 
+When /^I click on a track that fails to save$/ do
+  allow_any_instance_of(Track).to receive(:save).and_return(false)
+  expect {
+    select_node(@track_title)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.not_to change(@project.tracks, :count)
+end
+
+When /^I click on a track with an invalid datapath$/ do
+  @project.projects_datapaths.first.datapath.destroy
+  expect {
+    select_node(@track_title)
+    loop until page.evaluate_script('jQuery.active').zero?
+    @project.reload
+  }.not_to change(@project.tracks, :count)
+end
 
 ### Then
 
@@ -85,4 +102,8 @@ Then /^I should( not)? see a checkbox next to the track$/ do |negate|
       expect(page).to have_css('span.fancytree-checkbox')
     }
   end
+end
+
+Then /^I should see error "(.*?)"$/ do |error|
+  expect(page).to have_content error
 end

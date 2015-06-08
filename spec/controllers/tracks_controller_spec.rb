@@ -152,18 +152,18 @@ RSpec.describe TracksController do
       end
 
       context "failed creation" do
+        before { allow_any_instance_of(Track).to receive(:save).and_return(false) }
+
         it "should raise file system error" do
-          allow_any_instance_of(Track).to receive(:save).and_return(false)
           post :create, track: @track_attr, format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           expect(json['status']).to eq 'error'
-          expect(json['message']).to eq 'file system error'
+          expect(json['message']).to eq 'File System Error'
         end
 
         it "should not create a new track" do
-          allow_any_instance_of(Track).to receive(:save).and_return(false)
           expect{
             post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)

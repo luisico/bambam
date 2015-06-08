@@ -39,3 +39,24 @@ Feature: Create a track
 
     When I deselect the first project's datapath
     Then I should not see a checkbox next to the track
+
+  Scenario: User added track fails to save
+    Given I am signed in
+    And I belong to a project
+    And there are 3 datapaths in that project
+    And there is a track in the first project's datapath
+    When I am on the project page
+    And I expand the first project's datapath
+    And I click on a track that fails to save
+    Then I should see error "File System Error"
+
+  @allow-rescue
+  Scenario: User adds track to invalid datapath
+    Given I am signed in
+    And I belong to a project
+    And there are 3 datapaths in that project
+    And there is a track in the first project's datapath
+    When I am on the project page
+    And I expand the first project's datapath
+    And I click on a track with an invalid datapath
+    Then I should see error "Internal Server Error"
