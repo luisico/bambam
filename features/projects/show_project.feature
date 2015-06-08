@@ -13,6 +13,7 @@ Feature: Show a project
     When I am on the project page
     Then I should see the project's name
     And I should see a section titled "<title>"
+    And I should see a note about contacting "<contact>"
     And I should see the project's tracks
     And I should see the project's users <privilege> profile links
     And I should see the project's owner
@@ -20,11 +21,11 @@ Feature: Show a project
     And I <privilege2> see a "Delete" button
 
     Examples:
-      | role      | title                 | project exists        | privilege | privilege2 |
-      | an admin  | Datapaths & Tracks    | I belong to a project | with      | should     |
-      | a manager | Tracks                | I belong to a project | with      | should not |
-      | a manager | Datapaths & Tracks    | I own a project       | with      | should     |
-      | a user    | Tracks                | I belong to a project | without   | should not |
+      | role      | title                | contact | project exists        | privilege | privilege2 |
+      | an admin  | Datapaths and Tracks | admin   | I belong to a project | with      | should     |
+      | a manager | Tracks               | owner   | I belong to a project | with      | should not |
+      | a manager | Datapaths and Tracks | admin   | I own a project       | with      | should     |
+      | a user    | Tracks               | owner   | I belong to a project | without   | should not |
 
   Scenario: User can access the tracks page
     Given I am signed in

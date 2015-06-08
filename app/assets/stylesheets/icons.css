@@ -27,3 +27,7 @@
 .datapath-icon {
   @extend .fi-anchor;
 }
+
+.edit-icon {
+  @extend .fi-page-edit;
+}

@@ -6,10 +6,12 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :path %>
     <%= f.text_field :path, placeholder: 'new datapath' %>
   </div>
 
   <div class="field">
+    <%= f.label :users %>
     <%= f.collection_select :user_ids, User.with_role(:manager), :id, :handle_with_email, {}, {multiple:true, title: :email} %>
   </div>
 

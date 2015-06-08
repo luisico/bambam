@@ -2,7 +2,7 @@
   <div class="small-9 small-centered columns">
     <h3>Account cancelation instructions</h3>
 
-    <p>Please email XXX to cancel your account</p>
+    <p>Please email <%= mail_to ENV['ADMIN_EMAIL'] %> to cancel your account</p>
   </div>
 </div>
 

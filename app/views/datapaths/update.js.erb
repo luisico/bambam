@@ -1,7 +1,8 @@
 <% if @datapath.errors.any? %>
-  $('#edit_datapath_<%= @datapath.id %>').remove();
-  $('#datapath-<%= @datapath.id %>').append('<%= j render("form") %>');
+  $('form#edit_datapath_<%= @datapath.id %>').remove();
+  $('#datapath-<%= @datapath.id %> .panel').append('<%= j render("form") %>');
+  DatapathUsers.applySelect2();
 <% else %>
-  $('#edit_datapath_<%= @datapath.id %>').remove();
+  $('form#edit_datapath_<%= @datapath.id %>').remove();
   $('#datapath-<%= @datapath.id %>').replaceWith('<%= j render(@datapath) %>' )
 <% end %>

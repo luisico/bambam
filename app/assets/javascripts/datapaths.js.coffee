@@ -5,8 +5,8 @@ jQuery ->
     event.preventDefault()
 
   $('#datapath-list').on 'click', '.datapath-cancel', (event) ->
-    $(this).closest('form').siblings().find('.edit-datapath-link').show()
-    $(this).closest('form').siblings().find('.datapath-users').show()
+    $(this).closest('li').find('.edit-datapath-link').show()
+    $(this).closest('li').find('.datapath-users').show()
     $(this).closest('form').remove()
     event.preventDefault()
 

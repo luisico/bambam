@@ -40,17 +40,24 @@
 
       <div class="row">
         <div class="small-12 columns project-datapaths">
-          <h4>
+          <h4 class="no-margin-bottom">
             <% if can? :manage, @project %>
-              <i class="datapath-icon large margin-right"></i>
-              <i class="track-icon large margin-right"></i>
-              Datapaths & Tracks
+              <i class="datapath-icon large margin-right"></i>Datapaths
+              <small>and</small>
+              <i class="track-icon large margin-right"></i>Tracks
             <% else %>
               <i class="track-icon large margin-right"></i>
               Tracks
             <% end %>
             <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
           </h4>
+          <div class="subhead-note">
+            <% if can? :manage, @project %>
+              Contact site <%= mail_to ENV['ADMIN_EMAIL'], 'administrator' %> to add/remove datapaths from the project.
+            <% else %>
+              Contact <%= mail_to @project.owner.email, 'project owner' %> to add/remove datapaths from the project.
+            <% end %>
+          </div>
           <table id="track-tree" data-project=<%= @project.id %>>
             <colgroup>
               <col width="30px"></col>

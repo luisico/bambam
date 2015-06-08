@@ -1,10 +1,8 @@
-<h4 class="right" id="timestamps">
-  <small>
-    <span class="created-at"><i class="fi-calendar medium margin-right" title="created"></i>
-      <%= local_time_ago(record.created_at) %>
-    </span><br/>
-    <span class="updated-at"><i class="fi-clock medium margin-right" title="updated"></i>
-      updated: <%= local_time_ago(record.updated_at) %>
-    </span>
-  </small>
-</h4>
+<div id="timestamps">
+  <div class="created-at" title="Created at">
+    <%= local_time_ago(record.created_at, class: 'fi-calendar') %>
+  </div>
+  <div class="updated-at" title="Updated at">
+    <%= local_time_ago(record.updated_at, class: 'fi-clock') %>
+  </div>
+</div>

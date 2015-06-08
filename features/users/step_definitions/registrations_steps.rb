@@ -82,6 +82,8 @@ When /^I visit the cancel account page$/ do
   visit '/users/cancel'
 end
 
+### Then
+
 Then /^I should( not)? be able to invite a user with(out)? manager privileges$/ do |_not, out|
   build_invitee
   if out
@@ -208,10 +210,12 @@ end
 
 Then /^I should find account sign up instuctions$/ do
   expect(current_path).to eq user_sign_up_path
+  expect(page).to have_link ENV['ADMIN_EMAIL']
 end
 
 Then /^I should find account termination instructions$/ do
   expect(current_path).to eq user_cancel_path
+  expect(page).to have_link ENV['ADMIN_EMAIL']
 end
 
 Then /^I should be (on|redirected to) the projects page$/ do |foo|

@@ -7,6 +7,11 @@ en:
   unauthorized:
     default: You are not authorized to access this page
 
+  activerecord:
+    attributes:
+      datapath:
+        users: Managers
+
   errors:
     messages:
       exist: must exist in filesystem
