@@ -279,3 +279,11 @@ span.select2-hidden-accessible {
     margin-right: rem-calc(5);
   }
 }
+
+.top-bar-section {
+  form {
+    .button.expand {
+      padding: 5px 0px;
+    }
+  }
+}
