@@ -15,4 +15,6 @@ class @DatapathUsers
     $("#datapath_user_ids").select2({
       placeholder: "Select a user",
       allowClear: true
-    });
+    }).on('select2-removing', (e) ->
+      confirm('WARNING!!!\nRemoving this manager will permanently delete all tracks they have associated with this datapath. Are you sure you want to continue?')
+    );
