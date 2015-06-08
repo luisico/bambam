@@ -1,4 +1,8 @@
-<%= render partial: "tour_link", locals: {tour_name: "tour_project_show"} %>
+<% if can? :manage, @project %>
+  <%= render partial: "tour_link", locals: {tour_name: "tour_project_show_manager"} %>
+<% else %>
+  <%= render partial: "tour_link", locals: {tour_name: "tour_project_show"} %>
+<% end %>
 
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">

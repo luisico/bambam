@@ -1,5 +1,5 @@
-var tour_track_show = {
-  id: "tour-track-show",
+var tour_track_show_update = {
+  id: "tour-track-show-update",
   showPrevButton: true,
   steps: [
     {
@@ -10,8 +10,14 @@ var tour_track_show = {
     },
     {
       title: "Track name",
-      content: "Name of track, reference genome and link to associated project.",
+      content: "Click on name of track to edit.",
       target: ".track-name",
+      placement: 'bottom'
+    },
+    {
+      title: "Reference genome",
+      content: "Click on reference genome to edit.",
+      target: ".genome",
       placement: 'bottom'
     },
     {
