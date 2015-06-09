@@ -265,6 +265,9 @@ span.select2-hidden-accessible {
 
 .error-red {
   background-color: red !important;
+  td {
+    overflow: unset !important;
+  }
 }
 
 #timestamps {
