@@ -20,23 +20,23 @@
                 <%= link_to project.name, project, class: "text-panel-overhang" %>
               </li>
               <li>
-                <i class="track-icon small margin-right" title="tracks"></i>
+                <i class="track-icon margin-right" title="tracks"></i>
                 <%= project.tracks.count %>
-                <i class="users-icon small left-buffer margin-right" title="users"></i>
+                <i class="users-icon left-buffer margin-right" title="users"></i>
                 <%= project.users.count %>
               </li>
               <% if can? :show, project.owner %>
                 <li class="sub-text text-panel-overhang">
-                  <i class="owner-icon small margin-right" title="owner"></i>
+                  <i class="owner-icon margin-right" title="owner"></i>
                   <%= link_to project.owner.handle, project.owner, class: "text-panel-overhang" %>
                 </li>
               <% else %>
                 <li class="sub-text text-panel-overhang">
-                  <i class="fi-star small margin-right" title="owner"></i>
+                  <i class="fi-star margin-right" title="owner"></i>
                   <%= project.owner.handle %>
                 </li>
               <% end %>
-              <li class="sub-text"><i class="fi-clock small margin-right" title="updated_at"></i>
+              <li class="sub-text"><i class="fi-clock margin-right" title="updated_at"></i>
                 <%= local_time_ago(project.updated_at) %>
               </li>
             </ul>

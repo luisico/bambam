@@ -261,7 +261,6 @@ span.select2-hidden-accessible {
 #regular-users {
   i {
     @extend .users-icon;
-    @extend .large;
     @extend .margin-right;
   }
 }

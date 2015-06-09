@@ -30,9 +30,9 @@
     <div class="panel">
       <h3 id="current-users">Current users</h3>
       <ul class="inline-list">
-        <li><i class="invite-icon medium icon_key"> Invite outstanding</i></li>
-        <li><i class="admin-icon medium icon_key"> Admin</i></li>
-        <li><i class="manager-icon medium icon_key"> Manager</i></li>
+        <li><i class="invite-icon icon_key"> Invite outstanding</i></li>
+        <li><i class="admin-icon icon_key"> Admin</i></li>
+        <li><i class="manager-icon icon_key"> Manager</i></li>
       </ul>
 
       <% @users.each do |user| %>
@@ -42,13 +42,13 @@
             <%= user.handle %>
           <% end %>
           <% if user.invitation_accepted? == false && user.sign_in_count == 0 %>
-            <i class="invite-icon medium"></i>
+            <i class="invite-icon"></i>
           <% end %>
           <% if user.has_role? :admin %>
-            <i class="admin-icon medium"></i>
+            <i class="admin-icon"></i>
           <% end %>
           <% if user.has_role? :manager %>
-            <i class="manager-icon medium"></i>
+            <i class="manager-icon"></i>
           <% end %>
         </p>
       <% end %>

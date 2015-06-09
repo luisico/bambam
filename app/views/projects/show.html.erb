@@ -46,11 +46,11 @@
         <div class="small-12 columns project-datapaths">
           <h4 class="no-margin-bottom">
             <% if can? :manage, @project %>
-              <i class="datapath-icon large margin-right"></i>Datapaths
+              <i class="datapath-icon margin-right"></i>Datapaths
               <small>and</small>
-              <i class="track-icon large margin-right"></i>Tracks
+              <i class="track-icon margin-right"></i>Tracks
             <% else %>
-              <i class="track-icon large margin-right"></i>
+              <i class="track-icon margin-right"></i>
               Tracks
             <% end %>
             <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
