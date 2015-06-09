@@ -49,6 +49,7 @@
 }
 
 .icon-key {
-  padding-right: rem-calc(5);
-  display: inline-block;
+  &:before {
+    padding-right: rem-calc(5);
+  }
 }

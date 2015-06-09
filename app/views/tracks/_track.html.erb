@@ -7,6 +7,7 @@
     <div>
       <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
     </div>
+
     <div>
       <ul class="true-inline-list">
         <% if @projects_and_tracks %>
@@ -15,21 +16,10 @@
               <%= excerpt(track.path, @q, radius: 5) %>
             </i>
           </li>
-          <li>
-            <i class="fi-clock margin-right text-color-grey" title="updated">
-              <%= local_time_ago(track.updated_at) %>
-            </i>
-          </li>
+          <li class="text-color-grey fi-clock icon-key" title="updated"><%= local_time_ago(track.updated_at) %></li>
         <% else %>
           <li><%= link_to track.project.name, track.project %></li>
-          <li>
-            <i class="user-icon icon-key"></i>
-            <% if can? :show, track.owner %>
-              <%= link_to track.owner.handle, track.owner %>
-            <% else %>
-              <%= track.owner.handle %>
-            <% end %>
-          </li>
+          <li class="user-icon icon-key"><%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %></li>
         <% end %>
       </ul>
     </div>
