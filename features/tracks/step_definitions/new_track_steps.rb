@@ -47,6 +47,7 @@ end
 
 When /^I click on a track that fails to save$/ do
   allow_any_instance_of(Track).to receive(:save).and_return(false)
+  allow_any_instance_of(Track).to receive_message_chain(:errors, :full_messages).and_return(["my", "error"])
   expect {
     select_node(@track_title)
     loop until page.evaluate_script('jQuery.active').zero?
