@@ -20,8 +20,8 @@
   @extend .fi-torsos;
 }
 
-.icon_key {
-  padding-right: 1em;
+.user-icon {
+  @extend .fi-torso;
 }
 
 .datapath-icon {
@@ -30,4 +30,13 @@
 
 .edit-icon {
   @extend .fi-page-edit;
+}
+
+.icon_key {
+  padding-right: 1em;
+}
+
+.icon-key {
+  padding-right: rem-calc(5);
+  display: inline-block;
 }

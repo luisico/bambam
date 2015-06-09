@@ -46,6 +46,14 @@
   }
 }
 
+.true-inline-list {
+  @include inline-list;
+  margin-bottom: 0;
+  > li > * {
+    display: inline-block;
+  }
+}
+
 .fi-download:before {
   margin-right: rem-calc(5);
 }
