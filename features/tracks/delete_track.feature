@@ -1,5 +1,5 @@
 @javascript
-Feature: Delate a track
+Feature: Delete a track
   In order to remove a track from the system
   As a user
   I can delete a track
@@ -40,3 +40,12 @@ Feature: Delate a track
       | a user    | belong to   | I own 3 tracks in that project    | should     |
       | a user    | belong to   | there are 3 track in that project | should not |
       | a manager | own         | there are 3 track in that project | should     |
+
+  Scenario: Failed track deletion
+    Given I am signed in
+    And I belong to a project
+    And there are 3 datapaths in that project
+    And I own 3 tracks in that project
+    When I am on the project page
+    And I deselect a track and it fails to delete
+    Then I should see error "Record not deleted"
