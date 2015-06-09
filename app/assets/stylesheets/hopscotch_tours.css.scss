@@ -14,9 +14,9 @@
 }
 
 .tour-close {
-  @extend .text-color-grey;
   @extend .fi-x;
   @extend .icon-tour;
+  color: $subdue-color !important;
   margin-right: rem-calc(3);
 }
 

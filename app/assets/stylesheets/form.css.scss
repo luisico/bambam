@@ -1,4 +1,4 @@
 .checkbox-link {
   @extend .pointer;
-  @extend .text-color-grey;
+  color: $subdue-color;
 }

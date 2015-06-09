@@ -27,7 +27,7 @@
             <% (@user.projects + @user.owned_projects).each do |project| %>
               <li id="project_<%= project.id %>">
                 <%= link_to project.name, project %>
-                <span class="text-color-grey owner-icon icon-key" title="owner"><%= project.owner.handle %></span>
+                <span class="subdue owner-icon icon-key" title="owner"><%= project.owner.handle %></span>
               </li>
             <% end %>
           </ul>

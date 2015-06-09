@@ -11,12 +11,12 @@
     <div>
       <ul class="true-inline-list">
         <% if @projects_and_tracks %>
-          <li class="text-color-grey pointer">
+          <li class="subdue pointer">
             <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
               <%= excerpt(track.path, @q, radius: 5) %>
             </i>
           </li>
-          <li class="text-color-grey fi-clock icon-key" title="updated"><%= local_time_ago(track.updated_at) %></li>
+          <li class="subdue fi-clock icon-key" title="updated"><%= local_time_ago(track.updated_at) %></li>
         <% else %>
           <li><%= link_to track.project.name, track.project %></li>
           <li class="user-icon icon-key"><%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %></li>

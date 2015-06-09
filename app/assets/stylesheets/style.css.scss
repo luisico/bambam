@@ -1,3 +1,5 @@
+$subdue-color: #a8a8a8;
+
 .copy-to-clipboard {
   font-size: rem-calc(20);
   margin: rem-calc(0 10 0 0);
@@ -113,14 +115,18 @@ li.sub-text {
 
 li.search-result {
   @extend .medium-margin-bottom;
-  @extend .text-color-grey;
   font-size: rem-calc(20);
+  color: $subdue-color;
 }
 
 .subhead-note {
-  @extend .text-color-grey;
   @extend .medium-text;
   @extend .large-margin-bottom;
+  color: $subdue-color;
+}
+
+.subdue {
+  color: $subdue-color;
 }
 
 .cloud-tag {

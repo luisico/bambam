@@ -11,7 +11,7 @@
     <% else %>
       <li>expires in <%= distance_of_time_in_words(Time.now, share_link.expires_at) %></li>
     <% end %>
-    <li><i class="text-color-grey"><%= share_link.notes %></i></li>
+    <li><i class="subdue"><%= share_link.notes %></i></li>
     <li>
       <%= link_to "edit", edit_share_link_path(share_link), id: "edit_link_#{share_link.id}", remote: true, class: "edit-share-link-link" %>
     </li>
