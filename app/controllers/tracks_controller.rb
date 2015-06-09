@@ -17,7 +17,7 @@ class TracksController < ApplicationController
     if @track.save
       render json: {track: {id: @track.id, name: @track.name, genome: @track.genome, igv: view_context.link_to_igv(@track)}}, status: 200
     else
-      render json: {status: :error, message: @track.errors.full_messages.join(', ') }, status: 400
+      render json: {status: :error, message: error_messages(@track, "Record not created") }, status: 400
     end
   end
 
@@ -55,5 +55,10 @@ class TracksController < ApplicationController
 
   def track_params
     params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id, :genome)
+  end
+
+  def error_messages(track, default)
+    errors = track.errors.full_messages.join(';')
+    errors.empty? ? default : errors
   end
 end
