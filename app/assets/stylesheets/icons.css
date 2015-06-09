@@ -13,6 +13,14 @@
 }
 
 .admin-icon {
+  @extend .fi-crown;
+}
+
+.manager-icon {
+  @extend .fi-key;
+}
+
+.owner-icon {
   @extend .fi-sheriff-badge;
 }
 
@@ -30,6 +38,10 @@
 
 .edit-icon {
   @extend .fi-page-edit;
+}
+
+.invite-icon {
+  @extend .fi-ticket;
 }
 
 .icon_key {

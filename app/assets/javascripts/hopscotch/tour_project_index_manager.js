@@ -10,7 +10,7 @@ var tour_project_index_manager = {
     },
     {
       title: "Project index page",
-      content: "Each tile contains a link to the project page, track count <i class='track-icon small-margin-left'></i>, user count <i class='users-icon small-margin-left'></i>, project owner <i class='admin-icon small-margin-left'></i> and date of last update <i class='fi-clock small-margin-left'></i>.",
+      content: "Each tile contains a link to the project page, track count <i class='track-icon small-margin-left'></i>, user count <i class='users-icon small-margin-left'></i>, project owner <i class='owner-icon small-margin-left'></i> and date of last update <i class='fi-clock small-margin-left'></i>.",
       target: ".project-tile",
       placement: "right",
       arrowOffset: "center"

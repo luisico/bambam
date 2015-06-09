@@ -35,7 +35,7 @@ var tour_user_index = {
     },
     {
       title: "System users",
-      content: "Each user entry has link to their profile page and information on status (invite outstanding <i class='fi-ticket'></i>, admin <i class='fi-crown'></i>, etc.).",
+      content: "Each user entry has link to their profile page and information on status (invite outstanding <i class='invite-icon'></i>, admin <i class='admin-icon'></i>, etc.).",
       target: ".current-user",
       placement: 'top'
     },

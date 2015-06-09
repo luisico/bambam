@@ -9,7 +9,7 @@
     <%= @groups_and_users ? user.handle_with_email : user.handle %>
   <% end %>
   <% if @project && (user == @project.owner) %>
-    <i class="admin-icon small" title="owner"></i>
+    <i class="owner-icon small" title="owner"></i>
   <% end %>
   <% if @group && (user == @group.owner) %>
     <%= "(owner)" %>
