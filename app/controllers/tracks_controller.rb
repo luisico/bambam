@@ -58,7 +58,7 @@ class TracksController < ApplicationController
   end
 
   def error_messages(track, default)
-    errors = track.errors.full_messages.join(';')
+    errors = track.errors.full_messages.join('; ')
     errors.empty? ? default : errors
   end
 end

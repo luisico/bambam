@@ -48,7 +48,7 @@ Feature: Create a track
     When I am on the project page
     And I expand the first project's datapath
     And I click on a track that fails to save
-    Then I should see error "my;error"
+    Then I should see error "my; error"
 
   @allow-rescue
   Scenario: User adds track to invalid datapath
