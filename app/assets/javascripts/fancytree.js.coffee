@@ -243,14 +243,28 @@ class @Fancytree
     for i of childTracks
       track_id = childTracks[i].data.object.track.id
       path = Fancytree.buildTrack(event, childTracks[i], "isTransitionTrack")[0]
-      Fancytree.updateTrack(event, track_id, path, projects_datapath_id)
+      Fancytree.updateTrack(childTracks[i], track_id, path, projects_datapath_id)
 
-  @updateTrack: (event, track_id, path, projects_datapath_id) ->
+  @updateTrack: (node, track_id, path, projects_datapath_id) ->
     $.ajax({
       data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
       type: 'PATCH',
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + '/tracks/' + track_id
+      success:(jqXHR, textStatus, errorThrown) ->
+        $tr = $(node.tr)
+        if $tr.is(':visible')
+          $tr.effect("highlight", {}, 1500)
+        return false
+      error:(jqXHR, textStatus, errorThrown) ->
+        if jqXHR.responseJSON
+          errorMessage = jqXHR.responseJSON.message
+        else
+          errorMessage = errorThrown
+        $tr = $(node.tr)
+        $tr.addClass('error-red')
+        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        return false
     });
 
   @resetTrackCheckboxes: (event, tracks, remove) ->

@@ -41,3 +41,12 @@ Feature: Edit track fields
     And I own a track in that project
     When I am on the track page
     Then I should not be able to set track genome to blank
+
+  Scenario: Failed track update
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    And I own 3 tracks in that project
+    When I am on the project page
+    And I select an invalid track parent directory
+    Then I should see error "Record not updated"

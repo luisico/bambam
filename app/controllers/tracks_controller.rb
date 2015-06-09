@@ -33,7 +33,7 @@ class TracksController < ApplicationController
       if @track.update(track_params)
         render json: {status: :success, message: 'OK' }, status: 200
       else
-        render json: {status: :error, message: 'Record not saved'}, status: 400
+        render json: {status: :error, message: error_messages(@track, "Record not updated")}, status: 400
       end
     end
   end
