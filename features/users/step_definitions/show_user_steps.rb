@@ -16,7 +16,8 @@ end
 ### When
 
 When /^I am on (my|the)? account profile page$/ do |foo|
-  visit user_path(@user)
+  user = @user || @manager
+  visit user_path(user)
 end
 
 When /^I click on the user handle$/ do
@@ -38,7 +39,8 @@ Then /^I should see my avatar$/ do
 end
 
 Then /^I should see my projects$/ do
-  @user.projects.each do |project|
+  user = @user || @manager
+  (user.projects + user.owned_projects).each do |project|
     within("#project_#{project.id}") do
       expect(page).to have_link project.name
       expect(page).to have_content project.owner.handle

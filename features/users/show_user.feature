@@ -23,6 +23,13 @@ Feature: Show a user profile
     When I am on my account profile page
     Then I should only see my email once
 
+  Scenario: Managers see projects they own and where they are members
+    Given I am signed in as a manager
+    And I own a project
+    And I belong to a project
+    When I am on my account profile page
+    Then I should see my projects
+
   Scenario: Users can only see groups they are members of
     Given I am signed in
     And there are 2 groups in the system
