@@ -46,7 +46,7 @@ RSpec.describe ProjectsDatapathsController do
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
             expect(json['status']).to eq 'error'
-            expect(json['message']).to eq 'datapath must exist'
+            expect(json['message']).to eq 'Datapath datapath must exist'
           end
 
           it "should not create a new project's datapath" do

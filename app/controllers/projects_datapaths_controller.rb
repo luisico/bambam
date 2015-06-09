@@ -9,8 +9,7 @@ class ProjectsDatapathsController < ApplicationController
     if @projects_datapath.save
       render json: {projects_datapath: {id: @projects_datapath.id, name: @projects_datapath.name}}, status: 200
     else
-      message = @projects_datapath.errors.collect {|name, msg| msg }.join(';')
-      render json: {status: :error, message: message}, status: 400
+      render json: {status: :error, message: error_messages(@projects_datapath, "Record not created")}, status: 400
     end
   end
 
@@ -33,6 +32,11 @@ class ProjectsDatapathsController < ApplicationController
 
   def projects_datapath_params
     params.require(:projects_datapath).permit(:project_id, :datapath_id, :sub_directory, :name)
+  end
+
+  def error_messages(projects_datapath, default)
+    errors = projects_datapath.errors.full_messages.join('; ')
+    errors.empty? ? default : errors
   end
 
   def generate_tree(datapaths=[])
