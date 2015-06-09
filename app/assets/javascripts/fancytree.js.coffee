@@ -147,9 +147,13 @@ class @Fancytree
         delete node.data.object.projects_datapath
         return false
       error:(jqXHR, textStatus, errorThrown) ->
+        if jqXHR.responseJSON
+          errorMessage = jqXHR.responseJSON.message
+        else
+          errorMessage = errorThrown
         $tr = $(node.tr)
         $tr.addClass('error-red')
-        $tr.find('.fancytree-title').append(' [' + errorThrown.trim() + ']')
+        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
     })
 

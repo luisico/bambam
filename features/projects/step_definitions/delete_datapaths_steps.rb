@@ -21,7 +21,7 @@ Then /^I should be able to remove the datapath sub\-directory from the project$/
 end
 
 Then /^I should be informed of a failed datapath deletion$/ do
-  allow(ProjectsDatapath).to receive(:find_by_id).and_return(nil)
+  allow_any_instance_of(ProjectsDatapath).to receive(:destroy).and_return(false)
   expect {
     select_node(@projects_datapath.full_path)
     loop until page.evaluate_script('jQuery.active').zero?

@@ -18,7 +18,7 @@ class ProjectsDatapathsController < ApplicationController
     if @projects_datapath && @projects_datapath.destroy
       render json: {status: :success, message: 'OK' }, status: 200
     else
-      render json: {status: :error, message: 'file system error'}, status: 400
+      render json: {status: :error, message: error_messages(@projects_datapath, "Record not deleted")}, status: 400
     end
   end
 

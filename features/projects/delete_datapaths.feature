@@ -29,4 +29,4 @@ Feature: Delete projects datapaths
     And the project owner has access to 3 additional datapaths
     When I am on the project page
     Then I should be informed of a failed datapath deletion
-    And I should see the status code appended to the node title
+    And I should see "Record not deleted" appended to the node title
