@@ -82,6 +82,6 @@ Then /^I should( not)? see the datapath name$/ do |negate|
   end
 end
 
-Then /^I should see the status code appended to the node title$/ do
-  expect(fancytree_node(@title).text).to include '[Bad Request]'
+Then /^I should see "(.*?)" appended to the node title$/ do |error|
+  expect(fancytree_node(@title).text).to include error
 end

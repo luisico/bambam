@@ -152,18 +152,22 @@ RSpec.describe TracksController do
       end
 
       context "failed creation" do
-        it "should raise file system error" do
+        before do
           allow_any_instance_of(Track).to receive(:save).and_return(false)
+          allow_any_instance_of(Track).to receive_message_chain(:errors, :full_messages).and_return(["my", "error"])
+        end
+
+
+        it "should raise file system error" do
           post :create, track: @track_attr, format: :json
           expect(response.status).to eq 400
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           expect(json['status']).to eq 'error'
-          expect(json['message']).to eq 'file system error'
+          expect(json['message']).to eq 'my; error'
         end
 
         it "should not create a new track" do
-          allow_any_instance_of(Track).to receive(:save).and_return(false)
           expect{
             post :create, track: @track_attr, format: :json
           }.not_to change(Track, :count)
@@ -330,17 +334,20 @@ RSpec.describe TracksController do
         end
 
         context "failed deletion" do
-          it "should raise file system error" do
+          before do
             allow_any_instance_of(Track).to receive(:destroy).and_return(false)
+            allow_any_instance_of(Track).to receive_message_chain(:errors, :full_messages).and_return(["my", "error"])
+          end
+
+          it "should raise file system error" do
             delete :destroy, id: @track, format: :json
             expect(response.status).to eq 400
             json = JSON.parse(response.body)
             expect(json['status']).to eq 'error'
-            expect(json['message']).to eq "file system error"
+            expect(json['message']).to eq "my; error"
           end
 
           it "should not destroy the track" do
-            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track, format: :json
             }.not_to change(Track, :count)
@@ -363,14 +370,16 @@ RSpec.describe TracksController do
         end
 
         context "failed deletion" do
-          it "should rediret to the projects page" do
+          before do
             allow_any_instance_of(Track).to receive(:destroy).and_return(false)
+          end
+
+          it "should rediret to the projects page" do
             delete :destroy, id: @track
             expect(response).to redirect_to projects_path
           end
 
           it "should not destroy the track" do
-            allow_any_instance_of(Track).to receive(:destroy).and_return(false)
             expect{
               delete :destroy, id: @track
             }.not_to change(Track, :count)

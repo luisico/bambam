@@ -9,6 +9,15 @@ end
 
 ### When
 
+When /^I deselect a track and it fails to delete$/ do
+  @track_title = Pathname.new(@track.full_path).basename.to_s
+  allow_any_instance_of(Track).to receive(:destroy).and_return(false)
+  expect{
+    delete_track(@track_title)
+    @project.reload
+  }.not_to change(@project.tracks, :count)
+end
+
 ### Then
 
 Then /^I should( not)? be able to delete a track from the project$/ do |negate|

@@ -46,7 +46,7 @@ RSpec.describe ProjectsDatapathsController do
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
             expect(json['status']).to eq 'error'
-            expect(json['message']).to eq 'datapath must exist'
+            expect(json['message']).to eq 'Datapath datapath must exist'
           end
 
           it "should not create a new project's datapath" do
@@ -118,18 +118,20 @@ RSpec.describe ProjectsDatapathsController do
 
       context "with invalid parameters" do
         context "non-existance projects datapath" do
+          before { allow_any_instance_of(ProjectsDatapath).to receive(:destroy).and_return(false) }
+
           it "should raise record not found error" do
-            delete :destroy, id: 9999, format: :json
+            delete :destroy, id: @projects_datapath, format: :json
             expect(response.status).to eq 400
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
             expect(json['status']).to eq 'error'
-            expect(json['message']).to eq 'file system error'
+            expect(json['message']).to eq 'Record not deleted'
           end
 
           it "should not destroy the project's datapath" do
             expect{
-              delete :destroy, id: 9999, format: :json
+              delete :destroy, id: @projects_datapath, format: :json
             }.not_to change(ProjectsDatapath, :count)
           end
         end

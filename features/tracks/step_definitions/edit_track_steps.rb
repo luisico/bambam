@@ -4,6 +4,11 @@
 
 ### When
 
+When /^I select an invalid track parent directory$/ do
+  allow_any_instance_of(Track).to receive(:update).and_return(false)
+  select_node('tracks')
+end
+
 ### Then
 
 Then /^the tracks? should be transitioned to the selected datapath$/ do

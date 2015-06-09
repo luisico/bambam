@@ -17,7 +17,7 @@ class TracksController < ApplicationController
     if @track.save
       render json: {track: {id: @track.id, name: @track.name, genome: @track.genome, igv: view_context.link_to_igv(@track)}}, status: 200
     else
-      render json: {status: :error, message: 'file system error'}, status: 400
+      render json: {status: :error, message: error_messages(@track, "Record not created") }, status: 400
     end
   end
 
@@ -33,7 +33,7 @@ class TracksController < ApplicationController
       if @track.update(track_params)
         render json: {status: :success, message: 'OK' }, status: 200
       else
-        render json: {status: :error, message: 'Record not saved'}, status: 400
+        render json: {status: :error, message: error_messages(@track, "Record not updated")}, status: 400
       end
     end
   end
@@ -45,7 +45,7 @@ class TracksController < ApplicationController
         format.json { render json: {status: :success, message: 'OK' }, status: 200 }
         format.html { redirect_to project_path(@track.project) }
       else
-        format.json {render json: {status: :error, message: 'file system error'}, status: 400}
+        format.json {render json: {status: :error, message: error_messages(@track, "Record not deleted")}, status: 400}
         format.html { redirect_to projects_path }
       end
     end
@@ -55,5 +55,10 @@ class TracksController < ApplicationController
 
   def track_params
     params.require(:track).permit(:name, :path, :owner_id, :projects_datapath_id, :genome)
+  end
+
+  def error_messages(track, default)
+    errors = track.errors.full_messages.join('; ')
+    errors.empty? ? default : errors
   end
 end
