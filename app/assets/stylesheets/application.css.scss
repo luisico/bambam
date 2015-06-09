@@ -1,18 +1,29 @@
+/* Foundation */
 @import 'foundation_and_overrides';
 @import 'foundation-icons';
+
+/* Common styles */
 @import 'style';
 @import 'background';
 @import 'icons';
 @import 'panel';
-@import 'tracks';
+@import 'form';
+@import 'to_be_removed';
+
+/* Models */
 @import 'datapaths';
+@import 'share_links';
+@import 'tracks';
 @import 'users';
-@import 'tours';
+
+/* Third party */
 @import 'best_in_place';
 @import 'jquery.ui.core';
 @import 'jquery.ui.theme';
 @import 'jquery.ui.datepicker';
 @import 'hopscotch/hopscotch';
+@import 'hopscotch_tours';
 @import 'select2/select2';
+@import 'select2_local';
 @import 'fancytree/ui.fancytree';
 @import 'fancytree_local';
