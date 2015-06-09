@@ -66,10 +66,6 @@
 
 }
 
-.fi-download:before {
-  margin-right: rem-calc(5);
-}
-
 .pointer {
   cursor: pointer;
 }
@@ -94,14 +90,6 @@ a.restore-track {
   display: none;
 }
 
-i.fi-plus {
-  color: $primary-color;
-}
-
-i.margin-right {
-  margin-right: rem-calc(5);
-}
-
 .has-tip {
   @extend .radius;
   font-weight: normal;
@@ -124,16 +112,8 @@ i.margin-right {
   top: -5px;
 }
 
-i.small-margin-left {
-  margin-left: rem-calc(3);
-}
-
 .big-margin-right {
   margin-right: rem-calc(20) !important;
-}
-
-i.left-buffer {
-  margin-left: rem-calc(15);
 }
 
 div.track-form-fields {
@@ -205,10 +185,6 @@ span.inline-timestamps {
   font-size: rem-calc(12) !important;
 }
 
-.margin-right {
-  margin-right: rem-calc(10);
-}
-
 .margin-left {
   margin-left: rem-calc(10);
 }
@@ -226,21 +202,6 @@ input.with-instructions {
   @extend .text-color-grey;
   @extend .medium-text;
   @extend .large-margin-bottom;
-}
-
-.tour-link {
-  margin-bottom: 5px;
-  a {
-    @extend .right;
-    @extend .tour-icon;
-    font-size: rem-calc(10);
-    margin-right: 10px;
-    &:before {
-      font-size: rem-calc(20);
-      margin-right: 5px;
-      vertical-middle: middle;
-    }
-  }
 }
 
 .cloud-tag {

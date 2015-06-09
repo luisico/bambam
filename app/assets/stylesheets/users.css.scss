@@ -1,0 +1,4 @@
+.avatar {
+  @extend .left;
+  margin-right: rem-calc(10);
+}

@@ -1,0 +1,25 @@
+.tour-link {
+  margin-bottom: 5px;
+  a {
+    @extend .right;
+    @extend .tour-icon;
+    font-size: rem-calc(10);
+    margin-right: 10px;
+    &:before {
+      font-size: rem-calc(20);
+      margin-right: 5px;
+      vertical-middle: middle;
+    }
+  }
+}
+
+.tour-close {
+  @extend .text-color-grey;
+  @extend .fi-x;
+  @extend .icon-tour;
+  margin-right: rem-calc(3);
+}
+
+.icon-tour {
+  margin-left: rem-calc(3);
+}
