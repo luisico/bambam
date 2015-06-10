@@ -13,29 +13,7 @@
     <% end %>
     <% if current_user.projects.any? || current_user.owned_projects.any? || current_user.has_role?(:admin) %>
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
-        <% @projects.each do |project| %>
-          <li id="project_<%= project.id %>">
-            <ul class="no-bullet panel project-tile">
-              <li class="headline">
-                <%= link_to project.name, project, class: "text-panel-overhang" %>
-              </li>
-              <li>
-                <ul class="keys-inline-list">
-                  <li class="track-icon icon-key" title="tracks"><%= project.tracks.count %></li>
-                  <li class="users-icon icon-key" title="users"><%= project.users.count %></li>
-                </ul>
-              </li>
-              <li class="sub-text text-panel-overhang owner-icon icon-key" title="owner">
-                <% if can? :show, project.owner %>
-                  <%= link_to project.owner.handle, project.owner, class: "text-panel-overhang" %>
-                <% else %>
-                  <%= project.owner.handle %>
-                <% end %>
-              </li>
-              <li class="sub-text fi-clock icon-key" title="updated_at"><%= local_time_ago(project.updated_at) %></li>
-            </ul>
-          </li>
-        <% end %>
+        <%= render @projects %>
       </ul>
     <% else %>
       <div class="panel">
