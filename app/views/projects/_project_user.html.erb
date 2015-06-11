@@ -2,7 +2,7 @@
   <% if can? :manage, @project %>
     <div class="clearfix">
       <%= link_to user do %>
-        <%= image_tag avatar_url(user), class: "left margin-right" %>
+        <%= image_tag avatar_url(user), class: "avatar" %>
         <%= user.handle %>
         <%= render partial: "projects_users/form", locals: { projects_user: @project.projects_users.select {|p_u| p_u.user_id == user.id} } %>
       <% end %>

@@ -4,7 +4,7 @@ var tour_track_show = {
   steps: [
     {
       title: "Tour: Track page",
-      content: "View detailed information on track and share links.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "View detailed information on track and share links.<br/><br/>Click <i class='tour-close'></i> to exit tour at any time.",
       target: ".track-name",
       placement: 'right'
     },
@@ -16,7 +16,7 @@ var tour_track_show = {
     },
     {
       title: "Timestamps",
-      content: "Track creation date <i class='fi-calendar'></i> and date of last update <i class='fi-clock'></i>.",
+      content: "Track creation date <i class='fi-calendar icon-tour'></i> and date of last update <i class='fi-clock icon-tour'></i>.",
       target: "#timestamps",
       placement: 'left'
     },

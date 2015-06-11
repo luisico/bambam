@@ -1,3 +1,5 @@
+$subdue-color: #a8a8a8;
+
 .copy-to-clipboard {
   font-size: rem-calc(20);
   margin: rem-calc(0 10 0 0);
@@ -11,25 +13,6 @@
   background-color:  scale-color($info-color, $lightness: 80%);
   padding: rem-calc(5);
   word-wrap: break-word;
-}
-
-.share-link-box {
-  border-style: solid;
-  border-width: thin;
-  border-color: #A8A8A8;
-  padding: rem-calc(15);
-  word-wrap: break-word;
-  margin-bottom: rem-calc(20);
-}
-
-.service.button {
-  padding: 5px 10px;
-  margin-bottom: 0;
-  &.fi-eye:before {
-    font-size: rem-calc(20);
-    vertical-align: middle;
-    margin-right: rem-calc(5);
-  }
 }
 
 .width-limited-inline-list {
@@ -46,8 +29,23 @@
   }
 }
 
-.fi-download:before {
-  margin-right: rem-calc(5);
+.true-inline-list {
+  @include inline-list;
+  margin-bottom: 0;
+  > li > * {
+    display: inline-block;
+  }
+}
+
+.keys-inline-list {
+  @extend .true-inline-list;
+  margin-left: 0 !important;
+  li {
+    margin-left: rem-calc(20);
+    &:nth-of-type(1) {
+      margin-left: 0;
+    }
+  }
 }
 
 .pointer {
@@ -62,24 +60,14 @@
   word-wrap: break-word;
 }
 
-a.edit-track {
-  display: none;
-}
-
-a.done-track {
-  display: none;
-}
-
-a.restore-track {
-  display: none;
-}
-
-i.fi-plus {
-  color: $primary-color;
-}
-
-i.margin-right {
-  margin-right: rem-calc(5);
+.service.button {
+  padding: 5px 10px;
+  margin-bottom: 0;
+  &.fi-eye:before {
+    font-size: rem-calc(20);
+    vertical-align: middle;
+    margin-right: rem-calc(5);
+  }
 }
 
 .has-tip {
@@ -104,22 +92,6 @@ i.margin-right {
   top: -5px;
 }
 
-i.small-margin-left {
-  margin-left: rem-calc(3);
-}
-
-.big-margin-right {
-  margin-right: rem-calc(20) !important;
-}
-
-i.left-buffer {
-  margin-left: rem-calc(15);
-}
-
-div.track-form-fields {
-  display: none;
-}
-
 div.new-record {
   border-style: dotted;
   border-width: thin;
@@ -133,18 +105,6 @@ div.edit-record {
   @extend div.new-record;
 }
 
-div.margin-bottom {
-  margin-bottom: 0 !important;
-}
-
-.no-margin-bottom {
-  margin-bottom: 0 !important;
-}
-
-.no-margin-top {
-  margin-top: 0 !important;
-}
-
 li.headline {
   font-size: rem-calc(20)
 }
@@ -155,72 +115,18 @@ li.sub-text {
 
 li.search-result {
   @extend .medium-margin-bottom;
-  @extend .text-color-grey;
   font-size: rem-calc(20);
-}
-
-span.small-text {
-  font-size: rem-calc(10);
-  margin-top: 0;
-}
-
-span.inline-timestamps {
-  color: #A8A8A8 !important;
-  margin-left: rem-calc(15);
-}
-
-.medium-margin-bottom {
-  margin-bottom: rem-calc(10) !important;
-}
-
-.large-margin-bottom {
-  margin-bottom: rem-calc(15) !important;
-}
-
-.medium-margin-top {
-  margin-top: rem-calc(10) !important;
-}
-
-.medium-text {
-  font-size: rem-calc(12) !important;
-}
-
-.margin-right {
-  margin-right: rem-calc(10);
-}
-
-.margin-left {
-  margin-left: rem-calc(10);
-}
-
-input.with-instructions {
-  margin-top: rem-calc(5);
-  margin-bottom: rem-calc(5)
-}
-
-.text-color-grey {
-  color: #A8A8A8 !important;
+  color: $subdue-color;
 }
 
 .subhead-note {
-  @extend .text-color-grey;
   @extend .medium-text;
   @extend .large-margin-bottom;
+  color: $subdue-color;
 }
 
-.tour-link {
-  margin-bottom: 5px;
-  a {
-    @extend .right;
-    @extend .tour-icon;
-    font-size: rem-calc(10);
-    margin-right: 10px;
-    &:before {
-      font-size: rem-calc(20);
-      margin-right: 5px;
-      vertical-middle: middle;
-    }
-  }
+.subdue {
+  color: $subdue-color;
 }
 
 .cloud-tag {
@@ -233,41 +139,8 @@ input.with-instructions {
   }
 }
 
-.checkbox-link {
-  @extend .pointer;
-  @extend .text-color-grey;
-}
-
-.user-list-item {
-  @extend .large-margin-bottom;
-}
-
 .line-through {
   text-decoration: line-through;
-}
-
-span.select2-hidden-accessible {
-  display: none;
-}
-
-#regular-users {
-  i {
-    @extend .users-icon;
-    @extend .large;
-    @extend .margin-right;
-  }
-}
-
-#read-only-users {
-  @extend .text-color-grey;
-  @extend #regular-users;
-}
-
-.error-red {
-  background-color: red !important;
-  td {
-    overflow: unset !important;
-  }
 }
 
 #timestamps {
@@ -275,7 +148,17 @@ span.select2-hidden-accessible {
   line-height: 1;
   color: $subheader-font-color;
   @extend .right;
-  time:before {
-    margin-right: rem-calc(5);
+}
+
+span.inline-timestamps {
+  color: #A8A8A8 !important;
+  margin-left: rem-calc(15);
+}
+
+.top-bar-section {
+  form {
+    .button.expand {
+      padding: 5px 0px;
+    }
   }
 }

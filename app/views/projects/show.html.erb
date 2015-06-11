@@ -25,8 +25,8 @@
       <div class="row">
         <div class="small-12 medium-6 columns project-attributes">
           <div id="project-users">
-            <h4 id="regular-users"><i></i>
-              Users [<%= @project.regular_users.count %>]
+            <h4 id="regular-users">
+              <span class="users-icon icon-key">Users [<%= @project.regular_users.count %>]</span>
               <% if can? :manage, @project %>
                 <small><%= link_to 'Edit Project Users', edit_project_path(@project), id: 'edit-users', remote: true  %></small>
               <% end %>
@@ -34,7 +34,9 @@
             <div id="project-users-regular">
               <%= render partial: "projects/project_user", collection: @project.regular_users, as: :user %>
             </div>
-            <h4 id="read-only-users"><i></i>Read-Only Users [<%= @project.read_only_users.count %>]</h4>
+            <h4 id="read-only-users">
+              <span class="users-icon icon-key">Read-Only Users [<%= @project.read_only_users.count %>]</span>
+            </h4>
             <div id="project-users-read-only">
               <%= render partial: "projects/project_user", collection: @project.read_only_users, as: :user %>
             </div>
@@ -46,15 +48,13 @@
         <div class="small-12 columns project-datapaths">
           <h4 class="no-margin-bottom">
             <% if can? :manage, @project %>
-              <i class="datapath-icon large margin-right"></i>Datapaths
+              <span class="datapath-icon icon-key">Datapaths</span>
               <small>and</small>
-              <i class="track-icon large margin-right"></i>Tracks
-            <% else %>
-              <i class="track-icon large margin-right"></i>
-              Tracks
             <% end %>
+            <span class="track-icon icon-key">Tracks</span>
             <small>view all your <%= link_to 'tracks', tracks_path, id: "all-user-tracks" %></small>
           </h4>
+
           <div class="subhead-note">
             <% if can? :manage, @project %>
               Contact site <%= mail_to ENV['ADMIN_EMAIL'], 'administrator' %> to add/remove datapaths from the project.
@@ -62,6 +62,7 @@
               Contact <%= mail_to @project.owner.email, 'project owner' %> to add/remove datapaths from the project.
             <% end %>
           </div>
+
           <table id="track-tree" data-project=<%= @project.id %>>
             <colgroup>
               <col width="30px"></col>

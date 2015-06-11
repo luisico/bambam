@@ -1,28 +1,27 @@
-<ul class="width-limited-inline-list">
-  <li><%= link_to_igv(track) %></li>
-  <li><span><%= link_to track.name, track %><span class="label genome"><%= track.genome %></span></span></li>
-  <% unless (@project || @projects_and_tracks) %>
-    <li>
-      <span>
-        (<%= link_to track.project.name, track.project %>,
-        owner:
-        <% if can? :show, track.owner %>
-          <%= link_to track.owner.handle, track.owner %>
+<div class="track row">
+  <div class="small-2 columns">
+    <%= link_to_igv(track) %>
+  </div>
+
+  <div class="small-10 columns">
+    <div>
+      <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
+    </div>
+
+    <div>
+      <ul class="true-inline-list">
+        <% if @projects_and_tracks %>
+          <li class="subdue pointer">
+            <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
+              <%= excerpt(track.path, @q, radius: 5) %>
+            </i>
+          </li>
+          <li class="subdue fi-clock icon-key" title="updated"><%= local_time_ago(track.updated_at) %></li>
         <% else %>
-          <%= track.owner.handle %>
-        <% end %>)
-      </span>
-    </li>
-  <% end %>
-  <% if @projects_and_tracks %>
-    <li class="text-color-grey pointer">
-      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
-        <%= excerpt(track.path, @q, radius: 5) %>
-      </i>
-    <li>
-      <i class="fi-clock medium margin-right text-color-grey" title="updated">
-        <%= local_time_ago(track.updated_at) %>
-      </i>
-    </li>
-  <% end %>
-</ul>
+          <li><%= link_to track.project.name, track.project %></li>
+          <li class="user-icon icon-key"><%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

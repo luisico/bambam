@@ -15,10 +15,6 @@
   display: none;
 }
 
-.track-share-link {
-  display: none;
-}
-
 .ucsc-track-line {
   display: none;
 }
@@ -50,4 +46,24 @@ i.large-calendar {
   padding: rem-calc(1 6 2);
   font-size: rem-calc(10);
   vertical-align: super;
+}
+
+.track {
+  margin-bottom: rem-calc(15) !important;
+}
+
+a.edit-track {
+  display: none;
+}
+
+a.done-track {
+  display: none;
+}
+
+a.restore-track {
+  display: none;
+}
+
+div.track-form-fields {
+  display: none;
 }

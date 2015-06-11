@@ -16,7 +16,7 @@
             <%= f.datetime_field :expires_at, placeholder: "Choose expiration date", class: "no-margin-bottom", value: (@share_link.expires_at.blank? ? '' : @share_link.expires_at.strftime('Expires: %d, %b %Y')) %>
           </div>
         </div>
-        <span class="text-color-grey medium-text">
+        <span class="subdue medium-text">
           Expiration date defaults to two weeks from today
         </span>
         <ul class="inline-list no-margin-bottom">

@@ -4,19 +4,19 @@ var tour_project_show_manager = {
   steps: [
     {
       title: "Tour: Project page",
-      content: "Displays specific information about the project.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "Displays specific information about the project.<br/><br/>Click <i class='tour-close'></i> to exit tour at any time.",
       target: "#project-name",
       placement: 'right'
     },
     {
       title: "Project name and owner",
-      content: "Name of project and project owner.<br/><br/><i class='fi-target-two'> Detour: </i>Click on project name to edit. Unique and memorable names work best.",
+      content: "Name of project and project owner.<br/><br/><i class='fi-target-two icon-tour'> Detour: </i>Click on project name to edit. Unique and memorable names work best.",
       target: "#project-name",
       placement: 'bottom'
     },
     {
       title: "Timestamps",
-      content: "Project creation date <i class='fi-calendar'></i> and date of last update <i class='fi-clock'></i>.",
+      content: "Project creation date <i class='fi-calendar icon-tour'></i> and date of last update <i class='fi-clock icon-tour'></i>.",
       target: "#timestamps",
       placement: 'left'
     },
@@ -34,7 +34,7 @@ var tour_project_show_manager = {
     },
     {
       title: "Edit Users",
-      content: "<i class='fi-target-two'> Detour: </i> Click here to add/remove users from project.",
+      content: "<i class='fi-target-two icon-tour'> Detour: </i> Click here to add/remove users from project.",
       target: "#edit-users",
       placement: 'bottom',
       multipage: true,
