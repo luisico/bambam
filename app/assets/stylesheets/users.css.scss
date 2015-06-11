@@ -1,0 +1,12 @@
+.avatar {
+  @extend .left;
+  margin-right: rem-calc(10);
+}
+
+.user-list-item {
+  @extend .large-margin-bottom;
+}
+
+#read-only-users {
+  color: $subdue-color;
+}

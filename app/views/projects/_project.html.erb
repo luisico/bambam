@@ -1,7 +1,21 @@
 <li id="project_<%= project.id %>">
-  <%= link_to project.name, project %>
-  <span class="text-color-grey">
-    <i class="admin-icon small" title="owner"></i>
-    <%= project.owner.email %>
-  </span>
+  <ul class="no-bullet panel project-tile">
+    <li class="headline">
+      <%= link_to project.name, project, class: "text-panel-overhang" %>
+    </li>
+    <li>
+      <ul class="keys-inline-list">
+        <li class="track-icon icon-key" title="tracks"><%= project.tracks.count %></li>
+        <li class="users-icon icon-key" title="users"><%= project.users.count %></li>
+      </ul>
+    </li>
+    <li class="sub-text text-panel-overhang owner-icon icon-key" title="owner">
+      <% if can? :show, project.owner %>
+        <%= link_to project.owner.handle, project.owner, class: "text-panel-overhang" %>
+      <% else %>
+        <%= project.owner.handle %>
+      <% end %>
+    </li>
+    <li class="sub-text fi-clock icon-key" title="updated_at"><%= local_time_ago(project.updated_at) %></li>
+  </ul>
 </li>

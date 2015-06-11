@@ -13,6 +13,14 @@
 }
 
 .admin-icon {
+  @extend .fi-crown;
+}
+
+.manager-icon {
+  @extend .fi-key;
+}
+
+.owner-icon {
   @extend .fi-sheriff-badge;
 }
 
@@ -20,8 +28,8 @@
   @extend .fi-torsos;
 }
 
-.icon_key {
-  padding-right: 1em;
+.user-icon {
+  @extend .fi-torso;
 }
 
 .datapath-icon {
@@ -30,4 +38,18 @@
 
 .edit-icon {
   @extend .fi-page-edit;
+}
+
+.invite-icon {
+  @extend .fi-ticket;
+}
+
+.icon_key {
+  padding-right: 1em;
+}
+
+.icon-key {
+  &:before {
+    padding-right: rem-calc(5);
+  }
 }

@@ -1,72 +1,107 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <h2>What is Bambam?</h2>
+      <h4>What is Bambam?</h4>
       <p>Bambam is a web service for organizing, streaming and sharing gene sequencing data developed by the <%= link_to "Applied Bioinformatics Core (ABC)", "https://abc.med.cornell.edu" %>.</p>
-
     </div>
 
     <div class="panel">
-      <h2>Using Bambam</h2>
-      <p>Most of the pages on the site have interactive tours that can be accessed from a tour icon <i class="tour-icon"></i> on the right side of the browser window. These tours walk users through the various features of a given page.</p>
+      <h4>Tours</h4>
+      <p>Most of the pages on the site have interactive tours that can be accessed from a <i class="tour-icon icon-tour"></i> tour icon on the right side of the browser window. These tours walk users through the various features of a given page.</p>
+    </div>
 
-      <h3>Organizing tracks</h3>
-
-      <h4>Tracks <i class="track-icon"></i></h4>
-      <p>Tracks are organized within projects. To add, edit or remove a track, first go to the project for the track and click <span class="label radius">Add or edit tracks</span>:</p>
-      <ul>
-        <li><strong>Add a track</strong> by clicking on the <span class="label radius">Add track</span> button from the edit project page and fill in the required information.</li>
-        <li><strong>Edit a track</strong> by clicking on the tracks name and modify the name and/or path in the form.</li>
-        <li><strong>Remove a track</strong> by clicking on the trash can icon <i class="trash-icon"></i> next to the track name.</li>
-      </ul>
-      <p>Any of the above changes to tracks are only saved after the <span class="label radius">Update project</span> button has been clicked.</p>
-
+    <div class="panel">
       <h4>Projects</h4>
-      <p>Projects consist of a set of tracks shared among a group of users <i class="users-icon"></i> and is managed by an admin user <i class="admin-icon"></i>.</p>
-      <p>The admin for a project has some special privileges:</p>
-      <ul>
-        <li>Manages the users that have access to the project. When inviting a user, the admin can select the projects the user will have access to.</li>
-        <li>Creates projects. When creating a project, an admin selects a name for the project and the desired users, as well as adding any tracks that should be in the project.</li>
-        <li>Move tracks between projects.</li>
+      <p>Projects consist of a set of tracks shared among a group of users and is managed by a project manger.</p>
+
+      <h5 class="owner-icon icon-key">The manager for a project has some special privileges:</h5>
+      <ul class="indented-list">
+        <li>Creates new projects.</li>
+        <li>Manages the users that have access to the project.</li>
+        <li>Assign selected users read-only capabilities.</li>
+        <li>Manages the datapaths that the project will have access to.</li>
+        <li>Adds/removes tracks from the project, including those owned by the project users.</li>
+        <li>When inviting a new user to the site, the manager can select the projects the user will have access to.</li>
       </ul>
 
-      <p>Project members can:</p>
-      <ul>
-        <li>Add and remove tracks, which will be visible by all project members.</li>
-        <li>Edit track's name and path, but not move tracks between projects.</li>
+      <h5 class="users-icon icon-key">Project members can:</h5>
+      <ul class="indented-list">
+        <li>Add tracks to the project, which will be visible by all project members.</li>
+        <li>Remove tracks that they have created.</li>
+        <li>Edit the name of a track they have created.</li>
+        <li>Cannot edit/delete tracks created by other project members.</li>
       </ul>
 
-      <h4>Groups</h4>
-      <p>Groups are intended as a way of organizing users from different labs or different working groups. Admins can manage Groups from the Users page.</p>
+      <h5><span class="users-icon icon-key subdue"></span>Read-only members can:</h5>
+      <ul class="indented-list">
+        <li>See tracks in the project.</li>
+        <li>Cannot add, edit or remove tracks, even if they are the owners (track might have been added before being set as read-only users).</li>
+      </ul>
+    </div>
 
-      <h4>Search</h4>
-      <p>The search box, located in the top navigation bar, can be accessed from any page within the application. Searches return matching project names or users, track names or paths, user emails and group names. For non-admin users, searches only return projects and groups in the which that given user is a user/member.</p>
+    <div class="panel">
+      <h4>Organizing tracks</h4>
 
-      <h4>Profile</h4>
-      <p>Users can view a list of all their projects and groups from an account profile that can be accessed by clicking on the user email on the top navigation bar. From this account profile page, users can also edit their account email and password.</p>
-      <p>Users have an avatar (or user icon) using the third-party service <%= link_to "Gravatar", "http://gravatar.com" %>. This avatar is used throughout Bambam to visually identify users. Users that don't have a Gravatar will get a mathmatically generated pattern based on the given user's email. Instructions for customizing the avatar can be found at <%= link_to "Gravatar", "http://gravatar.com" %>.</p>
+      <h5 class="datapath-icon icon-key">Datapaths</h5>
+      <p>Datapaths are folders/directories that contain tracks. Select/deselect the checkbox next to a datapath to add/remove it from a project. Some features of datapaths to keep in mind:</p>
+      <ul class="indented-list">
+        <li>Only project managers can add and delete datapaths from a project.</li>
+        <li>Only one datapath can exist within a given folder hierarchy.</li>
+        <li>Removing a datapath will delete all dependent tracks.</li>
+      </ul>
 
-      <h3>Vieving and downloading tracks</h3>
-      <p>A complete card for each track is available from each track's page. It contains basic information like the name, project, path, as well as download links, sharing mechanism and efficient streaming to third-party services.</p>
-      <p>Third-party services include IGV and the UCSC Genome Browser.</p>
+      <h5 class="track-icon icon-key">Tracks</h5>
+      <p>Tracks are organized within projects. Tracks are added and removed in the same manner as datapaths. Select/deselect the checkbox next to a track to add/remove it from a project. Some features of tracks to keep in mind</p>
+      <ul class="indented-list">
+        <li>Tracks can only be selected if they are in a selected datapath.</li>
+        <li>Click the track name link to view complete card of track information.</li>
+        <li>Clicking this button <span class="tiny radius service button fi-eye">IGV</span> will open your track in IGV.</li>
+      </ul>
+    </div>
 
-      <h4>Open your track in IGV</h4>
+    <div class="panel">
+      <h4>Tracks</h4>
+      <p>A complete card for each track is available from each track's page. It contains basic information like the name, project, path, as well as download links, sharing mechanism and efficient streaming to third-party services like IGV and UCSC Genome Browser.</p>
+
+      <h5>Accessing all your tracks</h5>
+      <p>You can quickly access a list of all your tracks from the top navigation menu.</p>
+
+      <h5>Open your track in IGV</h5>
       <p>The <%= link_to "Integrative Genomics Viewer (IGV)", "http://www.broadinstitute.org/igv" %> is a high-performance visualization tool for interactive exploration of large, integrated genomic datasets developed by the Broad Institute.</p>
       <p>In order to open your tracks in IGV you first have to open IGV locally on your computer. See the <%= link_to "IGV website", "http://www.broadinstitute.org/software/igv" %> for registration and installation instructions.</p>
-      <p>Then click the <span class="label radius">IGV</span> button for the tracks you want to stream. There might be a small delay before it gets loaded in your local IGV instance. You can open multiple tracks this way to analyze them concurrently. In order to remove a tracks from IGV you will need to use the standard IGV features; see the <%= link_to "user guide", "http://www.broadinstitute.org/software/igv/UserGuide"%>.</p>
+      <p>Then click the <span class="tiny radius service button fi-eye">IGV</span> button for the tracks you want to stream. There might be a small delay before it gets loaded in your local IGV instance. You can open multiple tracks this way to analyze them concurrently. In order to remove a tracks from IGV you will need to use the standard IGV features; see the <%= link_to "user guide", "http://www.broadinstitute.org/software/igv/UserGuide"%>.</p>
       <p>Bambam uses the standard IGV <kbd>port 60151</kbd> to connect to IGV.</p>
 
-      <h4>Open your track in UCSC Genome Browser</h4>
+      <h5>Open your track in UCSC Genome Browser</h5>
       <p>A special track line to use in UCSC Genome Browser is provided with each share link (see below). Copy this line and paste it in your custom tracks at UCSC Genome Browser.</p>
 
-      <h3>Sharing tracks</h3>
-      <p>Users can share their tracks with collaborators and third-party services that do not have access to bambam by creating track share links. A track share link will allow anyone (including third-party services like UCSC Genome Browser) to download or stream the track.</p>
+      <h5>Editing tracks</h5>
+      <p>Click on the track name or genome to edit in place on the track card. Neither the track name nor genome can be left blank.</p>
+
+      <h5>Sharing tracks</h5>
+      <p>Users can share their tracks with collaborators and third-party services that do not have access to Bambam by creating track share links. A track share link will allow anyone (including third-party services like UCSC Genome Browser) to download or stream the track.</p>
       <p>Track share links can be set to expire after a period of time set by the user, for as little as a day or as long as several years, with a default of 2 weeks. Track share links can also be deleted at anytime which prevents further access to a track using that link.</p>
       <p>Users can share any track they have access to through their project's membership by creating a share link from the track's page. There is no limit in the number of share links a track can have.</p>
     </div>
 
     <div class="panel">
-      <h2>About the Applied Bioinformatics Core</h2>
+      <h4>Groups</h4>
+      <p>Groups are intended as a way of organizing users from different labs or different working groups. Admins can manage Groups from the Users page.</p>
+    </div>
+
+    <div class="panel">
+      <h4>Search</h4>
+      <p>The search box, located in the top navigation bar, can be accessed from any page within the application. Searches return matching project names or users, track names or paths, user emails and group names. For non-admin users, searches only return projects and groups in the which that given user is a user/member.</p>
+    </div>
+
+    <div class="panel">
+      <h4>Profile</h4>
+      <p>Users can view a list of all their projects and groups from an account profile that can be accessed by clicking on the user email on the top navigation bar. From this account profile page, users can also edit their account email and password.</p>
+      <p>Users have an avatar (or user icon) using the third-party service <%= link_to "Gravatar", "http://gravatar.com" %>. This avatar is used throughout Bambam to visually identify users. Users that don't have a Gravatar will get a mathematically generated pattern based on the given user's email. Instructions for customizing the avatar can be found at <%= link_to "Gravatar", "http://gravatar.com" %>.</p>
+    </div>
+
+    <div class="panel">
+      <h4>About the Applied Bioinformatics Core</h4>
       <p><%= link_to "Weill Cornell Medical College's", "http://weill.cornell.edu" %> <%= link_to "Applied Bioinformatics Core", "https://abc.med.cornell.edu" %>, or ABC, offers computational resources, full data lifecycle management and bioinformatics consulting for research and translational applications.</p>
     </div>
   </div>

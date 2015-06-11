@@ -1,7 +1,7 @@
 <div class="user-list-item" id="user-<%= user.id %>">
   <% if can? :show, user %>
     <%= link_to user do %>
-      <%= image_tag avatar_url(user) %>
+      <%= image_tag avatar_url(user), class: "avatar" %>
       <%= @groups_and_users ? user.handle_with_email : user.handle %>
     <% end %>
   <% else %>
@@ -9,7 +9,7 @@
     <%= @groups_and_users ? user.handle_with_email : user.handle %>
   <% end %>
   <% if @project && (user == @project.owner) %>
-    <i class="admin-icon small" title="owner"></i>
+    <i class="owner-icon" title="owner"></i>
   <% end %>
   <% if @group && (user == @group.owner) %>
     <%= "(owner)" %>

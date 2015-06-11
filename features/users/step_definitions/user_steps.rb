@@ -62,7 +62,7 @@ end
 
 Then /^I should see the invitee email with invitation pending icon$/ do
   within('p', text: @invitee[:email]) do
-    expect(page).to have_css('.fi-ticket')
+    expect(page).to have_css('.invite-icon')
   end
 end
 
@@ -72,11 +72,11 @@ Then /^I should see a list of users$/ do
     expect(page).to have_link user.handle
     if user.has_role? :admin
       within('p', text: user.handle) do
-        expect(page).to have_css('.fi-crown')
+        expect(page).to have_css('.admin-icon')
       end
     elsif user.has_role? :manager
       within('p', text: user.handle) do
-        expect(page).to have_css('.fi-key')
+        expect(page).to have_css('.manager-icon')
       end
     end
   end
@@ -90,7 +90,7 @@ end
 
 Then /^my (admin|manager) email should not have outstanding invite icon$/ do |role|
   within('p', text: instance_variable_get("@#{role}").handle) do
-    expect(page).not_to have_css('.fi-ticket')
+    expect(page).not_to have_css('.invite-icon')
   end
 end
 

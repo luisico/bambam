@@ -4,7 +4,7 @@ var tour_user_index = {
   steps: [
     {
       title: "Tour: Users page",
-      content: "Invite new users, see list of existing users and create groups.<br/><br/>Click <i class='fi-x small-margin-left margin-right text-color-grey'></i> to exit tour at any time.",
+      content: "Invite new users, see list of existing users and create groups.<br/><br/>Click <i class='tour-close'></i> to exit tour at any time.",
       target: "#invite-user",
       placement: 'right'
     },
@@ -35,7 +35,7 @@ var tour_user_index = {
     },
     {
       title: "System users",
-      content: "Each user entry has link to their profile page and information on status (invite outstanding <i class='fi-ticket'></i>, admin <i class='fi-crown'></i>, etc.).",
+      content: "Each user entry has link to their profile page and information on status (invite outstanding <i class='invite-icon icon-tour'></i>, admin <i class='admin-icon icon-tour'></i>, etc.).",
       target: ".current-user",
       placement: 'top'
     },

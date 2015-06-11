@@ -18,14 +18,7 @@
 
       <ul class="small-block-grid-2">
         <li>
-          <div>
-            <i class="admin-icon margin-right"></i>
-            <% if can? :manage, @track %>
-              <%= link_to @track.owner.handle, @track.owner %>
-            <% else %>
-              <%= @track.owner.handle %>
-            <% end %>
-          </div>
+          <div class="owner-icon icon-key"><%= can?(:manage, @track) ? link_to(@track.owner.handle, @track.owner) : @track.owner.handle %></div>
           <div>in project <%= link_to @track.project.name, @track.project %></div>
         </li>
 
@@ -40,10 +33,10 @@
             <%= link_to_igv(@track) %>
           </li>
           <% if Pathname.new(@track.path).extname == ".bam" %>
-            <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download' %></li>
-            <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download' %></li>
+            <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %></li>
+            <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download icon-key' %></li>
             <% elsif Pathname.new(@track.path).extname == ".bw" %>
-            <li><%= link_to "download bw file", stream_services_track_path(@track), class: 'fi-download' %></li>
+            <li><%= link_to "download bw file", stream_services_track_path(@track), class: 'fi-download icon-key' %></li>
           <% end %>
         </ul>
       </div>

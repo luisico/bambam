@@ -1,7 +1,4 @@
 <li id="group_<%= group.id %>">
   <%= link_to group.name, group %>
-  <span class="text-color-grey">
-    <i class="admin-icon small" title="owner"></i>
-    <%= group.owner.handle %>
-  </span>
+  <span class="subdue owner-icon icon-key" title="owner"><%= group.owner.handle %></span>
 </li>
