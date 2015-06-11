@@ -8,32 +8,42 @@
 
     <div class="panel">
       <h2>Using Bambam</h2>
-      <p>Most of the pages on the site have interactive tours that can be accessed from a tour icon <i class="tour-icon"></i> on the right side of the browser window. These tours walk users through the various features of a given page.</p>
+      <p>Most of the pages on the site have interactive tours that can be accessed from a <i class="tour-icon"></i> tour icon on the right side of the browser window. These tours walk users through the various features of a given page.</p>
 
       <h3>Organizing tracks</h3>
 
-      <h4>Tracks <i class="track-icon"></i></h4>
-      <p>Tracks are organized within projects. To add, edit or remove a track, first go to the project for the track and click <span class="label radius">Add or edit tracks</span>:</p>
+      <h4><i class="datapath-icon"></i> Datapaths</h4>
+      <p>Datapaths are folders/directories that contain tracks. Select/deselect the checkbox next to a datapath to add/remove it from a project. Some features of datapaths to keep in mind:</p>
       <ul>
-        <li><strong>Add a track</strong> by clicking on the <span class="label radius">Add track</span> button from the edit project page and fill in the required information.</li>
-        <li><strong>Edit a track</strong> by clicking on the tracks name and modify the name and/or path in the form.</li>
-        <li><strong>Remove a track</strong> by clicking on the trash can icon <i class="trash-icon"></i> next to the track name.</li>
+        <li>Only one datapath can exist within a given folder hierarchy.</li>
+        <li>Tracks can only be selected if they are in a selected datapath.</li>
+        <li>Only project managers can add and delete datapaths from a project.</li>
       </ul>
-      <p>Any of the above changes to tracks are only saved after the <span class="label radius">Update project</span> button has been clicked.</p>
+
+      <h4><i class="track-icon"></i> Tracks</h4>
+      <p>Tracks are organized within projects. Tracks are added and removed in the same manner as datapaths. Select/deselect the checkbox next to a track to add/remove it from a project. Some features of tracks to keep in mind</p>
+        <ul>
+          <li>Tracks can only be selected if they are in a selected datapath.</li>
+          <li>Deselecting a track's parent datapath will cause the track to be deleted.</li>
+          <li>Click the track name link to view complete card of track information.</li>
+          <li>Clicking this button <span class="label radius">IGV</span> will open your track in IGV.</li>
+        </ul>
 
       <h4>Projects</h4>
-      <p>Projects consist of a set of tracks shared among a group of users <i class="users-icon"></i> and is managed by an admin user <i class="admin-icon"></i>.</p>
-      <p>The admin for a project has some special privileges:</p>
+      <p>Projects consist of a set of tracks shared among a group of <i class="users-icon"></i> users and is managed by a <i class="admin-icon"></i> project manger.</p>
+      <p>The manager for a project has some special privileges:</p>
       <ul>
         <li>Manages the users that have access to the project. When inviting a user, the admin can select the projects the user will have access to.</li>
         <li>Creates projects. When creating a project, an admin selects a name for the project and the desired users, as well as adding any tracks that should be in the project.</li>
-        <li>Move tracks between projects.</li>
+        <li>Only project managers can add and delete datapaths from a project.</li>
+        <li>Click the project name to edit in place on the project page.</li>
       </ul>
 
       <p>Project members can:</p>
       <ul>
-        <li>Add and remove tracks, which will be visible by all project members.</li>
-        <li>Edit track's name and path, but not move tracks between projects.</li>
+        <li>Add and remove tracks that they have created, which will be visible by all project members.</li>
+        <li>Edit the name of a track they have created.</li>
+        <li>Cannot edit/delete tracks created by other project users.</li>
       </ul>
 
       <h4>Groups</h4>
@@ -63,6 +73,9 @@
       <p>Users can share their tracks with collaborators and third-party services that do not have access to bambam by creating track share links. A track share link will allow anyone (including third-party services like UCSC Genome Browser) to download or stream the track.</p>
       <p>Track share links can be set to expire after a period of time set by the user, for as little as a day or as long as several years, with a default of 2 weeks. Track share links can also be deleted at anytime which prevents further access to a track using that link.</p>
       <p>Users can share any track they have access to through their project's membership by creating a share link from the track's page. There is no limit in the number of share links a track can have.</p>
+
+      <h3>Editing tracks</h3>
+      <p>Click on the track name or genome to edit in place on the track card. Neither the track name nor genome can be left blank.</p>
     </div>
 
     <div class="panel">
