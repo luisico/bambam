@@ -15,6 +15,10 @@ $subdue-color: #a8a8a8;
   word-wrap: break-word;
 }
 
+.indented-list {
+  margin-left: $list-side-margin * 2;
+}
+
 .width-limited-inline-list {
   @include inline-list;
   i {
