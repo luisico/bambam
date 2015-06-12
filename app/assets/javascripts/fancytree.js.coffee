@@ -73,20 +73,13 @@ class @Fancytree
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths"
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, path: path, name: name } }
-      success:(jqXHR, textStatus, errorThrown) ->
+      context: node
+      success: (jqXHR, textStatus, errorThrown) ->
         Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
-        $(node.tr)
-          .effect("highlight", {}, 1500)
-          .find('.projects-datapath-name').html(jqXHR.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
-        return false
-      error:(jqXHR, textStatus, errorThrown) ->
-        errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $(node.tr)
-          .addClass('error-red')
-          .removeClass('fancytree-selected')
-          .find('.fancytree-title').append(' [' + errorMessage + ']')
-        return false
+        $(node.tr).find('.projects-datapath-name').html(jqXHR.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
+        Fancytree.ajaxSuccess(node)
+      error: Fancytree.ajaxError
 
   @destroyDatapath: (node) ->
     [datapath_id, path, name] = Fancytree.buildDatapath(node)
@@ -97,18 +90,12 @@ class @Fancytree
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + node.data.object.projects_datapath.id
       data: { _method: "delete" }
-      success:(jqXHR, textStatus, errorThrown) ->
-        tr = $(node.tr)
-        tr.find('.projects-datapath-name').html('').attr('title', '')
-        tr.effect("highlight", {}, 1500) if tr.is(':visible')
+      context: node
+      success: (jqXHR, textStatus, errorThrown) ->
+        $(node.tr).find('.projects-datapath-name').html('').attr('title', '')
         delete node.data.object.projects_datapath
-        return false
-      error:(jqXHR, textStatus, errorThrown) ->
-        errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $(node.tr)
-          .addClass('error-red')
-          .find('.fancytree-title').append(' [' + errorMessage + ']')
-        return false
+        Fancytree.ajaxSuccess(node)
+      error: Fancytree.ajaxError
 
   @createTrack: (node) ->
     [projects_datapath_id, path, name] = Fancytree.buildTrack(node)
@@ -117,21 +104,16 @@ class @Fancytree
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/tracks"
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
-      success:(jqXHR, textStatus, errorThrown) ->
+      context: node
+      success: (jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         tr = $(node.tr)
         tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>").attr('title', node.data.object.track.name)
         tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
         tr.find('.track-igv').html(jqXHR.track.igv)
-        tr.effect("highlight", {}, 1500)
         Project.updateTracksCount()
-        return false
-      error:(jqXHR, textStatus, errorThrown) ->
-        errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $(node.tr)
-          .addClass('error-red').removeClass('fancytree-selected')
-          .find('.fancytree-title').append(' [' + errorMessage + ']')
-        return false
+        Fancytree.ajaxSuccess(node)
+      error: Fancytree.ajaxError
 
   @destroyTrack: (node) ->
     $.ajax
@@ -139,37 +121,38 @@ class @Fancytree
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id
       data: { _method: "delete" }
-      success:(jqXHR, textStatus, errorThrown) ->
+      context: node
+      success: (jqXHR, textStatus, errorThrown) ->
         tr = $(node.tr)
-        tr.find('.track-link').html('').attr('title', '')
+        tr.find('.track-link').html('')
         tr.find('.track-genome').html('')
         tr.find('.track-igv').html('')
-        tr.effect("highlight", {}, 1500) if tr.is(':visible')
         Project.updateTracksCount()
-        return false
-      error:(jqXHR, textStatus, errorThrown) ->
-        errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $(node.tr)
-          .addClass('error-red')
-          .find('.fancytree-title').append(' [' + errorMessage + ']')
-        return false
+        Fancytree.ajaxSuccess(node)
+      error: Fancytree.ajaxError
 
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
     $.ajax
-      data: { track: { projects_datapath_id: projects_datapath_id, path: path } }
-      type: 'PATCH'
+      type: "PATCH"
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + '/tracks/' + track_id
-      success:(jqXHR, textStatus, errorThrown) ->
-        tr = $(node.tr)
-        tr.effect("highlight", {}, 1500) if tr.is(':visible')
-        return false
-      error:(jqXHR, textStatus, errorThrown) ->
-        errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $(node.tr)
-          .addClass('error-red')
-          .find('.fancytree-title').append(' [' + errorMessage + ']')
-        return false
+      data: { track: { projects_datapath_id: projects_datapath_id, path: path } }
+      context: node
+      success: (jqXHR, textStatus, errorThrown) ->
+        Fancytree.ajaxSuccess(node)
+      error: Fancytree.ajaxError
+
+  @ajaxSuccess: (node) ->
+    tr = $(node.tr)
+    tr.effect("highlight", {}, 1500) if tr.is(':visible')
+    return false
+
+  @ajaxError: (jqXHR, textStatus, errorThrown) ->
+    errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
+    tr = $(this.tr).addClass('error-red')
+    tr.toggleClass('fancytree-selected')
+    tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+    return false
 
   @buildDatapath: (node) ->
     parents = node.getParentList(false, true)
