@@ -45,11 +45,11 @@ class @Fancytree
             else
               false
         else if node.folder
-          selectedSiblingTracks = Fancytree.siblingTracks(node).filter((x) -> x.selected == true)
+          selectedSiblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(node))
           array = []
           parentList = node.getParentList()
           for i of parentList
-            siblingTracks = Fancytree.siblingTracks(parentList[i]).filter((x) -> x.selected == true)
+            siblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(parentList[i]))
             array.push(siblingTracks)
           selectedSiblingTracksOfParents = [].concat.apply([],array)
           selectedSiblingTracks = selectedSiblingTracks.concat(selectedSiblingTracksOfParents)
@@ -164,9 +164,9 @@ class @Fancytree
       for i of selectedChildFolders
         selectedChildFolders[i].toggleSelected()
         childTracks = Fancytree.childTracks(selectedChildFolders[i])
-        Fancytree.transitionChildTracks(projects_datapath_id, childTracks.filter((x) -> x.selected))
+        Fancytree.transitionChildTracks(projects_datapath_id, Fancytree.selectedFilter(childTracks))
       children = Fancytree.deepChildrenList(node)
-      Fancytree.resetTrackCheckboxes(children.filter((x) -> x.folder != true), false)
+      Fancytree.resetTrackCheckboxes(Fancytree.trackFilter(children), false)
     else if selectedChildTracks.length > 0
       Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
     else
@@ -284,21 +284,35 @@ class @Fancytree
         uniqueNewProjectsDatapaths[i].toggleSelected()
 
   @childTracks: (node) ->
-    Fancytree.deepChildrenList(node).filter((x) -> x.folder != true)
+    Fancytree.trackFilter(Fancytree.deepChildrenList(node))
 
   @selectedChildTracks: (node) ->
-    children = Fancytree.deepChildrenList(node)
-    children.filter((x) -> x.selected == true and x.folder != true)
+    Fancytree.selectedTrackFilter(Fancytree.deepChildrenList(node))
 
   @selectedChildFolders: (node) ->
-    children = Fancytree.deepChildrenList(node)
-    children.filter((x) -> x.selected == true and x.folder == true)
+    Fancytree.selectedFolderFilter(Fancytree.deepChildrenList(node))
 
   @siblingTracks: (node) ->
-    node.getParent().children.filter((x) -> x.folder != true)
+    Fancytree.trackFilter(node.getParent())
 
   @siblingFolders: (node) ->
-    node.getParent().children.filter((x) -> x.folder == true)
+    Fancytree.folderFilter(node.getParent())
 
   @selectedParent: (node) ->
-    node.getParentList().filter((x) -> x.folder and x.selected)[0]
+    Fancytree.selectedFolderFilter(node.getParentList())[0]
+
+  @folderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.folder)
+
+  @trackFilter: (nodes) ->
+    $.grep(nodes, (node) -> !node.folder)
+
+  @selectedFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.selected)
+
+  @selectedFolderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.selected and node.folder)
+
+  @selectedTrackFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.selected and !node.folder)
+
