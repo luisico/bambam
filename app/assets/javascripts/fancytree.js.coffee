@@ -15,21 +15,21 @@ class @Fancytree
 
       renderColumns: (event, data) ->
         node = data.node
-        $tdList = $(node.tr).find(">td")
-        $tdList.eq(1).attr('title', node.title)
+        tdList = $(node.tr).find(">td")
+        tdList.eq(1).attr('title', node.title)
         if node.isFolder() and node.isSelected()
-          $tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
-          $tdList.eq(2).attr('title', node.data.object.projects_datapath.name)
+          tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
+          tdList.eq(2).attr('title', node.data.object.projects_datapath.name)
         else if node.isFolder()
-          $tdList.eq(2).addClass('projects-datapath-name')
+          tdList.eq(2).addClass('projects-datapath-name')
         else if node.isSelected()
-          $tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
-          $tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
-          $tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
+          tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
+          tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
+          tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
         else
-          $tdList.eq(2).addClass('track-link')
-          $tdList.eq(3).addClass('track-genome')
-          $tdList.eq(4).addClass('track-igv')
+          tdList.eq(2).addClass('track-link')
+          tdList.eq(3).addClass('track-genome')
+          tdList.eq(4).addClass('track-igv')
 
       beforeSelect: (event, data) ->
         node = data.node
@@ -99,16 +99,16 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         Fancytree.resetPathHierarchy(node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
-        $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').html(jqXHR.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
-        $tr.effect("highlight", {}, 1500)
+        $(node.tr)
+          .effect("highlight", {}, 1500)
+          .find('.projects-datapath-name').html(jqXHR.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $tr = $(node.tr)
-        $tr.addClass('error-red')
-        $tr.removeClass('fancytree-selected')
-        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        $(node.tr)
+          .addClass('error-red')
+          .removeClass('fancytree-selected')
+          .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
   @deletePath: (node) ->
@@ -121,16 +121,16 @@ class @Fancytree
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + node.data.object.projects_datapath.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
-        $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').html('').attr('title', '')
-        $tr.effect("highlight", {}, 1500) if $tr.is(':visible')
+        tr = $(node.tr)
+        tr.find('.projects-datapath-name').html('').attr('title', '')
+        tr.effect("highlight", {}, 1500) if tr.is(':visible')
         delete node.data.object.projects_datapath
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $tr = $(node.tr)
-        $tr.addClass('error-red')
-        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        $(node.tr)
+          .addClass('error-red')
+          .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
   @resetPathHierarchy: (node, projects_datapath_id) ->
@@ -179,18 +179,18 @@ class @Fancytree
       data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
-        $tr = $(node.tr)
-        $tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>").attr('title', node.data.object.track.name)
-        $tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
-        $tr.find('.track-igv').html(jqXHR.track.igv)
-        $tr.effect("highlight", {}, 1500)
+        tr = $(node.tr)
+        tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>").attr('title', node.data.object.track.name)
+        tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
+        tr.find('.track-igv').html(jqXHR.track.igv)
+        tr.effect("highlight", {}, 1500)
         Project.updateTracksCount()
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $tr = $(node.tr)
-        $tr.addClass('error-red').removeClass('fancytree-selected')
-        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        $(node.tr)
+          .addClass('error-red').removeClass('fancytree-selected')
+          .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
   @deleteTrack: (node) ->
@@ -200,18 +200,18 @@ class @Fancytree
       url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
-        $tr = $(node.tr)
-        $tr.find('.track-link').html('').attr('title', '')
-        $tr.find('.track-genome').html('')
-        $tr.find('.track-igv').html("")
-        $tr.effect("highlight", {}, 1500) if $tr.is(':visible')
+        tr = $(node.tr)
+        tr.find('.track-link').html('').attr('title', '')
+        tr.find('.track-genome').html('')
+        tr.find('.track-igv').html('')
+        tr.effect("highlight", {}, 1500) if tr.is(':visible')
         Project.updateTracksCount()
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $tr = $(node.tr)
-        $tr.addClass('error-red')
-        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        $(node.tr)
+          .addClass('error-red')
+          .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
   @transitionChildTracks: (projects_datapath_id, childTracks) ->
@@ -227,14 +227,14 @@ class @Fancytree
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + '/tracks/' + track_id
       success:(jqXHR, textStatus, errorThrown) ->
-        $tr = $(node.tr)
-        $tr.effect("highlight", {}, 1500) if $tr.is(':visible')
+        tr = $(node.tr)
+        tr.effect("highlight", {}, 1500) if tr.is(':visible')
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         errorMessage = if jqXHR.responseJSON then jqXHR.responseJSON.message else errorThrown
-        $tr = $(node.tr)
-        $tr.addClass('error-red')
-        $tr.find('.fancytree-title').append(' [' + errorMessage + ']')
+        $(node.tr)
+          .addClass('error-red')
+          .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
   @resetTrackCheckboxes: (tracks, remove) ->
