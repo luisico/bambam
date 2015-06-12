@@ -62,11 +62,11 @@ class @Fancytree
       select: (event, data) ->
         node = data.node
         if node.isFolder()
-          if node.isSelected() then Fancytree.addPath(node) else Fancytree.deletePath(node)
+          if node.isSelected() then Fancytree.createPath(node) else Fancytree.destroyPath(node)
         else
-          if node.isSelected() then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
+          if node.isSelected() then Fancytree.createTrack(node) else Fancytree.destroyTrack(node)
 
-  @addPath: (node) ->
+  @createPath: (node) ->
     [datapath_id, path, name] = Fancytree.buildPath(node)
     $.ajax
       type: "POST",
@@ -88,7 +88,7 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @deletePath: (node) ->
+  @destroyPath: (node) ->
     [datapath_id, path, name] = Fancytree.buildPath(node)
     if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(node).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
@@ -110,7 +110,7 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @addTrack: (node) ->
+  @createTrack: (node) ->
     [projects_datapath_id, path, name] = Fancytree.buildTrack(node)
     $.ajax
       type: "POST",
@@ -133,7 +133,7 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @deleteTrack: (node) ->
+  @destroyTrack: (node) ->
     $.ajax
       type: "POST",
       dataType: "json",
