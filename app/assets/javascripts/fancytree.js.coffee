@@ -66,21 +66,6 @@ class @Fancytree
         else
           if node.isSelected() then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
 
-  @buildPath: (node) ->
-    parents = node.getParentList(false, true)
-    datapath_id = parents[0].key
-    path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
-    name = node.title.split('/').pop()
-    [datapath_id, path, name]
-
-  @buildTrack: (node) ->
-    parents = node.getParentList(false, true)
-    selected = $.grep(parents, (val, i) -> val.isSelected())[0]
-    projects_datapath_id = selected.data.object.projects_datapath.id if selected.data.object and selected.data.object.projects_datapath
-    path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) -> val.title).join('/')
-    name = node.title.replace(/\.[^/.]+$/, "")
-    [projects_datapath_id, path, name]
-
   @addPath: (node) ->
     [datapath_id, path, name] = Fancytree.buildPath(node)
     $.ajax
@@ -124,43 +109,6 @@ class @Fancytree
           .addClass('error-red')
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
-
-  @resetPathHierarchy: (node, projects_datapath_id) ->
-    selectedParent = Fancytree.selectedParent(node)
-    selectedChildFolders = Fancytree.selectedChildFolders(node)
-    selectedChildTracks = Fancytree.selectedChildTracks(node)
-    if selectedParent
-      Fancytree.resolveOrphanTracks(selectedParent, selectedChildTracks)
-      selectedParent.toggleSelected()
-      Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
-      siblings = Fancytree.siblingFolders(node).concat(Fancytree.siblingTracks(node))
-      for sibling in siblings
-        if sibling.isFolder() && !sibling.isSelected() && Fancytree.selectedChildFolders(sibling).length == 0
-          Fancytree.resetTrackCheckboxes(Fancytree.childTracks(sibling), true)
-        else if !sibling.isFolder()
-          Fancytree.resetTrackCheckboxes([sibling], true)
-      parentNodes =  node.getParentList()
-      Fancytree.resetTrackCheckboxes(Fancytree.siblingTracks(parent), true) for parent in parentNodes
-    else if selectedChildFolders.length > 0
-      for folder in selectedChildFolders
-        folder.toggleSelected()
-        childTracks = Fancytree.childTracks(folder)
-        Fancytree.transitionChildTracks(projects_datapath_id, Fancytree.selectedFilter(childTracks))
-      children = Fancytree.deepChildrenList(node)
-      Fancytree.resetTrackCheckboxes(Fancytree.trackFilter(children), false)
-    else if selectedChildTracks.length > 0
-      Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
-    else
-      childTracks = Fancytree.childTracks(node)
-      Fancytree.resetTrackCheckboxes(childTracks, false)
-
-  @deepChildrenList: (node, array = []) ->
-    node = node.getFirstChild()
-    while node
-      array.push(node)
-      Fancytree.deepChildrenList(node, array)
-      node = node.getNextSibling()
-    array
 
   @addTrack: (node) ->
     [projects_datapath_id, path, name] = Fancytree.buildTrack(node)
@@ -206,12 +154,6 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @transitionChildTracks: (projects_datapath_id, childTracks) ->
-    for track in childTracks
-      track_id = track.data.object.track.id
-      path = Fancytree.buildTrack(track)[1]
-      Fancytree.updateTrack(track, track_id, path, projects_datapath_id)
-
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
     $.ajax
       data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
@@ -228,6 +170,64 @@ class @Fancytree
           .addClass('error-red')
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
+
+  @buildPath: (node) ->
+    parents = node.getParentList(false, true)
+    datapath_id = parents[0].key
+    path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
+    name = node.title.split('/').pop()
+    [datapath_id, path, name]
+
+  @buildTrack: (node) ->
+    parents = node.getParentList(false, true)
+    selected = $.grep(parents, (val, i) -> val.isSelected())[0]
+    projects_datapath_id = selected.data.object.projects_datapath.id if selected.data.object and selected.data.object.projects_datapath
+    path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) -> val.title).join('/')
+    name = node.title.replace(/\.[^/.]+$/, "")
+    [projects_datapath_id, path, name]
+
+  @resetPathHierarchy: (node, projects_datapath_id) ->
+    selectedParent = Fancytree.selectedParent(node)
+    selectedChildFolders = Fancytree.selectedChildFolders(node)
+    selectedChildTracks = Fancytree.selectedChildTracks(node)
+    if selectedParent
+      Fancytree.resolveOrphanTracks(selectedParent, selectedChildTracks)
+      selectedParent.toggleSelected()
+      Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
+      siblings = Fancytree.siblingFolders(node).concat(Fancytree.siblingTracks(node))
+      for sibling in siblings
+        if sibling.isFolder() && !sibling.isSelected() && Fancytree.selectedChildFolders(sibling).length == 0
+          Fancytree.resetTrackCheckboxes(Fancytree.childTracks(sibling), true)
+        else if !sibling.isFolder()
+          Fancytree.resetTrackCheckboxes([sibling], true)
+      parentNodes =  node.getParentList()
+      Fancytree.resetTrackCheckboxes(Fancytree.siblingTracks(parent), true) for parent in parentNodes
+    else if selectedChildFolders.length > 0
+      for folder in selectedChildFolders
+        folder.toggleSelected()
+        childTracks = Fancytree.childTracks(folder)
+        Fancytree.transitionChildTracks(projects_datapath_id, Fancytree.selectedFilter(childTracks))
+      children = Fancytree.deepChildrenList(node)
+      Fancytree.resetTrackCheckboxes(Fancytree.trackFilter(children), false)
+    else if selectedChildTracks.length > 0
+      Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
+    else
+      childTracks = Fancytree.childTracks(node)
+      Fancytree.resetTrackCheckboxes(childTracks, false)
+
+  @deepChildrenList: (node, array = []) ->
+    node = node.getFirstChild()
+    while node
+      array.push(node)
+      Fancytree.deepChildrenList(node, array)
+      node = node.getNextSibling()
+    array
+
+  @transitionChildTracks: (projects_datapath_id, childTracks) ->
+    for track in childTracks
+      track_id = track.data.object.track.id
+      path = Fancytree.buildTrack(track)[1]
+      Fancytree.updateTrack(track, track_id, path, projects_datapath_id)
 
   @resetTrackCheckboxes: (tracks, remove) ->
     for track in tracks
