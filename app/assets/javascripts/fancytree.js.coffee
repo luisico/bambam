@@ -69,10 +69,10 @@ class @Fancytree
   @createDatapath: (node) ->
     [datapath_id, path, name] = Fancytree.buildDatapath(node)
     $.ajax
-      type: "POST",
-      dataType: "json",
-      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths",
-      data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, path: path, name: name } },
+      type: "POST"
+      dataType: "json"
+      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths"
+      data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, path: path, name: name } }
       success:(jqXHR, textStatus, errorThrown) ->
         Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
@@ -93,10 +93,10 @@ class @Fancytree
     if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(node).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
     $.ajax
-      type: "POST",
-      dataType: "json",
+      type: "POST"
+      dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + node.data.object.projects_datapath.id
-      data: { _method: "delete" },
+      data: { _method: "delete" }
       success:(jqXHR, textStatus, errorThrown) ->
         tr = $(node.tr)
         tr.find('.projects-datapath-name').html('').attr('title', '')
@@ -113,10 +113,10 @@ class @Fancytree
   @createTrack: (node) ->
     [projects_datapath_id, path, name] = Fancytree.buildTrack(node)
     $.ajax
-      type: "POST",
-      dataType: "json",
-      url: RAILS_RELATIVE_URL_ROOT + "/tracks",
-      data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } },
+      type: "POST"
+      dataType: "json"
+      url: RAILS_RELATIVE_URL_ROOT + "/tracks"
+      data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         tr = $(node.tr)
@@ -135,10 +135,10 @@ class @Fancytree
 
   @destroyTrack: (node) ->
     $.ajax
-      type: "POST",
-      dataType: "json",
+      type: "POST"
+      dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id
-      data: { _method: "delete" },
+      data: { _method: "delete" }
       success:(jqXHR, textStatus, errorThrown) ->
         tr = $(node.tr)
         tr.find('.track-link').html('').attr('title', '')
@@ -156,9 +156,9 @@ class @Fancytree
 
   @updateTrack: (node, track_id, path, projects_datapath_id) ->
     $.ajax
-      data: { track: { projects_datapath_id: projects_datapath_id, path: path } },
-      type: 'PATCH',
-      dataType: "json",
+      data: { track: { projects_datapath_id: projects_datapath_id, path: path } }
+      type: 'PATCH'
+      dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + '/tracks/' + track_id
       success:(jqXHR, textStatus, errorThrown) ->
         tr = $(node.tr)
