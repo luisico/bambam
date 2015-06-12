@@ -62,19 +62,19 @@ class @Fancytree
       select: (event, data) ->
         node = data.node
         if node.isFolder()
-          if node.isSelected() then Fancytree.createPath(node) else Fancytree.destroyPath(node)
+          if node.isSelected() then Fancytree.createDatapath(node) else Fancytree.destroyDatapath(node)
         else
           if node.isSelected() then Fancytree.createTrack(node) else Fancytree.destroyTrack(node)
 
-  @createPath: (node) ->
-    [datapath_id, path, name] = Fancytree.buildPath(node)
+  @createDatapath: (node) ->
+    [datapath_id, path, name] = Fancytree.buildDatapath(node)
     $.ajax
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths",
       data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, path: path, name: name } },
       success:(jqXHR, textStatus, errorThrown) ->
-        Fancytree.resetPathHierarchy(node, jqXHR.projects_datapath.id)
+        Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
         $(node.tr)
           .effect("highlight", {}, 1500)
@@ -88,8 +88,8 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @destroyPath: (node) ->
-    [datapath_id, path, name] = Fancytree.buildPath(node)
+  @destroyDatapath: (node) ->
+    [datapath_id, path, name] = Fancytree.buildDatapath(node)
     if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(node).length == 0
       Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
     $.ajax
@@ -171,7 +171,7 @@ class @Fancytree
           .find('.fancytree-title').append(' [' + errorMessage + ']')
         return false
 
-  @buildPath: (node) ->
+  @buildDatapath: (node) ->
     parents = node.getParentList(false, true)
     datapath_id = parents[0].key
     path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
@@ -186,7 +186,7 @@ class @Fancytree
     name = node.title.replace(/\.[^/.]+$/, "")
     [projects_datapath_id, path, name]
 
-  @resetPathHierarchy: (node, projects_datapath_id) ->
+  @resetDatapathHierarchy: (node, projects_datapath_id) ->
     selectedParent = Fancytree.selectedParent(node)
     selectedChildFolders = Fancytree.selectedChildFolders(node)
     selectedChildTracks = Fancytree.selectedChildTracks(node)
