@@ -2,16 +2,15 @@ class @Fancytree
   project_id = $('#track-tree').data('project')
 
   @applyFancytree: ->
-    $('#track-tree').fancytree {
+    $('#track-tree').fancytree
       source:
         url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/browser?id=" + project_id
       checkbox: true
       extensions: ["table"]
       clickFolderMode: 2
-      table: {
+      table:
         checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
-      }
 
       renderColumns: (event, data) ->
         node = data.node
@@ -66,26 +65,19 @@ class @Fancytree
           if node.isSelected() then Fancytree.addPath(node) else Fancytree.deletePath(node)
         else
           if node.isSelected() then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
-    }
 
   @buildPath: (node) ->
     parents = node.getParentList(false, true)
     datapath_id = parents[0].key
-    path = $.map(parents, (val, i) ->
-      val.title
-    ).slice(1).join('/')
+    path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
     name = node.title.split('/').pop()
     [datapath_id, path, name]
 
   @buildTrack: (node) ->
     parents = node.getParentList(false, true)
-    selected = $.grep(parents, (val, i) ->
-      val.isSelected()
-    )[0]
+    selected = $.grep(parents, (val, i) -> val.isSelected())[0]
     projects_datapath_id = selected.data.object.projects_datapath.id if selected.data.object and selected.data.object.projects_datapath
-    path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) ->
-      val.title
-    ).join('/')
+    path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) -> val.title).join('/')
     name = node.title.replace(/\.[^/.]+$/, "")
     [projects_datapath_id, path, name]
 
@@ -292,4 +284,3 @@ class @Fancytree
 
   @selectedTrackFilter: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
-
