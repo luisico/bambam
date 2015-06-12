@@ -17,12 +17,12 @@ class @Fancytree
         node = data.node
         $tdList = $(node.tr).find(">td")
         $tdList.eq(1).attr('title', node.title)
-        if node.folder and node.selected
+        if node.isFolder() and node.isSelected()
           $tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
           $tdList.eq(2).attr('title', node.data.object.projects_datapath.name)
-        else if node.folder
+        else if node.isFolder()
           $tdList.eq(2).addClass('projects-datapath-name')
-        else if node.selected
+        else if node.isSelected()
           $tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
           $tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
           $tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
@@ -33,7 +33,7 @@ class @Fancytree
 
       beforeSelect: (event, data) ->
         node = data.node
-        if node.selected and node.folder
+        if node.isFolder() and node.isSelected()
           selectedParent = Fancytree.selectedParent(node)
           selectedChildFolders = Fancytree.selectedChildFolders(node)
           selectedChildTracks = Fancytree.selectedChildTracks(node)
@@ -44,7 +44,7 @@ class @Fancytree
               true
             else
               false
-        else if node.folder
+        else if node.isFolder()
           selectedSiblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(node))
           array = []
           parentList = node.getParentList()
@@ -64,10 +64,10 @@ class @Fancytree
 
       select: (event, data) ->
         node = data.node
-        if node.folder
-          if node.selected then Fancytree.addPath(node) else Fancytree.deletePath(node)
+        if node.isFolder()
+          if node.isSelected() then Fancytree.addPath(node) else Fancytree.deletePath(node)
         else
-          if node.selected then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
+          if node.isSelected() then Fancytree.addTrack(node) else Fancytree.deleteTrack(node)
     }
 
   @buildPath: (node) ->
@@ -152,10 +152,10 @@ class @Fancytree
       Fancytree.transitionChildTracks(projects_datapath_id, selectedChildTracks)
       siblings = Fancytree.siblingFolders(node).concat(Fancytree.siblingTracks(node))
       for i of siblings
-        if siblings[i].folder == true && siblings[i].selected != true
+        if siblings[i].isFolder() && !siblings[i].isSelected()
           if Fancytree.selectedChildFolders(siblings[i]).length == 0
             Fancytree.resetTrackCheckboxes(Fancytree.childTracks(siblings[i]), true)
-        else if siblings[i].folder != true
+        else if !siblings[i].isFolder()
           Fancytree.resetTrackCheckboxes([siblings[i]], true)
       parentNodes =  node.getParentList()
       for i of parentNodes
@@ -302,17 +302,17 @@ class @Fancytree
     Fancytree.selectedFolderFilter(node.getParentList())[0]
 
   @folderFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.folder)
+    $.grep(nodes, (node) -> node.isFolder())
 
   @trackFilter: (nodes) ->
-    $.grep(nodes, (node) -> !node.folder)
+    $.grep(nodes, (node) -> !node.isFolder())
 
   @selectedFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.selected)
+    $.grep(nodes, (node) -> node.isSelected())
 
   @selectedFolderFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.selected and node.folder)
+    $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
 
   @selectedTrackFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.selected and !node.folder)
+    $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
 
