@@ -32,32 +32,8 @@ class @Fancytree
 
       beforeSelect: (event, data) ->
         node = data.node
-        if node.isFolder() and node.isSelected()
-          selectedParent = Fancytree.selectedParent(node)
-          selectedChildFolders = Fancytree.selectedChildFolders(node)
-          selectedChildTracks = Fancytree.selectedChildTracks(node)
-          if selectedParent == undefined and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
-            if confirm("Deselecting this folder will permanently delete all child tracks. Are you sure you want to continue?")
-              track.toggleSelected() for track in selectedChildTracks
-              true
-            else
-              false
-        else if node.isFolder()
-          selectedSiblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(node))
-          array = []
-          for parent in node.getParentList()
-            siblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(parent))
-            array.push(siblingTracks)
-          selectedSiblingTracksOfParents = [].concat.apply([],array)
-          selectedSiblingTracks = selectedSiblingTracks.concat(selectedSiblingTracksOfParents)
-          if selectedSiblingTracks.length > 0
-            if confirm("Selecting this folder will permanently delete all sibling tracks. Are you sure you want to continue?")
-              for track in selectedSiblingTracks
-                track.toggleSelected()
-                Fancytree.resetTrackCheckboxes([track], true)
-              true
-            else
-              false
+        if node.isFolder()
+          if node.isSelected() then Fancytree.confirmSelectedFolder(node) else Fancytree.confirmUnselectedFolder(node)
 
       select: (event, data) ->
         node = data.node
@@ -234,6 +210,32 @@ class @Fancytree
       parents = datapath.getParentList()
       overlap = parents.filter((n) -> uniqueNewProjectsDatapaths.indexOf(n) != -1)
       datapath.toggleSelected() unless overlap.length > 0
+
+  @confirmSelectedFolder: (node) ->
+    selectedParent = Fancytree.selectedParent(node)
+    selectedChildFolders = Fancytree.selectedChildFolders(node)
+    selectedChildTracks = Fancytree.selectedChildTracks(node)
+    if selectedParent == undefined and selectedChildFolders.length == 0 and selectedChildTracks.length > 0
+      if confirm("Deselecting this folder will permanently delete all child tracks. Are you sure you want to continue?")
+        track.toggleSelected() for track in selectedChildTracks
+        true
+      else
+        false
+
+  @confirmUnselectedFolder: (node) ->
+    selectedSiblingTracks = Fancytree.selectedFilter(Fancytree.siblingTracks(node))
+    array = []
+    array.push(Fancytree.selectedFilter(Fancytree.siblingTracks(parent))) for parent in node.getParentList()
+    selectedSiblingTracksOfParents = [].concat.apply([], array)
+    selectedSiblingTracks = selectedSiblingTracks.concat(selectedSiblingTracksOfParents)
+    if selectedSiblingTracks.length > 0
+      if confirm("Selecting this folder will permanently delete all sibling tracks. Are you sure you want to continue?")
+        for track in selectedSiblingTracks
+          track.toggleSelected()
+          Fancytree.resetTrackCheckboxes([track], true)
+        true
+      else
+        false
 
   @childTracks: (node) ->
     Fancytree.trackFilter(Fancytree.deepChildrenList(node))
