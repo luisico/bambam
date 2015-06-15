@@ -27,6 +27,14 @@ class @Filebrowser
             path: node.fullpath()
         }
 
+      postProcess: (event, data) ->
+        # Node triggering lazyLoad
+        node = Filebrowser.node(data.node)
+
+        # Hide checkboxes for non-selectable, non-folder nodes
+        if !node.isSelectable()
+          child.hideCheckbox = true for child in data.response when !child.folder
+
       click: (event, data) ->
         console.log(data)
         console.log(event)
