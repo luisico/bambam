@@ -14,21 +14,21 @@ class @Fancytree
 
       renderColumns: (event, data) ->
         node = data.node
+
         tdList = $(node.tr).find(">td")
         tdList.eq(1).attr('title', node.title)
-        if node.isFolder() and node.isSelected()
-          tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
-          tdList.eq(2).attr('title', node.data.object.projects_datapath.name)
-        else if node.isFolder()
-          tdList.eq(2).addClass('projects-datapath-name')
-        else if node.isSelected()
-          tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
-          tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
-          tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
+        if node.isFolder()
+          col2 = tdList.eq(2).addClass('projects-datapath-name')
+          if node.isSelected()
+            col2.html(node.data.object.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
         else
-          tdList.eq(2).addClass('track-link')
-          tdList.eq(3).addClass('track-genome')
-          tdList.eq(4).addClass('track-igv')
+          col2 = tdList.eq(2).addClass('track-link')
+          col3 = tdList.eq(3).addClass('track-genome')
+          col4 = tdList.eq(4).addClass('track-igv')
+          if node.isSelected()
+            col2.html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
+            col3.html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
+            col4.html(node.data.object.track.igv)
 
       beforeSelect: (event, data) ->
         node = data.node
