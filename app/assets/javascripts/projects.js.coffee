@@ -1,6 +1,6 @@
 jQuery ->
   #Fancytree.applyFancytree()
-  Filebrowser.load()
+  new Filebrowser('#track-tree')
 
   $("#project_user_ids").select2({
     placeholder: "Add a user"
