@@ -35,6 +35,7 @@ class ProjectsDatapathsController < ApplicationController
         end
       else
         tree = top_level_tree
+        tree = fill_in_tree tree
       end
 
     else
@@ -61,9 +62,32 @@ class ProjectsDatapathsController < ApplicationController
       @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
         pd_node = add_path(node, projects_datapath.sub_directory)
 
-        # Tracks
+        # Selected tracks
         projects_datapath.tracks.each do |track|
           add_path(pd_node, track.path, true)
+        end
+      end
+    end
+
+    tree
+  end
+
+  def fill_in_tree(tree=[], root='')
+    tree.each do |child|
+      next unless child[:folder]
+      path = root.blank? ? child[:title] : File.join(root, child[:title])
+
+      child[:children] = fill_in_tree(child[:children], path) if child[:children]
+
+      items = FilebrowserService.new(path).to_fancytree
+      if !items.empty?
+        child[:expanded] = true
+        if child[:children]
+          items.each do |item|
+            child[:children] << item unless child[:children].any?{|child| child[:title] == item[:title]}
+          end
+        else
+          child[:children] = items
         end
       end
     end

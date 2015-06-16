@@ -421,10 +421,56 @@ RSpec.describe ProjectsDatapathsController do
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
             {title: 'dir2', folder: true, lazy: true, selected: true, expanded: true, children: [
               {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true}, {title: 'track2.bam', selected: true}
+                {title: 'track1.bam', selected: true},
+                {title: 'track2.bam', selected: true}
               ]}
             ]}
           ]}
+        ]}
+      ]
+    end
+  end
+
+  describe "#fill_in_tree" do
+    it "should fill in directories and tracks" do
+      tree = [
+        {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+          {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir2', folder: true, lazy: true, expanded: true, children: [
+              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1.bam', selected: true}
+              ]}
+            ]}
+          ]}
+        ]}
+      ]
+
+      {
+        File.join('tmp/tests')                           => ['dir1/', 'dir11/', 'track11.bam'],
+        File.join('tmp/tests', 'dir1')                   => ['dir2/', 'dir12/', 'track12.bam'],
+        File.join('tmp/tests', 'dir1', 'dir2')           => ['tracks/', 'dir13/', 'track13.bam'],
+        File.join('tmp/tests', 'dir1', 'dir2', 'tracks') => ['track1.bam', 'dir14/', 'track14.bam']
+      }.each do |path, items|
+        allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+      end
+
+      expect(controller.send :fill_in_tree, tree).to eq [
+        {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+          {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir2', folder: true, lazy: true, expanded: true, children: [
+              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1.bam', selected: true},
+                {title: 'dir14', folder: true, lazy: true},
+                {title: 'track14.bam'}
+              ]},
+              {title: 'dir13', folder: true, lazy: true},
+              {title: 'track13.bam'}
+            ]},
+            {title: 'dir12', folder: true, lazy: true},
+            {title: 'track12.bam'}
+          ]},
+          {title: 'dir11', folder: true, lazy: true},
+          {title: 'track11.bam'}
         ]}
       ]
     end

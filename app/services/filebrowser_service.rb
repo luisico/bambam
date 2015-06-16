@@ -19,7 +19,7 @@ class FilebrowserService
   def to_fancytree
     fancytree = []
 
-    entries.each do |entry|
+    entries(path).each do |entry|
       if m = entry.match(/(.*)\/$/)
         # Directories
         node = {title: m[1]}
@@ -35,7 +35,8 @@ class FilebrowserService
     fancytree
   end
 
-  def entries
+  def entries(path=@path)
+    # Argument not needed, but helps in testing
     @entries || call
   end
 end
