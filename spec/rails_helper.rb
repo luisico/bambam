@@ -7,6 +7,8 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'email_spec'
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
 
 # Define file path for path related specs
 TEST_BASE = File.join Rails.root, 'tmp', 'tests'
@@ -86,6 +88,7 @@ RSpec.configure do |config|
   config.include ControllerHelpers, type: :controller
   config.include Tracks::TestHelpers
   config.include Users::TestHelpers, type: :feature
+  config.include Datapaths::TestHelpers, type: :feature
 
   # Remove files created during testing
   config.after(:suite) do
