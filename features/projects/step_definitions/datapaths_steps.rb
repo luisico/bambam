@@ -26,7 +26,7 @@ Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
   expect {
     owner_datapaths = FactoryGirl.create_list(:datapath, n, users:[@project.owner])
     @projects_datapaths = owner_datapaths.collect do |datapath|
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath, sub_directory: '')
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath, path: '')
     end
   }.to change(Datapath, :count).by(n)
   @projects_datapath = @projects_datapaths.last
@@ -52,7 +52,7 @@ Given /^there is a datapath sub\-directory in the project$/ do
   @dir = 'my_dir'
   @basename = 'my_subdir'
   expect {
-    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, sub_directory: File.join(@dir, @basename))
+    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, path: File.join(@dir, @basename))
   }.to change(@project.projects_datapaths, :count).by(1)
 end
 
@@ -60,7 +60,7 @@ Given /^there is another datapath sub\-directory in the project$/ do
   @dir2 = 'dir2'
   @basename2 = 'subdir_2'
   expect {
-    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, sub_directory: File.join(@dir2, @basename2))
+    FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath, path: File.join(@dir2, @basename2))
   }.to change(@project.projects_datapaths, :count).by(1)
 end
 

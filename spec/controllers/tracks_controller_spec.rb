@@ -219,8 +219,8 @@ RSpec.describe TracksController do
 
           context "projects_datapath_id" do
             before do
-              items = @track.projects_datapath.sub_directory.split(File::SEPARATOR)
-              @projects_datapath = FactoryGirl.create(:projects_datapath, datapath: @track.datapath, sub_directory: File.join(items[0...-1]), project: @track.project)
+              items = @track.projects_datapath.path.split(File::SEPARATOR)
+              @projects_datapath = FactoryGirl.create(:projects_datapath, datapath: @track.datapath, path: File.join(items[0...-1]), project: @track.project)
               @path = File.join(items[-1], @track.path)
             end
 

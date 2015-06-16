@@ -157,13 +157,13 @@ RSpec.describe Track do
     it "should return the full path of the track" do
       expect(@track.full_path).to eq File.join(
         @track.datapath.path,
-        @track.projects_datapath.sub_directory,
+        @track.projects_datapath.path,
         @track.path
       )
     end
 
-    it "should return the full path of the track with empty sub_directory" do
-      @track.projects_datapath.sub_directory = ""
+    it "should return the full path of the track with empty path" do
+      @track.projects_datapath.path = ""
       expect(@track.full_path).to eq File.join(
         @track.datapath.path,
         @track.path
