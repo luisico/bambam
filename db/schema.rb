@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150601213132) do
+ActiveRecord::Schema.define(version: 20150616142016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20150601213132) do
   create_table "projects_datapaths", force: true do |t|
     t.integer  "project_id"
     t.integer  "datapath_id"
-    t.string   "sub_directory", default: "", null: false
+    t.string   "path",        default: "", null: false
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
