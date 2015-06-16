@@ -1,23 +1,5 @@
 ### Methods
 
-def fancytree_node(title)
-  # TODO make sure these take advantage of capybara inherent waiting
-  page.find('span.fancytree-title', text: title)
-end
-
-def fancytree_parent(node_title)
-  fancytree_node(node_title).find(:xpath, '../../..')
-end
-
-def select_node(title)
-  @title = title
-  fancytree_parent(title).find('span.fancytree-checkbox').click
-end
-
-def expand_node(title)
-  fancytree_parent(title).find('span.fancytree-expander').click
-end
-
 ### Given
 
 Given /^there (is|are) (\d+|a) datapaths? in that project?$/ do |foo, n|
