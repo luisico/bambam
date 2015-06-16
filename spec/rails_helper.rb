@@ -85,6 +85,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include ControllerHelpers, type: :controller
   config.include Tracks::TestHelpers
+  config.include Users::TestHelpers, type: :feature
 
   # Remove files created during testing
   config.after(:suite) do
