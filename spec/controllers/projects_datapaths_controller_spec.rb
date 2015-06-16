@@ -385,7 +385,10 @@ RSpec.describe ProjectsDatapathsController do
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(datapaths)
 
-      expect(controller.send :top_level_tree).to eq [{title: datapaths[0].path, folder: true, lazy: true}, {title: datapaths[1].path, folder: true, lazy: true}]
+      expect(controller.send :top_level_tree).to eq [
+        {title: datapaths[0].path, folder: true, lazy: true},
+        {title: datapaths[1].path, folder: true, lazy: true}
+      ]
     end
 
     it "should add selected projects_datapaths" do
@@ -406,7 +409,7 @@ RSpec.describe ProjectsDatapathsController do
     it "should add selected tracks" do
       datapath = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'subdir')
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'dir1/dir2')
       track1 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track1.bam')
       track2 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track2.bam')
 
@@ -415,9 +418,11 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true, expanded: true, children: [
-            {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-              {title: 'track1.bam', selected: true}, {title: 'track2.bam', selected: true}
+          {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir2', folder: true, lazy: true, selected: true, expanded: true, children: [
+              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1.bam', selected: true}, {title: 'track2.bam', selected: true}
+              ]}
             ]}
           ]}
         ]}
@@ -453,44 +458,51 @@ RSpec.describe ProjectsDatapathsController do
   describe "#add_path" do
     it "adds a path to a node" do
       node = {}
-      result = {expanded: true, children: [{title: 'path', folder: true, lazy: true, selected: true}]}
-      controller.send :add_path, node, 'path'
-      expect(node).to eq result
+
+      result = controller.send :add_path, node, 'path'
+      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true)
+      expect(node).to eq Hash(expanded: true, children: [result])
     end
 
     it "adds multiple paths to a node" do
       node = {}
-      result = {expanded: true, children: [
+
+      result = controller.send :add_path, node, 'path1/path2'
+      expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true)
+      expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
-          {title: 'path2', folder: true, lazy: true, selected: true}
+          result
         ]}
-      ]}
-      controller.send :add_path, node, 'path1/path2'
-      expect(node).to eq result
+      ])
     end
 
     it "adds multiple subpaths to a node" do
       node = {}
-      result = {expanded: true, children: [
+
+      result1 = controller.send :add_path, node, 'path/path1'
+      expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true)
+
+      result2 = controller.send :add_path, node, 'path/path2'
+      expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true)
+
+      expect(node).to eq Hash(expanded: true, children: [
         {title: 'path', folder: true, lazy: true, expanded: true, children: [
-          {title: 'path1', folder: true, lazy: true, selected: true},
-          {title: 'path2', folder: true, lazy: true, selected: true}
+          result1,
+          result2
         ]}
-      ]}
-      controller.send :add_path, node, 'path/path1'
-      controller.send :add_path, node, 'path/path2'
-      expect(node).to eq result
+      ])
     end
 
     it "add path with a track to a node" do
       node = {}
-      result = {expanded: true, children: [
+
+      result = controller.send :add_path, node, 'path1/track.bam', true
+      expect(result).to eq Hash(title: 'track.bam', selected: true)
+      expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
-          {title: 'track.bam', selected: true}
+          result
         ]}
-      ]}
-      controller.send :add_path, node, 'path1/track.bam', true
-      expect(node).to eq result
+      ])
     end
   end
 
