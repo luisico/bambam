@@ -86,7 +86,7 @@ class ProjectsDatapathsController < ApplicationController
       parent[:children] << node
     end
 
-    add_path(node, tail, is_track) if tail
+    node = add_path(node, tail, is_track) if tail
     node
   end
 
