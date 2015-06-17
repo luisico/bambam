@@ -7,6 +7,13 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'email_spec'
+
+# Use Chrome for selenium tests
+Capybara.register_driver :selenium do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+# Use Poltergeist for javascript tests
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
