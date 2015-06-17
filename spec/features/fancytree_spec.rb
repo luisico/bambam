@@ -54,4 +54,24 @@ RSpec.feature "One datapath per file hierarchy" do
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
   end
+
+  scenario "manager selects parent of two selected datapaths", js: true do
+    subdir2 = preselect_datapath(@project, @datapaths[0], 'subdir2')
+
+    visit project_path(@project)
+    %w[subdir1 subdir2].each do |title|
+      expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
+    end
+
+    expect {
+      select_node(@datapaths[0].path)
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.to change(@project.projects_datapaths, :count).by(-1)
+
+    %w[subdir1 subdir2].each do |title|
+      expect(fancytree_parent(title)[:class]).not_to include 'fancytree-selected'
+    end
+    expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
+  end
 end
