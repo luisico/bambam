@@ -66,6 +66,7 @@ group :test do
   gem 'launchy', '~> 2.4.3'
   gem 'database_cleaner', '~> 1.4.1'
   gem 'email_spec', '~> 1.6.0'
+  gem 'connection_pool', '~> 2.2.0'
 end
 
 group :production, :staging do
