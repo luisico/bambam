@@ -47,5 +47,6 @@ Rails.application.configure do
 
   # Fix circular dependency errors in rails integration tests
   # https://robots.thoughtbot.com/how-to-fix-circular-dependency-errors-in-rails-integration-tests
+  # TODO: Rails 4.2 should fix this
   config.allow_concurrency = false
 end
