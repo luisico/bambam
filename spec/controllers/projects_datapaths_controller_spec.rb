@@ -401,7 +401,7 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true}
+          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id}}
         ]}
       ]
     end
@@ -419,10 +419,10 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir2', folder: true, lazy: true, selected: true, expanded: true, children: [
+            {title: 'dir2', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id}, expanded: true, children: [
               {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true},
-                {title: 'track2.bam', selected: true}
+                {title: 'track1.bam', selected: true, object: {type: 'track', id: track1.id}},
+                {title: 'track2.bam', selected: true, object: {type: 'track', id: track2.id}}
               ]}
             ]}
           ]}
