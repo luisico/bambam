@@ -10,14 +10,6 @@ end
 
 ### Then
 
-Then /^I should see a section about what is bambam$/ do
-  expect(page).to have_content "What is Bambam?"
-end
-
-Then /^I should see a section about using bambam$/ do
-  expect(page).to have_content "Using Bambam"
-end
-
-Then /^I should see a section about ABC$/ do
-  expect(page).to have_content "About the Applied Bioinformatics Core"
+Then /^I should see a section title "(.*?)"$/ do |title|
+  expect(page).to have_css "h4", text: title
 end
