@@ -38,6 +38,7 @@ gem 'jbuilder', '~> 2.2.16'
 # Monitoring
 gem 'newrelic_rpm', '~> 3.12.0'
 gem 'health_check', '~> 1.5.1'
+gem 'exception_notification', '~> 4.1.0'
 
 group :development do
   gem 'spring', '~> 1.3.6'
@@ -73,8 +74,6 @@ group :production, :staging do
   gem 'puma', '~> 2.9.2'
   gem 'lograge', '~> 0.3.3'
 end
-
-gem 'exception_notification', '~> 4.1.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.1', group: :doc
