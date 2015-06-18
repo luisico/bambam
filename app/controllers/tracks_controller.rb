@@ -41,9 +41,11 @@ class TracksController < ApplicationController
   def destroy
     respond_to do |format|
       if @track.destroy
-        flash[:notice] = 'Track was successfully deleted.'
         format.json { render json: {status: :success, message: 'OK' }, status: 200 }
-        format.html { redirect_to project_path(@track.project) }
+        format.html do
+          flash[:notice] = 'Track was successfully deleted.'
+          redirect_to project_path(@track.project)
+        end
       else
         format.json {render json: {status: :error, message: error_messages(@track, "Record not deleted")}, status: 400}
         format.html { redirect_to projects_path }
