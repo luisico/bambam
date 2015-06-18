@@ -18,10 +18,6 @@ table#track-tree {
     &:nth-of-type(2) {
       width: 40%;
       max-width: 40%;
-      word-wrap: break-word;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     &:nth-of-type(3) {
@@ -48,6 +44,17 @@ table#track-tree {
           right: -4px;
           top: -3px;
         }
+      }
+    }
+  }
+
+  tr.fancytree-selected {
+    td {
+      &:nth-of-type(2) {
+        word-wrap: break-word;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
   }

@@ -15,12 +15,14 @@ class @Fancytree
       renderColumns: (event, data) ->
         node = data.node
         $tdList = $(node.tr).find(">td")
+        $tdList.eq(1).attr('title', node.title)
         if node.folder and node.selected
           $tdList.eq(2).addClass('projects-datapath-name').html(node.data.object.projects_datapath.name)
+          $tdList.eq(2).attr('title', node.data.object.projects_datapath.name)
         else if node.folder
           $tdList.eq(2).addClass('projects-datapath-name')
         else if node.selected
-          $tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>")
+          $tdList.eq(2).addClass('track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + node.data.object.track.id + "'>" + node.data.object.track.name + "</a>").attr('title', node.data.object.track.name)
           $tdList.eq(3).addClass('track-genome').html("<span class='label genome'>" + node.data.object.track.genome + "</span>")
           $tdList.eq(4).addClass('track-igv').html(node.data.object.track.igv)
         else
@@ -115,7 +117,7 @@ class @Fancytree
         Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').html(jqXHR.projects_datapath.name)
+        $tr.find('.projects-datapath-name').html(jqXHR.projects_datapath.name).attr('title', node.data.object.projects_datapath.name)
         $tr.effect("highlight", {}, 1500)
         return false
       error:(jqXHR, textStatus, errorThrown) ->
@@ -141,7 +143,7 @@ class @Fancytree
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
-        $tr.find('.projects-datapath-name').html('')
+        $tr.find('.projects-datapath-name').html('').attr('title', '')
         if $tr.is(':visible')
           $tr.effect("highlight", {}, 1500)
         delete node.data.object.projects_datapath
@@ -206,7 +208,7 @@ class @Fancytree
       success:(jqXHR, textStatus, errorThrown) ->
         node.data['object'] = jqXHR
         $tr = $(node.tr)
-        $tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>")
+        $tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.track.id + "'>" + jqXHR.track.name + "</a>").attr('title', node.data.object.track.name)
         $tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
         $tr.find('.track-igv').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
@@ -230,7 +232,7 @@ class @Fancytree
       data: { _method: "delete" },
       success:(jqXHR, textStatus, errorThrown) ->
         $tr = $(node.tr)
-        $tr.find('.track-link').html('')
+        $tr.find('.track-link').html('').attr('title', '')
         $tr.find('.track-genome').html('')
         $tr.find('.track-igv').html("")
         if $tr.is(':visible')
