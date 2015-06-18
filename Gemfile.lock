@@ -138,6 +138,8 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    health_check (1.5.1)
+      rails (>= 2.3.0)
     hike (1.2.3)
     hitimes (1.2.2)
     i18n (0.7.0)
@@ -328,6 +330,7 @@ DEPENDENCIES
   foundation-rails (~> 5.2.3.0)
   guard-cucumber (~> 1.5.4)
   guard-rspec (~> 4.5.1)
+  health_check (~> 1.5.1)
   jbuilder (~> 2.2.16)
   jquery-rails (~> 3.1.2)
   jquery-ui-sass-rails!

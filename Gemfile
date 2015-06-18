@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.2.16'
 
 # Monitoring
 gem 'newrelic_rpm', '~> 3.12.0'
+gem 'health_check', '~> 1.5.1'
 
 group :development do
   gem 'spring', '~> 1.3.6'
