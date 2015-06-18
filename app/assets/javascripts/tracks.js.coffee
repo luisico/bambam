@@ -1,4 +1,12 @@
 jQuery ->
+  $('.track-name-update').bind 'ajax:success', ->
+    igvButton = $('a.fi-eye')
+    newName = $(this).text()
+    oldName = $('.track-name-update').data('track-name')
+    newHref = igvButton.attr('href').replace(oldName, newName)
+    igvButton.attr('href', newHref)
+    $('.track-name-update').data('track-name', newName)
+
   $('#share-links-list').on 'click', '.show-track-link', (event) ->
     $(this).parent().parent().next().toggle()
     event.preventDefault()

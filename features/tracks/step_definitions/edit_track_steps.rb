@@ -47,3 +47,7 @@ Then /^I should not be able to set track (.*?) to blank$/ do |attribute|
     @track.reload
   }.not_to change(@track, attribute)
 end
+
+Then /^the igv link name should match the track name$/ do
+  expect(find('a.fi-eye')[:href]).to include @track.name
+end
