@@ -161,6 +161,10 @@ GEM
       rb-inotify (>= 0.9)
     local_time (1.0.2)
       coffee-rails
+    lograge (0.3.3)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
@@ -336,6 +340,7 @@ DEPENDENCIES
   jquery-ui-sass-rails!
   launchy (~> 2.4.3)
   local_time (~> 1.0.2)
+  lograge (~> 0.3.3)
   newrelic_rpm (~> 3.12.0)
   nokogiri (~> 1.6.1)
   pg (~> 0.18.2)

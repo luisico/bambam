@@ -71,6 +71,7 @@ group :production, :staging do
   gem 'therubyracer', platforms: :ruby
   gem 'nokogiri', '~> 1.6.1'
   gem 'puma', '~> 2.9.2'
+  gem 'lograge', '~> 0.3.3'
 end
 
 gem 'exception_notification', '~> 4.1.0'
