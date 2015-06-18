@@ -30,6 +30,7 @@ Feature: Edit track fields
     And <track exists in the project>
     When I visit the track page
     Then I <privilege> be able to update the track genome
+    And the igv link genome should match the track genome
 
     Examples:
       | track exists in the project      | privilege  |

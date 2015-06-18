@@ -7,6 +7,14 @@ jQuery ->
     igvButton.attr('href', newHref)
     $('.track-name-update').data('track-name', newName)
 
+  $('.track-genome-update').bind 'ajax:success', ->
+    igvButton = $('a.fi-eye')
+    newGenome = $(this).text()
+    oldGenome = $('.track-genome-update').data('track-genome')
+    newHref = igvButton.attr('href').replace(oldGenome, newGenome)
+    igvButton.attr('href', newHref)
+    $('.track-genome-update').data('track-genome', newGenome)
+
   $('#share-links-list').on 'click', '.show-track-link', (event) ->
     $(this).parent().parent().next().toggle()
     event.preventDefault()
