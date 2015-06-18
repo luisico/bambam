@@ -35,6 +35,9 @@ gem 'best_in_place', '~> 3.0.3'
 # JSON APIs
 gem 'jbuilder', '~> 2.2.16'
 
+# Monitoring
+gem 'newrelic_rpm', '~> 3.12.0'
+
 group :development do
   gem 'spring', '~> 1.3.6'
   gem 'spring-commands-rspec', '~> 1.0.4'
