@@ -86,9 +86,35 @@ RSpec.describe UsersController do
         expect(assigns(:user)).to eq @admin
       end
 
-      it "should be able to view show page of another user" do
-        get :show, id: @users.first
-        expect(assigns(:user)).to eq @users.first
+      context "page of another user" do
+        it "should be successful" do
+          get :show, id: @users.first
+          expect(response).to be_success
+          expect(response).to render_template :show
+        end
+
+        it "should return the correct user" do
+          get :show, id: @users.first
+          expect(assigns(:user)).to eq @users.first
+        end
+
+        it "should return the correct projects" do
+          project = FactoryGirl.create(:project)
+          user_on_projects = FactoryGirl.create_list(:project, 3, users: @users)
+          get :show, id: @users.first
+          expect(assigns(:projects)).to eq user_on_projects
+        end
+      end
+
+      context "page of a manager" do
+        it "should return the correct projects" do
+          manager = FactoryGirl.create(:manager)
+          project = FactoryGirl.create(:project)
+          user_on_projects = FactoryGirl.create_list(:project, 2, users: [manager])
+          owned_projects = FactoryGirl.create_list(:project, 2, owner: manager)
+          get :show, id: manager
+          expect(assigns(:projects)).to eq (user_on_projects | owned_projects)
+        end
       end
     end
 
@@ -104,6 +130,14 @@ RSpec.describe UsersController do
       it "should return the correct user" do
         get :show, id: @users.first
         expect(assigns(:user)).to eq @users.first
+      end
+
+      it "should return the correct projects" do
+        project = FactoryGirl.create(:project)
+        user_on_projects = FactoryGirl.create_list(:project, 3, users: [@users.first])
+        get :show, id: @users.first
+        expect(assigns(:user)).to eq @users.first
+        expect(assigns(:projects)).to eq user_on_projects
       end
 
       it "should not be able to view show page of another user" do

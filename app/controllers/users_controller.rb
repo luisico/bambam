@@ -12,6 +12,8 @@ class UsersController < ApplicationController
   end
 
   def show
+    user_ability = Ability.new(@user)
+    @projects = Project.accessible_by(user_ability)
   end
 
   def new

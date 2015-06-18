@@ -40,7 +40,8 @@ end
 
 Then /^I should see my projects$/ do
   user = @user || @manager
-  (user.projects + user.owned_projects).each do |project|
+  user_ability = Ability.new(user)
+  Project.accessible_by(user_ability).each do |project|
     within("#project_#{project.id}") do
       expect(page).to have_link project.name
       expect(page).to have_content project.owner.handle

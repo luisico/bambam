@@ -24,7 +24,7 @@
         <div class="small-12 medium-6 columns">
           <h4>My Projects<small> list all your <%= link_to "tracks", tracks_path %></small></h4>
           <ul class="small-block-grid-1">
-            <%= render (@user.projects + @user.owned_projects) %>
+            <%= render @projects %>
           </ul>
         </div>
       </div>
