@@ -2,6 +2,11 @@ source 'https://rubygems.org'
 
 ruby '2.2.0'
 
+# Monitoring
+gem 'newrelic_rpm', '~> 3.12.0'
+gem 'health_check', '~> 1.5.1'
+gem 'exception_notification', '~> 4.1.0'
+
 gem 'rails', '~> 4.1.11'
 
 # Env variables (must be at top)
@@ -34,11 +39,6 @@ gem 'best_in_place', '~> 3.0.3'
 
 # JSON APIs
 gem 'jbuilder', '~> 2.2.16'
-
-# Monitoring
-gem 'newrelic_rpm', '~> 3.12.0'
-gem 'health_check', '~> 1.5.1'
-gem 'exception_notification', '~> 4.1.0'
 
 group :development do
   gem 'spring', '~> 1.3.6'
