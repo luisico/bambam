@@ -3,7 +3,7 @@ jQuery ->
     igvButton = $('a.fi-eye')
     newName = $(this).text()
     oldName = $('.track-name-update').data('track-name')
-    newHref = igvButton.attr('href').replace(oldName, newName)
+    newHref = igvButton.attr('href').replace('name=' + oldName, 'name=' + newName)
     igvButton.attr('href', newHref)
     $('.track-name-update').data('track-name', newName)
 
@@ -11,7 +11,7 @@ jQuery ->
     igvButton = $('a.fi-eye')
     newGenome = $(this).text()
     oldGenome = $('.track-genome-update').data('track-genome')
-    newHref = igvButton.attr('href').replace(oldGenome, newGenome)
+    newHref = igvButton.attr('href').replace('genome=' + oldGenome, 'genome=' + newGenome)
     igvButton.attr('href', newHref)
     $('.track-genome-update').data('track-genome', newGenome)
 
