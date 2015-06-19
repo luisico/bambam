@@ -1,4 +1,4 @@
-<div class="row">
+<div id="user" class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
       <div class="row">
@@ -20,7 +20,21 @@
           <ul class="no-bullet">
             <%= render @user.groups %>
           </ul>
+
+          <% if @user.has_role? :manager %>
+            <h4>My Datapaths</h4>
+            <% if @user.datapaths.any? %>
+              <ul>
+                <% @user.datapaths.each do |datapath| %>
+                  <li class="datapath"><%= datapath.path %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p>Please contact <%= mail_to ENV['ADMIN_EMAIL'], 'administrator' %> to add datapaths</p>
+            <% end %>
+          <% end %>
         </div>
+
         <div class="small-12 medium-6 columns">
           <h4>My Projects<small> list all your <%= link_to "tracks", tracks_path %></small></h4>
           <ul class="small-block-grid-1">

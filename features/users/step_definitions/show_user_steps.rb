@@ -63,3 +63,17 @@ Then /^I should only see my email once$/ do
     expect(page).to have_content(@user.email, count: 1)
   }
 end
+
+Then /^I should( not)? see my datapaths$/ do |negate|
+  if negate
+    expect(page).not_to have_content "My datapaths"
+  else
+    @manager.datapaths.each do |datapath|
+      expect(page).to have_content datapath.path
+    end
+  end
+end
+
+Then /^I should see note to contact admin to get datapaths$/ do
+  expect(page).to have_content 'Please contact admin'
+end

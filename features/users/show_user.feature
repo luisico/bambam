@@ -11,9 +11,23 @@ Feature: Show a user profile
     Then I should see my user name
     And I should see my email
     And I should see my avatar
+    And I should not see my datapaths
     And I should see my projects
     And I should see my groups
     And I should see a link to "Edit"
+
+  Scenario: Manager can see their datapaths
+    Given I am signed in as a manager
+    And I own a project
+    And there are 3 datapaths in that project
+    When I am on my account profile page
+    And I should see my datapaths
+
+  Scenario: Manager can see instructions to get datapaths
+    Given I am signed in as a manager
+    And I own a project
+    When I am on my account profile page
+    Then I should see note to contact admin to get datapaths
 
   Scenario: Email appears once for user with no first or last name
     Given I am signed in
