@@ -1,9 +1,7 @@
 jQuery ->
-  $('.track-name-update').bind 'ajax:success', ->
-    BestInPlaceLocal.updateQueryParam($(this), 'name', $('a.fi-eye'))
-
-  $('.track-genome-update').bind 'ajax:success', ->
-    BestInPlaceLocal.updateQueryParam($(this), 'genome', $('a.fi-eye'))
+  $('.best_in_place[data-bip-object="track"]').bind 'ajax:success', ->
+    igv = $('a.service.fi-eye')
+    igv.attr('href', $.replaceParam(igv.attr('href'), $(this).data('bipAttribute'), $(this).data('bipValue')))
 
   $('#share-links-list').on 'click', '.show-track-link', (event) ->
     $(this).parent().parent().next().toggle()
