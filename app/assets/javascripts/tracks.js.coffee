@@ -1,4 +1,8 @@
 jQuery ->
+  $('.best_in_place[data-bip-object="track"]').bind 'ajax:success', ->
+    igv = $('a.service.fi-eye')
+    igv.attr('href', $.replaceParam(igv.attr('href'), $(this).data('bipAttribute'), $(this).data('bipValue')))
+
   $('#share-links-list').on 'click', '.show-track-link', (event) ->
     $(this).parent().parent().next().toggle()
     event.preventDefault()
