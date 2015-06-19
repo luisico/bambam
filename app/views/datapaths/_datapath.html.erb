@@ -4,7 +4,9 @@
       <%= link_to "", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-icon edit-datapath-link margin-left" %>
       <%= link_to "", datapath, method: :delete, data: {confirm: "WARNING!!!\nThis action cannot be undone. Deleting this datapath will also permenately delete all associated tracks. Are you sure you want to continue?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
     </div>
-    <h5 id="datapath-path-<%= datapath.id %>" class=""><%= datapath.path %></h5>
+    <h5 id="datapath-path-<%= datapath.id %>" class="" title=<%= datapath.path %>>
+      <%= datapath.path %>
+    </h5>
 
     <% if datapath.users.any? %>
       <ul class="datapath-users inline-list" id="datapath-users-<%= datapath.id %>">

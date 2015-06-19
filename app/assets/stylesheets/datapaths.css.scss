@@ -1,6 +1,8 @@
 .datapath {
   h5 {
     margin-bottom: rem-calc(20) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .no-datapath-users {
     font-size: rem-calc(11);
