@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.0'
 
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.1.11'
 
 # Env variables (must be at top)
 gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
@@ -24,7 +24,7 @@ gem 'rolify', '~> 4.0.0'
 gem 'sass-rails', '~> 4.0.5'
 gem 'uglifier', '~> 2.7.1'
 gem 'coffee-rails', '~> 4.0.1'
-gem 'jquery-rails', '~> 3.1.2'
+gem 'jquery-rails', '~> 3.1.3'
 gem 'jquery-ui-sass-rails', github: 'jhilden/jquery-ui-sass-rails'
 gem 'turbolinks', '~> 2.5.3 '
 gem 'foundation-rails', '~> 5.2.3.0'
