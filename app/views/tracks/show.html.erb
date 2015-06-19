@@ -9,10 +9,10 @@
     <div class="panel">
       <h3 class="track-name">
         <%= best_in_place_if can?(:update, @track), @track, :name,
-          {ok_button: 'save', cancel_button: 'cancel', class: 'track-name-update', data: {track_name: @track.name}} %>
+          {ok_button: 'save', cancel_button: 'cancel', class: 'track-name-update', data: {name: @track.name}} %>
         <span class="label genome">
           <%= best_in_place_if can?(:update, @track), @track, :genome,
-            {ok_button: 'save', cancel_button: 'cancel', class: 'track-genome-update', data: {track_genome: @track.genome}} %>
+            {ok_button: 'save', cancel_button: 'cancel', class: 'track-genome-update', data: {genome: @track.genome}} %>
         </span>
       </h3>
 

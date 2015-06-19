@@ -1,19 +1,9 @@
 jQuery ->
   $('.track-name-update').bind 'ajax:success', ->
-    igvButton = $('a.fi-eye')
-    newName = $(this).text()
-    oldName = $('.track-name-update').data('track-name')
-    newHref = igvButton.attr('href').replace('name=' + oldName, 'name=' + newName)
-    igvButton.attr('href', newHref)
-    $('.track-name-update').data('track-name', newName)
+    BestInPlaceLocal.updateQueryParam($(this), 'name', $('a.fi-eye'))
 
   $('.track-genome-update').bind 'ajax:success', ->
-    igvButton = $('a.fi-eye')
-    newGenome = $(this).text()
-    oldGenome = $('.track-genome-update').data('track-genome')
-    newHref = igvButton.attr('href').replace('genome=' + oldGenome, 'genome=' + newGenome)
-    igvButton.attr('href', newHref)
-    $('.track-genome-update').data('track-genome', newGenome)
+    BestInPlaceLocal.updateQueryParam($(this), 'genome', $('a.fi-eye'))
 
   $('#share-links-list').on 'click', '.show-track-link', (event) ->
     $(this).parent().parent().next().toggle()

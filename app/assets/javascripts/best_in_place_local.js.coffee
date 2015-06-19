@@ -1,5 +1,13 @@
 BestInPlaceEditor.defaults.ajaxDataType = 'json'
 
+class @BestInPlaceLocal
+  @updateQueryParam: (field, attr, link) ->
+    newAttr = field.text()
+    oldAttr = field.data(attr)
+    newHref = link.attr('href').replace(attr + '=' + oldAttr, attr + '=' + newAttr)
+    link.attr('href', newHref)
+    field.data(attr, newAttr)
+
 jQuery ->
   $('.best_in_place').best_in_place()
 
