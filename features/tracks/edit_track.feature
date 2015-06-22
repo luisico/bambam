@@ -56,14 +56,15 @@ Feature: Edit track fields
     And I belong to a project
     And I own a track in that project
     When I am on the track page
-    Then I should be able to change the track name to "<new value>"
-    And the IGV link should be updated with a new name
+    Then I should be able to change the track name to "<ruby value1>"
+    And the IGV link should be updated with name "<js value1>"
 
-    Then I should be able to change the track name to "<new new value>"
-    And the IGV link should be updated with a new name
+    Then I should be able to change the track name to "<ruby value2>"
+    And the IGV link should be updated with name "<js value2>"
 
     Examples:
-    | new value | new new value |
-    | a  b      | a b           |
-    | =ab       | ==ab          |
-    | &a&b      | &&a&b         |
+    | ruby value1 | js value1 | ruby value2 | js value2   |
+    | a  b        | a%20%20b  | a b         | a%20b       |
+    | a+b         | a%2Bb     | a+ b        | a%2B%20b    |
+    | =ab         | %3Dab     | ==ab        | %3D%3Dab    |
+    | &a&b        | %26a%26b  | &&a&b       | %26%26a%26b |

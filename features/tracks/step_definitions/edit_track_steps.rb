@@ -58,10 +58,13 @@ Then /^I should be able to change the track (.*?) to "(.*?)"$/ do |attribute, ne
   expect(@track.send(attribute)).to eq new_value
 end
 
-Then /^the IGV link should be updated with a new (.*?)$/ do |attribute|
+Then /^the IGV link should be updated with name "(.*?)"$/ do |value|
    igv_url = find('a.fi-eye')[:href]
-   params = igv_url.split('?')[1].split('&')
-   attr_index = params.index{|x| x.include? attribute + '='}
+   params = {}
+   igv_url.sub(/^\?/, '').split('&').each do |item|
+     tmp = item.split('=')
+     params[tmp[0]] = tmp[1]
+   end
 
-   expect(params[attr_index]).to eq URI::Generic.build(:query => {attribute => @track.send(attribute)}.to_query).to_s.gsub(/^\?/, '')
+   expect(params['name']).to eq value
 end

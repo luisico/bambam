@@ -12,7 +12,7 @@ jQuery.replaceParam = (url, name, value) ->
 
   params = $.map(search.replace(/^\?/, '').split('&'), (val, i) ->
     items = val.split('=')
-    items[1] = encodeURI(value) if decodeURI(items[0]) == name
+    items[1] = encodeURIComponent(value) if decodeURIComponent(items[0]) == name
     items.join('=')
   ).join('&')
 
