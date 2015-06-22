@@ -2,7 +2,12 @@ source 'https://rubygems.org'
 
 ruby '2.2.0'
 
-gem 'rails', '~> 4.1.10'
+# Monitoring
+gem 'newrelic_rpm', '~> 3.12.0'
+gem 'health_check', '~> 1.5.1'
+gem 'exception_notification', '~> 4.1.0'
+
+gem 'rails', '~> 4.1.11'
 
 # Env variables (must be at top)
 gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
@@ -24,7 +29,7 @@ gem 'rolify', '~> 4.0.0'
 gem 'sass-rails', '~> 4.0.5'
 gem 'uglifier', '~> 2.7.1'
 gem 'coffee-rails', '~> 4.0.1'
-gem 'jquery-rails', '~> 3.1.2'
+gem 'jquery-rails', '~> 3.1.3'
 gem 'jquery-ui-sass-rails', github: 'jhilden/jquery-ui-sass-rails'
 gem 'turbolinks', '~> 2.5.3 '
 gem 'foundation-rails', '~> 5.2.3.0'
@@ -67,9 +72,8 @@ group :production, :staging do
   gem 'therubyracer', platforms: :ruby
   gem 'nokogiri', '~> 1.6.1'
   gem 'puma', '~> 2.9.2'
+  gem 'lograge', '~> 0.3.3'
 end
-
-gem 'exception_notification', '~> 4.1.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.1', group: :doc
