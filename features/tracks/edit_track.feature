@@ -10,7 +10,6 @@ Feature: Edit track fields
     And <track exists in the project>
     When I visit the track page
     Then I <privilege> be able to update the track name
-    And the igv link name should match the track name
 
     Examples:
       | track exists in the project      | privilege  |
@@ -30,7 +29,6 @@ Feature: Edit track fields
     And <track exists in the project>
     When I visit the track page
     Then I <privilege> be able to update the track genome
-    And the igv link genome should match the track genome
 
     Examples:
       | track exists in the project      | privilege  |
@@ -52,3 +50,20 @@ Feature: Edit track fields
     When I am on the project page
     And I select an invalid track parent directory
     Then I should see error "Record not updated"
+
+  Scenario Outline: IGV link gets updated on attribute update
+    Given I am signed in
+    And I belong to a project
+    And I own a track in that project
+    When I am on the track page
+    Then I should be able to change the track name to "<new value>"
+    And the IGV link should be updated with a new name
+
+    Then I should be able to change the track name to "<new new value>"
+    And the IGV link should be updated with a new name
+
+    Examples:
+    | new value | new new value |
+    | a  b      | a b           |
+    | =ab       | ==ab          |
+    | &a&b      | &&a&b         |
