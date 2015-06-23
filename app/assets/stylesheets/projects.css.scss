@@ -3,3 +3,7 @@
     padding: rem-calc(10);
   }
 }
+
+#project-desc {
+ @extend .desc-icon;
+}

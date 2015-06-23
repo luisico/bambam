@@ -24,6 +24,15 @@
       </div>
 
       <div class="row">
+        <div class="small-12 medium-8 columns">
+          <p id="project-desc">
+            <%= best_in_place_if can?(:manage, @project), @project, :desc,
+              {ok_button: 'save', cancel_button: 'cancel'} %>
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
         <div class="small-12 medium-6 columns project-attributes">
           <div id="project-users">
             <h4 id="regular-users">
