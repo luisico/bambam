@@ -16,13 +16,25 @@
 
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <h4>My Groups</h4>
+          <h4>
+            <% if current_user == @user %>
+              My Groups
+            <% else %>
+              Groups
+            <% end %>
+          </h4>
           <ul class="no-bullet">
             <%= render @user.groups %>
           </ul>
 
           <% if @user.has_role? :manager %>
-            <h4>My Datapaths</h4>
+            <h4>
+              <% if current_user == @user %>
+                My Datapaths
+              <% else %>
+                Datapaths
+              <% end %>
+            </h4>
             <% if @user.datapaths.any? %>
               <ul>
                 <% @user.datapaths.each do |datapath| %>
@@ -36,7 +48,14 @@
         </div>
 
         <div class="small-12 medium-6 columns">
-          <h4>My Projects<small> list all your <%= link_to "tracks", tracks_path %></small></h4>
+          <h4>
+            <% if current_user == @user %>
+              My Projects
+              <small> list all your <%= link_to "tracks", tracks_path %></small>
+            <% else %>
+              Projects
+            <% end %>
+          </h4>
           <ul class="small-block-grid-1">
             <%= render @projects %>
           </ul>

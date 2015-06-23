@@ -21,7 +21,8 @@ When /^I am on (my|the)? account profile page$/ do |foo|
 end
 
 When /^I click on the user handle$/ do
-  click_on @user.handle
+  user = @user || @manager
+  click_on user.handle
 end
 
 ### Then
@@ -76,4 +77,9 @@ end
 
 Then /^I should see note to contact admin to get datapaths$/ do
   expect(page).to have_content 'Please contact admin'
+end
+
+Then /^I should not see "(.*?)" in the "(.*?)" section$/ do |pronoun, coll|
+  expect(page).not_to have_css('h4', text:  pronoun + ' ' + coll)
+  expect(page).to have_css('h4', text: coll, exact: true)
 end

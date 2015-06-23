@@ -29,7 +29,8 @@ Then /^I should be on the root page$/ do
 end
 
 Then /^I should be on (my|the)? account profile page$/ do |foo|
-  expect(current_path).to eq user_path(@user)
+  user = @user || @manager
+  expect(current_path).to eq user_path(user)
 end
 
 Then /^I should be on the help page$/ do

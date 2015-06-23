@@ -51,18 +51,15 @@ Feature: Show a user profile
     When I am on my account profile page
     And I should only see a list of projects I belong to
 
-  Scenario Outline: Admin/manager can access the user show page from the users page
-    Given I am signed in as an <role>
-    And there is 1 other user in the system
+  Scenario: Manager can access the user show page from the users page
+    Given I am signed in as a manager
+    And there is 1 other manager in the system
     And I am on the users page
     When I click on the user handle
     Then I should be on the account profile page
-    And I should not see a link to "Edit"
-
-    Examples:
-      | role    |
-      | admin   |
-      | manager |
+    And I should not see "My" in the "Groups" section
+    And I should not see "My" in the "Datapaths" section
+    And I should not see "My" in the "Projects" section
 
   Scenario: Access tracks page
     Given I am signed in
