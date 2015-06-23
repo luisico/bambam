@@ -12,3 +12,8 @@ jQuery ->
   $('.project-attributes').on 'click', '#cancel-edit-users', (event) ->
     $('#project-users').show()
     $(this).closest('form').remove()
+
+class @Project
+  @updateTracksCount: ->
+    count = $('a.service.fi-eye').length
+    $('.track-count').text("[" + count + "]")

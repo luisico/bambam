@@ -25,8 +25,11 @@ Feature: Delete a track
     And there is a track in the first project's datapath
     When I am on the project page
     And I expand the first project's datapath
+    And I should see a project track count of "0"
     Then I should be able to add a track to the project
+    And I should see a project track count of "1"
     And I should be able to immediately delete the track
+    And I should see a project track count of "0"
 
   Scenario Outline: Delete a track from the track track show page
     Given I am signed in as <user type>

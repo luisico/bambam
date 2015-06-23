@@ -24,6 +24,12 @@ Then /^I should see the project's name$/ do
   expect(page).to have_content @project.name
 end
 
+Then /^I should see a project track count of "(.*?)"$/ do |count|
+  within(find(".track-count")) {
+    expect(page).to have_content count
+  }
+end
+
 Then /^I should see a section titled "(.*?)"$/ do |title|
   within(find('.project-datapaths')) {
     expect(page).to have_content title
