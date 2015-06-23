@@ -13,19 +13,19 @@ Then /^I should( not)? be able to edit the project description$/ do |negate|
     }
   else
     expect{
-      bip_text(@project, :desc, 'new_desc')
-      expect(page).to have_content 'new_desc'
+      bip_text(@project, :description, 'new_description')
+      expect(page).to have_content 'new_description'
       loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
-    }.to change(@project, :desc)
-    expect(@project.desc).to eq 'new_desc'
+    }.to change(@project, :description)
+    expect(@project.description).to eq 'new_description'
   end
 end
 
 Then /^I should be able to set project description to blank$/ do
   expect{
-    bip_text(@project, :desc, '')
+    bip_text(@project, :description, '')
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
-  }.to change(@project, :desc)
+  }.to change(@project, :description)
 end

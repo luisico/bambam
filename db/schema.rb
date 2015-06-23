@@ -46,11 +46,11 @@ ActiveRecord::Schema.define(version: 20150623165500) do
   end
 
   create_table "projects", force: true do |t|
-    t.string   "name",       null: false
-    t.integer  "owner_id",   null: false
+    t.string   "name",        null: false
+    t.integer  "owner_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "desc"
+    t.string   "description"
   end
 
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
@@ -97,9 +97,9 @@ ActiveRecord::Schema.define(version: 20150623165500) do
     t.string   "path",                                  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "genome",               default: "hg19", null: false
     t.integer  "owner_id",                              null: false
     t.integer  "projects_datapath_id",                  null: false
+    t.string   "genome",               default: "hg19", null: false
   end
 
   add_index "tracks", ["name"], name: "index_tracks_on_name", using: :btree

@@ -8,7 +8,7 @@ def fill_project_form(project=nil)
   click_link "New Project"
   project ||= @project_attrs
   fill_in 'Name', with: project[:name]
-  fill_in 'Description', with: project[:desc]
+  fill_in 'Description', with: project[:description]
 end
 
 def submit_project_form(content)
@@ -43,7 +43,7 @@ Then /^I should not be able to create a new project without a name$/ do
 end
 
 Then /^I should be able to create a new project without a description$/ do
-  new_project_attr = {name: "new_project", desc: ""}
+  new_project_attr = {name: "new_project", description: ""}
   expect {
     fill_project_form(new_project_attr)
     submit_project_form(new_project_attr[:name])

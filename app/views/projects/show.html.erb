@@ -26,7 +26,7 @@
       <div class="row">
         <div class="small-12 medium-8 columns">
           <p id="project-desc">
-            <%= best_in_place_if can?(:manage, @project), @project, :desc,
+            <%= best_in_place_if can?(:manage, @project), @project, :description,
               {ok_button: 'save', cancel_button: 'cancel'} %>
           </p>
         </div>

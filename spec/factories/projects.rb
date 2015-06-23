@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :project do
     sequence(:name) {|n| "project#{n}"}
-    sequence(:desc) {|n| "#{n} foos "}
+    sequence(:description) {|n| "description#{n}"}
     owner
   end
 end
