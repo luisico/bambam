@@ -212,7 +212,7 @@ class @Fancytree
         $tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.track.genome + "</span>")
         $tr.find('.track-igv').html(jqXHR.track.igv)
         $tr.effect("highlight", {}, 1500)
-        ProjectTracks.updateCount()
+        Project.updateTracksCount()
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         if jqXHR.responseJSON
@@ -238,7 +238,7 @@ class @Fancytree
         $tr.find('.track-igv').html("")
         if $tr.is(':visible')
           $tr.effect("highlight", {}, 1500)
-        ProjectTracks.updateCount()
+        Project.updateTracksCount()
         return false
       error:(jqXHR, textStatus, errorThrown) ->
         if jqXHR.responseJSON
