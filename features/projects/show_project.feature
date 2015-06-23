@@ -12,6 +12,7 @@ Feature: Show a project
     And there are 3 tracks in that project
     When I am on the project page
     Then I should see the project's name
+    And I should see a project track count of "3"
     And I should see a section titled "<title>"
     And I should see a note about contacting "<contact>"
     And I should see the project's tracks
