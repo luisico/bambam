@@ -14,7 +14,7 @@ RSpec.describe ProjectsDatapathsController do
       before { sign_in @manager }
 
       context "project datapath creation" do
-        it { is_expected.to permit(:project_id, :datapath_id, :sub_directory, :name).for(:create, params: {format: :json}) }
+        it { is_expected.to permit(:project_id, :datapath_id, :path, :name).for(:create, params: {format: :json}) }
 
         context "with valid parameters" do
           before { @projects_datapath_attr.merge!(datapath_id: FactoryGirl.create(:datapath).id) }
@@ -283,9 +283,9 @@ RSpec.describe ProjectsDatapathsController do
       it "marks project's datapaths as selected and expanded" do
         datapath2 = FactoryGirl.create(:datapath)
         project = FactoryGirl.create(:project)
-        projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, sub_directory: "")
+        projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath2, path: "")
         projects_datapaths = %w(dir1 dir1/subdir2/subdir3).collect do |sub_dir|
-          FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: project, sub_directory: sub_dir)
+          FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: project, path: sub_dir)
         end
         track = FactoryGirl.create(:track, projects_datapath: projects_datapaths.last)
         project.reload
@@ -318,11 +318,11 @@ RSpec.describe ProjectsDatapathsController do
 
     context "project user" do
       it "only creates nodes where the node, a parent, or a child is selected" do
-        projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, sub_directory: (File.join 'dir1', 'subdir1'))
+        projects_datapath1 = FactoryGirl.create(:projects_datapath, datapath: @datapath1, project: @project, path: (File.join 'dir1', 'subdir1'))
         FileUtils.mkdir(File.join(@datapath1.path, 'not_shown_dir')) unless File.exist?(File.join(@datapath1.path, 'unshown_dir'))
         cp_track File.join @datapath1.path, 'not_shown_track.bam'
-        projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
-        projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, sub_directory: '')
+        projects_datapath2 = FactoryGirl.create(:projects_datapath, project: @project, path: '')
+        projects_datapath3 = FactoryGirl.create(:projects_datapath, project: @project, path: '')
         track = FactoryGirl.create(:track, projects_datapath: projects_datapath2, path: (File.join 'dir1', 'dir2', 'track1.bam'))
 
         allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
@@ -355,7 +355,7 @@ RSpec.describe ProjectsDatapathsController do
         allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
         folder_path = @datapath1.path + "/dir1/"
-        projects_datapath = FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath1, sub_directory: "dir1")
+        projects_datapath = FactoryGirl.create(:projects_datapath, project: @project, datapath: @datapath1, path: "dir1")
         selected_track = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: "track1.bam")
         track_path = folder_path + "track2.bam"
         cp_track track_path

@@ -83,13 +83,13 @@ class @Fancytree
         dir_array.push(parent_list[i].title)
       sub_array = dir_array.slice(1)
       sub_array.push(node.title)
-      sub_dir = sub_array.join('/')
+      path = sub_array.join('/')
       name = sub_array.pop()
     else
       datapath_id = node.key
-      sub_dir = ""
+      path = ""
       name = node.title.split('/').pop()
-    [datapath_id, sub_dir, name]
+    [datapath_id, path, name]
 
   @buildTrack: (event, node, isTransitionTrack) ->
     parent_list = node.getParentList()
@@ -107,12 +107,12 @@ class @Fancytree
     name = track_array[track_array.length-1].replace(/\.[^/.]+$/, "")
     [path, name, projects_datapath_id]
 
-  @addPath: (event, node, datapath_id, sub_dir, name) ->
+  @addPath: (event, node, datapath_id, path, name) ->
     $.ajax({
       type: "POST",
       dataType: "json",
       url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths",
-      data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, sub_directory: sub_dir, name: name } },
+      data: { projects_datapath: { datapath_id: datapath_id, project_id: project_id, path: path, name: name } },
       success:(jqXHR, textStatus, errorThrown) ->
         Fancytree.resetPathHierarchy(event, node, jqXHR.projects_datapath.id)
         node.data['object'] = jqXHR
@@ -132,7 +132,7 @@ class @Fancytree
         return false
     })
 
-  @deletePath: (event, node, datapath_id, sub_dir) ->
+  @deletePath: (event, node, datapath_id, path) ->
     children = Fancytree.deepChildrenList(node, [])
     if Fancytree.selectedParent(event, node) == undefined and Fancytree.selectedChildFolders(event, children).length == 0
       Fancytree.resetTrackCheckboxes(event, Fancytree.childTracks(event, node), true)

@@ -62,9 +62,9 @@ RSpec.describe Project do
       datapath1 = FactoryGirl.create(:datapath)
       datapath2 = FactoryGirl.create(:datapath)
 
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, sub_directory: "mysubdir")
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, sub_directory: "")
-      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath2, sub_directory: "")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, path: "mysubdir")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath1, path: "")
+      FactoryGirl.create(:projects_datapath, project: @project, datapath: datapath2, path: "")
 
       expect(@project.allowed_paths).to eq [
         File.join(datapath1.path, "mysubdir"),

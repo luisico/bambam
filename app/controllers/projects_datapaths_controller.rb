@@ -31,7 +31,7 @@ class ProjectsDatapathsController < ApplicationController
   private
 
   def projects_datapath_params
-    params.require(:projects_datapath).permit(:project_id, :datapath_id, :sub_directory, :name)
+    params.require(:projects_datapath).permit(:project_id, :datapath_id, :path, :name)
   end
 
   def error_messages(projects_datapath, default)
@@ -87,7 +87,7 @@ class ProjectsDatapathsController < ApplicationController
     components.each_with_index do |component, index|
       built_path = File.join built_path, component
       if @project.allowed_paths.include?(built_path)
-        projects_datapath = @project.projects_datapaths.where(datapath: datapath, sub_directory: built_path.sub("#{datapath.path}/", '')).first
+        projects_datapath = @project.projects_datapaths.where(datapath: datapath, path: built_path.sub("#{datapath.path}/", '')).first
         selected_components[index] = projects_datapath
       elsif @project.tracks.collect {|t| t.full_path}.include?(built_path)
         # TODO: database select?

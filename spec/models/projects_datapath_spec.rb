@@ -9,7 +9,7 @@ RSpec.describe ProjectsDatapath do
     it_behaves_like "timestampable table"
     it { is_expected.to have_db_column(:project_id) }
     it { is_expected.to have_db_column(:datapath_id) }
-    it { is_expected.to have_db_column(:sub_directory).with_options(null: false) }
+    it { is_expected.to have_db_column(:path).with_options(null: false) }
     it { is_expected.to have_db_column(:name) }
   end
 
@@ -30,17 +30,17 @@ RSpec.describe ProjectsDatapath do
     it { is_expected.to respond_to :datapath_id }
   end
 
-  describe "sub_directory" do
-    it { is_expected.to respond_to :sub_directory }
-    it { is_expected.to validate_exclusion_of(:sub_directory).in_array([nil]) }
+  describe "path" do
+    it { is_expected.to respond_to :path }
+    it { is_expected.to validate_exclusion_of(:path).in_array([nil]) }
 
     it "should be invalid when nil" do
-      @projects_datapath.sub_directory = nil
+      @projects_datapath.path = nil
       expect(@projects_datapath).not_to be_valid
     end
 
     it "should be valid when an empty string" do
-      @projects_datapath.sub_directory = ''
+      @projects_datapath.path = ''
       expect(@projects_datapath).to be_valid
     end
   end
@@ -59,13 +59,13 @@ RSpec.describe ProjectsDatapath do
     it "should return the full path of the projects datapath" do
       expect(@projects_datapath.full_path).to eq File.join(
         @projects_datapath.datapath.path,
-        @projects_datapath.sub_directory
+        @projects_datapath.path
       )
     end
 
-    it "should return the full path of the projects datapath with empty sub_directory" do
+    it "should return the full path of the projects datapath with empty path" do
       ["", nil].each do |value|
-        @projects_datapath.sub_directory = value
+        @projects_datapath.path = value
         expect(@projects_datapath.full_path).to eq File.join(
           @projects_datapath.datapath.path
         )

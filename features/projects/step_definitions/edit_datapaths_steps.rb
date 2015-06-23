@@ -11,7 +11,7 @@ When /^I select the parent datapath$/ do
     @project.reload
   }.not_to change(@project.projects_datapaths, :count)
   expect(@project.projects_datapaths.last.datapath).to eq @datapath
-  expect(@project.projects_datapaths.where(sub_directory: File.join(@dir, @basename))).to eq []
+  expect(@project.projects_datapaths.where(path: File.join(@dir, @basename))).to eq []
 end
 
 When /^I select the sub\-directory$/ do
@@ -20,7 +20,7 @@ When /^I select the sub\-directory$/ do
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.not_to change(@project.datapaths, :count)
-  expect(@project.projects_datapaths.last.sub_directory).to eq File.join @dir, @basename
+  expect(@project.projects_datapaths.last.path).to eq File.join @dir, @basename
   expect(@project.projects_datapaths).not_to include @datapath
 end
 

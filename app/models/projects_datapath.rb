@@ -4,10 +4,10 @@ class ProjectsDatapath < ActiveRecord::Base
   has_many :tracks
 
   validate :datapath_id_exists
-  validates_exclusion_of :sub_directory, {in: [nil]}
+  validates_exclusion_of :path, {in: [nil]}
 
   def full_path
-    Pathname.new('').join(datapath.path, sub_directory || "").to_s
+    Pathname.new('').join(datapath.path, path || "").to_s
   end
 
   def datapath_id_exists
