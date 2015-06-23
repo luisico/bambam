@@ -48,10 +48,23 @@ Then /^I should not be able to set track (.*?) to blank$/ do |attribute|
   }.not_to change(@track, attribute)
 end
 
-Then /^the igv link name should match the track name$/ do
-  expect(find('a.fi-eye')[:href]).to include @track.name
+Then /^I should be able to change the track (.*?) to "(.*?)"$/ do |attribute, new_value|
+  expect {
+    bip_text(@track, attribute, new_value)
+    expect(page).to have_content new_value
+    loop until page.evaluate_script('jQuery.active').zero?
+    @track.reload
+  }.to change(@track, attribute)
+  expect(@track.send(attribute)).to eq new_value
 end
 
-Then /^the igv link genome should match the track genome$/ do
-  expect(find('a.fi-eye')[:href]).to include @track.genome
+Then /^the IGV link should be updated with name "(.*?)"$/ do |value|
+   igv_url = find('a.fi-eye')[:href]
+   params = {}
+   igv_url.sub(/^\?/, '').split('&').each do |item|
+     tmp = item.split('=')
+     params[tmp[0]] = tmp[1]
+   end
+
+   expect(params['name']).to eq value
 end
