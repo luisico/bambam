@@ -7,7 +7,8 @@ end
 def fill_project_form(project=nil)
   click_link "New Project"
   project ||= @project_attrs
-  fill_in 'Project name', with: project[:name]
+  fill_in 'Name', with: project[:name]
+  fill_in 'Description', with: project[:desc]
 end
 
 def submit_project_form(content)
@@ -39,6 +40,14 @@ Then /^I should not be able to create a new project without a name$/ do
     fill_project_form({name: ""})
     submit_project_form("can't be blank")
   }.not_to change(Project, :count)
+end
+
+Then /^I should be able to create a new project without a description$/ do
+  new_project_attr = {name: "new_project", desc: ""}
+  expect {
+    fill_project_form(new_project_attr)
+    submit_project_form(new_project_attr[:name])
+  }.to change(Project, :count).by(1)
 end
 
 Then /^I should be able to cancel new project$/ do

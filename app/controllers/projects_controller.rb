@@ -45,10 +45,10 @@ class ProjectsController < ApplicationController
   private
 
   def create_params
-    params.require(:project).permit(:name).merge(owner_id: current_user.id)
+    params.require(:project).permit(:name, :desc).merge(owner_id: current_user.id)
   end
 
   def update_params
-    params.require(:project).permit(:name, user_ids: [])
+    params.require(:project).permit(:name, :desc, user_ids: [])
   end
 end

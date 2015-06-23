@@ -19,6 +19,11 @@ Feature: Create a project
     When I am on the projects page
     Then I should not be able to create a new project without a name
 
+  Scenario: Manager can create a project without a description
+    Given I am signed in as a manager
+    When I am on the projects page
+    Then I should be able to create a new project without a description
+
   Scenario: Manager can cancel out of creation of a new project
     Given I am signed in as a manager
     When I am on the projects page
