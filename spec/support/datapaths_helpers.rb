@@ -28,7 +28,7 @@ module Datapaths
 
     def fancytree_node(title)
       # TODO make sure these take advantage of capybara inherent waiting
-      page.find('span.fancytree-title', text: title)
+      page.find('span.fancytree-title', text: title, :match => :prefer_exact)
     end
 
     def fancytree_parent(node_title)
