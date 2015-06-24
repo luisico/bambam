@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150623165500) do
     t.integer  "owner_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "description"
+    t.text     "description"
   end
 
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
