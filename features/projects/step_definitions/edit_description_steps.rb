@@ -8,7 +8,7 @@
 
 Then /^I should( not)? be able to edit the project description$/ do |negate|
   if negate
-    within(page.find('.description-icon')) {
+    within(page.find('.project-description')) {
       expect(page).not_to have_css 'span.best_in_place'
     }
   else
