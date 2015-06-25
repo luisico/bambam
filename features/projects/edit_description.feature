@@ -24,3 +24,4 @@ Feature: Edit project description
     And there are 3 datapaths in that project
     When I am on the project page
     Then I should be able to set project description to blank
+    And I should see the place holder text "Click to add description"

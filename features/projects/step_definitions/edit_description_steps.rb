@@ -31,3 +31,9 @@ Then /^I should be able to set project description to blank$/ do
     @project.reload
   }.to change(@project, :description)
 end
+
+Then /^I should see the place holder text "(.*?)"$/ do |place_holder|
+  within(page.find('.project-description')) {
+    expect(page).to have_text place_holder
+  }
+end

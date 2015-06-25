@@ -3,3 +3,10 @@
     padding: rem-calc(10);
   }
 }
+
+.project-description {
+  span {
+    font-size: rem-calc(14);
+    color: $subdue-color;
+  }
+}

@@ -27,7 +27,7 @@
         <div class="small-12 medium-8 columns">
           <p class="project-description">
             <%= best_in_place_if can?(:manage, @project), @project, :description,
-              {as: :textarea, ok_button: 'save', cancel_button: 'cancel'} %>
+              {as: :textarea, ok_button: 'save', cancel_button: 'cancel', place_holder: 'Click to add description'} %>
           </p>
         </div>
       </div>
