@@ -3,9 +3,13 @@ class ProjectsController < ApplicationController
   load_and_authorize_resource
 
   respond_to :html, only: [:index, :show]
-  respond_to :js, :json, only: [:new, :create, :edit, :update]
+  respond_to :js, :json, only: [:new, :create, :edit, :update, :index]
 
   def index
+    @projects_filter = params[:projects_filter]
+    @projects = Project.accessible_by(current_ability).
+    search(name_or_description_or_owner_email_or_owner_first_name_or_owner_last_name_cont: @projects_filter).
+    result(distinct: true).order('projects.id ASC')
   end
 
   def show

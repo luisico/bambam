@@ -37,6 +37,25 @@ Feature: List of projects
     Then I should be on the project page
 
   @javascript
+  Scenario Outline: Filter list of projects
+    Given I am signed in
+    And I belong to a project named "best_project" with track "ok_track"
+    And I belong to a project named "second_best_project" with track "so_so_track"
+    And I belong to a project named "ok_project" with track "best_track"
+    When I am on the projects page
+    And I filter projects on "<filter>"
+    Then <result>
+
+    When I click on clear "<location>"
+    Then the input field should be clear
+    And I should see 3 projects
+
+    Examples:
+    | filter | result                            | location           |
+    | best   | I should see 2 projects           | next to filter box |
+    | foo    | I should see a no matches message | in results panel   |
+
+  @javascript
   Scenario Outline: Admin and managers can access the new project page
     Given I am signed in as <role>
     When I am on the projects page

@@ -33,6 +33,24 @@ When /^I click on the project name$/ do
   click_link @project.name
 end
 
+When /^I filter projects on "(.*?)"$/ do |projects_filter|
+  fill_in 'Filter projects', with: projects_filter
+  click_button 'Filter'
+  loop until page.evaluate_script('jQuery.active').zero?
+  @projects_filter = projects_filter
+end
+
+When /^I click on clear "(.*?)"$/ do |location|
+  if location == 'in results panel'
+    link = 'Clear filter.'
+  else
+    link = 'Clear'
+  end
+
+  click_link link, exact: true
+  loop until page.evaluate_script('jQuery.active').zero?
+end
+
 ### Then
 
 Then /^I should see a list of all projects$/ do
@@ -70,4 +88,19 @@ Then /^I should see a special message$/ do
   else
     expect(page).to have_content "Please contact your admin to be added to a project"
   end
+end
+
+Then /^I should see (\d+|a) projects?$/ do |n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+
+  project_count = page.all('.project-tile').count
+  expect(project_count).to eq n
+end
+
+Then /^I should see a no matches message$/ do
+  expect(page).to have_content 'No matches.'
+end
+
+Then /^the input field should be clear$/ do
+  expect(find('#projects_filter').value).to eq ''
 end
