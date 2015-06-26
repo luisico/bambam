@@ -35,7 +35,7 @@ Then /^I should not be able to set project name to more than (\d+) characters$/ 
   too_long_string = "s" * (n.to_i + 1)
   expect{
     bip_text(@project, :name, too_long_string)
-    expect(page).to have_css 'small.error', text: "File system error. Changes not saved."
+    expect(page).to have_css 'small.error', text: "File system error."
     loop until page.evaluate_script('jQuery.active').zero?
     @project.reload
   }.not_to change(@project, :name)
