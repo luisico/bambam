@@ -8,12 +8,17 @@ RSpec.describe Project do
   describe "database fields" do
     it { is_expected.to have_db_column(:name).with_options(null: false) }
     it { is_expected.to have_db_index(:name).unique(false) }
+    it { is_expected.to have_db_column(:description) }
     it { is_expected.to have_db_column(:owner_id).with_options(null: false) }
   end
 
   describe "name" do
     it { is_expected.to respond_to :name }
     it { is_expected.to validate_presence_of(:name) }
+  end
+
+  describe "description" do
+    it { is_expected.to respond_to :description }
   end
 
   describe "owner" do
