@@ -10,13 +10,16 @@ end
 
 ### Then
 
-Then /^I should see a list of tracks with IGV link$/ do
+Then /^I should see a list of tracks with IGV link grouped by project$/ do
   expect(Track.count).to be > 0
-  Track.all.each do |track|
-    expect(page).to have_link track.name
-    encoded = ERB::Util.url_encode stream_services_track_url(track)
-    expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
-    expect(page).to have_link track.project.name
+  Track.all.group_by{|track| track.project}.each do |project, track_array|
+    expect(page).to have_link(project.name)
+    expect(page).to have_content("#{track_array.length}")
+    track_array.each do |track|
+      expect(page).to have_link track.name
+      encoded = ERB::Util.url_encode stream_services_track_url(track)
+      expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
+    end
   end
 end
 
