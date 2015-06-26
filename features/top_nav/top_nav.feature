@@ -21,7 +21,7 @@ Feature: Top navigation
 
   Scenario: User can access help page
     Given I am signed in
-    When I click on "help" in the top nav
+    When I click on "Help" in the top nav
     Then I should be on the help page
 
   Scenario: Admin can access the datapaths page
