@@ -10,3 +10,11 @@
     color: $subdue-color;
   }
 }
+
+#create-new-project {
+  form {
+    margin-bottom: rem-calc(20);
+    padding: rem-calc(10);
+    border: 1px solid $secondary-color;
+  }
+}

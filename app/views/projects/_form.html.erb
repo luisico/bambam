@@ -5,19 +5,15 @@
     </div>
   <% end %>
 
-  <div class="row">
-    <div class="small-12 medium-5 columns">
-      <h4>New Project</h4>
-      <div class="field">
-        <%= f.text_field :name, size: 60, placeholder: 'Name' %>
-      </div>
-      <div class="field">
-        <%= f.text_area :description, size: "60x3", placeholder: 'Description' %>
-      </div>
-    </div>
-  </div>
   <div class="actions">
     <%= f.submit class: 'button tiny radius', id: "create-project" %>
     <%= link_to 'Cancel', '#', class: 'button tiny radius', id:'project-cancel' %>
+  </div>
+
+  <div class="field">
+    <%= f.text_field :name, size: 60, placeholder: 'Name' %>
+  </div>
+  <div class="field">
+    <%= f.text_area :description, size: "60x3", placeholder: 'Description' %>
   </div>
 <% end %>
