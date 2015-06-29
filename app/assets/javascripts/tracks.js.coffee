@@ -64,13 +64,13 @@ jQuery ->
     tracks_project.next('.track-list').toggle()
     tracks_project.toggleClass('open')
 
-  $('#tracks-by-projects').on 'click', '.show-all', (event) ->
+  $('.track-form').on 'click', '.show-all', (event) ->
     $('.track-list').each ->
       $(this).show()
     $('.tracks-project').each ->
       $(this).toggleClass('open') unless $(this).hasClass('open')
 
-  $('#tracks-by-projects').on 'click', '.hide-all', (event) ->
+  $('.track-form').on 'click', '.hide-all', (event) ->
     $('.track-list').each ->
       $(this).hide()
     $('.tracks-project').each ->

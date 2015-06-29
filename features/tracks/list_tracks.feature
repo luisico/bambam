@@ -52,3 +52,14 @@ Feature: List of tracks
 
     When I click the play icon next to the project name
     Then I should not see 3 tracks listed on the page
+
+  @javascript
+  Scenario: Filter list of tracks
+    Given I am signed in
+    And I belong to a project named "best_project" with track "best_track"
+    And I belong to a project named "second_best_project" with track "ok_track"
+    And I belong to a project named "ok_project" with track "ok_track"
+    And I belong to a project named "so_so_project" with track "so_so_track"
+    When I am on the tracks page
+    And I filter tracks on "best"
+    Then I should only see 2 tracks on the index page

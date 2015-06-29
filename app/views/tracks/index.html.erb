@@ -3,11 +3,24 @@
     <div class="panel">
       <h3 class="track-icon icon-key">Tracks by project</h3>
       <% if @tracks.any? %>
+        <%= form_tag(tracks_path, method: :get, class: "track-form") do %>
+          <div class="row collapse">
+            <div class="small-12 large-3 columns">
+              <a class="button tiny show-all">Show all</a>
+              <a class="button tiny hide-all">Hide all</a>
+            </div>
+            <div class="small-6 large-4 columns">
+              <%= text_field_tag :track_filter, nil , placeholder: "Filter tracks", value: @track_filter %>
+            </div>
+            <div class="small-3 large-1 columns">
+              <%= submit_tag 'Filter', class: "button postfix" %>
+            </div>
+            <div class="small-3 large-1 columns end">
+              <%= link_to 'Clear', tracks_path, class: "button postfix" %>
+            </div>
+          </div>
+        <% end %>
         <ul class="no-bullet" id="tracks-by-projects">
-          <li>
-            <a class="button tiny show-all">Show all</a>
-            <a class="button tiny hide-all">Hide all</a>
-          </li>
           <% @tracks.group_by{|track| track.project}.each do |project, track_array| %>
             <li class="tracks-project open"><i class="icon-folder"></i>
               <span class="track-icon icon-key"><%= project.tracks.count%></span>

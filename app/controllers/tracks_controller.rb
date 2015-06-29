@@ -7,6 +7,14 @@ class TracksController < ApplicationController
   respond_to :json, only: [:create, :update]
 
   def index
+    @track_filter = params[:track_filter]
+    tracks = Track.accessible_by(current_ability).
+    search(name_or_path_or_genome_or_owner_email_or_owner_first_name_or_owner_last_name_cont: @track_filter).
+    result(distinct: true).order('tracks.id ASC')
+    project_tracks = Project.accessible_by(current_ability).
+    search(name_cont: @track_filter).result(distinct: true).
+    collect {|project| project.tracks }.flatten
+    @tracks = (tracks | project_tracks)
   end
 
   def show

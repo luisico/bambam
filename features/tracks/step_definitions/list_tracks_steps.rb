@@ -12,6 +12,13 @@ When /^I click the play icon next to the project name$/ do
   find('.icon-folder').click
 end
 
+When /^I filter tracks on "(.*?)"$/ do |track_filter|
+  fill_in 'Filter tracks', with: track_filter
+  click_button 'Filter'
+  @track_filter = track_filter
+end
+
+
 ### Then
 
 Then /^I should see a list of tracks with IGV link grouped by project$/ do
@@ -54,4 +61,9 @@ end
 Then /^I should not see (\d+) tracks listed on the page$/ do |n|
   n = (n == 'a' || n == 'an' ? 1 : n.to_i)
   expect(all('.track').length).to eq n
+end
+
+Then /^I should only see (\d+) tracks on the index page$/ do |count|
+  track_count = page.all('.track').count
+  expect(track_count).to eq count.to_i
 end
