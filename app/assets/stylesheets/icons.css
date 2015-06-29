@@ -56,4 +56,5 @@
 
 .icon-folder {
   @extend .fi-play;
+  cursor: pointer;
 }
