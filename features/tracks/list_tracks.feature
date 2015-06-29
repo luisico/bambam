@@ -39,3 +39,16 @@ Feature: List of tracks
     And there are 3 tracks in that project
     When I am on the tracks page
     Then I should be able to activate a tooltip on the IGV buttons
+
+  @javascript
+  Scenario: Show and hide project tracks
+    Given I am signed in
+    And I belong to a project
+    And there are 3 datapaths in that project
+    And there are 3 tracks in that project
+    When I am on the tracks page
+    And I click the play icon next to the project name
+    Then I should not see 0 tracks listed on the page
+
+    When I click the play icon next to the project name
+    Then I should not see 3 tracks listed on the page

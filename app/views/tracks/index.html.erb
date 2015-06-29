@@ -2,14 +2,18 @@
   <div class="small-12 medium-8 medium-centered columns">
     <div class="panel">
       <% if @tracks.any? %>
-        <ul class="no-bullet" id="projects-and-tracks">
+        <ul class="no-bullet" id="tracks-by-projects">
+          <li>
+            <a class="button tiny show-all">Show all</a>
+            <a class="button tiny hide-all">Hide all</a>
+          </li>
           <% @tracks.group_by{|track| track.project}.each do |project, track_array| %>
-            <li class="search-result">
+            <li class="tracks-project open"><i class="icon-folder"></i>
               <%= link_to project.name, project_path(project) %>
-              (owner: <%= project.owner.handle %>)
-              [<%= pluralize(project.tracks.count, 'track') %>]
+              <span class="track-icon"><%= project.tracks.count%></span>
+              <span class="owner-icon"><%= project.owner.handle %></span>
             </li>
-            <ul>
+            <ul class="track-list">
               <%= render track_array %>
             </ul>
           <% end %>

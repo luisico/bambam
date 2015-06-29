@@ -38,3 +38,28 @@ i.large-calendar {
 .track {
   margin-bottom: rem-calc(15) !important;
 }
+
+ul#tracks-by-projects {
+  .icon-plus {
+    color: $subdue-color;
+  }
+  .icon-minus {
+    color: $subdue-color;
+  }
+  li.tracks-project {
+    @extend .medium-margin-bottom;
+    font-size: rem-calc(20);
+    span.owner-icon {
+     color: $subdue-color;
+      font-size: rem-calc(12);
+    }
+  }
+}
+
+.tracks-project.open i:before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

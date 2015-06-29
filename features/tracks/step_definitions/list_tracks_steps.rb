@@ -8,6 +8,10 @@ When /^I am on the tracks page$/ do
   visit tracks_path
 end
 
+When /^I click the play icon next to the project name$/ do
+  find('.icon-folder').click
+end
+
 ### Then
 
 Then /^I should see a list of tracks with IGV link grouped by project$/ do
@@ -45,4 +49,9 @@ end
 
 Then /^I should see instuctions on how to add tracks$/ do
   expect(page).to have_content 'You either have no projects or no tracks'
+end
+
+Then /^I should not see (\d+) tracks listed on the page$/ do |n|
+  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
+  expect(all('.track').length).to eq n
 end
