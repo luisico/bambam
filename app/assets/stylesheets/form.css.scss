@@ -2,3 +2,7 @@
   @extend .pointer;
   color: $subdue-color;
 }
+
+.postfix-edge {
+  border-right: solid $shiny-edge-color 1px !important;
+}

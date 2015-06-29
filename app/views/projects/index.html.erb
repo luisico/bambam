@@ -4,47 +4,42 @@
   <%= render partial: "tour_link", locals: {tour_name: "tour_project_index"} %>
 <% end %>
 
-<% if can? :manage, Project %>
-  <div class="row">
-    <div class="small-12 medium-6 columns">
-      <div id="create-new-project">
-        <%= link_to 'New Project', new_project_path, class: "button tiny radius", id: "new-project", remote: true %>
-      </div>
-    </div>
-  </div>
-<% end %>
+<div class="row">
+  <div class="small-12 medium-10 columns">
+    <div id="create-new-project"></div>
 
-<% if Project.accessible_by(current_ability).any? || current_user.has_role?(:admin) %>
-  <div class="projects-index">
     <div class="row">
-      <div class="small-6 columns">
-        <%= form_tag(projects_path, method: :get, remote: true) do %>
-          <div class="row collapse">
-            <div class="small-8 columns">
-              <%= text_field_tag :projects_filter, nil , placeholder: "Filter projects", value: @projects_filter %>
-            </div>
-            <div class="small-2 columns">
-              <%= submit_tag 'Filter', class: "button postfix" %>
-            </div>
-            <div class="small-2 columns">
-              <%= link_to 'Clear', projects_path, class: "button postfix clear-projects-filter", remote: true %>
-            </div>
-          </div>
+      <div class="small-12 medium-6 columns">
+        <% if can? :manage, Project %>
+          <%= link_to 'New Project', new_project_path, class: "button tiny radius", id: "new-project", remote: true %>
         <% end %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="small-12 medium-10 columns">
-        <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="project-list">
-          <%= render @projects %>
-        </ul>
+      <div class="small-12 medium-6 columns">
+        <% unless @projects.empty? %>
+          <%= form_tag(projects_path, method: :get, remote: true) do %>
+            <div class="row collapse">
+              <div class="small-8 columns">
+                <%= text_field_tag :projects_filter, nil , placeholder: "Filter projects", value: @projects_filter %>
+              </div>
+              <div class="small-2 columns">
+                <%= submit_tag 'Filter', class: "button postfix postfix-edge" %>
+              </div>
+              <div class="small-2 columns">
+                <%= link_to 'Clear', projects_path, class: "button postfix clear-projects-filter", remote: true %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
       </div>
     </div>
-  </div>
-<% else %>
-  <div class="row">
-    <div class="small-12 medmium columns">
+
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="project-list">
+      <%= render @projects %>
+    </ul>
+
+    <% if @projects.empty? %>
       <div class="panel">
         <h3>Projects</h3>
         <% if current_user.invited_by %>
@@ -53,6 +48,6 @@
           <p>Please contact your admin to be added to a project</p>
         <% end %>
       </div>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

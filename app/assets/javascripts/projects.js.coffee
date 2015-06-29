@@ -13,7 +13,7 @@ jQuery ->
     $('#project-users').show()
     $(this).closest('form').remove()
 
-  $('.projects-index').on 'click', '.clear-projects-filter', (event) ->
+  $('.clear-projects-filter').on 'click', (event) ->
     $('#projects_filter').val('')
 
 class @Project

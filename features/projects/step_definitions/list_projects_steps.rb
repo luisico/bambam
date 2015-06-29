@@ -40,14 +40,8 @@ When /^I filter projects on "(.*?)"$/ do |projects_filter|
   @projects_filter = projects_filter
 end
 
-When /^I click on clear "(.*?)"$/ do |location|
-  if location == 'in results panel'
-    link = 'Clear filter.'
-  else
-    link = 'Clear'
-  end
-
-  click_link link, exact: true
+When /^I click on clear$/ do
+  click_link 'Clear', exact: true
   loop until page.evaluate_script('jQuery.active').zero?
 end
 
@@ -98,7 +92,7 @@ Then /^I should see (\d+|a) projects?$/ do |n|
 end
 
 Then /^I should see a no matches message$/ do
-  expect(page).to have_content 'No matches.'
+  expect(page).to have_content 'No projects found.'
 end
 
 Then /^the input field should be clear$/ do

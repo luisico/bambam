@@ -8,8 +8,8 @@ class ProjectsController < ApplicationController
   def index
     @projects_filter = params[:projects_filter]
     @projects = Project.accessible_by(current_ability).
-    search(name_or_description_or_owner_email_or_owner_first_name_or_owner_last_name_cont: @projects_filter).
-    result(distinct: true).order('projects.id ASC')
+      search(name_or_description_or_owner_email_or_owner_first_name_or_owner_last_name_cont: @projects_filter).
+      result(distinct: true).order('projects.id ASC')
   end
 
   def show

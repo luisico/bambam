@@ -46,14 +46,14 @@ Feature: List of projects
     And I filter projects on "<filter>"
     Then <result>
 
-    When I click on clear "<location>"
+    When I click on clear
     Then the input field should be clear
     And I should see 3 projects
 
     Examples:
-    | filter | result                            | location           |
-    | best   | I should see 2 projects           | next to filter box |
-    | foo    | I should see a no matches message | in results panel   |
+    | filter | result                            |
+    | best   | I should see 2 projects           |
+    | foo    | I should see a no matches message |
 
   @javascript
   Scenario Outline: Admin and managers can access the new project page
