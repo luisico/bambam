@@ -13,6 +13,9 @@ jQuery ->
     $('#project-users').show()
     $(this).closest('form').remove()
 
+  $('.clear-projects-filter').on 'click', (event) ->
+    $('#projects_filter').val('')
+
 class @Project
   @updateTracksCount: ->
     count = $('a.service.fi-eye').length

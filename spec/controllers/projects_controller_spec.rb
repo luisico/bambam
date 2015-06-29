@@ -29,9 +29,9 @@ RSpec.describe ProjectsController do
 
     context "as a signed in user and project user" do
       before do
-        user = FactoryGirl.create(:user)
-        sign_in user
-        @user_projects = FactoryGirl.create_list(:project, 3, users: [user])
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+        @user_projects = FactoryGirl.create_list(:project, 3, users: [@user])
       end
 
       it "should be successful" do
@@ -43,6 +43,17 @@ RSpec.describe ProjectsController do
       it "should return only my projects" do
         get :index
         expect(assigns(:projects)).to eq @user_projects
+      end
+
+      it "should correctly filter tracks" do
+        project1 = FactoryGirl.create(:project, name: "best_project", users: [@user])
+        project2 = FactoryGirl.create(:project, description: "bestest", users: [@user])
+        project3 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, email: 'best@example.com'), users: [@user])
+        project4 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, first_name: 'best'), users: [@user])
+        project5 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, last_name: 'best'), users: [@user])
+
+        get :index, projects_filter: 'best'
+        expect(assigns(:projects)).to eq [project1, project2, project3, project4, project5]
       end
     end
 

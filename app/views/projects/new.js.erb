@@ -1,4 +1,5 @@
-$('#new-project').hide().after('<%= j render("form") %>');
+$('#new-project').hide()
+$('#create-new-project').html('<%= j render("form") %>');
 
 if (hopscotch.getState() === "tour-project-index-manager:3") {
   hopscotch.startTour(eval($('div[data-tour]').data('tour')), 3);

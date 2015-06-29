@@ -1,0 +1,5 @@
+<% if @projects.count > 0 %>
+  $('#project-list').html('<%= j render(@projects) %>');
+<% else %>
+  $('#project-list').html('<li>No projects found.</li>');
+<% end %>
