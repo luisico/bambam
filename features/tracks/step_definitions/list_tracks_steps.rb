@@ -15,6 +15,7 @@ end
 When /^I filter tracks on "(.*?)"$/ do |track_filter|
   fill_in 'Filter tracks', with: track_filter
   click_button 'Filter'
+  loop until page.evaluate_script('jQuery.active').zero?
   @track_filter = track_filter
 end
 
@@ -66,4 +67,8 @@ end
 Then /^I should only see (\d+) tracks on the index page$/ do |count|
   track_count = page.all('.track').count
   expect(track_count).to eq count.to_i
+end
+
+Then /^I should see a message that no tracks matched the filter$/ do
+  expect(page).to have_content 'No matches.'
 end

@@ -54,12 +54,17 @@ Feature: List of tracks
     Then I should not see 3 tracks listed on the page
 
   @javascript
-  Scenario: Filter list of tracks
+  Scenario Outline: Filter list of tracks
     Given I am signed in
     And I belong to a project named "best_project" with track "best_track"
     And I belong to a project named "second_best_project" with track "ok_track"
     And I belong to a project named "ok_project" with track "ok_track"
     And I belong to a project named "so_so_project" with track "so_so_track"
     When I am on the tracks page
-    And I filter tracks on "best"
-    Then I should only see 2 tracks on the index page
+    And I filter tracks on "<filter>"
+    Then <result>
+
+    Examples:
+    | filter | result                                                   |
+    | best   | I should only see 2 tracks on the index page             |
+    | foo    | I should see a message that no tracks matched the filter |

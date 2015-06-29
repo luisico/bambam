@@ -3,7 +3,7 @@
     <div class="panel">
       <h3 class="track-icon icon-key">Tracks by project</h3>
       <% if @tracks.any? %>
-        <%= form_tag(tracks_path, method: :get, class: "track-form") do %>
+        <%= form_tag(tracks_path, method: :get, class: "track-form", remote: true) do %>
           <div class="row collapse">
             <div class="small-12 large-3 columns">
               <a class="button tiny show-all">Show all</a>
@@ -16,21 +16,12 @@
               <%= submit_tag 'Filter', class: "button postfix" %>
             </div>
             <div class="small-3 large-1 columns end">
-              <%= link_to 'Clear', tracks_path, class: "button postfix" %>
+              <%= link_to 'Clear', tracks_path, class: "button postfix", remote: true %>
             </div>
           </div>
         <% end %>
         <ul class="no-bullet" id="tracks-by-projects">
-          <% @tracks.group_by{|track| track.project}.each do |project, track_array| %>
-            <li class="tracks-project open"><i class="icon-folder"></i>
-              <span class="track-icon icon-key"><%= project.tracks.count%></span>
-              <%= link_to project.name, project_path(project) %>
-              <span class="owner-icon icon-key"><%= project.owner.handle %></span>
-            </li>
-            <ul class="track-list">
-              <%= render track_array %>
-            </ul>
-          <% end %>
+          <%= render partial: "tracks/tracks_by_projects", locals: {tracks: @tracks} %>
         </ul>
       <% else %>
         <h5>You either have no projects or no tracks.</h5>
