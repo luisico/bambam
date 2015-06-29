@@ -48,10 +48,10 @@ Feature: List of tracks
     And there are 3 tracks in that project
     When I am on the tracks page
     And I click the play icon next to the project name
-    Then I should not see 0 tracks listed on the page
+    Then I should see 0 tracks on the index page
 
     When I click the play icon next to the project name
-    Then I should not see 3 tracks listed on the page
+    Then I should see 3 tracks on the index page
 
   @javascript
   Scenario Outline: Filter list of tracks
@@ -64,7 +64,11 @@ Feature: List of tracks
     And I filter tracks on "<filter>"
     Then <result>
 
+    When I click on clear "<location>"
+    Then the input field should be clear
+    And I should see 4 tracks on the index page
+
     Examples:
-    | filter | result                                                   |
-    | best   | I should only see 2 tracks on the index page             |
-    | foo    | I should see a message that no tracks matched the filter |
+    | filter | result                                   | location           |
+    | best   | I should see 2 tracks on the index page  | next to filter box |
+    | foo    | I should see a no tracks matched message | in results panel   |

@@ -19,6 +19,16 @@ When /^I filter tracks on "(.*?)"$/ do |track_filter|
   @track_filter = track_filter
 end
 
+When /^I click on clear "(.*?)"$/ do |location|
+  if location == 'in results panel'
+    link = 'Clear filter.'
+  else
+    link = 'Clear'
+  end
+
+  click_link link, exact: true
+  loop until page.evaluate_script('jQuery.active').zero?
+end
 
 ### Then
 
@@ -59,16 +69,15 @@ Then /^I should see instuctions on how to add tracks$/ do
   expect(page).to have_content 'You either have no projects or no tracks'
 end
 
-Then /^I should not see (\d+) tracks listed on the page$/ do |n|
-  n = (n == 'a' || n == 'an' ? 1 : n.to_i)
-  expect(all('.track').length).to eq n
-end
-
-Then /^I should only see (\d+) tracks on the index page$/ do |count|
+Then /^I should see (\d+) tracks on the index page$/ do |count|
   track_count = page.all('.track').count
   expect(track_count).to eq count.to_i
 end
 
-Then /^I should see a message that no tracks matched the filter$/ do
+Then /^I should see a no tracks matched message$/ do
   expect(page).to have_content 'No matches.'
+end
+
+Then /^the input field should be clear$/ do
+  expect(find('#track_filter').value).to eq ''
 end

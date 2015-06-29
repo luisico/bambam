@@ -1,6 +1,6 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
-    <div class="panel">
+    <div class="panel tracks-index">
       <h3 class="track-icon icon-key">Tracks by project</h3>
       <% if @tracks.any? %>
         <%= form_tag(tracks_path, method: :get, class: "track-form", remote: true) do %>
@@ -16,7 +16,7 @@
               <%= submit_tag 'Filter', class: "button postfix" %>
             </div>
             <div class="small-3 large-1 columns end">
-              <%= link_to 'Clear', tracks_path, class: "button postfix", remote: true %>
+              <%= link_to 'Clear', tracks_path, class: "button postfix clear-filter", remote: true %>
             </div>
           </div>
         <% end %>
