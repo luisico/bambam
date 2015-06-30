@@ -37,7 +37,8 @@ i.large-calendar {
 
 ul#projects-and-tracks {
   @extend .no-bullet;
-  li.tracks-project {
+  ul.tracks-project {
+    @extend .true-inline-list;
     @extend .medium-margin-bottom;
     font-size: rem-calc(20);
     span {
@@ -53,12 +54,4 @@ ul#projects-and-tracks {
       margin-bottom: rem-calc(15) !important;
     }
   }
-}
-
-.tracks-project.folder-open i:before {
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
 }

@@ -60,18 +60,18 @@ jQuery ->
     event.preventDefault()
 
   $('#projects-and-tracks').on 'click', '.icon-folder', (event) ->
-    $(this).parent('.tracks-project').toggleClass('folder-open').next('.tracks').toggle()
+    $(this).toggleClass('folder-open').parents('.tracks-project').next('.tracks').toggle()
 
   $('.track-form').on 'click', '.show-all', (event) ->
     $('.tracks').each ->
       $(this).show()
-    $('.tracks-project').each ->
+    $('.icon-folder').each ->
       $(this).toggleClass('folder-open') unless $(this).hasClass('folder-open')
 
   $('.track-form').on 'click', '.hide-all', (event) ->
     $('.tracks').each ->
       $(this).hide()
-    $('.tracks-project').each ->
+    $('.icon-folder').each ->
       $(this).removeClass('folder-open')
 
   format_date = (time) ->

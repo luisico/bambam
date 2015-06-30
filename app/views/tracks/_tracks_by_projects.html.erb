@@ -1,9 +1,14 @@
 <% tracks.group_by{|track| track.project}.each do |project, tracks_array| %>
-  <li class="tracks-project folder-open"><i class="icon-folder"></i>
-    <%= link_to project.name, project_path(project) %>
-    <span class="track-icon icon-key"><%= tracks_array.count%></span>
-    <span class="owner-icon icon-key"><%= project.owner.handle %></span>
-  </li>
+  <ul class="tracks-project">
+    <li>
+      <i class="icon-folder folder-open"></i>
+    </li>
+    <li>
+      <%= link_to project.name, project_path(project) %>
+    </li>
+    <li><span class="track-icon icon-key"><%= tracks_array.count%></span></li>
+    <li><span class="owner-icon icon-key"><%= project.owner.handle %></span></li>
+  </ul>
   <ul class="tracks">
     <%= render tracks_array %>
   </ul>
