@@ -1,5 +1,5 @@
 <% if @tracks.count > 0 %>
   $('#projects-and-tracks').html('<%= j render(partial: "tracks/tracks_by_projects", locals: {tracks: @tracks}) %>');
 <% else %>
-  $('#projects-and-tracks').html('<li>No matches. <%= link_to 'Clear filter.', tracks_path, class: "clear-filter", remote: true %></li>');
+  $('#projects-and-tracks').html('<li>No tracks found.</li>');
 <% end %>

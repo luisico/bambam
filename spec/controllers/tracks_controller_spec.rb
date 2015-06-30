@@ -54,7 +54,7 @@ RSpec.describe TracksController do
         track4 = FactoryGirl.create(:track, name: "a track", project: project2)
         result = [track1, track2, track3, track4]
 
-        get :index, track_filter: 'best'
+        get :index, filter: 'best'
         expect(assigns(:tracks)).to eq result
       end
     end

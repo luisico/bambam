@@ -52,7 +52,7 @@ RSpec.describe ProjectsController do
         project4 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, first_name: 'best'), users: [@user])
         project5 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, last_name: 'best'), users: [@user])
 
-        get :index, projects_filter: 'best'
+        get :index, filter: 'best'
         expect(assigns(:projects)).to eq [project1, project2, project3, project4, project5]
       end
     end

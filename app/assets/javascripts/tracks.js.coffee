@@ -74,9 +74,6 @@ jQuery ->
     $('.tracks-project').each ->
       $(this).removeClass('folder-open')
 
-  $('.tracks-index').on 'click', '.clear-filter', (event) ->
-    $('#track_filter').val('')
-
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 

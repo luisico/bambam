@@ -19,17 +19,6 @@ When /^I filter tracks on "(.*?)"$/ do |track_filter|
   @track_filter = track_filter
 end
 
-When /^I click on clear "(.*?)"$/ do |location|
-  if location == 'in results panel'
-    link = 'Clear filter.'
-  else
-    link = 'Clear'
-  end
-
-  click_link link, exact: true
-  loop until page.evaluate_script('jQuery.active').zero?
-end
-
 ### Then
 
 Then /^I should see a list of tracks with IGV link grouped by project$/ do
@@ -75,9 +64,5 @@ Then /^I should see (\d+) tracks on the index page$/ do |count|
 end
 
 Then /^I should see a no tracks matched message$/ do
-  expect(page).to have_content 'No matches.'
-end
-
-Then /^the input field should be clear$/ do
-  expect(find('#track_filter').value).to eq ''
+  expect(page).to have_content 'No tracks found.'
 end

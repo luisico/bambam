@@ -64,11 +64,11 @@ Feature: List of tracks
     And I filter tracks on "<filter>"
     Then <result>
 
-    When I click on clear "<location>"
+    When I click on clear
     Then the input field should be clear
     And I should see 4 tracks on the index page
 
     Examples:
-    | filter | result                                   | location           |
-    | best   | I should see 2 tracks on the index page  | next to filter box |
-    | foo    | I should see a no tracks matched message | in results panel   |
+    | filter | result                                   |
+    | best   | I should see 2 tracks on the index page  |
+    | foo    | I should see a no tracks matched message |
