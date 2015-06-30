@@ -53,7 +53,7 @@ Then /^I should see a section for projects and tracks$/ do
   within("#projects-and-tracks") {
     expect(page).to have_css ".search-result"
     expect(page).to have_css ".cloud-tag"
-    expect(page).to have_css ".true-inline-list"
+    expect(page).to have_css ".tracks"
   }
 end
 

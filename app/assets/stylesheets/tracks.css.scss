@@ -35,17 +35,21 @@ i.large-calendar {
   vertical-align: super;
 }
 
-.track {
-  margin-bottom: rem-calc(15) !important;
-}
-
-ul#tracks-by-projects {
+ul#projects-and-tracks {
+  @extend .no-bullet;
   li.tracks-project {
     @extend .medium-margin-bottom;
     font-size: rem-calc(20);
     span {
-     color: $subdue-color;
+      color: $subdue-color;
       font-size: rem-calc(12);
+    }
+  }
+  .tracks {
+    @extend .no-bullet;
+    ul {
+      @extend .true-inline-list;
+      margin-bottom: rem-calc(15) !important;
     }
   }
 }

@@ -70,7 +70,7 @@ Then /^I should see instuctions on how to add tracks$/ do
 end
 
 Then /^I should see (\d+) tracks on the index page$/ do |count|
-  track_count = page.all('.track').count
+  track_count = page.all('.service.fi-eye').count
   expect(track_count).to eq count.to_i
 end
 

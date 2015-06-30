@@ -1,27 +1,19 @@
-<div class="track row">
-  <div class="small-2 columns">
-    <%= link_to_igv(track) %>
-  </div>
-
-  <div class="small-10 columns">
-    <div>
+<li>
+  <ul>
+    <li><%= link_to_igv(track) %></li>
+    <li>
       <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
-    </div>
-
-    <div>
-      <ul class="true-inline-list">
-        <li class="subdue pointer">
-          <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
-            <%= excerpt(track.path, @q, radius: 5) %>
-          </i>
-        </li>
-        <li class="owner-icon icon-key">
-          <%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %>
-        </li>
-        <li class="subdue fi-clock icon-key" title="updated">
-          <%= local_time_ago(track.updated_at) %>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+    </li>
+    <li class="subdue pointer">
+      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
+        <%= excerpt(track.path, @q, radius: 5) %>
+      </i>
+    </li>
+    <li class="owner-icon icon-key">
+      <%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %>
+    </li>
+    <li class="subdue fi-clock icon-key" title="updated">
+      <%= local_time_ago(track.updated_at) %>
+    </li>
+  </ul>
+</li>

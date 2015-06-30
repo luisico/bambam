@@ -4,7 +4,7 @@
       <% if @projects_and_tracks.any? || @groups_and_users.any? %>
         <% if @projects_and_tracks.any? %>
           <h3>Projects and Tracks</h3>
-          <ul class="no-bullet" id="projects-and-tracks">
+          <ul id="projects-and-tracks">
             <% @projects_and_tracks.each do |project, hash| %>
               <li class="search-result">
                 <%= link_to project.name, project_path(project) %>
@@ -20,7 +20,7 @@
                   </ul>
                 </ul>
               <% end %>
-              <ul>
+              <ul class="tracks">
                 <%= render hash[:tracks] %>
               </ul>
             <% end %>

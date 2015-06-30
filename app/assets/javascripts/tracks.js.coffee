@@ -59,17 +59,17 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
-  $('#tracks-by-projects').on 'click', '.icon-folder', (event) ->
-    $(this).parent('.tracks-project').toggleClass('folder-open').next('.track-list').toggle()
+  $('#projects-and-tracks').on 'click', '.icon-folder', (event) ->
+    $(this).parent('.tracks-project').toggleClass('folder-open').next('.tracks').toggle()
 
   $('.track-form').on 'click', '.show-all', (event) ->
-    $('.track-list').each ->
+    $('.tracks').each ->
       $(this).show()
     $('.tracks-project').each ->
       $(this).toggleClass('folder-open') unless $(this).hasClass('folder-open')
 
   $('.track-form').on 'click', '.hide-all', (event) ->
-    $('.track-list').each ->
+    $('.tracks').each ->
       $(this).hide()
     $('.tracks-project').each ->
       $(this).removeClass('folder-open')
