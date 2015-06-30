@@ -46,7 +46,7 @@ ul#projects-and-tracks {
       font-size: rem-calc(12);
     }
   }
-  .tracks {
+  ul.tracks {
     @extend .no-bullet;
     ul {
       @extend .true-inline-list;
