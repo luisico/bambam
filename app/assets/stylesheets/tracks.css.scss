@@ -40,16 +40,10 @@ i.large-calendar {
 }
 
 ul#tracks-by-projects {
-  .icon-plus {
-    color: $subdue-color;
-  }
-  .icon-minus {
-    color: $subdue-color;
-  }
   li.tracks-project {
     @extend .medium-margin-bottom;
     font-size: rem-calc(20);
-    span.owner-icon {
+    span {
      color: $subdue-color;
       font-size: rem-calc(12);
     }

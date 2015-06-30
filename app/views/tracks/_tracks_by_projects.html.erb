@@ -1,7 +1,7 @@
 <% tracks.group_by{|track| track.project}.each do |project, tracks_array| %>
   <li class="tracks-project folder-open"><i class="icon-folder"></i>
-    <span class="track-icon icon-key"><%= tracks_array.count%></span>
     <%= link_to project.name, project_path(project) %>
+    <span class="track-icon icon-key"><%= tracks_array.count%></span>
     <span class="owner-icon icon-key"><%= project.owner.handle %></span>
   </li>
   <ul class="track-list">
