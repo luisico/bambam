@@ -1,3 +1,4 @@
+<% excerpt_text = @q || track.path[(track.path.length/2).round] %>
 <li>
   <ul>
     <li><%= link_to_igv(track) %></li>
@@ -5,8 +6,8 @@
       <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
     </li>
     <li class="subdue pointer">
-      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, @q, radius: 5) %> data-truncated=true>
-        <%= excerpt(track.path, @q, radius: 5) %>
+      <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, excerpt_text, radius: 5) %> data-truncated=true>
+        <%= excerpt(track.path, excerpt_text, radius: 5) %>
       </i>
     </li>
     <li class="owner-icon icon-key">
