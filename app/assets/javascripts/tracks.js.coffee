@@ -60,21 +60,19 @@ jQuery ->
     event.preventDefault()
 
   $('#tracks-by-projects').on 'click', '.icon-folder', (event) ->
-    tracks_project = $(this).parent('.tracks-project')
-    tracks_project.next('.track-list').toggle()
-    tracks_project.toggleClass('open')
+    $(this).parent('.tracks-project').toggleClass('folder-open').next('.track-list').toggle()
 
   $('.track-form').on 'click', '.show-all', (event) ->
     $('.track-list').each ->
       $(this).show()
     $('.tracks-project').each ->
-      $(this).toggleClass('open') unless $(this).hasClass('open')
+      $(this).toggleClass('folder-open') unless $(this).hasClass('folder-open')
 
   $('.track-form').on 'click', '.hide-all', (event) ->
     $('.track-list').each ->
       $(this).hide()
     $('.tracks-project').each ->
-      $(this).removeClass('open')
+      $(this).removeClass('folder-open')
 
   $('.tracks-index').on 'click', '.clear-filter', (event) ->
     $('#track_filter').val('')
