@@ -1,4 +1,4 @@
-<div class="user-list-item" id="user-<%= user.id %>">
+<li class="user" id="user-<%= user.id %>">
   <% if can? :show, user %>
     <%= link_to user do %>
       <%= image_tag avatar_url(user), class: "avatar" %>
@@ -14,4 +14,4 @@
   <% if @group && (user == @group.owner) %>
     <%= "(owner)" %>
   <% end %>
-</div>
+</li>

@@ -6,9 +6,9 @@
         <%= render partial: 'timestamps', locals: { record: @group } %>
       </div>
 
-      <div id="members">
+      <ul class="no-bullet" id="members">
         <%= render @group.members %>
-      </div>
+      </ul>
     </div>
 
     <% if can? :manage, @group %>

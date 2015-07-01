@@ -60,7 +60,7 @@ end
 Then /^I should see a section for groups and users$/ do
   within("#groups-and-users") {
     expect(page).to have_css ".search-result"
-    expect(page).to have_css ".users-list"
+    expect(page).to have_css ".users"
   }
 end
 

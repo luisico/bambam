@@ -7,6 +7,11 @@
   @extend .large-margin-bottom;
 }
 
+.user {
+  @extend .large-margin-bottom;
+  @extend .clearfix;
+}
+
 #read-only-users {
   color: $subdue-color;
 }

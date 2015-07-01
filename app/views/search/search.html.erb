@@ -30,18 +30,20 @@
         <% end %>
         <% if @groups_and_users.any? %>
           <h3>Groups and Users</h3>
-          <ul class="no-bullet" id="groups-and-users">
-            <% @groups_and_users.each do |group, members_array| %>
-              <li class="search-result">
-                <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
-              </li>
-              <li>
-                <ul class="users-list">
-                  <%= render members_array %>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
+          <div class="group-by">
+            <ul id="groups-and-users" class="by-group">
+              <% @groups_and_users.each do |group, members_array| %>
+                <li class="search-result">
+                  <div class="by-icon by-open">
+                    <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
+                  </div>
+                  <ul class="users by-items">
+                    <%= render members_array %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
       <% else %>
         <p>Your search - <b><%= @q %></b> - did not return any results.</p>
