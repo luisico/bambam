@@ -45,17 +45,26 @@ RSpec.describe TracksController do
         expect(assigns(:tracks)).to eq @tracks
       end
 
-      it "should correctly filter tracks" do
-        project1 = FactoryGirl.create(:project, users: [@user])
-        project2 = FactoryGirl.create(:project, name: "best_project", users: [@user])
-        track1 = FactoryGirl.create(:track, name: "best", owner: @user, project: project1)
-        track2 = FactoryGirl.create(:track, path: "best/tracks/track.bam", owner: @user, project: project1)
-        track3 = FactoryGirl.create(:track, name: "a track", project: project1, owner: FactoryGirl.create(:user, first_name: "best"))
-        track4 = FactoryGirl.create(:track, name: "a track", project: project2)
-        result = [track1, track2, track3, track4]
+      context "filter" do
+        it "should be successful" do
+          xhr :get, :index, filter: 'best', format: :js
+          expect(response).to be_success
+          expect(response.header['Content-Type']).to include 'text/javascript'
+          expect(response).to render_template :index
+        end
 
-        get :index, filter: 'best'
-        expect(assigns(:tracks)).to eq result
+        it "should return the correct tracks" do
+          project1 = FactoryGirl.create(:project, users: [@user])
+          project2 = FactoryGirl.create(:project, name: "best_project", users: [@user])
+          track1 = FactoryGirl.create(:track, name: "best", owner: @user, project: project1)
+          track2 = FactoryGirl.create(:track, path: "best/tracks/track.bam", owner: @user, project: project1)
+          track3 = FactoryGirl.create(:track, name: "a track", project: project1, owner: FactoryGirl.create(:user, first_name: "best"))
+          track4 = FactoryGirl.create(:track, name: "a track", project: project2)
+          result = [track1, track2, track3, track4]
+
+          xhr :get, :index, filter: 'best', format: :js
+          expect(assigns(:tracks)).to eq result
+        end
       end
     end
 
