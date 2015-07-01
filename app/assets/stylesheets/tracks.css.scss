@@ -37,21 +37,33 @@ i.large-calendar {
 
 ul#projects-and-tracks {
   @extend .no-bullet;
-  ul.tracks-project {
-    @extend .true-inline-list;
-    @extend .medium-margin-bottom;
-    font-size: rem-calc(20);
-    span {
-      color: $subdue-color;
-      font-size: rem-calc(12);
+
+  > li {
+    > div {
+      font-size: rem-calc(20);
+      ul {
+        @extend .true-inline-list;
+        @extend .subdue;
+        display: inline-block;
+        font-size: rem-calc(12);
+      }
     }
   }
+
   ul.tracks {
-    @extend .no-bullet;
+    & > li {
+      margin-bottom: rem-calc(20);
+    }
     ul {
       @extend .true-inline-list;
-      font-size: rem-calc(14);
-      margin-bottom: rem-calc(15) !important;
+      line-height: 1rem;
+      &:nth-of-type(2) {
+        color: $subdue-color;
+        font-size: rem-calc(12);
+      }
+      li {
+        color: inherit;
+      }
     }
   }
 }

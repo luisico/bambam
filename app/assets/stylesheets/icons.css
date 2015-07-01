@@ -58,7 +58,7 @@
   @extend .fi-play;
   cursor: pointer;
   color: grey;
-  &:hover{
+  &:hover {
     color: $primary-color;
   }
 }

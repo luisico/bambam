@@ -60,7 +60,7 @@ jQuery ->
     event.preventDefault()
 
   $('#projects-and-tracks').on 'click', '.icon-folder', (event) ->
-    $(this).toggleClass('folder-open').parents('.tracks-project').next('.tracks').toggle()
+    $(this).toggleClass('folder-open').next('.tracks').toggle()
 
   $('.track-form').on 'click', '.show-all', (event) ->
     $('.tracks').each ->

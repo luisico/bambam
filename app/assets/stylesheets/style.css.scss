@@ -36,6 +36,9 @@ $subdue-color: #a8a8a8;
 .true-inline-list {
   @include inline-list;
   margin-bottom: 0;
+  li {
+    color: inherit;
+  }
   > li > * {
     display: inline-block;
   }
