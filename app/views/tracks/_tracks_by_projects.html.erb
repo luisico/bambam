@@ -4,12 +4,12 @@
       <%= link_to project.name, project_path(project) %>
 
       <ul class="by-attrs">
-        <li class="track-icon icon-key"><%= tracks_array.count%></li>
+        <li class="track-icon icon-key"><%= tracks_array.count %></li>
         <li class="owner-icon icon-key"><%= project.owner.handle %></li>
       </ul>
     </div>
 
-    <ul id="tracks" class="by-items">
+    <ul class="tracks by-items">
       <%= render tracks_array %>
     </ul>
   </li>
