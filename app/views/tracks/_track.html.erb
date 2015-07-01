@@ -3,18 +3,18 @@
   <div class="left"><%= link_to_igv(track) %></div>
 
   <div>
-    <ul>
+    <ul class="by-attrs">
       <li>
         <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
       </li>
-      <li class="subdue pointer">
+      <li class="pointer">
         <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, excerpt_text, radius: 5) %> data-truncated=true>
           <%= excerpt(track.path, excerpt_text, radius: 5) %>
         </i>
       </li>
     </ul>
 
-    <ul>
+    <ul class="by-attrs">
       <li class="owner-icon icon-key">
         <%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %>
       </li>

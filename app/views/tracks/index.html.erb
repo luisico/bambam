@@ -3,30 +3,32 @@
     <div class="panel">
       <h3>Tracks by project</h3>
       <% if @tracks.any? %>
-        <%= form_tag(tracks_path, method: :get, class: "track-form", remote: true) do %>
-          <div class="row collapse">
-            <div class="small-12 large-3 columns">
-              <a class="button tiny show-all">Show all</a>
-              <a class="button tiny hide-all">Hide all</a>
+        <div class="group-by">
+          <%= form_tag(tracks_path, method: :get, class: "track-form", remote: true) do %>
+            <div class="row collapse">
+              <div class="small-12 large-3 columns">
+                <a class="button tiny by-show-all">Show all</a>
+                <a class="button tiny by-hide-all">Hide all</a>
+              </div>
+              <div class="small-6 large-4 columns">
+                <%= text_field_tag :filter, nil , placeholder: "Filter tracks", value: @filter %>
+              </div>
+              <div class="small-3 large-1 columns">
+                <%= submit_tag 'Filter', class: "button postfix postfix-edge" %>
+              </div>
+              <div class="small-3 large-1 columns end">
+                <%= link_to 'Clear', tracks_path, class: "button postfix clear-filter", remote: true %>
+              </div>
             </div>
-            <div class="small-6 large-4 columns">
-              <%= text_field_tag :filter, nil , placeholder: "Filter tracks", value: @filter %>
-            </div>
-            <div class="small-3 large-1 columns">
-              <%= submit_tag 'Filter', class: "button postfix postfix-edge" %>
-            </div>
-            <div class="small-3 large-1 columns end">
-              <%= link_to 'Clear', tracks_path, class: "button postfix clear-filter", remote: true %>
-            </div>
-          </div>
-        <% end %>
-        <ul id="projects-and-tracks">
-          <%= render partial: "tracks/tracks_by_projects", locals: {tracks: @tracks} %>
-        </ul>
+          <% end %>
+          <ul id="tracks-by-projects" class="by-group">
+            <%= render partial: "tracks/tracks_by_projects", locals: {tracks: @tracks} %>
+          </ul>
+        </div>
       <% else %>
         <h5>You either have no projects or no tracks.</h5>
         <p>If you belong to a project, you can add tracks to the project edit page.</p>
-        <p>If you don't belong to a project, please contact your administrator</p>
+        <p>If you don't belong to a project, please contact your administrator.</p>
       <% end %>
     </div>
   </div>

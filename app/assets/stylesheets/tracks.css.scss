@@ -34,36 +34,3 @@ i.large-calendar {
   font-size: rem-calc(10);
   vertical-align: super;
 }
-
-ul#projects-and-tracks {
-  @extend .no-bullet;
-
-  > li {
-    > div {
-      font-size: rem-calc(20);
-      ul {
-        @extend .true-inline-list;
-        @extend .subdue;
-        display: inline-block;
-        font-size: rem-calc(12);
-      }
-    }
-  }
-
-  ul.tracks {
-    & > li {
-      margin-bottom: rem-calc(20);
-    }
-    ul {
-      @extend .true-inline-list;
-      line-height: 1rem;
-      &:nth-of-type(2) {
-        color: $subdue-color;
-        font-size: rem-calc(12);
-      }
-      li {
-        color: inherit;
-      }
-    }
-  }
-}

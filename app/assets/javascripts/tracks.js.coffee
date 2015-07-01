@@ -59,21 +59,6 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
-  $('#projects-and-tracks').on 'click', '.icon-folder', (event) ->
-    $(this).toggleClass('folder-open').next('.tracks').toggle()
-
-  $('.track-form').on 'click', '.show-all', (event) ->
-    $('.tracks').each ->
-      $(this).show()
-    $('.icon-folder').each ->
-      $(this).toggleClass('folder-open') unless $(this).hasClass('folder-open')
-
-  $('.track-form').on 'click', '.hide-all', (event) ->
-    $('.tracks').each ->
-      $(this).hide()
-    $('.icon-folder').each ->
-      $(this).removeClass('folder-open')
-
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 
