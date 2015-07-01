@@ -9,7 +9,7 @@ When /^I am on the tracks page$/ do
 end
 
 When /^I click the play icon next to the project name$/ do
-  find('.icon-folder').click
+  find('.by-icon').click
 end
 
 When /^I filter tracks on "(.*?)"$/ do |track_filter|
