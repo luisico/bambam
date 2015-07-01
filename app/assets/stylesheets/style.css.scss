@@ -137,6 +137,7 @@ li.search-result {
 }
 
 .cloud-tag {
+  @extend .inline-list;
   li {
     @include label(
       $bg: $secondary-color,
