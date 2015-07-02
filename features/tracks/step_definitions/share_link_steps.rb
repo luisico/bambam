@@ -9,6 +9,7 @@ def create_shareable_link(opts={})
   click_link "Create new share link"
   within('.new_share_link') {
     yield if block_given?
+    page.execute_script "$('#share_link_expires_at').datepicker('hide')"
     opts[:cancel] ? click_link('Cancel') : click_button('Create Share link')
   }
   expect(page).not_to have_css('.new_share_link') unless opts[:keep]

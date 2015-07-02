@@ -27,10 +27,10 @@
         <li class="has-form">
           <%= form_tag(search_path, method: :get) do %>
             <div class="row collapse">
-              <div class="large-8 small-9 columns">
+              <div class="small-9 medium-8 columns">
                 <%= text_field_tag :q, nil , placeholder: "Search", id: "nav_search_box", value: @q %>
               </div>
-              <div class="large-4 small-3 columns">
+              <div class="small-3 medium-4 columns">
                 <%= submit_tag 'Search', class: "button expand", id: "nav_search_btn" %>
               </div>
             </div>
