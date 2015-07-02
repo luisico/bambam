@@ -1,6 +1,7 @@
 <% tracks.group_by{|track| track.project}.each do |project, tracks_array| %>
   <li>
-    <div class="by-icon by-open">
+    <div class="by-group">
+      <i class="by-icon by-open"></i>
       <%= link_to project.name, project_path(project) %>
 
       <ul class="by-attrs">

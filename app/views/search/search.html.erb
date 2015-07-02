@@ -5,10 +5,11 @@
         <% if @projects_and_tracks.any? %>
           <h3>Projects and Tracks</h3>
           <div class="group-by">
-            <ul id="projects-and-tracks" class="by-group">
+            <ul id="projects-and-tracks" class="by-groups">
               <% @projects_and_tracks.each do |project, hash| %>
                 <li class="search-result">
-                  <div class="by-icon by-open">
+                  <div class="by-group">
+                    <i class="by-icon by-open"></i>
                     <%= link_to project.name, project_path(project) %>
                     (owner: <%= project.owner.handle %>)
                     [<%= pluralize(project.tracks.count, 'track') %>]
@@ -31,10 +32,11 @@
         <% if @groups_and_users.any? %>
           <h3>Groups and Users</h3>
           <div class="group-by">
-            <ul id="groups-and-users" class="by-group">
+            <ul id="groups-and-users" class="by-groups">
               <% @groups_and_users.each do |group, members_array| %>
                 <li class="search-result">
-                  <div class="by-icon by-open">
+                  <div class="by-group">
+                    <i class="by-icon by-open"></i>
                     <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
                   </div>
                   <ul class="users by-items">

@@ -1,6 +1,6 @@
 $('.group-by')
   .on 'click', '.by-icon', (event) ->
-    $(this).toggleClass('by-open').next('.by-items').toggle()
+    $(this).toggleClass('by-open').parent('.by-group').next('.by-items').toggle()
 
   .on 'click', '.by-show-all', (event) ->
     $('.by-items').each ->
