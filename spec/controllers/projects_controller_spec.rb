@@ -45,15 +45,24 @@ RSpec.describe ProjectsController do
         expect(assigns(:projects)).to eq @user_projects
       end
 
-      it "should correctly filter tracks" do
-        project1 = FactoryGirl.create(:project, name: "best_project", users: [@user])
-        project2 = FactoryGirl.create(:project, description: "bestest", users: [@user])
-        project3 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, email: 'best@example.com'), users: [@user])
-        project4 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, first_name: 'best'), users: [@user])
-        project5 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, last_name: 'best'), users: [@user])
+      context "filter" do
+        it "should be successful" do
+          xhr :get, :index, filter: 'best', format: :js
+          expect(response).to be_success
+          expect(response.header['Content-Type']).to include 'text/javascript'
+          expect(response).to render_template :index
+        end
 
-        get :index, projects_filter: 'best'
-        expect(assigns(:projects)).to eq [project1, project2, project3, project4, project5]
+        it "should return the correct projects" do
+          project1 = FactoryGirl.create(:project, name: "best_project", users: [@user])
+          project2 = FactoryGirl.create(:project, description: "bestest", users: [@user])
+          project3 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, email: 'best@example.com'), users: [@user])
+          project4 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, first_name: 'best'), users: [@user])
+          project5 = FactoryGirl.create(:project, owner: FactoryGirl.create(:manager, last_name: 'best'), users: [@user])
+
+          xhr :get, :index, filter: 'best', format: :js
+          expect(assigns(:projects)).to eq [project1, project2, project3, project4, project5]
+        end
       end
     end
 

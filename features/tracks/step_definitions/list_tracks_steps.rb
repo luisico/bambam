@@ -8,15 +8,29 @@ When /^I am on the tracks page$/ do
   visit tracks_path
 end
 
+When /^I click the play icon next to the project name$/ do
+  find('.by-icon').click
+end
+
+When /^I filter tracks on "(.*?)"$/ do |track_filter|
+  fill_in 'Filter tracks', with: track_filter
+  click_button 'Filter'
+  loop until page.evaluate_script('jQuery.active').zero?
+  @track_filter = track_filter
+end
+
 ### Then
 
-Then /^I should see a list of tracks with IGV link$/ do
+Then /^I should see a list of tracks with IGV link grouped by project$/ do
   expect(Track.count).to be > 0
-  Track.all.each do |track|
-    expect(page).to have_link track.name
-    encoded = ERB::Util.url_encode stream_services_track_url(track)
-    expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
-    expect(page).to have_link track.project.name
+  Track.all.group_by{|track| track.project}.each do |project, track_array|
+    expect(page).to have_link(project.name)
+    expect(page).to have_content("#{track_array.length}")
+    track_array.each do |track|
+      expect(page).to have_link track.name
+      encoded = ERB::Util.url_encode stream_services_track_url(track)
+      expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
+    end
   end
 end
 
@@ -42,4 +56,13 @@ end
 
 Then /^I should see instuctions on how to add tracks$/ do
   expect(page).to have_content 'You either have no projects or no tracks'
+end
+
+Then /^I should see (\d+) tracks on the index page$/ do |count|
+  track_count = page.all('.service.fi-eye').count
+  expect(track_count).to eq count.to_i
+end
+
+Then /^I should see a no tracks matched message$/ do
+  expect(page).to have_content 'No tracks found.'
 end

@@ -1,0 +1,48 @@
+.group-by {
+  .by-groups {
+    @extend .no-bullet;
+    > li {
+      font-size: rem-calc(20);
+    }
+    .by-attrs {
+      display: inline-block;
+    }
+  }
+
+  .by-items {
+    > li {
+      margin-bottom: rem-calc(15);
+    }
+    .by-attrs {
+      display: block;
+      line-height: 1rem;
+      &:nth-of-type(1) {
+        color: inherit;
+      }
+    }
+  }
+
+  .by-attrs {
+    @extend .true-inline-list;
+    @extend .subdue;
+    font-size: rem-calc(12);
+  }
+
+  .by-icon {
+    @extend .fi-play;
+    cursor: pointer;
+    color: grey;
+    &:hover {
+      color: $primary-color;
+    }
+    &.by-open {
+      &:before {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

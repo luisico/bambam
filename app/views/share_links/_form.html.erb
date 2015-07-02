@@ -7,12 +7,12 @@
     <% end %>
 
     <div class="row">
-      <div class="large-5 columns">
+      <div class="small-12 medium-5 columns">
         <div class="row collapse">
-          <div class="small-3 large-2 columns">
+          <div class="small-3 medium-2 columns">
             <span class="prefix"><i class="fi-calendar large-calendar"></i></span>
           </div>
-          <div class="small-9 large-10 columns">
+          <div class="small-9 medium-10 columns">
             <%= f.datetime_field :expires_at, placeholder: "Choose expiration date", class: "no-margin-bottom", value: (@share_link.expires_at.blank? ? '' : @share_link.expires_at.strftime('Expires: %d, %b %Y')) %>
           </div>
         </div>
@@ -26,7 +26,7 @@
         </ul>
       </div>
 
-      <div class="large-7 columns">
+      <div class="small-12 medium-7 columns">
         <%= f.text_field :notes, placeholder: "Enter notes here" %>
       </div>
 

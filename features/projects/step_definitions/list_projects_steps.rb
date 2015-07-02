@@ -96,5 +96,5 @@ Then /^I should see a no matches message$/ do
 end
 
 Then /^the input field should be clear$/ do
-  expect(find('#projects_filter').value).to eq ''
+  expect(find('#filter').value).to eq ''
 end

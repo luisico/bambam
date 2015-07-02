@@ -20,13 +20,13 @@
           <%= form_tag(projects_path, method: :get, remote: true) do %>
             <div class="row collapse">
               <div class="small-8 columns">
-                <%= text_field_tag :projects_filter, nil , placeholder: "Filter projects", value: @projects_filter %>
+                <%= text_field_tag :filter, nil , placeholder: "Filter projects", value: @filter %>
               </div>
               <div class="small-2 columns">
                 <%= submit_tag 'Filter', class: "button postfix postfix-edge" %>
               </div>
               <div class="small-2 columns">
-                <%= link_to 'Clear', projects_path, class: "button postfix clear-projects-filter", remote: true %>
+                <%= link_to 'Clear', projects_path, class: "button postfix clear-filter", remote: true %>
               </div>
             </div>
           <% end %>
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="project-list">
+    <ul class="small-block-grid-1 medium-block-grid-3" id="project-list">
       <%= render @projects %>
     </ul>
 

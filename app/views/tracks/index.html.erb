@@ -1,13 +1,34 @@
 <div class="row">
-  <div class="small-12 medium-8 medium-centered columns">
+  <div class="small-12 medium-10 medium-centered columns">
     <div class="panel">
-      <h3>Tracks</h3>
-      <% if @tracks.count > 0 %>
-        <%= render @tracks %>
+      <h3>Tracks by project</h3>
+      <% if @tracks.any? %>
+        <div class="group-by">
+          <%= form_tag(tracks_path, method: :get, class: "track-form", remote: true) do %>
+            <div class="row collapse">
+              <div class="small-12 medium-6 columns">
+                <a class="button tiny by-show-all">Show all</a>
+                <a class="button tiny by-hide-all">Hide all</a>
+              </div>
+              <div class="small-6 medium-4 columns">
+                <%= text_field_tag :filter, nil , placeholder: "Filter tracks", value: @filter %>
+              </div>
+              <div class="small-3 medium-1 columns">
+                <%= submit_tag 'Filter', class: "button postfix postfix-edge" %>
+              </div>
+              <div class="small-3 medium-1 columns end">
+                <%= link_to 'Clear', tracks_path, class: "button postfix clear-filter", remote: true %>
+              </div>
+            </div>
+          <% end %>
+          <ul id="projects-and-tracks" class="by-groups">
+            <%= render partial: "tracks/tracks_by_projects", locals: {tracks: @tracks} %>
+          </ul>
+        </div>
       <% else %>
         <h5>You either have no projects or no tracks.</h5>
         <p>If you belong to a project, you can add tracks to the project edit page.</p>
-        <p>If you don't belong to a project, please contact your administrator</p>
+        <p>If you don't belong to a project, please contact your administrator.</p>
       <% end %>
     </div>
   </div>

@@ -1,16 +1,3 @@
-.allowed-track-paths {
-  @extend label;
-  font-size: .8rem;
-  font-family: Courier;
-  margin-bottom: rem-calc(10px);
-  color: #A8A8A8;
-  li {
-    margin-left: 1rem;
-    line-height: 1;
-    cursor:default;
-  }
-}
-
 .share-track-form {
   display: none;
 }
@@ -46,24 +33,4 @@ i.large-calendar {
   padding: rem-calc(1 6 2);
   font-size: rem-calc(10);
   vertical-align: super;
-}
-
-.track {
-  margin-bottom: rem-calc(15) !important;
-}
-
-a.edit-track {
-  display: none;
-}
-
-a.done-track {
-  display: none;
-}
-
-a.restore-track {
-  display: none;
-}
-
-div.track-form-fields {
-  display: none;
 }

@@ -4,42 +4,48 @@
       <% if @projects_and_tracks.any? || @groups_and_users.any? %>
         <% if @projects_and_tracks.any? %>
           <h3>Projects and Tracks</h3>
-          <ul class="no-bullet" id="projects-and-tracks">
-            <% @projects_and_tracks.each do |project, hash| %>
-              <li class="search-result">
-                <%= link_to project.name, project_path(project) %>
-                (owner: <%= project.owner.handle %>)
-                [<%= pluralize(project.tracks.count, 'track') %>]
-              </li>
-              <% if hash[:users].any? %>
-                <ul>
-                  <ul class="inline-list cloud-tag">
-                  <% hash[:users].each do |user| %>
-                    <li><span><%= user.handle_with_email %></span></li>
+          <div class="group-by">
+            <ul id="projects-and-tracks" class="by-groups">
+              <% @projects_and_tracks.each do |project, hash| %>
+                <li class="search-result">
+                  <div class="by-group">
+                    <i class="by-icon by-open"></i>
+                    <%= link_to project.name, project_path(project) %>
+                    (owner: <%= project.owner.handle %>)
+                    [<%= pluralize(project.tracks.count, 'track') %>]
+                  </div>
+                  <% if hash[:users].any? %>
+                    <ul class="cloud-tag by-items">
+                      <% hash[:users].each do |user| %>
+                        <li><span><%= user.handle_with_email %></span></li>
+                      <% end %>
+                    </ul>
                   <% end %>
+                  <ul class="tracks by-items">
+                    <%= render hash[:tracks] %>
                   </ul>
-                </ul>
+                </li>
               <% end %>
-              <ul>
-                <%= render hash[:tracks] %>
-              </ul>
-            <% end %>
-          </ul>
+            </ul>
+          </div>
         <% end %>
         <% if @groups_and_users.any? %>
           <h3>Groups and Users</h3>
-          <ul class="no-bullet" id="groups-and-users">
-            <% @groups_and_users.each do |group, members_array| %>
-              <li class="search-result">
-                <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
-              </li>
-              <li>
-                <ul class="users-list">
-                  <%= render members_array %>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
+          <div class="group-by">
+            <ul id="groups-and-users" class="by-groups">
+              <% @groups_and_users.each do |group, members_array| %>
+                <li class="search-result">
+                  <div class="by-group">
+                    <i class="by-icon by-open"></i>
+                    <%= link_to group.name, group_path(group) %> (owner: <%= group.owner.handle %>) [<%= pluralize(group.members.count, 'user') %>]
+                  </div>
+                  <ul class="users by-items">
+                    <%= render members_array %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
       <% else %>
         <p>Your search - <b><%= @q %></b> - did not return any results.</p>
