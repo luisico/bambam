@@ -64,6 +64,8 @@ RSpec.feature "Selected parent" do
     %w[dir11 track1111.bam track1112.bam].each do |title|
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
+    expand_node('dir112')
+    expect(fancytree_parent("track1121.bam")).to have_css '.fancytree-checkbox'
 
     expect {
       select_node('dir111')
@@ -76,9 +78,10 @@ RSpec.feature "Selected parent" do
     end
 
     expect(fancytree_parent("dir11")[:class]).not_to include 'fancytree-selected'
-    ['dir111', "track1111.bam", "track1112.bam"].each do |title|
+    %w[dir111 track1111.bam track1112.bam].each do |title|
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
+    expect(fancytree_parent("track1121.bam")).not_to have_css '.fancytree-checkbox'
   end
 
   scenario "manager selects sibling folder of selected track", js: true do
