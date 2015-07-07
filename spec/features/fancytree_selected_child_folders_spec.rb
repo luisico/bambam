@@ -111,4 +111,19 @@ RSpec.feature "Selected child folders" do
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
   end
+
+  scenario "selecting parent of folder with sibling track reveals checkbox on track", js: true do
+    preselect_datapath(@project, @datapaths[0], 'dir111')
+
+    visit project_path(@project)
+    expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
+
+    expect {
+      select_node(@datapaths[0].path)
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.not_to change(@project.projects_datapaths, :count)
+
+    expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
+  end
 end
