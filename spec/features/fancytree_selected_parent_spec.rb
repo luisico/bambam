@@ -84,6 +84,41 @@ RSpec.feature "Selected parent" do
     expect(fancytree_parent("track1121.bam")).not_to have_css '.fancytree-checkbox'
   end
 
+  scenario "selecting sibling of track hides checkbox on track", js: true do
+    preselect_datapath(@project, @datapaths[0])
+
+    visit project_path(@project)
+    expand_node(@datapaths[0].path)
+    expand_node('dir11')
+    expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
+
+    expect {
+      select_node('dir111')
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.not_to change(@project.projects_datapaths, :count)
+
+    expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
+  end
+
+  scenario "selecting child resets checkbox on parent sibling track", js: true do
+    preselect_datapath(@project, @datapaths[0])
+
+    visit project_path(@project)
+    expect(fancytree_parent('datapath1')[:class]).to include 'fancytree-selected'
+    expand_node('datapath1')
+    expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
+
+    expect {
+      expand_node('dir11')
+      select_node('dir111')
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.not_to change(@project.projects_datapaths, :count)
+
+    expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
+  end
+
   scenario "manager selects sibling folder of selected track", js: true do
     dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')
     track111 = preselect_track(dir11, 'track111', 'bam', @manager)
@@ -104,22 +139,5 @@ RSpec.feature "Selected parent" do
       expect(fancytree_parent(title)[:class]).not_to include 'fancytree-selected'
     end
     expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
-  end
-
-  scenario "selecting sibling of tack hides checkbox on track", js: true do
-    preselect_datapath(@project, @datapaths[0])
-
-    visit project_path(@project)
-    expand_node(@datapaths[0].path)
-    expand_node('dir11')
-    expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
-
-    expect {
-      select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
-      @project.reload
-    }.not_to change(@project.projects_datapaths, :count)
-
-    expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
   end
 end
