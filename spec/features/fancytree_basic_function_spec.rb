@@ -13,6 +13,8 @@ RSpec.feature "Selected child folders" do
 
   scenario "manager adds a top level datapath", js: true do
     visit project_path(@project)
+    expand_node(@datapaths[0].path)
+    expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
 
     expect {
       select_node(@datapaths[0].path)
@@ -20,6 +22,7 @@ RSpec.feature "Selected child folders" do
     }.to change(@project.projects_datapaths, :count).by(1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
+    expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
   end
 
   scenario "manager adds a nested datapath", js: true do
