@@ -35,6 +35,52 @@ RSpec.feature "Selected parent" do
     end
   end
 
+  scenario "manager selects child of selected datapath", js: true do
+    preselect_datapath(@project, @datapaths[0], 'dir11')
+    visit project_path(@project)
+    expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
+
+    expect {
+      expand_node('dir11')
+      select_node('dir111')
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.not_to change(@project.projects_datapaths, :count)
+
+    expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
+    expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
+  end
+
+  scenario "manager selects child of selected datapath with tracks", js: true do
+    dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')
+    %w[track1111 track1112].each do |name|
+      preselect_track(dir11, name, 'bam', @manager)
+    end
+
+    @project.tracks.each do |track|
+      expect(track.projects_datapath).to eq dir11
+    end
+
+    visit project_path(@project)
+    %w[dir11 track1111.bam track1112.bam].each do |title|
+      expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
+    end
+
+    expect {
+      select_node('dir111')
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.not_to change(@project.projects_datapaths, :count)
+
+    @project.tracks.each do |track|
+      expect(track.projects_datapath).not_to eq dir11
+    end
+
+    expect(fancytree_parent("dir11")[:class]).not_to include 'fancytree-selected'
+    ['dir111', "track1111.bam", "track1112.bam"].each do |title|
+      expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
+    end
+  end
+
   scenario "manager selects sibling folder of selected track", js: true do
     dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')
     track111 = preselect_track(dir11, 'track111', 'bam', @manager)
