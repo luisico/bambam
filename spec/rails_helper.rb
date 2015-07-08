@@ -95,6 +95,7 @@ RSpec.configure do |config|
   config.include ControllerHelpers, type: :controller
   config.include Tracks::TestHelpers
   config.include Users::TestHelpers, type: :feature
+  config.include Fancytree::TestHelpers, type: :feature
   config.include Datapaths::TestHelpers, type: :feature
   config.include AlertConfirmer, type: :feature
 

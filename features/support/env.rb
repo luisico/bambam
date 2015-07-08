@@ -12,9 +12,9 @@ require 'email_spec/cucumber'
 
 # Rspec helpers
 require_relative '../../spec/support/tracks_helpers.rb'
-require_relative '../../spec/support/datapaths_helpers.rb'
+require_relative '../../spec/support/fancytree_helpers.rb'
 World(Tracks::TestHelpers)
-World(Datapaths::TestHelpers)
+World(Fancytree::TestHelpers)
 
 # Use Chrome for selenium tests
 Capybara.register_driver :selenium do |app|
