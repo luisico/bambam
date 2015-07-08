@@ -96,6 +96,7 @@ RSpec.configure do |config|
   config.include Tracks::TestHelpers
   config.include Users::TestHelpers, type: :feature
   config.include Datapaths::TestHelpers, type: :feature
+  config.include AlertConfirmer, type: :feature
 
   # Remove files created during testing
   config.after(:suite) do
