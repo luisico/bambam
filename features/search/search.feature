@@ -3,6 +3,7 @@ Feature: Search the application
   As a user/admin
   I want to be able to access a page with results of my search query
 
+  @javascript
   Scenario: Show a list of search results
     Given I am signed in
     And I belong to a project named "best_project" with track "best_track"
@@ -12,11 +13,14 @@ Feature: Search the application
     Then I should see my search term in the results page
     And I should see a section for projects and tracks
     And I should see a section for groups and users
+    And I should see 6 text highlights
 
+  @javascript
   Scenario: Show special message when no results are returned
     Given I am signed in
     When I search for "best"
     Then I should see a message that no search results were returned
+    And I should see no text highlights
 
   Scenario Outline: Return to search page after clicking result
     Given I am signed in as an admin
