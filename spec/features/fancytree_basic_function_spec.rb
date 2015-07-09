@@ -25,6 +25,18 @@ RSpec.feature "Basic fancytree functions" do
     expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
   end
 
+  scenario "manager is informed of a failed datapath addition", js: true do
+    allow_any_instance_of(ProjectsDatapath).to receive(:valid?).and_return(false)
+
+    expect {
+      visit project_path(@project)
+      select_node(@datapaths[0].path)
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.not_to change(@project.projects_datapaths, :count)
+    expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'error-red'
+    expect(fancytree_node(@datapaths[0].path).text).to include "Record not created"
+  end
+
   scenario "manager removes a top level datapath", js: true do
     preselect_datapath(@project, @datapaths[0])
     visit project_path(@project)
