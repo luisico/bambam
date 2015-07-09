@@ -63,6 +63,13 @@ Then /^I should see (\d+) tracks on the index page$/ do |count|
   expect(track_count).to eq count.to_i
 end
 
+Then /^I should see (\d+|no) text highlights?$/ do |count|
+  count = (count == "no" ? 0 : count.to_i)
+
+  highlight_count = page.all('span.highlight').count
+  expect(highlight_count).to eq count.to_i
+end
+
 Then /^I should see a no tracks matched message$/ do
   expect(page).to have_content 'No tracks found.'
 end

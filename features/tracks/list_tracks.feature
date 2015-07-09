@@ -62,13 +62,15 @@ Feature: List of tracks
     And I belong to a project named "so_so_project" with track "so_so_track"
     When I am on the tracks page
     And I filter tracks on "<filter>"
-    Then <result>
+    Then I should see <result1>
+    And I should see <result2>
 
     When I click on clear
     Then the input field should be clear
     And I should see 4 tracks on the index page
+    And I should see no text highlights
 
     Examples:
-    | filter | result                                   |
-    | best   | I should see 2 tracks on the index page  |
-    | foo    | I should see a no tracks matched message |
+    | filter | result1                     | result2            |
+    | best   | 2 tracks on the index page  | 3 text highlights  |
+    | foo    | a no tracks matched message | no text highlights |

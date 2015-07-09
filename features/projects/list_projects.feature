@@ -44,16 +44,18 @@ Feature: List of projects
     And I belong to a project named "ok_project" with track "best_track"
     When I am on the projects page
     And I filter projects on "<filter>"
-    Then <result>
+    Then I should see <result1>
+    And I should see <result2>
 
     When I click on clear
     Then the input field should be clear
     And I should see 3 projects
+    And I should see no text highlights
 
     Examples:
-    | filter | result                            |
-    | best   | I should see 2 projects           |
-    | foo    | I should see a no matches message |
+    | filter | result1              | result2            |
+    | best   | 2 projects           | 2 text highlights  |
+    | foo    | a no matches message | no text highlights |
 
   @javascript
   Scenario Outline: Admin and managers can access the new project page
