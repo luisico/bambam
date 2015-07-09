@@ -54,6 +54,19 @@ RSpec.feature "Basic fancytree functions" do
     expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
   end
 
+  scenario "manager is informed of a failed datapath deletion", js: true do
+    preselect_datapath(@project, @datapaths[0])
+    allow_any_instance_of(ProjectsDatapath).to receive(:destroy).and_return(false)
+
+    expect {
+      visit project_path(@project)
+      select_node(@datapaths[0].path)
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.not_to change(@project.projects_datapaths, :count)
+    expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'error-red'
+    expect(fancytree_node(@datapaths[0].path).text).to include "Record not deleted"
+  end
+
   scenario "manager adds a nested datapath", js: true do
     visit project_path(@project)
 
