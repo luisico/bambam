@@ -1,3 +1,4 @@
+# derived from https://gist.github.com/michaelglass/8610317
 module AlertConfirmer
   def reject_confirm_from &block
     handle_js_modal 'confirm', false, &block
