@@ -40,7 +40,7 @@
     </ul>
 
     <% if @projects.empty? %>
-      <div class="panel">
+      <div class="transpanel">
         <h3>Projects</h3>
         <% if current_user.invited_by %>
           <p>Please contact <%= mail_to current_user.invited_by.email %> to be added to a project</p>
