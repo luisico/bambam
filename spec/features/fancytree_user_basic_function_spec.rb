@@ -51,6 +51,38 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
   end
 
+  scenario "is informed of a failed track deletion" do
+    datapath1 = preselect_datapath(@project, @datapaths[0])
+    preselect_track(datapath1, 'track11', 'bam', @user)
+    allow_any_instance_of(Track).to receive(:destroy).and_return(false)
+
+    expect {
+    visit project_path(@project)
+      select_node('track11.bam')
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.not_to change(@project.tracks, :count)
+    expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
+    expect(fancytree_node('track11.bam').text).to include "Record not deleted"
+  end
+
+  scenario "can add and immediately remove a datapath" do
+    preselect_datapath(@project, @datapaths[0])
+    visit project_path(@project)
+
+    expect {
+      expand_node(@datapaths[0].path)
+      select_node('track11.bam')
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.to change(@project.tracks, :count).by(1)
+    expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'
+
+    expect {
+      select_node('track11.bam')
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.to change(@project.tracks, :count).by(-1)
+    expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
+  end
+
   scenario "cannot remove another users track from a top level datapath" do
     datapath1 = preselect_datapath(@project, @datapaths[0])
     preselect_track(datapath1, 'track11', 'bam', @project.owner)
