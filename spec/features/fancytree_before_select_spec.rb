@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Before select" do
+RSpec.feature "Before select manager", js: true do
   before do
     @manager = FactoryGirl.create(:manager)
     @project = FactoryGirl.create(:project, owner: @manager)
@@ -11,7 +11,7 @@ RSpec.feature "Before select" do
     sign_in @manager
   end
 
-  scenario "manager cancels deselection of parent of selected track", js: true do
+  scenario "cancels deselection of parent of selected track" do
     datapath1 = preselect_datapath(@project, @datapaths[0])
     preselect_track(datapath1, 'track11', 'bam', @manager)
     visit project_path(@project)
@@ -30,7 +30,7 @@ RSpec.feature "Before select" do
     expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'
   end
 
-  scenario "manager confirms deselection of parent of selected track", js: true do
+  scenario "confirms deselection of parent of selected track" do
     datapath1 = preselect_datapath(@project, @datapaths[0])
     preselect_track(datapath1, 'track11', 'bam', @manager)
     visit project_path(@project)
@@ -49,7 +49,7 @@ RSpec.feature "Before select" do
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
   end
 
-  scenario "manager cancels selection of sibling folder of selected track", js: true do
+  scenario "cancels selection of sibling folder of selected track" do
     datapath1 = preselect_datapath(@project, @datapaths[0])
     track11 = preselect_track(datapath1, 'track11', 'bam', @manager)
     track111 = preselect_track(datapath1, 'track111', 'bam', @manager)
@@ -74,7 +74,7 @@ RSpec.feature "Before select" do
     expect(fancytree_parent('dir111')[:class]).not_to include 'fancytree-selected'
   end
 
-  scenario "manager confirms selection of sibling folder of selected track", js: true do
+  scenario "confirms selection of sibling folder of selected track" do
     datapath1 = preselect_datapath(@project, @datapaths[0])
     track11 = preselect_track(datapath1, 'track11', 'bam', @manager)
     track111 = preselect_track(datapath1, 'track111', 'bam', @manager)

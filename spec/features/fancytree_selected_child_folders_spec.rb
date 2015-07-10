@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Selected child folders" do
+RSpec.feature "Selected child folders manager", js: true do
   before do
     @manager = FactoryGirl.create(:manager)
     @project = FactoryGirl.create(:project, owner: @manager)
@@ -11,7 +11,7 @@ RSpec.feature "Selected child folders" do
     sign_in @manager
   end
 
-  scenario "manager selects parent of selected datapath", js: true do
+  scenario "selects parent of selected datapath" do
     preselect_datapath(@project, @datapaths[0], 'dir111')
     visit project_path(@project)
     expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
@@ -25,7 +25,7 @@ RSpec.feature "Selected child folders" do
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
   end
 
-  scenario "manager selects parent of selected datapath with tracks", js: true do
+  scenario "selects parent of selected datapath with tracks" do
     dir111 = preselect_datapath(@project, @datapaths[0], 'dir111')
     %w[track1111 track1112].each do |name|
       preselect_track(dir111, name, 'bam', @manager)
@@ -56,7 +56,7 @@ RSpec.feature "Selected child folders" do
     end
   end
 
-  scenario "manager selects parent of two selected datapaths", js: true do
+  scenario "selects parent of two selected datapaths" do
     preselect_datapath(@project, @datapaths[0], 'dir111')
     preselect_datapath(@project, @datapaths[0], 'dir121')
 
@@ -77,7 +77,7 @@ RSpec.feature "Selected child folders" do
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
   end
 
-  scenario "manager selects parent of two selected datapaths with tracks", js: true do
+  scenario "selects parent of two selected datapaths with tracks" do
     dir111 = preselect_datapath(@project, @datapaths[0], 'dir111')
     %w[track1111 track1112].each do |name|
       preselect_track(dir111, name, 'bam', @manager)
@@ -112,7 +112,7 @@ RSpec.feature "Selected child folders" do
     end
   end
 
-  scenario "selecting parent of folder with sibling track reveals checkbox on track", js: true do
+  scenario "selects parent of folder with sibling track reveals checkbox on track" do
     preselect_datapath(@project, @datapaths[0], 'dir111')
 
     visit project_path(@project)

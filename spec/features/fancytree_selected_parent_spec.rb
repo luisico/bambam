@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Selected parent" do
+RSpec.feature "Selected parent manager", js: true do
   before do
     @manager = FactoryGirl.create(:manager)
     @project = FactoryGirl.create(:project, owner: @manager)
@@ -11,7 +11,7 @@ RSpec.feature "Selected parent" do
     sign_in @manager
   end
 
-  scenario "manager creates orphan tracks", js: true do
+  scenario "creates orphan tracks" do
     projects_datapath = preselect_datapath(@project, @datapaths[0])
     %w[track1111 track1112 track1211 track1212].each do |name|
       preselect_track(projects_datapath, name, 'bam', @manager)
@@ -35,7 +35,7 @@ RSpec.feature "Selected parent" do
     end
   end
 
-  scenario "manager selects child of selected datapath", js: true do
+  scenario "selects child of selected datapath" do
     preselect_datapath(@project, @datapaths[0], 'dir11')
     visit project_path(@project)
     expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
@@ -50,7 +50,7 @@ RSpec.feature "Selected parent" do
     expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
   end
 
-  scenario "manager selects child of selected datapath with tracks", js: true do
+  scenario "selects child of selected datapath with tracks" do
     dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')
     %w[track1111 track1112].each do |name|
       preselect_track(dir11, name, 'bam', @manager)
@@ -84,7 +84,7 @@ RSpec.feature "Selected parent" do
     expect(fancytree_parent("track1121.bam")).not_to have_css '.fancytree-checkbox'
   end
 
-  scenario "selecting sibling of track hides checkbox on track", js: true do
+  scenario "selects sibling of track hides checkbox on track" do
     preselect_datapath(@project, @datapaths[0])
 
     visit project_path(@project)
@@ -101,7 +101,7 @@ RSpec.feature "Selected parent" do
     expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
   end
 
-  scenario "selecting child resets checkbox on parent sibling track", js: true do
+  scenario "selects child resets checkbox on parent sibling track" do
     preselect_datapath(@project, @datapaths[0])
 
     visit project_path(@project)
