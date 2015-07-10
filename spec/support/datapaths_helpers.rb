@@ -13,12 +13,10 @@ module Datapaths
     end
 
     def preselect_datapath(project, datapath, subdir=nil)
-      formats = %w(*.bw *.bam /)
-      globs = formats.map{ |f| File.join(datapath.path, "**", f) }
-      file_system = Dir.glob(globs)
-
       if subdir
-        file_path = file_system.select {|path| Pathname.new(path).basename.to_s == subdir}.join
+        formats = %w(*.bw *.bam /)
+        globs = formats.map{ |f| File.join(datapath.path, "**", f) }
+        file_path = Dir.glob(globs).select {|path| Pathname.new(path).basename.to_s == subdir}.join
         path = file_path.gsub(datapath.path + '/', "")[0...-1]
         FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: path)
       else
