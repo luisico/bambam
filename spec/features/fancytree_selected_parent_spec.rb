@@ -84,6 +84,21 @@ RSpec.feature "Selected parent manager", js: true do
     expect(fancytree_parent("track1121.bam")).not_to have_css '.fancytree-checkbox'
   end
 
+  scenario "informed of failed track update" do
+    datapath = preselect_datapath(@project, @datapaths[0])
+    preselect_track(datapath, "track111", 'bam', @manager)
+    visit project_path(@project)
+
+    expect {
+      allow_any_instance_of(Track).to receive(:update).and_return(false)
+      select_node('dir11')
+      loop until page.evaluate_script('jQuery.active').zero?
+      @project.reload
+    }.not_to change(@project.projects_datapaths, :count)
+    expect(fancytree_parent('track111.bam')[:class]).to include 'error-red'
+    expect(fancytree_node('track111.bam').text).to include "Record not updated"
+  end
+
   scenario "selects sibling of track hides checkbox on track" do
     preselect_datapath(@project, @datapaths[0])
 
