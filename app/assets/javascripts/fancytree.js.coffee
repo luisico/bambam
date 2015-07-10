@@ -247,10 +247,10 @@ class @Fancytree
     Fancytree.selectedFolderFilter(Fancytree.deepChildrenList(node))
 
   @siblingTracks: (node) ->
-    Fancytree.trackFilter(node.getParent())
+    Fancytree.trackFilter(node.getParent().children)
 
   @siblingFolders: (node) ->
-    Fancytree.folderFilter(node.getParent())
+    Fancytree.folderFilter(node.getParent().children)
 
   @selectedParent: (node) ->
     Fancytree.selectedFolderFilter(node.getParentList())[0]
