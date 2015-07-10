@@ -77,6 +77,12 @@ RSpec.configure do |config|
   config.after type: :request do
     DatabaseCleaner.strategy = :transaction
   end
+  config.before type: :feature do
+    DatabaseCleaner.strategy = :truncation
+  end
+  config.after type: :feature do
+    DatabaseCleaner.strategy = :transaction
+  end
   config.before(:each) do
     DatabaseCleaner.start
     ActionMailer::Base.deliveries.clear
