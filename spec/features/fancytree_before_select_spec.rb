@@ -55,6 +55,7 @@ RSpec.feature "Before select" do
     track111 = preselect_track(datapath1, 'track111', 'bam', @manager)
 
     visit project_path(@project)
+    loop until page.evaluate_script('jQuery.active').zero?
     [datapath1.path, 'track11', 'track111.bam'].each do |title|
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
@@ -79,6 +80,7 @@ RSpec.feature "Before select" do
     track111 = preselect_track(datapath1, 'track111', 'bam', @manager)
 
     visit project_path(@project)
+    loop until page.evaluate_script('jQuery.active').zero?
     [datapath1.path, 'track11', 'track111.bam'].each do |title|
       expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
     end
