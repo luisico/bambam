@@ -67,7 +67,7 @@ RSpec.feature "User basic fancytree functions", js: true do
       loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
-    expect(fancytree_node('track11.bam').text).to include "Internal Server Error"
+    expect(fancytree_node('track11.bam').text).to include "You don't have permission to create"
   end
 
   scenario "removes a track from a datapath" do

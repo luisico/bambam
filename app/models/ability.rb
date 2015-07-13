@@ -36,16 +36,16 @@ class Ability
       can :read, Track, projects_datapath: {project: {projects_users: {user_id: user.id}}}
 
       can [:update, :destroy], Track do |track|
-        projects_users = track.project.projects_users.where(user: user).first
+        projects_users = track.try(:project).try(:projects_users).try(:where, user: user).try(:first)
         track.owner == user && !(projects_users.present? && projects_users.read_only)
       end
 
       can :create, Track do |track|
-        track.project.users.include?(user)
+        track.try(:project).try(:users).try(:include?, user)
       end
 
       can :manage, ShareLink do |share_link|
-        share_link.track.project.users.include?(user)
+        share_link.track.try(:project).try(:users).try(:include?, user)
       end
 
       can :browser, ProjectsDatapath, project: {projects_users: {user_id: user.id}}
