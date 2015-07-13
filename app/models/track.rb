@@ -1,8 +1,8 @@
 class Track < ActiveRecord::Base
   belongs_to :projects_datapath
   # TODO revisit delegated project= on track when adding tracks to fancytree
-  delegate :project, :project=, :project_id, :project_id=, to: :projects_datapath
-  delegate :datapath, :datapath=, :datapath_id, :datapath_id=, to: :projects_datapath
+  delegate :project, :project=, :project_id, :project_id=, to: :projects_datapath, allow_nil: true
+  delegate :datapath, :datapath=, :datapath_id, :datapath_id=, to: :projects_datapath, allow_nil: true
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links

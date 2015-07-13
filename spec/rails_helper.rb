@@ -8,6 +8,15 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'email_spec'
 
+# Use Chrome for selenium tests
+Capybara.register_driver :selenium do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+# Use Poltergeist for javascript tests
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+
 # Define file path for path related specs
 TEST_BASE = File.join Rails.root, 'tmp', 'tests'
 
@@ -68,6 +77,12 @@ RSpec.configure do |config|
   config.after type: :request do
     DatabaseCleaner.strategy = :transaction
   end
+  config.before type: :feature do
+    DatabaseCleaner.strategy = :truncation
+  end
+  config.after type: :feature do
+    DatabaseCleaner.strategy = :transaction
+  end
   config.before(:each) do
     DatabaseCleaner.start
     ActionMailer::Base.deliveries.clear
@@ -85,6 +100,10 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include ControllerHelpers, type: :controller
   config.include Tracks::TestHelpers
+  config.include Users::TestHelpers, type: :feature
+  config.include Fancytree::TestHelpers, type: :feature
+  config.include Datapaths::TestHelpers, type: :feature
+  config.include AlertConfirmer, type: :feature
 
   # Remove files created during testing
   config.after(:suite) do
