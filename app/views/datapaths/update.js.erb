@@ -1,6 +1,6 @@
 <% if @datapath.errors.any? %>
   $('form#edit_datapath_<%= @datapath.id %>').remove();
-  $('#datapath-<%= @datapath.id %> .panel').append('<%= j render("form") %>');
+  $('#datapath-<%= @datapath.id %> .transpanel').append('<%= j render("form") %>');
   DatapathUsers.applySelect2();
 <% else %>
   $('form#edit_datapath_<%= @datapath.id %>').remove();

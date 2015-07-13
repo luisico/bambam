@@ -1,2 +1,2 @@
 jQuery ->
-  $(".search-result").highlight($('.panel').data('query'))
+  $(".search-result").highlight($('[data-query]').data('query'))

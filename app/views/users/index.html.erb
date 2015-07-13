@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="medium-6 columns">
-    <div class="panel">
+    <div class="transpanel">
       <h3 id="invite-user">Invite a new user</h3>
       <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
         <div>
@@ -27,7 +27,7 @@
       <% end %>
     </div>
 
-    <div class="panel">
+    <div class="transpanel">
       <h3 id="current-users">Current users</h3>
       <ul class="keys-inline-list">
         <li class="invite-icon icon-key">Invite outstanding</li>
@@ -56,7 +56,7 @@
   </div>
 
   <div class="medium-6 columns">
-    <div class="panel">
+    <div class="transpanel">
       <h3 id="groups-headline">Groups</h3>
       <ul class="no-bullet" id="group-list">
         <%= render partial: "groups/group", collection: @groups %>

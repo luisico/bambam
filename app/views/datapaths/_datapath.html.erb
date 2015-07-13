@@ -1,5 +1,5 @@
 <li id="datapath-<%= datapath.id %>" class="datapath">
-  <div class="panel">
+  <div class="transpanel">
     <div class="right">
       <%= link_to "", edit_datapath_path(datapath), id: "edit-datapath-#{datapath.id}", remote: true, class: "edit-icon edit-datapath-link margin-left" %>
       <%= link_to "", datapath, method: :delete, data: {confirm: "WARNING!!!\nThis action cannot be undone. Deleting this datapath will also permenately delete all associated tracks. Are you sure you want to continue?"}, remote: true, class: "trash-icon margin-left", id: "delete-datapath-#{datapath.id}" %>
