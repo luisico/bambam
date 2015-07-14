@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe FilebrowserService do
+RSpec.describe FilebrowserService do
   before { @path = File.join(TEST_BASE, 'mypath') }
   subject { FilebrowserService.new(@path) }
 
@@ -18,7 +18,9 @@ describe FilebrowserService do
   end
 
   describe "#path" do
-    its(:path) { should eq @path }
+    it "should be equal to @path" do
+      expect(subject.path).to eq @path
+    end
   end
 
   describe "#entries" do
