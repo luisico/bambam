@@ -61,12 +61,12 @@ class ProjectsDatapathsController < ApplicationController
       # Selected projects_datapaths
       @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
         pd_node = add_path(node, projects_datapath.path)
-        pd_node[:object] = {type: 'projects_datapath', id: projects_datapath.id}
+        pd_node[:object] = {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}
 
         # Selected tracks
         projects_datapath.tracks.each do |track|
           track_node = add_path(pd_node, track.path, true)
-          track_node[:object] = {type: 'track', id: track.id}
+          track_node[:object] = {type: 'track', id: track.id, name: track.name, genome: track.genome, igv: view_context.link_to_igv(track)}
         end
       end
     end

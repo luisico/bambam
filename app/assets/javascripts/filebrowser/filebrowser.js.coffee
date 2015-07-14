@@ -16,6 +16,15 @@ class @Filebrowser
         data:
           project: @project_id
       checkbox: true
+      extensions: ["table"]
+      clickFolderMode: 2
+      table:
+        checkboxColumnIdx: 0 # render the checkboxes into the this column index (default: nodeColumnIdx)
+        nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
+
+      renderColumns: (event, data) ->
+        node = data.node
+        Filebrowser.node(node).renderColumns(node)
 
       lazyLoad: (event, data) ->
         node = new FilebrowserNode(data.node)

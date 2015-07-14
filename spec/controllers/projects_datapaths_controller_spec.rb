@@ -405,7 +405,7 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id}}
+          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}}
         ]}
       ]
     end
@@ -419,14 +419,15 @@ RSpec.describe ProjectsDatapathsController do
 
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
+      allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir2', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id}, expanded: true, children: [
+            {title: 'dir2', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
               {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true, object: {type: 'track', id: track1.id}},
-                {title: 'track2.bam', selected: true, object: {type: 'track', id: track2.id}}
+                {title: 'track1.bam', selected: true, object: {type: 'track', id: track1.id, name: track1.name, genome: track1.genome, igv: 'igv_url'}},
+                {title: 'track2.bam', selected: true, object: {type: 'track', id: track2.id, name: track2.name, genome: track2.genome, igv: 'igv_url'}}
               ]}
             ]}
           ]}
