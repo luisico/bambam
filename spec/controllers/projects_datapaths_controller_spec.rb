@@ -394,7 +394,7 @@ RSpec.describe ProjectsDatapathsController do
     it "should add selected projects_datapaths" do
       datapath = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'subdir')
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: 'subdir')
 
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
@@ -409,7 +409,7 @@ RSpec.describe ProjectsDatapathsController do
     it "should add selected tracks" do
       datapath = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, sub_directory: 'dir1/dir2')
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: 'dir1/dir2')
       track1 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track1.bam')
       track2 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track2.bam')
 
