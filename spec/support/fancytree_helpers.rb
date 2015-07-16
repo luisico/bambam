@@ -10,8 +10,24 @@ module Fancytree
     end
 
     def select_node(title)
-      @title = title
+      if fancytree_parent(title)[:class].include? 'fancytree-selected'
+        raise "Error. You have attempt to select a node that is already selected"
+      else
+        toggle_selected(title)
+      end
+    end
+
+    def deselect_node(title)
+      if fancytree_parent(title)[:class].include? 'fancytree-selected'
+        toggle_selected(title)
+      else
+        raise "Error. You have attempt to deselect a node that is not selected"
+      end
+    end
+
+    def toggle_selected(title)
       fancytree_parent(title).find('span.fancytree-checkbox').click
+      loop until page.evaluate_script('jQuery.active').zero?
     end
 
     def expand_node(title)

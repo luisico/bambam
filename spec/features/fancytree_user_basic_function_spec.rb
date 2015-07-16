@@ -30,7 +30,6 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect {
       expand_node(@datapaths[0].path)
       select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.tracks, :count).by(1)
 
     new_track = Track.last
@@ -50,7 +49,6 @@ RSpec.feature "User basic fancytree functions", js: true do
       allow_any_instance_of(Track).to receive_message_chain(:errors, :full_messages).and_return(["my", "error"])
       expand_node(@datapaths[0].path)
       select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
     expect(fancytree_node('track11.bam').text).to include "my; error"
@@ -64,7 +62,6 @@ RSpec.feature "User basic fancytree functions", js: true do
       datapath1.destroy
       expand_node(@datapaths[0].path)
       select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
     expect(fancytree_node('track11.bam').text).to include "You don't have permission to create"
@@ -81,8 +78,7 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect(fancytree_parent('track11')).to have_css ".service.fi-eye"
 
     expect {
-      select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('track11.bam')
     }.to change(@project.tracks, :count).by(-1)
 
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
@@ -98,8 +94,7 @@ RSpec.feature "User basic fancytree functions", js: true do
 
     expect {
     visit project_path(@project)
-      select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('track11.bam')
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
     expect(fancytree_node('track11.bam').text).to include "Record not deleted"
@@ -112,13 +107,11 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect {
       expand_node(@datapaths[0].path)
       select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.tracks, :count).by(1)
     expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'
 
     expect {
-      select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('track11.bam')
     }.to change(@project.tracks, :count).by(-1)
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
   end

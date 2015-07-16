@@ -24,7 +24,6 @@ RSpec.feature "Selected parent manager", js: true do
 
     expect {
       select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.to change(@project.projects_datapaths, :count).by(1)
     expect(@project.tracks.count).to eq 4
@@ -43,7 +42,6 @@ RSpec.feature "Selected parent manager", js: true do
     expect {
       expand_node('dir11')
       select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
 
     expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
@@ -69,7 +67,6 @@ RSpec.feature "Selected parent manager", js: true do
 
     expect {
       select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 
@@ -92,7 +89,6 @@ RSpec.feature "Selected parent manager", js: true do
     expect {
       allow_any_instance_of(Track).to receive(:update).and_return(false)
       select_node('dir11')
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
     expect(fancytree_parent('track111.bam')[:class]).to include 'error-red'
@@ -109,7 +105,6 @@ RSpec.feature "Selected parent manager", js: true do
 
     expect {
       select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 
@@ -127,7 +122,6 @@ RSpec.feature "Selected parent manager", js: true do
     expect {
       expand_node('dir11')
       select_node('dir111')
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 

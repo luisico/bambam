@@ -18,7 +18,6 @@ RSpec.feature "Selected child folders manager", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
 
     expect(fancytree_parent('dir111')[:class]).not_to include 'fancytree-selected'
@@ -42,7 +41,6 @@ RSpec.feature "Selected child folders manager", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 
@@ -67,7 +65,6 @@ RSpec.feature "Selected child folders manager", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.to change(@project.projects_datapaths, :count).by(-1)
 
@@ -95,7 +92,6 @@ RSpec.feature "Selected child folders manager", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.to change(@project.projects_datapaths, :count).by(-1)
 
@@ -120,7 +116,6 @@ RSpec.feature "Selected child folders manager", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 
