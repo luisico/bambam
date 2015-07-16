@@ -390,22 +390,24 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller).to receive(:allowed_datapaths).and_return(datapaths)
 
       expect(controller.send :top_level_tree).to eq [
-        {title: datapaths[0].path, folder: true, lazy: true},
-        {title: datapaths[1].path, folder: true, lazy: true}
+        {title: datapaths[0].path, object: {datapath_id: datapaths[0].id}, folder: true, lazy: true},
+        {title: datapaths[1].path, object: {datapath_id: datapaths[1].id}, folder: true, lazy: true}
       ]
     end
 
     it "should add selected projects_datapaths" do
-      datapath = FactoryGirl.create(:datapath)
+      datapaths = FactoryGirl.create_list(:datapath, 2)
       project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: 'subdir')
+      projects_datapath1 = FactoryGirl.create(:projects_datapath, project: project, datapath: datapaths[0], path: '')
+      projects_datapath2 = FactoryGirl.create(:projects_datapath, project: project, datapath: datapaths[1], path: 'subdir')
 
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
 
       expect(controller.send :top_level_tree).to eq [
-        {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}}
+        {title: datapaths[0].path, folder: true, lazy: true, selected: true, object: {datapath_id: datapaths[0].id, type: 'projects_datapath', id: projects_datapath1.id, name: projects_datapath1.name}, expanded: true },
+        {title: datapaths[1].path, folder: true, lazy: true, object: {datapath_id: datapaths[1].id}, expanded: true, children: [
+          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath2.id, name: projects_datapath2.name}}
         ]}
       ]
     end
@@ -422,7 +424,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
 
       expect(controller.send :top_level_tree).to eq [
-        {title: datapath.path, folder: true, lazy: true, expanded: true, children: [
+        {title: datapath.path, object: {datapath_id: datapath.id}, folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
             {title: 'dir2', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
               {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
@@ -554,6 +556,14 @@ RSpec.describe ProjectsDatapathsController do
           result
         ]}
       ])
+    end
+
+    it "raises ArgumentError when path is an empty string" do
+      node = {}
+
+      expect {
+        controller.send :add_path, node, ''
+      }.to raise_error(ArgumentError)
     end
   end
 

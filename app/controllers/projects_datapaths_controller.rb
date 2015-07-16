@@ -56,12 +56,14 @@ class ProjectsDatapathsController < ApplicationController
     allowed_datapaths.each do |datapath|
       # Main project datapaths
       node = {title: datapath.path, folder: true, lazy: true}
+      node[:object] = {datapath_id: datapath.id}
       tree << node
 
       # Selected projects_datapaths
       @project.projects_datapaths.where(datapath: datapath).each do |projects_datapath|
-        pd_node = add_path(node, projects_datapath.path)
-        pd_node[:object] = {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}
+        node_attr = {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}
+        pd_node = projects_datapath.path.blank? ? node.merge!({selected: true, expanded: true}) : add_path(node, projects_datapath.path)
+        pd_node[:object] ? pd_node[:object].merge!(node_attr) : pd_node[:object] = node_attr
 
         # Selected tracks
         projects_datapath.tracks.each do |track|
@@ -98,21 +100,27 @@ class ProjectsDatapathsController < ApplicationController
   end
 
   def add_path(parent, path, is_track=false)
+    raise ArgumentError if path.blank?
+
     head, tail = path.split(File::SEPARATOR, 2)
 
+    # Create new node
     node = {title: head}
     node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
     node.merge!(selected: true) unless tail
 
+    # Add node to parent if not already present
     parent[:expanded] = true
     parent[:children] ||= []
-    if new_parent = parent[:children].select{|child| child[:title] == head}.first
+    if new_parent = parent[:children].select{|child| child[:title] == node[:title]}.first
       node = new_parent
     else
       parent[:children] << node
     end
 
+    # Add rest of path recursively
     node = add_path(node, tail, is_track) if tail
+
     node
   end
 
