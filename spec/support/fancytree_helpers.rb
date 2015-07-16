@@ -31,7 +31,24 @@ module Fancytree
     end
 
     def expand_node(title)
+      if fancytree_parent(title)[:class].include? 'fancytree-expanded'
+        raise "Error. You have attempt to expand a node that is already expanded"
+      else
+        toggle_expanded(title)
+      end
+    end
+
+    def contract_node(title)
+      if fancytree_parent(title)[:class].include? 'fancytree-expanded'
+        toggle_expanded(title)
+      else
+        raise "Error. You have attempt to contract a node that is not expanded"
+      end
+    end
+
+    def toggle_expanded(title)
       fancytree_parent(title).find('span.fancytree-expander').click
+      loop until page.evaluate_script('jQuery.active').zero?
     end
   end
 end
