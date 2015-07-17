@@ -594,6 +594,42 @@ RSpec.describe ProjectsDatapathsController do
     end
   end
 
+  describe "#checkbox_abilities" do
+    context "as a user" do
+      it "should hide checkboxes on folders" do
+        allow(controller).to receive(:cannot?).and_return(true)
+        tree = [
+          {title: 'dir1', folder: true, lazy: true, children: [
+            {title: 'dir1', folder: true, lazy: true}
+          ]}
+        ]
+        result = controller.send :checkbox_abilities, tree
+
+        expect(result).to eq [
+          {:title=>"dir1", :folder=>true, :lazy=>true, :hideCheckbox=>true, :children=>[
+            {:title=>"dir1", :folder=>true, :lazy=>true, :hideCheckbox=>true}
+          ]}
+        ]
+      end
+
+      it "should hide checkboxes on unowned tracks" do
+        project = FactoryGirl.create(:project)
+        track = FactoryGirl.create(:track, project: project)
+        controller.instance_variable_set(:@project, project)
+        allow(controller).to receive(:cannot?).and_return(true)
+
+        tree = [
+          {title: 'track1.bam', lazy: true, selected: true, object: {id: track.id}}
+        ]
+        result = controller.send :checkbox_abilities, tree
+
+        expect(result).to eq [
+          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>track.id}, :hideCheckbox=>true}
+        ]
+      end
+    end
+  end
+
   describe "#add_node_to_tree" do
     context "top level nodes" do
       before do

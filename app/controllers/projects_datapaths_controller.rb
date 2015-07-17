@@ -30,12 +30,14 @@ class ProjectsDatapathsController < ApplicationController
       if params[:mode] && params[:mode] == "children"
         if allowed_datapaths.any? {|datapath| params[:path].match datapath.path}
           tree = FilebrowserService.new(params[:path]).to_fancytree
+          tree = checkbox_abilities tree
         else
           status = 403
         end
       else
         tree = top_level_tree
         tree = fill_in_tree tree
+        tree = checkbox_abilities tree
       end
 
     else
@@ -130,6 +132,17 @@ class ProjectsDatapathsController < ApplicationController
     node = add_path(node, tail, is_track) if tail
 
     node
+  end
+
+  def checkbox_abilities(tree)
+    tree.each do |child|
+      if child[:folder]
+        child.merge!(hideCheckbox: true) if cannot? :manage, @project
+      elsif child[:selected]
+        child.merge!(hideCheckbox: true) if cannot? :update, @project.tracks.find(child[:object][:id])
+      end
+      checkbox_abilities(child[:children]) if child[:children]
+    end
   end
 
   def projects_datapath_params

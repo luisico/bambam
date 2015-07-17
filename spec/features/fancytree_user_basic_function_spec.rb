@@ -16,11 +16,12 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect(page).to have_css(".subhead-note", text: "Contact project owner to add/remove datapaths")
   end
 
-  # scenario "cannot add a nested datapath" do
-  #   preselect_datapath(@project, @datapaths[0])
-  #   visit project_path(@project)
-  #   expect(fancytree_parent('dir11')).not_to have_css '.fancytree-checkbox'
-  # end
+  scenario "cannot add a nested datapath" do
+    preselect_datapath(@project, @datapaths[0])
+    visit project_path(@project)
+    expand_node('dir11')
+    expect(fancytree_parent('dir111')).not_to have_css '.fancytree-checkbox'
+  end
 
   scenario "adds a track to a datapath" do
     preselect_datapath(@project, @datapaths[0])
@@ -111,11 +112,11 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
   end
 
-  # scenario "cannot remove another users track from a top level datapath" do
-  #   datapath1 = preselect_datapath(@project, @datapaths[0])
-  #   preselect_track(datapath1, 'track11', 'bam', @project.owner)
-  #   visit project_path(@project)
+  scenario "cannot remove another users track from a top level datapath" do
+    datapath1 = preselect_datapath(@project, @datapaths[0])
+    preselect_track(datapath1, 'track11', 'bam', @project.owner)
+    visit project_path(@project)
 
-  #   expect(fancytree_parent('track11')).not_to have_css '.fancytree-checkbox'
-  # end
+    expect(fancytree_parent('track11')).not_to have_css '.fancytree-checkbox'
+  end
 end
