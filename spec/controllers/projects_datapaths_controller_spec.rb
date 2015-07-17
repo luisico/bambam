@@ -407,7 +407,7 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :top_level_tree).to eq [
         {title: datapaths[0].path, folder: true, lazy: true, selected: true, object: {datapath_id: datapaths[0].id, type: 'projects_datapath', id: projects_datapath1.id, name: projects_datapath1.name}, expanded: true },
         {title: datapaths[1].path, folder: true, lazy: true, object: {datapath_id: datapaths[1].id}, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath2.id, name: projects_datapath2.name}}
+          {title: 'subdir', folder: true, lazy: true, selected: true, expanded: true, object: {type: 'projects_datapath', id: projects_datapath2.id, name: projects_datapath2.name}}
         ]}
       ]
     end
@@ -481,6 +481,33 @@ RSpec.describe ProjectsDatapathsController do
         ]}
       ]
     end
+
+    it "should not expand node without selected children" do
+      tree = [
+        {title: 'tmp/tests', folder: true, lazy: true}
+      ]
+
+      allow_any_instance_of(FilebrowserService).to receive(:entries).with(File.join('tmp/tests')).and_return(['dir1/', 'track1.bam'])
+
+      expect(controller.send :fill_in_tree, tree).to eq [
+        {:title=>"tmp/tests", :folder=>true, :lazy=>true}
+      ]
+    end
+
+    it "should load direct children of selected folder node" do
+      tree = [
+        {title: 'tmp/tests', folder: true, lazy: true, selected: true}
+      ]
+
+      allow_any_instance_of(FilebrowserService).to receive(:entries).with(File.join('tmp/tests')).and_return(['dir1/', 'track1.bam'])
+
+      expect(controller.send :fill_in_tree, tree).to eq [
+        {:title=>"tmp/tests", :folder=>true, :lazy=>true, :selected=>true, :children=>[
+          {:title=>"dir1", :folder=>true, :lazy=>true},
+          {:title=>"track1.bam"}
+        ]}
+      ]
+    end
   end
 
   describe "#allowed_datapaths" do
@@ -513,7 +540,7 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
 
       result = controller.send :add_path, node, 'path'
-      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true)
+      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [result])
     end
 
@@ -521,7 +548,7 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
 
       result = controller.send :add_path, node, 'path1/path2'
-      expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true)
+      expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
           result
@@ -533,10 +560,10 @@ RSpec.describe ProjectsDatapathsController do
       node = {}
 
       result1 = controller.send :add_path, node, 'path/path1'
-      expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true)
+      expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true, expanded: true)
 
       result2 = controller.send :add_path, node, 'path/path2'
-      expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true)
+      expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
 
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path', folder: true, lazy: true, expanded: true, children: [

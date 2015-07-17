@@ -78,20 +78,27 @@ class ProjectsDatapathsController < ApplicationController
 
   def fill_in_tree(tree=[], root='')
     tree.each do |child|
+      # Tracks at same level as top level datapath are not rendered in tree
       next unless child[:folder]
+
+      # If top level datapath set path to title , else add child title to existing root
       path = root.blank? ? child[:title] : File.join(root, child[:title])
 
+      # Recursively add all children to path
       child[:children] = fill_in_tree(child[:children], path) if child[:children]
 
+      # Retrive directory structure from filesystem
       items = FilebrowserService.new(path).to_fancytree
+
       if !items.empty?
-        child[:expanded] = true
+        # add unselected nodes to children of selected child node
         if child[:children]
           items.each do |item|
             child[:children] << item unless child[:children].any?{|child| child[:title] == item[:title]}
           end
         else
-          child[:children] = items
+          # add children to child node only if child is selected
+          child[:children] = items if child[:selected]
         end
       end
     end
@@ -108,6 +115,7 @@ class ProjectsDatapathsController < ApplicationController
     node = {title: head}
     node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
     node.merge!(selected: true) unless tail
+    node.merge!(expanded: true) unless is_track
 
     # Add node to parent if not already present
     parent[:expanded] = true
