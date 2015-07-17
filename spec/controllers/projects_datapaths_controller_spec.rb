@@ -415,9 +415,9 @@ RSpec.describe ProjectsDatapathsController do
     it "should add selected tracks" do
       datapath = FactoryGirl.create(:datapath)
       project = FactoryGirl.create(:project)
-      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: 'dir1/dir2')
-      track1 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track1.bam')
-      track2 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'tracks/track2.bam')
+      projects_datapath = FactoryGirl.create(:projects_datapath, project: project, datapath: datapath, path: 'dir1/dir11')
+      track1111 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'dir111/track1111.bam')
+      track1112 = FactoryGirl.create(:track, projects_datapath: projects_datapath, path: 'dir111/track1112.bam')
 
       controller.instance_variable_set(:@project, project)
       expect(controller).to receive(:allowed_datapaths).and_return(project.datapaths)
@@ -426,10 +426,10 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, object: {datapath_id: datapath.id}, folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir2', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
-              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true, object: {type: 'track', id: track1.id, name: track1.name, genome: track1.genome, igv: 'igv_url'}},
-                {title: 'track2.bam', selected: true, object: {type: 'track', id: track2.id, name: track2.name, genome: track2.genome, igv: 'igv_url'}}
+            {title: 'dir11', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
+              {title: 'dir111', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1111.bam', selected: true, object: {type: 'track', id: track1111.id, name: track1111.name, genome: track1111.genome, igv: 'igv_url'}},
+                {title: 'track1112.bam', selected: true, object: {type: 'track', id: track1112.id, name: track1112.name, genome: track1112.genome, igv: 'igv_url'}}
               ]}
             ]}
           ]}
@@ -443,9 +443,9 @@ RSpec.describe ProjectsDatapathsController do
       tree = [
         {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir2', folder: true, lazy: true, expanded: true, children: [
-              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true}
+            {title: 'dir11', folder: true, lazy: true, expanded: true, children: [
+              {title: 'dir111', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1111.bam', selected: true}
               ]}
             ]}
           ]}
@@ -453,10 +453,10 @@ RSpec.describe ProjectsDatapathsController do
       ]
 
       {
-        File.join('tmp/tests')                           => ['dir1/', 'dir11/', 'track11.bam'],
-        File.join('tmp/tests', 'dir1')                   => ['dir2/', 'dir12/', 'track12.bam'],
-        File.join('tmp/tests', 'dir1', 'dir2')           => ['tracks/', 'dir13/', 'track13.bam'],
-        File.join('tmp/tests', 'dir1', 'dir2', 'tracks') => ['track1.bam', 'dir14/', 'track14.bam']
+        File.join('tmp/tests')                            => ['dir1/', 'dir2/', 'track1.bam'],
+        File.join('tmp/tests', 'dir1')                    => ['dir11/', 'dir12/', 'track11.bam'],
+        File.join('tmp/tests', 'dir1', 'dir11')           => ['dir111/', 'dir112/', 'track111.bam'],
+        File.join('tmp/tests', 'dir1', 'dir11', 'dir111') => ['track1111.bam', 'dir1111/', 'track1112.bam']
       }.each do |path, items|
         allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
       end
@@ -464,20 +464,20 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :fill_in_tree, tree).to eq [
         {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir2', folder: true, lazy: true, expanded: true, children: [
-              {title: 'tracks', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1.bam', selected: true},
-                {title: 'dir14', folder: true, lazy: true},
-                {title: 'track14.bam'}
+            {title: 'dir11', folder: true, lazy: true, expanded: true, children: [
+              {title: 'dir111', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track1111.bam', selected: true},
+                {title: 'dir1111', folder: true, lazy: true},
+                {title: 'track1112.bam'}
               ]},
-              {title: 'dir13', folder: true, lazy: true},
-              {title: 'track13.bam'}
+              {title: 'dir112', folder: true, lazy: true},
+              {title: 'track111.bam'}
             ]},
             {title: 'dir12', folder: true, lazy: true},
-            {title: 'track12.bam'}
+            {title: 'track11.bam'}
           ]},
-          {title: 'dir11', folder: true, lazy: true},
-          {title: 'track11.bam'}
+          {title: 'dir2', folder: true, lazy: true},
+          {title: 'track1.bam'}
         ]}
       ]
     end
