@@ -23,8 +23,8 @@ class @Filebrowser
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
 
       renderColumns: (event, data) ->
-        node = data.node
-        Filebrowser.node(node).renderColumns(node)
+        fsNode = Filebrowser.node(data.node)
+        fsNode.renderColumns()
 
       lazyLoad: (event, data) ->
         node = new FilebrowserNode(data.node)
