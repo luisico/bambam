@@ -27,21 +27,21 @@ class @Filebrowser
         fsNode.renderColumns()
 
       lazyLoad: (event, data) ->
-        node = new FilebrowserNode(data.node)
+        fsNode = new FilebrowserNode(data.node)
         data.result = {
           url: url
           data:
             project: project_id
             mode: "children"
-            path: node.fullpath()
+            path: fsNode.fullpath()
         }
 
       postProcess: (event, data) ->
         # Node triggering lazyLoad
-        node = Filebrowser.node(data.node)
+        fsNode = Filebrowser.node(data.node)
 
         # Hide checkboxes for non-selectable, non-folder nodes
-        if !node.isSelectable()
+        if !fsNode.isSelectable()
           child.hideCheckbox = true for child in data.response when !child.folder
 
       select: (event, data) ->
