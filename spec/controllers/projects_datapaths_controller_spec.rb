@@ -25,7 +25,7 @@ RSpec.describe ProjectsDatapathsController do
             expect(response.header['Content-Type']).to include 'application/json'
             json = JSON.parse(response.body)
             new_projects_datapath = ProjectsDatapath.last
-            expect(json['projects_datapath']).to eq ({"id" => new_projects_datapath.id, "name" => new_projects_datapath.name})
+            expect(json).to eq ({"type" => "projects_datapath", "id" => new_projects_datapath.id, "name" => new_projects_datapath.name})
           end
 
           it "should create a new project's datapath" do

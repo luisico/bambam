@@ -7,7 +7,7 @@ class ProjectsDatapathsController < ApplicationController
   def create
     @projects_datapath = ProjectsDatapath.new(projects_datapath_params)
     if @projects_datapath.save
-      render json: {projects_datapath: {id: @projects_datapath.id, name: @projects_datapath.name}}, status: 200
+      render json: {type: "projects_datapath", id: @projects_datapath.id, name: @projects_datapath.name}, status: 200
     else
       render json: {status: :error, message: error_messages(@projects_datapath, "Record not created")}, status: 400
     end

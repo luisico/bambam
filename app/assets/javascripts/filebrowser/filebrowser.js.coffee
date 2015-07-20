@@ -44,6 +44,10 @@ class @Filebrowser
         if !node.isSelectable()
           child.hideCheckbox = true for child in data.response when !child.folder
 
+      select: (event, data) ->
+        fsNode = Filebrowser.node(data.node)
+        if fsNode.isSelected() then fsNode.createNode(project_id) else fsNode.destroyNode()
+
       click: (event, data) ->
         console.log(data)
         console.log(event)
