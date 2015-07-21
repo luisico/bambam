@@ -163,7 +163,7 @@ RSpec.describe TracksController do
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           new_track = Track.last
-          expect(json['track']).to eq ({"id" => new_track.id, "name" => new_track.name, "genome" => new_track.genome, "igv" => 'igv_url'})
+          expect(json).to eq ({"type" => "track", "id" => new_track.id, "name" => new_track.name, "genome" => new_track.genome, "igv" => 'igv_url'})
         end
 
         it "should create a new track" do
