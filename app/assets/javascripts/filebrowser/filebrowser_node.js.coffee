@@ -9,6 +9,25 @@ class @FilebrowserNode
   isSelected: ->
     @node.isSelected()
 
+  selectedParent: ->
+    FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
+
+  @selectedFolderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
+
+  @fileFilter: (nodes) ->
+    $.grep(nodes, (node) -> !node.isFolder())
+
+  @resetFileCheckboxes: (files, remove) ->
+    for file in files
+      tr = $(file.tr)
+      if remove
+        file.hideCheckbox = true
+        tr.find('td span').first().removeClass('fancytree-checkbox')
+      else
+        file.hideCheckbox = false
+        tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
+
   @ajaxSuccess: (node) ->
     tr = $(node.tr)
     tr.effect("highlight", {}, 1500) if tr.is(':visible')

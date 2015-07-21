@@ -22,6 +22,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       context: this
       success: (jqXHR, textStatus, errorThrown) ->
         # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
+        FilebrowserNode.resetFileCheckboxes(this.childFiles(), false)
         if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
         $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
         FilebrowserNode.ajaxSuccess(@node)
@@ -29,8 +30,8 @@ class @FilebrowserFolderNode extends @FilebrowserNode
 
   destroyNode: ->
     [datapath_id, path, name] = this.buildNode()
-    # if Fancytree.selectedParent(node) == undefined and Fancytree.selectedChildFolders(node).length == 0
-    #   Fancytree.resetTrackCheckboxes(Fancytree.childTracks(node), true)
+    if this.selectedParent() == undefined and this.selectedChildFolders().length == 0
+      FilebrowserNode.resetFileCheckboxes(this.childFiles(), true)
     $.ajax
       type: "POST"
       dataType: "json"
@@ -51,3 +52,17 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
     name = @node.title.split('/').pop()
     [datapath_id, path, name]
+
+  selectedChildFolders: ->
+    FilebrowserNode.selectedFolderFilter(FilebrowserFolderNode.deepChildrenList(@node))
+
+  childFiles: ->
+    FilebrowserNode.fileFilter(FilebrowserFolderNode.deepChildrenList(@node))
+
+  @deepChildrenList: (node, array = []) ->
+    node = node.getFirstChild()
+    while node
+      array.push(node)
+      FilebrowserFolderNode.deepChildrenList(node, array)
+      node = node.getNextSibling()
+    array

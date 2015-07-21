@@ -21,7 +21,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     }.to change(@project.projects_datapaths, :count).by(1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
-    # expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
+    expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
   end
 
   scenario "is informed of a failed datapath addition" do
@@ -47,7 +47,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     }.to change(@project.projects_datapaths, :count).by(-1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
-    # expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
+    expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
   end
 
   scenario "is informed of a failed datapath deletion" do
@@ -98,7 +98,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     }.to change(@project.projects_datapaths, :count).by(-1)
 
     expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
-    # expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
+    expect(fancytree_parent('track111.bam')).not_to have_css '.fancytree-checkbox'
   end
 
   scenario "adds a track to a top level datapath" do
