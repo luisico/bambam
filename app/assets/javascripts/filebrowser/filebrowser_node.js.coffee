@@ -9,6 +9,10 @@ class @FilebrowserNode
   isSelected: ->
     @node.isSelected()
 
+  renderColumns: ->
+    @tdList = $(@node.tr).find(">td")
+    @tdList.eq(1).attr('title', @node.title)
+
   selectedParent: ->
     FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
 

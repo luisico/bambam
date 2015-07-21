@@ -6,9 +6,8 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       .length > 0
 
   renderColumns: ->
-    tdList = $(@node.tr).find(">td")
-    tdList.eq(1).attr('title', @node.title)
-    col2 = tdList.eq(2).addClass('projects-datapath-name')
+    super
+    col2 = @tdList.eq(2).addClass('projects-datapath-name')
     if @node.isSelected()
       col2.html(@node.data.object.name).attr('title', @node.data.object.name)
 
