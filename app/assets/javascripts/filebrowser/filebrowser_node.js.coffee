@@ -28,8 +28,8 @@ class @FilebrowserNode
         file.hideCheckbox = false
         tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
 
-  @ajaxSuccess: (node) ->
-    tr = $(node.tr)
+  @ajaxSuccess: ->
+    tr = $(@node.tr)
     tr.effect("highlight", {}, 1500) if tr.is(':visible')
     return false
 

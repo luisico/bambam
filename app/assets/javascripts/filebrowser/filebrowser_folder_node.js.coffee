@@ -25,7 +25,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         FilebrowserNode.resetFileCheckboxes(this.childFiles(), false)
         if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
         $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
-        FilebrowserNode.ajaxSuccess(@node)
+        FilebrowserNode.ajaxSuccess
       error: FilebrowserNode.ajaxError
 
   destroyNode: ->
@@ -43,7 +43,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         delete @node.data.object.id
         delete @node.data.object.name
         delete @node.data.object.type
-        FilebrowserNode.ajaxSuccess(@node)
+        FilebrowserNode.ajaxSuccess
       error: FilebrowserNode.ajaxError
 
   buildNode: ->
