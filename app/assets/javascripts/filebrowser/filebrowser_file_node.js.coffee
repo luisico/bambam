@@ -31,8 +31,8 @@ class @FilebrowserFileNode extends @FilebrowserNode
         tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
         tr.find('.track-igv').html(jqXHR.igv)
         Project.updateTracksCount()
-        FilebrowserNode.ajaxSuccess
-      error: FilebrowserNode.ajaxError
+        FilebrowserFileNode.ajaxSuccess
+      error: FilebrowserFileNode.ajaxError
 
   destroyNode: ->
     $.ajax
@@ -48,8 +48,8 @@ class @FilebrowserFileNode extends @FilebrowserNode
         tr.find('.track-igv').html('')
         delete @node.data.object
         Project.updateTracksCount()
-        FilebrowserNode.ajaxSuccess
-      error: FilebrowserNode.ajaxError
+        FilebrowserFileNode.ajaxSuccess
+      error: FilebrowserFileNode.ajaxError
 
   buildNode: ->
     parents = @node.getParentList(false, true)

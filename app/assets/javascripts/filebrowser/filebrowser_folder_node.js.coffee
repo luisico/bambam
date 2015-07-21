@@ -22,16 +22,16 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       context: this
       success: (jqXHR, textStatus, errorThrown) ->
         # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
-        FilebrowserNode.resetFileCheckboxes(this.childFiles(), false)
+        FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), false)
         if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
         $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
-        FilebrowserNode.ajaxSuccess
-      error: FilebrowserNode.ajaxError
+        FilebrowserFolderNode.ajaxSuccess
+      error: FilebrowserFolderNode.ajaxError
 
   destroyNode: ->
     [datapath_id, path, name] = this.buildNode()
     if this.selectedParent() == undefined and this.selectedChildFolders().length == 0
-      FilebrowserNode.resetFileCheckboxes(this.childFiles(), true)
+      FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), true)
     $.ajax
       type: "POST"
       dataType: "json"
@@ -43,8 +43,8 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         delete @node.data.object.id
         delete @node.data.object.name
         delete @node.data.object.type
-        FilebrowserNode.ajaxSuccess
-      error: FilebrowserNode.ajaxError
+        FilebrowserFolderNode.ajaxSuccess
+      error: FilebrowserFolderNode.ajaxError
 
   buildNode: ->
     parents = @node.getParentList(false, true)
@@ -54,10 +54,10 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     [datapath_id, path, name]
 
   selectedChildFolders: ->
-    FilebrowserNode.selectedFolderFilter(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.selectedFolderFilter(FilebrowserFolderNode.deepChildrenList(@node))
 
   childFiles: ->
-    FilebrowserNode.fileFilter(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.fileFilter(FilebrowserFolderNode.deepChildrenList(@node))
 
   @deepChildrenList: (node, array = []) ->
     node = node.getFirstChild()
