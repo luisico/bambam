@@ -21,7 +21,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
     this.ajaxRequest(url, data)
 
-  createSuccess: (jqXHR, textStatus, errorThrown) ->
+  createSuccess: (jqXHR) ->
     @node.data['object'] = jqXHR
     tr = $(@node.tr)
     tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.id + "'>" + jqXHR.name + "</a>").attr('title', @node.data.object.name)
@@ -33,7 +33,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     url = "/tracks/" + @node.data.object.id
     this.ajaxRequest(url)
 
-  destroySuccess: (jqXHR, textStatus, errorThrown) ->
+  destroySuccess: () ->
     tr = $(@node.tr)
     tr.find('.track-link').html('')
     tr.find('.track-genome').html('')

@@ -21,7 +21,7 @@ class @FilebrowserNode
       data: data || { _method: "delete" }
       context: this
       success: (jqXHR, textStatus, errorThrown) ->
-        if data then this.createSuccess(jqXHR, textStatus, errorThrown) else this.destroySuccess(jqXHR, textStatus, errorThrown)
+        if data then this.createSuccess(jqXHR) else this.destroySuccess()
         FilebrowserNode.ajaxSuccess(@node)
       error: FilebrowserNode.ajaxError
 

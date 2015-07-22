@@ -17,7 +17,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
     this.ajaxRequest(url, data)
 
-  createSuccess: (jqXHR, textStatus, errorThrown) ->
+  createSuccess: (jqXHR) ->
     # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
     FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), false)
     if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
@@ -29,7 +29,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     url = "/projects_datapaths/" + @node.data.object.id
     this.ajaxRequest(url)
 
-  destroySuccess: (jqXHR, textStatus, errorThrown) ->
+  destroySuccess: () ->
     $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')
     delete @node.data.object.id
     delete @node.data.object.name
