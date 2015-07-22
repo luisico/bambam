@@ -24,22 +24,16 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
 
   destroyNode: ->
-    [datapath_id, path, name] = this.buildNode()
     if this.selectedParent() == undefined and this.selectedChildFolders().length == 0
       FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), true)
-    $.ajax
-      type: "POST"
-      dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/" + @node.data.object.id
-      data: { _method: "delete" }
-      context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')
-        delete @node.data.object.id
-        delete @node.data.object.name
-        delete @node.data.object.type
-        FilebrowserFolderNode.ajaxSuccess
-      error: FilebrowserFolderNode.ajaxError
+    @url = "/projects_datapaths/" + @node.data.object.id
+    super
+
+  destroySuccess: (jqXHR, textStatus, errorThrown) ->
+    $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')
+    delete @node.data.object.id
+    delete @node.data.object.name
+    delete @node.data.object.type
 
   buildNode: ->
     parents = @node.getParentList(false, true)

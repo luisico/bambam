@@ -25,6 +25,18 @@ class @FilebrowserNode
         FilebrowserNode.ajaxSuccess
       error: FilebrowserNode.ajaxError
 
+  destroyNode: ->
+    $.ajax
+      type: "POST"
+      dataType: "json"
+      url: RAILS_RELATIVE_URL_ROOT + @url
+      data: { _method: "delete" }
+      context: this
+      success: (jqXHR, textStatus, errorThrown) ->
+        this.destroySuccess(jqXHR, textStatus, errorThrown)
+        FilebrowserNode.ajaxSuccess
+      error: FilebrowserNode.ajaxError
+
   selectedParent: ->
     FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
 

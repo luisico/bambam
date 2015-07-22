@@ -30,21 +30,16 @@ class @FilebrowserFileNode extends @FilebrowserNode
     Project.updateTracksCount()
 
   destroyNode: ->
-    $.ajax
-      type: "POST"
-      dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + "/tracks/" + @node.data.object.id
-      data: { _method: "delete" }
-      context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        tr = $(@node.tr)
-        tr.find('.track-link').html('')
-        tr.find('.track-genome').html('')
-        tr.find('.track-igv').html('')
-        delete @node.data.object
-        Project.updateTracksCount()
-        FilebrowserFileNode.ajaxSuccess
-      error: FilebrowserFileNode.ajaxError
+    @url = "/tracks/" + @node.data.object.id
+    super
+
+  destroySuccess: (jqXHR, textStatus, errorThrown) ->
+    tr = $(@node.tr)
+    tr.find('.track-link').html('')
+    tr.find('.track-genome').html('')
+    tr.find('.track-igv').html('')
+    delete @node.data.object
+    Project.updateTracksCount()
 
   buildNode: ->
     parents = @node.getParentList(false, true)
