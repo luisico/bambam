@@ -12,28 +12,30 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       col2.html(@node.data.object.name).attr('title', @node.data.object.name)
 
   createNode: (project_id) ->
-    url = "/projects_datapaths"
-    [datapath_id, path, name] = this.buildNode()
-    data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
-    this.ajaxRequest(url, data)
+    @url = "/projects_datapaths"
+    [datapath_id, path, name] = @buildNode()
+    @data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
+    super
 
   createSuccess: (jqXHR) ->
     # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
-    FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), false)
+    FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
     if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
     $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
+    super
 
   destroyNode: ->
-    if this.selectedParent() == undefined and this.selectedChildFolders().length == 0
-      FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), true)
-    url = "/projects_datapaths/" + @node.data.object.id
-    this.ajaxRequest(url)
+    if @selectedParent() == undefined and @selectedChildFolders().length == 0
+      FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), true)
+    @url = "/projects_datapaths/" + @node.data.object.id
+    super
 
-  destroySuccess: () ->
+  destroySuccess: ->
     $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')
     delete @node.data.object.id
     delete @node.data.object.name
     delete @node.data.object.type
+    super
 
   buildNode: ->
     parents = @node.getParentList(false, true)

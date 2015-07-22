@@ -13,17 +13,27 @@ class @FilebrowserNode
     @tdList = $(@node.tr).find(">td")
     @tdList.eq(1).attr('title', @node.title)
 
-  ajaxRequest: (url, data=null) ->
+  createNode: ->
+    @ajaxRequest("POST", @url, @data, @createSuccess, FilebrowserNode.ajaxError)
+
+  destroyNode: ->
+    @ajaxRequest("POST", @url, { _method: "delete" }, @destroySuccess, FilebrowserNode.ajaxError)
+
+  ajaxRequest: (type, url, data, success, error) ->
     $.ajax
-      type: "POST"
+      type: type
       dataType: "json"
       url: RAILS_RELATIVE_URL_ROOT + url
-      data: data || { _method: "delete" }
+      data: data
       context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        if data then this.createSuccess(jqXHR) else this.destroySuccess()
-        FilebrowserNode.ajaxSuccess(@node)
-      error: FilebrowserNode.ajaxError
+      success: success
+      error: error
+
+  createSuccess:  ->
+    FilebrowserNode.ajaxSuccess(@node)
+
+  destroySuccess: ->
+    FilebrowserNode.ajaxSuccess(@node)
 
   selectedParent: ->
     FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]

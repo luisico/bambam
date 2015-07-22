@@ -16,10 +16,10 @@ class @FilebrowserFileNode extends @FilebrowserNode
       col4.html(@node.data.object.igv)
 
   createNode: ->
-    url = "/tracks"
-    [projects_datapath_id, path, name] = this.buildNode()
-    data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
-    this.ajaxRequest(url, data)
+    @url = "/tracks"
+    [projects_datapath_id, path, name] = @buildNode()
+    @data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
+    super
 
   createSuccess: (jqXHR) ->
     @node.data['object'] = jqXHR
@@ -28,10 +28,11 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
     tr.find('.track-igv').html(jqXHR.igv)
     Project.updateTracksCount()
+    super
 
   destroyNode: ->
-    url = "/tracks/" + @node.data.object.id
-    this.ajaxRequest(url)
+    @url = "/tracks/" + @node.data.object.id
+    super
 
   destroySuccess: () ->
     tr = $(@node.tr)
@@ -40,6 +41,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-igv').html('')
     delete @node.data.object
     Project.updateTracksCount()
+    super
 
   buildNode: ->
     parents = @node.getParentList(false, true)
