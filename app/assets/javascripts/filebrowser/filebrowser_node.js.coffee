@@ -13,6 +13,18 @@ class @FilebrowserNode
     @tdList = $(@node.tr).find(">td")
     @tdList.eq(1).attr('title', @node.title)
 
+  createNode: ->
+    $.ajax
+      type: "POST"
+      dataType: "json"
+      url: RAILS_RELATIVE_URL_ROOT + @url
+      data: @data
+      context: this
+      success: (jqXHR, textStatus, errorThrown) ->
+        this.createSuccess(jqXHR, textStatus, errorThrown)
+        FilebrowserNode.ajaxSuccess
+      error: FilebrowserNode.ajaxError
+
   selectedParent: ->
     FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
 

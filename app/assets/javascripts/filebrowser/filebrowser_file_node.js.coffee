@@ -17,21 +17,17 @@ class @FilebrowserFileNode extends @FilebrowserNode
 
   createNode: ->
     [projects_datapath_id, path, name] = this.buildNode()
-    $.ajax
-      type: "POST"
-      dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + "/tracks"
-      data: { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
-      context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        @node.data['object'] = jqXHR
-        tr = $(@node.tr)
-        tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.id + "'>" + jqXHR.name + "</a>").attr('title', @node.data.object.name)
-        tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
-        tr.find('.track-igv').html(jqXHR.igv)
-        Project.updateTracksCount()
-        FilebrowserFileNode.ajaxSuccess
-      error: FilebrowserFileNode.ajaxError
+    @data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
+    @url = "/tracks"
+    super
+
+  createSuccess: (jqXHR, textStatus, errorThrown) ->
+    @node.data['object'] = jqXHR
+    tr = $(@node.tr)
+    tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.id + "'>" + jqXHR.name + "</a>").attr('title', @node.data.object.name)
+    tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
+    tr.find('.track-igv').html(jqXHR.igv)
+    Project.updateTracksCount()
 
   destroyNode: ->
     $.ajax

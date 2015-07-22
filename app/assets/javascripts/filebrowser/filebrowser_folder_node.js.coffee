@@ -13,19 +13,15 @@ class @FilebrowserFolderNode extends @FilebrowserNode
 
   createNode: (project_id) ->
     [datapath_id, path, name] = this.buildNode()
-    $.ajax
-      type: "POST"
-      dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + "/projects_datapaths"
-      data: { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
-      context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
-        FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), false)
-        if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
-        $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
-        FilebrowserFolderNode.ajaxSuccess
-      error: FilebrowserFolderNode.ajaxError
+    @data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
+    @url = "/projects_datapaths"
+    super
+
+  createSuccess: (jqXHR, textStatus, errorThrown) ->
+    # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
+    FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), false)
+    if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
+    $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
 
   destroyNode: ->
     [datapath_id, path, name] = this.buildNode()
