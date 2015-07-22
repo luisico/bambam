@@ -22,7 +22,7 @@ class @FilebrowserNode
       context: this
       success: (jqXHR, textStatus, errorThrown) ->
         if data then this.createSuccess(jqXHR, textStatus, errorThrown) else this.destroySuccess(jqXHR, textStatus, errorThrown)
-        FilebrowserNode.ajaxSuccess
+        FilebrowserNode.ajaxSuccess(@node)
       error: FilebrowserNode.ajaxError
 
   selectedParent: ->
@@ -44,8 +44,8 @@ class @FilebrowserNode
         file.hideCheckbox = false
         tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
 
-  @ajaxSuccess: ->
-    tr = $(@node.tr)
+  @ajaxSuccess: (node) ->
+    tr = $(node.tr)
     tr.effect("highlight", {}, 1500) if tr.is(':visible')
     return false
 
