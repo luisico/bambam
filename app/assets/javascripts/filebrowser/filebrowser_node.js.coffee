@@ -13,27 +13,15 @@ class @FilebrowserNode
     @tdList = $(@node.tr).find(">td")
     @tdList.eq(1).attr('title', @node.title)
 
-  createNode: ->
+  ajaxRequest: (url, data=null) ->
     $.ajax
       type: "POST"
       dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + @url
-      data: @data
+      url: RAILS_RELATIVE_URL_ROOT + url
+      data: data || { _method: "delete" }
       context: this
       success: (jqXHR, textStatus, errorThrown) ->
-        this.createSuccess(jqXHR, textStatus, errorThrown)
-        FilebrowserNode.ajaxSuccess
-      error: FilebrowserNode.ajaxError
-
-  destroyNode: ->
-    $.ajax
-      type: "POST"
-      dataType: "json"
-      url: RAILS_RELATIVE_URL_ROOT + @url
-      data: { _method: "delete" }
-      context: this
-      success: (jqXHR, textStatus, errorThrown) ->
-        this.destroySuccess(jqXHR, textStatus, errorThrown)
+        if data then this.createSuccess(jqXHR, textStatus, errorThrown) else this.destroySuccess(jqXHR, textStatus, errorThrown)
         FilebrowserNode.ajaxSuccess
       error: FilebrowserNode.ajaxError
 

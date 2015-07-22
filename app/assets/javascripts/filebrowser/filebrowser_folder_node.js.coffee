@@ -12,10 +12,10 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       col2.html(@node.data.object.name).attr('title', @node.data.object.name)
 
   createNode: (project_id) ->
+    url = "/projects_datapaths"
     [datapath_id, path, name] = this.buildNode()
-    @data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
-    @url = "/projects_datapaths"
-    super
+    data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
+    this.ajaxRequest(url, data)
 
   createSuccess: (jqXHR, textStatus, errorThrown) ->
     # Fancytree.resetDatapathHierarchy(node, jqXHR.projects_datapath.id)
@@ -26,8 +26,8 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   destroyNode: ->
     if this.selectedParent() == undefined and this.selectedChildFolders().length == 0
       FilebrowserFolderNode.resetFileCheckboxes(this.childFiles(), true)
-    @url = "/projects_datapaths/" + @node.data.object.id
-    super
+    url = "/projects_datapaths/" + @node.data.object.id
+    this.ajaxRequest(url)
 
   destroySuccess: (jqXHR, textStatus, errorThrown) ->
     $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')

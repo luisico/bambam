@@ -16,10 +16,10 @@ class @FilebrowserFileNode extends @FilebrowserNode
       col4.html(@node.data.object.igv)
 
   createNode: ->
+    url = "/tracks"
     [projects_datapath_id, path, name] = this.buildNode()
-    @data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
-    @url = "/tracks"
-    super
+    data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
+    this.ajaxRequest(url, data)
 
   createSuccess: (jqXHR, textStatus, errorThrown) ->
     @node.data['object'] = jqXHR
@@ -30,8 +30,8 @@ class @FilebrowserFileNode extends @FilebrowserNode
     Project.updateTracksCount()
 
   destroyNode: ->
-    @url = "/tracks/" + @node.data.object.id
-    super
+    url = "/tracks/" + @node.data.object.id
+    this.ajaxRequest(url)
 
   destroySuccess: (jqXHR, textStatus, errorThrown) ->
     tr = $(@node.tr)
