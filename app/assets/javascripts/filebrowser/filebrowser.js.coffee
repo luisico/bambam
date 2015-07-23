@@ -48,6 +48,11 @@ class @Filebrowser
         fsNode = Filebrowser.node(data.node)
         if fsNode.isSelected() then fsNode.createNode(project_id) else fsNode.destroyNode()
 
+      beforeSelect: (event, data) ->
+        fsNode = Filebrowser.node(data.node)
+        if data.node.isFolder()
+          if fsNode.isSelected() then fsNode.confirmSelectedFolder() else fsNode.confirmUnselectedFolder()
+
       click: (event, data) ->
         console.log(data)
         console.log(event)

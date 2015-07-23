@@ -34,19 +34,18 @@ RSpec.feature "Selected parent manager", js: true do
   #   end
   # end
 
-  # scenario "selects child of selected datapath" do
-  #   preselect_datapath(@project, @datapaths[0], 'dir11')
-  #   visit project_path(@project)
-  #   expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
+  scenario "selects child of selected datapath" do
+    preselect_datapath(@project, @datapaths[0], 'dir11')
+    visit project_path(@project)
+    expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
 
-  #   expect {
-  #     expand_node('dir11')
-  #     select_node('dir111')
-  #   }.not_to change(@project.projects_datapaths, :count)
+    expect {
+      select_node('dir111')
+    }.not_to change(@project.projects_datapaths, :count)
 
-  #   expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
-  #   expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
-  # end
+    expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
+    expect(fancytree_parent('dir111')[:class]).to include 'fancytree-selected'
+  end
 
   # scenario "selects child of selected datapath with tracks" do
   #   dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')

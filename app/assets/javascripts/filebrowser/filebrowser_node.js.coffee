@@ -38,8 +38,17 @@ class @FilebrowserNode
   selectedParent: ->
     FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
 
+  siblingFiles: ->
+    FilebrowserNode.fileFilter(@node.getParent().children)
+
+  @selectedFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected())
+
   @selectedFolderFilter: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
+
+  @selectedFileFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
 
   @fileFilter: (nodes) ->
     $.grep(nodes, (node) -> !node.isFolder())
