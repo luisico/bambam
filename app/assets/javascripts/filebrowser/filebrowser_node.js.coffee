@@ -50,6 +50,9 @@ class @FilebrowserNode
   siblingFiles: ->
     FilebrowserNode.fileFilter(@node.getParent().children)
 
+  siblingFolders: ->
+    FilebrowserNode.folderFilter(@node.getParent().children)
+
   @selectedFilter: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected())
 
@@ -61,6 +64,9 @@ class @FilebrowserNode
 
   @fileFilter: (nodes) ->
     $.grep(nodes, (node) -> !node.isFolder())
+
+  @folderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isFolder())
 
   @resetFileCheckboxes: (files, remove) ->
     for file in files
