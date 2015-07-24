@@ -50,3 +50,11 @@ class @FilebrowserFileNode extends @FilebrowserNode
     path = $.map(parents.slice($.inArray(selected, parents)+1), (val, i) -> val.title).join('/')
     name = @node.title.replace(/\.[^/.]+$/, "")
     [projects_datapath_id, path, name]
+
+  updateNode: (projectsDatapathId) ->
+    @url = "/tracks/" + @node.data.object.id
+    parents = @node.getParentList(false, true)
+    newParent = $.grep(parents, (val, i) -> val.data.object != undefined and val.data.object.id == projectsDatapathId)[0]
+    path = $.map(parents.slice($.inArray(newParent, parents)+1), (val, i) -> val.title).join('/')
+    @data = { track: { path: path, projects_datapath_id: projectsDatapathId } }
+    super

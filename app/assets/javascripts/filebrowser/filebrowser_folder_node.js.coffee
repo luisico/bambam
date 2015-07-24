@@ -18,10 +18,10 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     super
 
   createSuccess: (jqXHR) ->
-    @resetDatapathHierarchy(jqXHR.id)
-    FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
     if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
     $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
+    @resetDatapathHierarchy(jqXHR.id)
+    FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
     super
 
   destroyNode: ->
@@ -79,10 +79,15 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       else
         false
 
-  resetDatapathHierarchy: (projects_datapath_id) ->
+  resetDatapathHierarchy: (projectsDatapathId) ->
     selectedParent = @selectedParent()
     if selectedParent
+      @transitionChildFiles(projectsDatapathId)
       selectedParent.toggleSelected()
+
+  transitionChildFiles: (projectsDatapathId) ->
+    for file in @selectedChildFiles()
+      Filebrowser.node(file).updateNode(projectsDatapathId)
 
   @deepChildrenList: (node, array = []) ->
     node = node.getFirstChild()

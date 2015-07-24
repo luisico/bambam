@@ -279,10 +279,10 @@ RSpec.describe TracksController do
           context "projects_datapath_id" do
             it "should response with unprocessable entity" do
               patch :update, id: @track, track: {projects_datapath_id: 9999 }, format: :json
-              expect(response.status).to eq 403
+              expect(response.status).to eq 400
               expect(response.header['Content-Type']).to include 'application/json'
               json = JSON.parse(response.body)
-              expect(json["message"]).to include "You don't have permission"
+              expect(json["message"]).to include "Path must exist in filesystem"
             end
 
             it "should not change the track's projects datapath" do

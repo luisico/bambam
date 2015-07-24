@@ -19,6 +19,9 @@ class @FilebrowserNode
   destroyNode: ->
     @ajaxRequest("POST", @url, { _method: "delete" }, @destroySuccess, FilebrowserNode.ajaxError)
 
+  updateNode: ->
+    @ajaxRequest("PATCH", @url, @data, @updateSuccess, FilebrowserNode.ajaxError)
+
   ajaxRequest: (type, url, data, success, error) ->
     $.ajax
       type: type
@@ -33,6 +36,9 @@ class @FilebrowserNode
     FilebrowserNode.ajaxSuccess(@node)
 
   destroySuccess: ->
+    FilebrowserNode.ajaxSuccess(@node)
+
+  updateSuccess: ->
     FilebrowserNode.ajaxSuccess(@node)
 
   selectedParent: ->

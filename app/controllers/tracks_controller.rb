@@ -36,9 +36,7 @@ class TracksController < ApplicationController
       @track.update(track_params)
       respond_with_bip(@track)
     else
-      projects_datapath = ProjectsDatapath.find_by_id(track_params[:projects_datapath_id]) if track_params[:projects_datapath_id]
-      project = projects_datapath.try(:project)
-      authorize! :manage, project
+      authorize! :manage, @track.try(:project)
       if @track.update(track_params)
         render json: {status: :success, message: 'OK' }, status: 200
       else
