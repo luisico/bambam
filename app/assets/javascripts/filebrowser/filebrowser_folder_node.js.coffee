@@ -81,9 +81,26 @@ class @FilebrowserFolderNode extends @FilebrowserNode
 
   resetDatapathHierarchy: (projectsDatapathId) ->
     selectedParent = @selectedParent()
+    selectedChildFiles = @selectedChildFiles()
     if selectedParent
+      Filebrowser.node(selectedParent).resolveOrphanFiles(selectedChildFiles)
       @transitionChildFiles(projectsDatapathId)
       selectedParent.toggleSelected()
+    else if selectedChildFiles.length > 0
+      @transitionChildFiles(projectsDatapathId)
+
+  resolveOrphanFiles: (childFiles) ->
+    selectedParentChildFiles = @selectedChildFiles()
+    newProjectsDatapaths = []
+    orphanFiles = $(selectedParentChildFiles).not(childFiles).get()
+    for orphanFile in orphanFiles
+      orphanFileParentList = orphanFile.getParentList()
+      newProjectsDatapaths.push(orphanFileParentList[orphanFileParentList.length - 1])
+    uniqueNewProjectsDatapaths = newProjectsDatapaths.filter((elem, pos) -> newProjectsDatapaths.indexOf(elem) == pos)
+    for projectsDatapath in uniqueNewProjectsDatapaths
+      parents = projectsDatapath.getParentList()
+      overlap = parents.filter((n) -> uniqueNewProjectsDatapaths.indexOf(n) != -1)
+      projectsDatapath.toggleSelected() unless overlap.length > 0
 
   transitionChildFiles: (projectsDatapathId) ->
     for file in @selectedChildFiles()

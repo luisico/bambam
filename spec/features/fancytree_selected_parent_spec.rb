@@ -11,28 +11,28 @@ RSpec.feature "Selected parent manager", js: true do
     sign_in @manager
   end
 
-  # scenario "creates orphan tracks" do
-  #   projects_datapath = preselect_datapath(@project, @datapaths[0])
-  #   %w[track1111 track1112 track1211 track1212].each do |name|
-  #     preselect_track(projects_datapath, name, 'bam', @manager)
-  #   end
+  scenario "creates orphan tracks" do
+    projects_datapath = preselect_datapath(@project, @datapaths[0])
+    %w[track1111 track1112 track1211 track1212].each do |name|
+      preselect_track(projects_datapath, name, 'bam', @manager)
+    end
 
-  #   visit project_path(@project)
-  #   [@datapaths[0].path] + %w[track1111.bam track1112.bam track1211.bam track1212.bam].each do |title|
-  #     expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
-  #   end
+    visit project_path(@project)
+    [@datapaths[0].path] + %w[track1111.bam track1112.bam track1211.bam track1212.bam].each do |title|
+      expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
+    end
 
-  #   expect {
-  #     select_node('dir111')
-  #     @project.reload
-  #   }.to change(@project.projects_datapaths, :count).by(1)
-  #   expect(@project.tracks.count).to eq 4
+    expect {
+      select_node('dir111')
+      @project.reload
+    }.to change(@project.projects_datapaths, :count).by(1)
+    expect(@project.tracks.count).to eq 4
 
-  #   expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
-  #   %w[dir111 track1111.bam track1112.bam dir121 track1211.bam track1212.bam].each do |title|
-  #     expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
-  #   end
-  # end
+    expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
+    %w[dir111 track1111.bam track1112.bam dir121 track1211.bam track1212.bam].each do |title|
+      expect(fancytree_parent(title)[:class]).to include 'fancytree-selected'
+    end
+  end
 
   scenario "selects child of selected datapath" do
     preselect_datapath(@project, @datapaths[0], 'dir11')
