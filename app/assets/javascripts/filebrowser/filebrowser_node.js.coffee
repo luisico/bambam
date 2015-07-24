@@ -22,6 +22,9 @@ class @FilebrowserNode
   updateNode: ->
     @ajaxRequest("PATCH", @url, @data, @updateSuccess, FilebrowserNode.ajaxError)
 
+  buildNode: ->
+    @parents = @node.getParentList(false, true)
+
   ajaxRequest: (type, url, data, success, error) ->
     $.ajax
       type: type

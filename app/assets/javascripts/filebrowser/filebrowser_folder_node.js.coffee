@@ -38,9 +38,9 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     super
 
   buildNode: ->
-    parents = @node.getParentList(false, true)
-    datapath_id = parents[0].data.object.datapath_id
-    path = $.map(parents, (val, i) -> val.title).slice(1).join('/')
+    super
+    datapath_id = @parents[0].data.object.datapath_id
+    path = $.map(@parents, (val, i) -> val.title).slice(1).join('/')
     name = @node.title.split('/').pop()
     [datapath_id, path, name]
 
