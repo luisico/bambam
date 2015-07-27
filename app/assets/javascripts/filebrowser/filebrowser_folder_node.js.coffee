@@ -82,6 +82,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   resetDatapathHierarchy: (projectsDatapathId) ->
     selectedParent = @selectedParent()
     selectedChildFiles = @selectedChildFiles()
+    selectedChildFolders = @selectedChildFolders()
     if selectedParent
       Filebrowser.node(selectedParent).resolveOrphanFiles(selectedChildFiles)
       @transitionChildFiles(projectsDatapathId)
@@ -94,6 +95,12 @@ class @FilebrowserFolderNode extends @FilebrowserNode
           FilebrowserNode.resetFileCheckboxes([sibling], true)
       parentNodes =  @node.getParentList()
       FilebrowserNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true) for parent in parentNodes
+    else if selectedChildFolders.length > 0
+      for folder in selectedChildFolders
+        Filebrowser.node(folder).transitionChildFiles(projectsDatapathId)
+        folder.toggleSelected()
+      children = FilebrowserFolderNode.deepChildrenList(@node)
+      FilebrowserNode.resetFileCheckboxes(FilebrowserNode.fileFilter(children), false)
     else if selectedChildFiles.length > 0
       @transitionChildFiles(projectsDatapathId)
 
