@@ -96,6 +96,10 @@ class ProjectsDatapathsController < ApplicationController
         # add unselected nodes to children of selected child node
         if child[:children]
           items.each do |item|
+            unless item[:folder]
+              # hide checkbox for silbing files on selected folders
+              item.merge!(hideCheckbox: true) if child[:children].any? {|child| child[:folder] && child[:selected]}
+            end
             child[:children] << item unless child[:children].any?{|child| child[:title] == item[:title]}
           end
         else
