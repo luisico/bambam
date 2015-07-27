@@ -86,15 +86,9 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     if selectedParent
       Filebrowser.node(selectedParent).resolveOrphanFiles(selectedChildFiles)
       @transitionChildFiles(projectsDatapathId)
+      @resetSiblingCheckboxes()
+      @resetParentCheckboxes()
       selectedParent.toggleSelected()
-      siblings = @siblingFolders().concat(@siblingFiles())
-      for sibling in siblings
-        if sibling.isFolder() && !sibling.isSelected() && Filebrowser.node(sibling).selectedChildFolders().length == 0
-          FilebrowserNode.resetFileCheckboxes(Filebrowser.node(sibling).childFiles(), true)
-        else if !sibling.isFolder()
-          FilebrowserNode.resetFileCheckboxes([sibling], true)
-      parentNodes =  @node.getParentList()
-      FilebrowserNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true) for parent in parentNodes
     else if selectedChildFolders.length > 0
       for folder in selectedChildFolders
         Filebrowser.node(folder).transitionChildFiles(projectsDatapathId)
@@ -120,6 +114,17 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   transitionChildFiles: (projectsDatapathId) ->
     for file in @selectedChildFiles()
       Filebrowser.node(file).updateNode(projectsDatapathId)
+
+  resetSiblingCheckboxes: ->
+    for sibling in @siblingFolders().concat(@siblingFiles())
+      if sibling.isFolder() && !sibling.isSelected() && Filebrowser.node(sibling).selectedChildFolders().length == 0
+        FilebrowserNode.resetFileCheckboxes(Filebrowser.node(sibling).childFiles(), true)
+      else if !sibling.isFolder()
+        FilebrowserNode.resetFileCheckboxes([sibling], true)
+
+  resetParentCheckboxes: ->
+    for parent in @node.getParentList()
+      FilebrowserNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
 
   @deepChildrenList: (node, array = []) ->
     node = node.getFirstChild()
