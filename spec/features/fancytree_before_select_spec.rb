@@ -21,9 +21,8 @@ RSpec.feature "Before select manager", js: true do
 
     expect {
       reject_confirm_from do
-        select_node('datapath1')
+        deselect_node('datapath1')
       end
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
@@ -40,9 +39,8 @@ RSpec.feature "Before select manager", js: true do
 
     expect {
       accept_confirm_from do
-        select_node('datapath1')
+        deselect_node('datapath1')
       end
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.projects_datapaths, :count).by(-1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
@@ -64,7 +62,6 @@ RSpec.feature "Before select manager", js: true do
       reject_confirm_from do
         select_node('dir111')
       end
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
     expect(@project.tracks.count).to eq 2
 
@@ -89,7 +86,6 @@ RSpec.feature "Before select manager", js: true do
       accept_confirm_from do
         select_node('dir111')
       end
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
     expect(@project.tracks.count).to eq 0
 

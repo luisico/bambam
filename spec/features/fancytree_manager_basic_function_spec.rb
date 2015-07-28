@@ -18,7 +18,6 @@ RSpec.feature "Manager basic fancytree functions", js: true do
 
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.projects_datapaths, :count).by(1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
@@ -31,7 +30,6 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect {
       visit project_path(@project)
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(@project.projects_datapaths, :count)
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'error-red'
     expect(fancytree_node(@datapaths[0].path).text).to include "Record not created"
@@ -46,8 +44,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
 
     expect {
-      select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node(@datapaths[0].path)
     }.to change(@project.projects_datapaths, :count).by(-1)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
@@ -60,8 +57,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
 
     expect {
       visit project_path(@project)
-      select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node(@datapaths[0].path)
     }.not_to change(@project.projects_datapaths, :count)
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'error-red'
     expect(fancytree_node(@datapaths[0].path).text).to include "Record not deleted"
@@ -71,13 +67,11 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     visit project_path(@project)
     expect {
       select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.projects_datapaths, :count).by(1)
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
 
     expect {
-      select_node(@datapaths[0].path)
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node(@datapaths[0].path)
     }.to change(@project.projects_datapaths, :count).by(-1)
     expect(fancytree_parent(@datapaths[0].path)[:class]).not_to include 'fancytree-selected'
   end
@@ -88,7 +82,6 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect {
       expand_node(@datapaths[0].path)
       select_node('dir11')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.projects_datapaths, :count).by(1)
 
     expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
@@ -103,8 +96,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
 
     expect {
-      select_node('dir11')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('dir11')
     }.to change(@project.projects_datapaths, :count).by(-1)
 
     expect(fancytree_parent('dir11')[:class]).not_to include 'fancytree-selected'
@@ -114,12 +106,10 @@ RSpec.feature "Manager basic fancytree functions", js: true do
   scenario "adds a track to a top level datapath" do
     visit project_path(@project)
     select_node(@datapaths[0].path)
-    loop until page.evaluate_script('jQuery.active').zero?
 
     expect {
       expand_node(@datapaths[0].path)
       select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.tracks, :count).by(1)
 
     expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'
@@ -133,8 +123,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'
 
     expect {
-      select_node('track11.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('track11.bam')
     }.to change(@project.tracks, :count).by(-1)
 
     expect(fancytree_parent('track11')[:class]).not_to include 'fancytree-selected'
@@ -144,12 +133,10 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     visit project_path(@project)
     expand_node(@datapaths[0].path)
     select_node('dir11')
-    loop until page.evaluate_script('jQuery.active').zero?
 
     expect {
       expand_node('dir11')
       select_node('track111.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
     }.to change(@project.tracks, :count).by(1)
 
     expect(fancytree_parent('track111')[:class]).to include 'fancytree-selected'
@@ -163,8 +150,7 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     expect(fancytree_parent('track111')[:class]).to include 'fancytree-selected'
 
     expect {
-      select_node('track111.bam')
-      loop until page.evaluate_script('jQuery.active').zero?
+      deselect_node('track111.bam')
     }.to change(@project.tracks, :count).by(-1)
 
     expect(fancytree_parent('track111')[:class]).not_to include 'fancytree-selected'
