@@ -619,15 +619,29 @@ RSpec.describe ProjectsDatapathsController do
   end
 
   describe "#checkbox_abilities" do
-    context "as a user" do
-      it "should hide checkboxes on folders" do
-        allow(controller).to receive(:cannot?).and_return(true)
-        tree = [
+    context "folders" do
+      before do
+        @tree = [
           {title: 'dir1', folder: true, lazy: true, children: [
             {title: 'dir1', folder: true, lazy: true}
           ]}
         ]
-        result = controller.send :checkbox_abilities, tree
+      end
+
+      it "should show checkboxes on folders for project managers" do
+        allow(controller).to receive(:cannot?).and_return(false)
+        result = controller.send :checkbox_abilities, @tree
+
+        expect(result).to eq [
+          {:title=>"dir1", :folder=>true, :lazy=>true, :children=>[
+            {:title=>"dir1", :folder=>true, :lazy=>true}
+          ]}
+        ]
+      end
+
+      it "should hide checkboxes on folders for project users" do
+        allow(controller).to receive(:cannot?).and_return(true)
+        result = controller.send :checkbox_abilities, @tree
 
         expect(result).to eq [
           {:title=>"dir1", :folder=>true, :lazy=>true, :hideCheckbox=>true, :children=>[
@@ -635,20 +649,34 @@ RSpec.describe ProjectsDatapathsController do
           ]}
         ]
       end
+    end
 
-      it "should hide checkboxes on unowned tracks" do
+    context "unowned tracks" do
+      before do
         project = FactoryGirl.create(:project)
-        track = FactoryGirl.create(:track, project: project)
+        @track = FactoryGirl.create(:track, project: project)
         controller.instance_variable_set(:@project, project)
-        allow(controller).to receive(:cannot?).and_return(true)
 
-        tree = [
-          {title: 'track1.bam', lazy: true, selected: true, object: {id: track.id}}
+        @tree = [
+          {title: 'track1.bam', lazy: true, selected: true, object: {id: @track.id}}
         ]
-        result = controller.send :checkbox_abilities, tree
+      end
+
+      it "should show checkboxes for project managers" do
+        allow(controller).to receive(:cannot?).and_return(false)
+        result = controller.send :checkbox_abilities, @tree
 
         expect(result).to eq [
-          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>track.id}, :hideCheckbox=>true}
+          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}}
+        ]
+      end
+
+      it "should hide checkboxes for project users" do
+        allow(controller).to receive(:cannot?).and_return(true)
+        result = controller.send :checkbox_abilities, @tree
+
+        expect(result).to eq [
+          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}, :hideCheckbox=>true}
         ]
       end
     end
