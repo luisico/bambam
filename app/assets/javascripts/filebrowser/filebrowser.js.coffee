@@ -50,7 +50,7 @@ class @Filebrowser
 
       beforeSelect: (event, data) ->
         fsNode = Filebrowser.node(data.node)
-        if data.node.isFolder()
+        if fsNode instanceof FilebrowserFolderNode
           if fsNode.isSelected() then fsNode.confirmSelectedFolder() else fsNode.confirmUnselectedFolder()
 
       click: (event, data) ->
