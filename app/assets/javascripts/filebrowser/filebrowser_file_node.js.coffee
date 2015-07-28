@@ -43,7 +43,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     Project.updateTracksCount()
     super
 
-  buildNode: (projectsDatapathId=false) ->
+  buildNode: (projectsDatapathId=null) ->
     super
     if projectsDatapathId
       projectsDatapath = $.grep(@parents, (val, i) -> val.data.object != undefined and val.data.object.id == projectsDatapathId)[0]
