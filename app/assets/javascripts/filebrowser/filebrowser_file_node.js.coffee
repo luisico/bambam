@@ -30,7 +30,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
     tr.find('.track-igv').html(jqXHR.igv)
     Project.updateTracksCount()
-    super
+    FilebrowserNode.ajaxSuccess(@node)
 
   destroySuccess: () ->
     tr = $(@node.tr)
