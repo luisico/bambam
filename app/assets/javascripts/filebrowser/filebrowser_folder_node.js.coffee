@@ -1,9 +1,9 @@
 #= require filebrowser/filebrowser_node
 
 class @FilebrowserFolderNode extends @FilebrowserNode
-  constructor: ->
+  constructor: (@node, filebrowser) ->
+    @filebrowser = filebrowser
     @url = "/projects_datapaths"
-    super
 
   isSelectable: ->
     $.grep(@node.getParentList(false, true), (node) -> node.isSelected())
@@ -15,9 +15,9 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     if @node.isSelected()
       col2.html(@node.data.object.name).attr('title', @node.data.object.name)
 
-  data: (project_id) ->
+  data: ->
     [datapath_id, path, name] = @buildNode()
-    { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
+    { projects_datapath: {datapath_id: datapath_id, project_id: @filebrowser.project_id, path: path, name: name }}
 
   createSuccess: (jqXHR) ->
     if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR

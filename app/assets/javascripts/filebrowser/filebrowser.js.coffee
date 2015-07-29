@@ -8,6 +8,7 @@ class @Filebrowser
 
   load: ->
     project_id = @project_id
+    filebrowser = this
     url = RAILS_RELATIVE_URL_ROOT + "/projects_datapaths/browser"
 
     @tree.fancytree
@@ -45,8 +46,8 @@ class @Filebrowser
           child.hideCheckbox = true for child in data.response when !child.folder
 
       select: (event, data) ->
-        fsNode = Filebrowser.node(data.node)
-        if fsNode.isSelected() then fsNode.createNode(project_id) else fsNode.destroyNode()
+        fsNode = Filebrowser.node(data.node, filebrowser)
+        if fsNode.isSelected() then fsNode.createNode() else fsNode.destroyNode()
 
       beforeSelect: (event, data) ->
         fsNode = Filebrowser.node(data.node)
@@ -60,9 +61,9 @@ class @Filebrowser
         console.log(node)
         console.log(node.isSelectable())
 
-  @node: (node) ->
+  @node: (node, filebrowser) ->
     # Instantiates a new FilebrowserNode
     if node.isFolder()
-      new FilebrowserFolderNode(node)
+      new FilebrowserFolderNode(node, filebrowser)
     else
       new FilebrowserFileNode(node)

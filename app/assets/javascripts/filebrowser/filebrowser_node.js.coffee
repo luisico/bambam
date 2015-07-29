@@ -13,8 +13,8 @@ class @FilebrowserNode
     @tdList = $(@node.tr).find(">td")
     @tdList.eq(1).attr('title', @node.title)
 
-  createNode: (project_id)->
-    @ajaxRequest("POST", @url, @data(project_id), @createSuccess, FilebrowserNode.ajaxError)
+  createNode: ->
+    @ajaxRequest("POST", @url, @data(), @createSuccess, FilebrowserNode.ajaxError)
 
   destroyNode: ->
     @ajaxRequest("POST", @url + "/" + @node.data.object.id, { _method: "delete" }, @destroySuccess, FilebrowserNode.ajaxError)
