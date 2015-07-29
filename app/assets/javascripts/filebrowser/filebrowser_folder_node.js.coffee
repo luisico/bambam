@@ -24,7 +24,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
     @resetDatapathHierarchy(jqXHR.id)
     FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
-    FilebrowserNode.ajaxSuccess(@node)
+    super
 
   destroyNode: ->
     if @selectedParent() == undefined and @selectedChildFolders().length == 0

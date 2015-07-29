@@ -35,6 +35,9 @@ class @FilebrowserNode
       success: success
       error: error
 
+  createSuccess:  ->
+    FilebrowserNode.ajaxSuccess(@node)
+
   destroySuccess: ->
     FilebrowserNode.ajaxSuccess(@node)
 
