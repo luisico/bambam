@@ -1,6 +1,10 @@
 #= require filebrowser/filebrowser_node
 
 class @FilebrowserFileNode extends @FilebrowserNode
+  constructor: ->
+    @url = "/tracks"
+    super
+
   isSelectable: ->
     $.grep(@node.getParentList(), (node) -> node.isSelected())
       .length > 0
@@ -15,11 +19,9 @@ class @FilebrowserFileNode extends @FilebrowserNode
       col3.html("<span class='label genome'>" + @node.data.object.genome + "</span>")
       col4.html(@node.data.object.igv)
 
-  createNode: ->
-    @url = "/tracks"
+  data: ->
     [projects_datapath_id, path, name] = @buildNode()
-    @data = { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
-    super
+    { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
 
   createSuccess: (jqXHR) ->
     @node.data['object'] = jqXHR
@@ -28,10 +30,6 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
     tr.find('.track-igv').html(jqXHR.igv)
     Project.updateTracksCount()
-    super
-
-  destroyNode: ->
-    @url = "/tracks/" + @node.data.object.id
     super
 
   destroySuccess: () ->

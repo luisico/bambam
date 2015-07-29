@@ -1,6 +1,10 @@
 #= require filebrowser/filebrowser_node
 
 class @FilebrowserFolderNode extends @FilebrowserNode
+  constructor: ->
+    @url = "/projects_datapaths"
+    super
+
   isSelectable: ->
     $.grep(@node.getParentList(false, true), (node) -> node.isSelected())
       .length > 0
@@ -11,11 +15,9 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     if @node.isSelected()
       col2.html(@node.data.object.name).attr('title', @node.data.object.name)
 
-  createNode: (project_id) ->
-    @url = "/projects_datapaths"
+  data: (project_id) ->
     [datapath_id, path, name] = @buildNode()
-    @data = { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
-    super
+    { projects_datapath: {datapath_id: datapath_id, project_id: project_id, path: path, name: name }}
 
   createSuccess: (jqXHR) ->
     if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
@@ -27,7 +29,6 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   destroyNode: ->
     if @selectedParent() == undefined and @selectedChildFolders().length == 0
       FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), true)
-    @url = "/projects_datapaths/" + @node.data.object.id
     super
 
   destroySuccess: ->
