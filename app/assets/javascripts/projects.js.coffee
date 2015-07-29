@@ -14,6 +14,6 @@ jQuery ->
     $('#project-users').show()
     $(this).closest('form').remove()
 
-  $('.track-count').on 'updateFileCount', (event) ->
+  $('.track-count').on 'filebrowserUpdateFileCount', (event) ->
     count = $('a.service.fi-eye').length
     $('.track-count').text("[" + count + "]")
