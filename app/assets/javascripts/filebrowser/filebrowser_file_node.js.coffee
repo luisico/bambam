@@ -29,7 +29,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.id + "'>" + jqXHR.name + "</a>").attr('title', @node.data.object.name)
     tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
     tr.find('.track-igv').html(jqXHR.igv)
-    Project.updateTracksCount()
+    $('.track-count').trigger('updateFileCount')
     super
 
   destroySuccess: () ->
@@ -38,7 +38,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-genome').html('')
     tr.find('.track-igv').html('')
     delete @node.data.object
-    Project.updateTracksCount()
+    $('.track-count').trigger('updateFileCount')
     super
 
   buildNode: (projectsDatapathId=null) ->

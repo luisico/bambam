@@ -14,7 +14,6 @@ jQuery ->
     $('#project-users').show()
     $(this).closest('form').remove()
 
-class @Project
-  @updateTracksCount: ->
+  $('.track-count').on 'updateFileCount', (event) ->
     count = $('a.service.fi-eye').length
     $('.track-count').text("[" + count + "]")
