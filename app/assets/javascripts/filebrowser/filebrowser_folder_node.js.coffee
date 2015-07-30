@@ -64,7 +64,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     FilebrowserFolderNode.folders(@node.getParent().children)
 
   confirmSelectedFolder: ->
-    parent = @parent()
+    parent = @selectedParent()
     folders = @selectedChildFolders()
     files = @selectedChildFiles()
     if parent == undefined and folders.length == 0 and files.length > 0
