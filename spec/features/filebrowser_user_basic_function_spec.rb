@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "User basic fancytree functions", js: true do
+RSpec.feature "User basic filebrowser functions", js: true do
   before do
     @user = FactoryGirl.create(:user)
     @project = FactoryGirl.create(:project, users: [@user])

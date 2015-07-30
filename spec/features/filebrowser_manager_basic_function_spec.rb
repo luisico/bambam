@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Manager basic fancytree functions", js: true do
+RSpec.feature "Manager basic filebrowser functions", js: true do
   before do
     @manager = FactoryGirl.create(:manager)
     @project = FactoryGirl.create(:project, owner: @manager)
