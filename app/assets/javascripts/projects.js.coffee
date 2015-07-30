@@ -1,5 +1,4 @@
 jQuery ->
-  #Fancytree.applyFancytree()
   new Filebrowser('#track-tree')
 
   $("#project_user_ids").select2({
