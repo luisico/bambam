@@ -54,8 +54,12 @@ Then /^I should be able to access the track page from a link$/ do
   expect(current_path).to eq track_path(@track)
 end
 
-Then /^I should see instuctions on how to add tracks$/ do
-  expect(page).to have_content 'You either have no projects or no tracks'
+Then /^I should see instuctions with a link to email an administrator$/ do
+  expect(page).to have_link ENV['ADMIN_EMAIL']
+end
+
+Then /^I should see instuctions with a link to the projects page$/ do
+  expect(page).to have_link 'projects'
 end
 
 Then /^I should see (\d+) tracks on the index page$/ do |count|

@@ -26,9 +26,12 @@
           </ul>
         </div>
       <% else %>
-        <h5>You either have no projects or no tracks.</h5>
-        <p>If you belong to a project, you can add tracks to the project edit page.</p>
-        <p>If you don't belong to a project, please contact your administrator.</p>
+        <p>You have no tracks in the system. You can add tracks to the system through
+        <% if current_user.projects.any? %>
+          <%= link_to "projects", projects_path %>.</p>
+        <% else %>
+           projects. Please contact <%= mail_to current_user.invited_by ? current_user.invited_by.email : ENV['ADMIN_EMAIL'] %> to be added to a project.</p>
+        <% end %>
       <% end %>
     </div>
   </div>

@@ -25,11 +25,16 @@ Feature: List of tracks
     When I am on the tracks page
     Then I should be able to access the track page from a link
 
-  Scenario: User with no tracks will see instructions on how to add tracks
+  Scenario: User with no tracks and no projects
+    Given I am signed in
+    When I am on the tracks page
+    Then I should see instuctions with a link to email an administrator
+
+  Scenario: User with a project, but no tracks
     Given I am signed in
     And I belong to a project
     When I am on the tracks page
-    Then I should see instuctions on how to add tracks
+    Then I should see instuctions with a link to the projects page
 
   @javascript
   Scenario: IGV info tooltip
