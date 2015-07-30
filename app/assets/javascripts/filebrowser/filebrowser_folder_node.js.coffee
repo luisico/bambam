@@ -23,12 +23,12 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     if @node.data.object then $.extend(@node.data.object, data) else @node.data['object'] = data
     $(@node.tr).find('.projects-datapath-name').html(data.name).attr('title', data.name)
     @resetDatapathHierarchy(data.id)
-    FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
+    FilebrowserFolderNode.resetCheckboxes(@childFiles(), false)
     super
 
   destroyNode: ->
     if @selectedParent() == undefined and @selectedChildFolders().length == 0
-      FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), true)
+      FilebrowserFolderNode.resetCheckboxes(@childFiles(), true)
     super
 
   destroySuccess: (data, textStatus, jqXHR) ->
@@ -46,13 +46,13 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     [datapath_id, path, name]
 
   selectedChildFolders: ->
-    FilebrowserFolderNode.selectedFolders(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.selectedFolders(FilebrowserFolderNode.deepChildren(@node))
 
   selectedChildFiles: ->
-    FilebrowserFolderNode.selectedFiles(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.selectedFiles(FilebrowserFolderNode.deepChildren(@node))
 
   childFiles: ->
-    FilebrowserFolderNode.files(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.files(FilebrowserFolderNode.deepChildren(@node))
 
   selectedParent: ->
     FilebrowserFolderNode.selected(@node.getParentList())[0]
@@ -64,12 +64,10 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     FilebrowserFolderNode.folders(@node.getParent().children)
 
   confirmSelectedFolder: ->
-    parent = @selectedParent()
-    folders = @selectedChildFolders()
-    files = @selectedChildFiles()
-    if parent == undefined and folders.length == 0 and files.length > 0
+    selected_files = @selectedChildFiles()
+    if @selectedParent() == undefined and @selectedChildFolders().length == 0 and selected_files.length > 0
       if confirm("Deselecting this folder will permanently delete all child files. Are you sure you want to continue?")
-        file.toggleSelected() for file in files
+        file.toggleSelected() for file in selected_files
         true
       else
         false
@@ -84,64 +82,62 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       if confirm("Selecting this folder will permanently delete all sibling files. Are you sure you want to continue?")
         for file in siblings
           file.toggleSelected()
-          FilebrowserFolderNode.resetFileCheckboxes([file], true)
+          FilebrowserFolderNode.resetCheckboxes([file], true)
         true
       else
         false
 
   resetDatapathHierarchy: (projectsDatapathId) ->
-    selectedParent = @selectedParent()
-    selectedChildFiles = @selectedChildFiles()
-    selectedChildFolders = @selectedChildFolders()
-    if selectedParent
-      Filebrowser.node(selectedParent).resolveOrphanFiles(selectedChildFiles)
-      @transitionChildFiles(projectsDatapathId)
+    parent = @selectedParent()
+    folders = @selectedChildFolders()
+    files = @selectedChildFiles()
+    if parent
+      Filebrowser.node(parent).resolveOrphans(files)
+      @transitionFiles(projectsDatapathId)
       @resetSiblingCheckboxes()
       @resetParentCheckboxes()
-      selectedParent.toggleSelected()
-    else if selectedChildFolders.length > 0
-      for folder in selectedChildFolders
-        Filebrowser.node(folder).transitionChildFiles(projectsDatapathId)
+      parent.toggleSelected()
+    else if folders.length > 0
+      for folder in folders
+        Filebrowser.node(folder).transitionFiles(projectsDatapathId)
         folder.toggleSelected()
-      children = FilebrowserFolderNode.deepChildrenList(@node)
-      FilebrowserFolderNode.resetFileCheckboxes(FilebrowserFolderNode.files(children), false)
-    else if selectedChildFiles.length > 0
-      @transitionChildFiles(projectsDatapathId)
+      children = FilebrowserFolderNode.deepChildren(@node)
+      FilebrowserFolderNode.resetCheckboxes(FilebrowserFolderNode.files(children), false)
+    else if files.length > 0
+      @transitionFiles(projectsDatapathId)
 
-  resolveOrphanFiles: (childFiles) ->
-    selectedParentChildFiles = @selectedChildFiles()
-    newProjectsDatapaths = []
-    orphanFiles = $(selectedParentChildFiles).not(childFiles).get()
-    for orphanFile in orphanFiles
-      orphanFileParentList = orphanFile.getParentList()
-      newProjectsDatapaths.push(orphanFileParentList[orphanFileParentList.length - 1])
-    uniqueNewProjectsDatapaths = newProjectsDatapaths.filter((elem, pos) -> newProjectsDatapaths.indexOf(elem) == pos)
-    for projectsDatapath in uniqueNewProjectsDatapaths
-      parents = projectsDatapath.getParentList()
-      overlap = parents.filter((n) -> uniqueNewProjectsDatapaths.indexOf(n) != -1)
-      projectsDatapath.toggleSelected() unless overlap.length > 0
+  resolveOrphans: (childFiles) ->
+    folders = []
+    for orphan in $(@selectedChildFiles()).not(childFiles).get()
+      parents = orphan.getParentList()
+      folders.push(parents[parents.length - 1])
+    unique_folders = folders.filter((elem, pos) -> folders.indexOf(elem) == pos)
+    for folder in unique_folders
+      parents = folder.getParentList()
+      overlap = parents.filter((n) -> unique_folders.indexOf(n) != -1)
+      folder.toggleSelected() unless overlap.length > 0
 
-  transitionChildFiles: (projectsDatapathId) ->
+  transitionFiles: (projectsDatapathId) ->
     for file in @selectedChildFiles()
       Filebrowser.node(file).updateNode(projectsDatapathId)
 
   resetSiblingCheckboxes: ->
     for sibling in @siblingFolders().concat(@siblingFiles())
       if sibling.isFolder() && !sibling.isSelected() && Filebrowser.node(sibling).selectedChildFolders().length == 0
-        FilebrowserFolderNode.resetFileCheckboxes(Filebrowser.node(sibling).childFiles(), true)
+        FilebrowserFolderNode.resetCheckboxes(Filebrowser.node(sibling).childFiles(), true)
       else if !sibling.isFolder()
-        FilebrowserFolderNode.resetFileCheckboxes([sibling], true)
+        FilebrowserFolderNode.resetCheckboxes([sibling], true)
 
   resetParentCheckboxes: ->
     for parent in @node.getParentList()
-      FilebrowserFolderNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
+      FilebrowserFolderNode.resetCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
       # TODO: calling Filebrowser.node here might call for moving that method to FilebrowserNode
 
-  @deepChildrenList: (node, array = []) ->
+  @deepChildren: (node, array = []) ->
     node = node.getFirstChild()
     while node
       array.push(node)
-      FilebrowserFolderNode.deepChildrenList(node, array)
+      FilebrowserFolderNode.deepChildren(node, array)
       node = node.getNextSibling()
     array
 
@@ -160,7 +156,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   @folders: (nodes) ->
     $.grep(nodes, (node) -> node.isFolder())
 
-  @resetFileCheckboxes: (files, remove) ->
+  @resetCheckboxes: (files, remove) ->
     for file in files
       tr = $(file.tr)
       if remove
