@@ -482,32 +482,76 @@ RSpec.describe ProjectsDatapathsController do
       end
     end
 
-    context "unowned tracks" do
-      before do
-        project = FactoryGirl.create(:project)
-        @track = FactoryGirl.create(:track, project: project)
-        controller.instance_variable_set(:@project, project)
+    context "files" do
+      context "selected and unowned" do
+        before do
+          project = FactoryGirl.create(:project)
+          @track = FactoryGirl.create(:track, project: project)
+          controller.instance_variable_set(:@project, project)
 
-        @tree = [
-          {title: 'track1.bam', lazy: true, selected: true, object: {id: @track.id}}
-        ]
+          @tree = [
+            {title: 'track1.bam', lazy: true, selected: true, object: {id: @track.id}}
+          ]
+        end
+
+        it "should show checkboxes for project managers" do
+          allow(controller).to receive(:cannot?).and_return(false)
+          result = controller.send :checkbox_abilities, @tree
+
+          expect(result).to eq [
+            {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}}
+          ]
+        end
+
+        it "should hide checkboxes for project users" do
+          allow(controller).to receive(:cannot?).and_return(true)
+          result = controller.send :checkbox_abilities, @tree
+
+          expect(result).to eq [
+            {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}, :hideCheckbox=>true}
+          ]
+        end
       end
+    end
 
-      it "should show checkboxes for project managers" do
+    context "unselected" do
+      it "should hide checkbox when there is no selected parent" do
         allow(controller).to receive(:cannot?).and_return(false)
-        result = controller.send :checkbox_abilities, @tree
+        tree = [
+          {title: 'dir1', folder: true, lazy: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam'}
+            ]}
+          ]}
+        ]
+        result = controller.send :checkbox_abilities, tree
 
         expect(result).to eq [
-          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}}
+          {title: 'dir1', folder: true, lazy: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam', hideCheckbox: true}
+            ]}
+          ]}
         ]
       end
 
-      it "should hide checkboxes for project users" do
-        allow(controller).to receive(:cannot?).and_return(true)
-        result = controller.send :checkbox_abilities, @tree
+      it "should show checkbox when there is a selected parent" do
+        allow(controller).to receive(:cannot?).and_return(false)
+        tree = [
+          {title: 'dir1', folder: true, lazy: true, selected: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam'}
+            ]}
+          ]}
+        ]
+        result = controller.send :checkbox_abilities, tree
 
         expect(result).to eq [
-          {:title=>"track1.bam", :lazy=>true, :selected=>true, :object=>{:id=>@track.id}, :hideCheckbox=>true}
+          {title: 'dir1', folder: true, lazy: true, selected: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam'}
+            ]}
+          ]}
         ]
       end
     end
