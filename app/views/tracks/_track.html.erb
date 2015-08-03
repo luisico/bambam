@@ -7,10 +7,8 @@
       <li>
         <%= link_to track.name, track %><span class="label genome"><%= track.genome %></span>
       </li>
-      <li class="pointer">
-        <i class="truncated" title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, excerpt_text, radius: 5) %> data-truncated=true>
+      <li title=<%= track.path %> data-long=<%= track.path %> data-short=<%= excerpt(track.path, excerpt_text, radius: 5) %> data-excerpt=true>
           <%= excerpt(track.path, excerpt_text, radius: 5) %>
-        </i>
       </li>
     </ul>
 
