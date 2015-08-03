@@ -23,12 +23,12 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     if @node.data.object then $.extend(@node.data.object, data) else @node.data['object'] = data
     $(@node.tr).find('.projects-datapath-name').html(data.name).attr('title', data.name)
     @resetDatapathHierarchy(data.id)
-    FilebrowserFolderNode.resetCheckboxes(@childFiles(), false)
+    @resetChildCheckboxes(false)
     super
 
   destroyNode: ->
     if @selectedParent() == undefined and @selectedChildFolders().length == 0
-      FilebrowserFolderNode.resetCheckboxes(@childFiles(), true)
+      @resetChildCheckboxes(true)
     super
 
   destroySuccess: (data, textStatus, jqXHR) ->
@@ -82,7 +82,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       if confirm("Selecting this folder will permanently delete all sibling files. Are you sure you want to continue?")
         for file in siblings
           file.toggleSelected()
-          FilebrowserFolderNode.resetCheckboxes([file], true)
+          new FilebrowserFolderNode(file).resetCheckbox(true)
         true
       else
         false
@@ -101,8 +101,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       for folder in folders
         Filebrowser.node(folder).transitionFiles(projectsDatapathId)
         folder.toggleSelected()
-      children = FilebrowserFolderNode.deepChildren(@node)
-      FilebrowserFolderNode.resetCheckboxes(FilebrowserFolderNode.files(children), false)
+      @resetChildCheckboxes(false)
     else if files.length > 0
       @transitionFiles(projectsDatapathId)
 
@@ -121,17 +120,30 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     for file in @selectedChildFiles()
       Filebrowser.node(file).updateNode(projectsDatapathId)
 
+  resetCheckbox: (remove) ->
+    tr = $(@node.tr)
+    if remove
+      @node.hideCheckbox = true
+      tr.find('td span').first().removeClass('fancytree-checkbox')
+    else
+      @node.hideCheckbox = false
+      tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
+
+  resetChildCheckboxes: (remove) ->
+    for child in @childFiles()
+      new FilebrowserFolderNode(child).resetCheckbox(remove)
+
   resetSiblingCheckboxes: ->
     for sibling in @siblingFolders().concat(@siblingFiles())
       if sibling.isFolder() && !sibling.isSelected() && Filebrowser.node(sibling).selectedChildFolders().length == 0
-        FilebrowserFolderNode.resetCheckboxes(Filebrowser.node(sibling).childFiles(), true)
+        new FilebrowserFolderNode(sibling).resetChildCheckboxes(true)
       else if !sibling.isFolder()
-        FilebrowserFolderNode.resetCheckboxes([sibling], true)
+        new FilebrowserFolderNode(sibling).resetCheckbox(true)
 
   resetParentCheckboxes: ->
     for parent in @node.getParentList()
-      FilebrowserFolderNode.resetCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
-      # TODO: calling Filebrowser.node here might call for moving that method to FilebrowserNode
+      for sibling in new FilebrowserFolderNode(parent).siblingFiles()
+        new FilebrowserFolderNode(sibling).resetCheckbox(true)
 
   @deepChildren: (node, array = []) ->
     node = node.getFirstChild()
@@ -155,13 +167,3 @@ class @FilebrowserFolderNode extends @FilebrowserNode
 
   @folders: (nodes) ->
     $.grep(nodes, (node) -> node.isFolder())
-
-  @resetCheckboxes: (files, remove) ->
-    for file in files
-      tr = $(file.tr)
-      if remove
-        file.hideCheckbox = true
-        tr.find('td span').first().removeClass('fancytree-checkbox')
-      else
-        file.hideCheckbox = false
-        tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
