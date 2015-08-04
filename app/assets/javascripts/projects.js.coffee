@@ -1,5 +1,5 @@
 jQuery ->
-  Fancytree.applyFancytree()
+  new Filebrowser('#track-tree')
 
   $("#project_user_ids").select2({
     placeholder: "Add a user"
@@ -13,7 +13,6 @@ jQuery ->
     $('#project-users').show()
     $(this).closest('form').remove()
 
-class @Project
-  @updateTracksCount: ->
+  $('.track-count').on 'filebrowserUpdateFileCount', (event) ->
     count = $('a.service.fi-eye').length
     $('.track-count').text("[" + count + "]")

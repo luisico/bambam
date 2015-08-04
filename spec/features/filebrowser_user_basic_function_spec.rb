@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "User basic fancytree functions", js: true do
+RSpec.feature "User basic filebrowser functions", js: true do
   before do
     @user = FactoryGirl.create(:user)
     @project = FactoryGirl.create(:project, users: [@user])
@@ -19,8 +19,8 @@ RSpec.feature "User basic fancytree functions", js: true do
   scenario "cannot add a nested datapath" do
     preselect_datapath(@project, @datapaths[0])
     visit project_path(@project)
-    expand_node(@datapaths[0].path)
-    expect(fancytree_parent('dir11')).not_to have_css '.fancytree-checkbox'
+    expand_node('dir11')
+    expect(fancytree_parent('dir111')).not_to have_css '.fancytree-checkbox'
   end
 
   scenario "adds a track to a datapath" do
@@ -28,7 +28,6 @@ RSpec.feature "User basic fancytree functions", js: true do
     visit project_path(@project)
 
     expect {
-      expand_node(@datapaths[0].path)
       select_node('track11.bam')
     }.to change(@project.tracks, :count).by(1)
 
@@ -47,7 +46,6 @@ RSpec.feature "User basic fancytree functions", js: true do
     expect {
       allow_any_instance_of(Track).to receive(:save).and_return(false)
       allow_any_instance_of(Track).to receive_message_chain(:errors, :full_messages).and_return(["my", "error"])
-      expand_node(@datapaths[0].path)
       select_node('track11.bam')
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
@@ -60,7 +58,6 @@ RSpec.feature "User basic fancytree functions", js: true do
 
     expect {
       datapath1.destroy
-      expand_node(@datapaths[0].path)
       select_node('track11.bam')
     }.not_to change(@project.tracks, :count)
     expect(fancytree_parent('track11.bam')[:class]).to include 'error-red'
@@ -105,7 +102,6 @@ RSpec.feature "User basic fancytree functions", js: true do
     visit project_path(@project)
 
     expect {
-      expand_node(@datapaths[0].path)
       select_node('track11.bam')
     }.to change(@project.tracks, :count).by(1)
     expect(fancytree_parent('track11')[:class]).to include 'fancytree-selected'

@@ -40,7 +40,6 @@ RSpec.feature "Selected parent manager", js: true do
     expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
 
     expect {
-      expand_node('dir11')
       select_node('dir111')
     }.not_to change(@project.projects_datapaths, :count)
 
@@ -99,7 +98,6 @@ RSpec.feature "Selected parent manager", js: true do
     preselect_datapath(@project, @datapaths[0])
 
     visit project_path(@project)
-    expand_node(@datapaths[0].path)
     expand_node('dir11')
     expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
 
@@ -116,7 +114,6 @@ RSpec.feature "Selected parent manager", js: true do
 
     visit project_path(@project)
     expect(fancytree_parent('datapath1')[:class]).to include 'fancytree-selected'
-    expand_node('datapath1')
     expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
 
     expect {
@@ -125,6 +122,6 @@ RSpec.feature "Selected parent manager", js: true do
       @project.reload
     }.not_to change(@project.projects_datapaths, :count)
 
-    expect(fancytree_parent('track11.bam')).not_to have_css '.fancytree-checkbox'
+    expect(fancytree_parent('track11')).not_to have_css '.fancytree-checkbox'
   end
 end

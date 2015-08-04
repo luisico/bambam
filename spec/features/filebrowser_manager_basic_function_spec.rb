@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Manager basic fancytree functions", js: true do
+RSpec.feature "Manager basic filebrowser functions", js: true do
   before do
     @manager = FactoryGirl.create(:manager)
     @project = FactoryGirl.create(:project, owner: @manager)
@@ -40,7 +40,6 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     visit project_path(@project)
 
     expect(fancytree_parent(@datapaths[0].path)[:class]).to include 'fancytree-selected'
-    expand_node(@datapaths[0].path)
     expect(fancytree_parent('track11.bam')).to have_css '.fancytree-checkbox'
 
     expect {
@@ -92,7 +91,6 @@ RSpec.feature "Manager basic fancytree functions", js: true do
     visit project_path(@project)
 
     expect(fancytree_parent('dir11')[:class]).to include 'fancytree-selected'
-    expand_node('dir11')
     expect(fancytree_parent('track111.bam')).to have_css '.fancytree-checkbox'
 
     expect {
