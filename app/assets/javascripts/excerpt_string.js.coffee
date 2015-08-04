@@ -1,8 +1,8 @@
 jQuery ->
   $('[data-excerpt]').on 'click', (event) ->
-    if $(this).data('excerpt') == true
-      $(this).text($(this).data('long'))
-      $(this).data('excerpt', false)
+    if $(this).data('excerpt') == "short"
+      $(this).text($(this).data('excerpt-long'))
+      $(this).data('excerpt', "long")
     else
-      $(this).text($(this).data('short'))
-      $(this).data('excerpt', true)
+      $(this).text($(this).data('excerpt-short'))
+      $(this).data('excerpt', "short")

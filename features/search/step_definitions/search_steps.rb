@@ -90,10 +90,10 @@ Then /^I should see the full track path on mouseover$/ do
 end
 
 Then /^I should be able to toggle track path from excerpt to full$/ do
-  find(:css, 'li[data-excerpt="true"]').trigger('click')
+  find(:css, 'li[data-excerpt="short"]').trigger('click')
   expect(page).to have_content @track.path
   expect(page).not_to have_content "...54321best12345..."
-  find(:css, 'li[data-excerpt="true"]').trigger('click')
+  find(:css, 'li[data-excerpt="short"]').trigger('click')
   expect(page).not_to have_content @track.path
   expect(page).to have_content "...54321best12345..."
 end
