@@ -46,13 +46,13 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     [datapath_id, path, name]
 
   selectedChildFolders: ->
-    FilebrowserFolderNode.selectedFolders(FilebrowserFolderNode.deepChildren(@node))
+    FilebrowserFolderNode.selectedFolders(new FilebrowserFolderNode(@node).deepChildren())
 
   selectedChildFiles: ->
-    FilebrowserFolderNode.selectedFiles(FilebrowserFolderNode.deepChildren(@node))
+    FilebrowserFolderNode.selectedFiles(new FilebrowserFolderNode(@node).deepChildren())
 
   childFiles: ->
-    FilebrowserFolderNode.files(FilebrowserFolderNode.deepChildren(@node))
+    FilebrowserFolderNode.files(new FilebrowserFolderNode(@node).deepChildren())
 
   selectedParent: ->
     FilebrowserFolderNode.selected(@node.getParentList())[0]
@@ -145,11 +145,11 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       for sibling in new FilebrowserFolderNode(parent).siblingFiles()
         new FilebrowserFolderNode(sibling).resetCheckbox(true)
 
-  @deepChildren: (node, array = []) ->
-    node = node.getFirstChild()
+  deepChildren: (array = []) ->
+    node = @node.getFirstChild()
     while node
       array.push(node)
-      FilebrowserFolderNode.deepChildren(node, array)
+      new FilebrowserFolderNode(node).deepChildren(array)
       node = node.getNextSibling()
     array
 
