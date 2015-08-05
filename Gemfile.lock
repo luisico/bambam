@@ -111,6 +111,8 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     ffi (1.9.8)
+    font-awesome-sass (4.3.2.1)
+      sass (~> 3.2)
     formatador (0.2.5)
     foundation-icons-sass-rails (3.0.0)
       railties (>= 3.1.1)
@@ -330,6 +332,7 @@ DEPENDENCIES
   email_spec (~> 1.6.0)
   exception_notification (~> 4.1.0)
   factory_girl_rails (~> 4.5.0)
+  font-awesome-sass (~> 4.3.2)
   foundation-icons-sass-rails
   foundation-rails (~> 5.2.3.0)
   guard-cucumber (~> 1.5.4)
