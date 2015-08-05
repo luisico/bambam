@@ -12,9 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.datepicker
-//= require jquery.ui.effect-highlight
-//= require jquery.ui.widget
+//= require jquery.ui.all
 //= require foundation
 //= require local_time
 //= require best_in_place
