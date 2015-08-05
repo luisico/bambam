@@ -50,12 +50,12 @@ Feature: Search the application
     Then I should not see a search box and button
 
   @javascript
-  Scenario: Track path changes from truncated to full on click
+  Scenario: Track path changes from excerpt to full on click
     Given I am signed in as an admin
     And I belong to a project named "best_project" with track "best_track" and path "tmp/tracks/54321best12345.bam"
     When I search for "best"
     Then I should see the full track path on mouseover
-    And I should be able to toggle track path from truncated to full
+    And I should be able to toggle track path from excerpt to full
 
   @javascript
   Scenario: IGV info tooltip

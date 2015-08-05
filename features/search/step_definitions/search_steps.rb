@@ -86,14 +86,14 @@ Then /^I should not see a search box and button$/ do
 end
 
 Then /^I should see the full track path on mouseover$/ do
-  expect(page).to have_xpath("//i[@title='#{@track.path}']")
+  expect(page).to have_xpath("//li[@title='#{@track.path}']")
 end
 
-Then /^I should be able to toggle track path from truncated to full$/ do
-  find('.truncated').trigger('click')
+Then /^I should be able to toggle track path from excerpt to full$/ do
+  find(:css, 'li[data-excerpt="short"]').trigger('click')
   expect(page).to have_content @track.path
   expect(page).not_to have_content "...54321best12345..."
-  find('.truncated').trigger('click')
+  find(:css, 'li[data-excerpt="short"]').trigger('click')
   expect(page).not_to have_content @track.path
   expect(page).to have_content "...54321best12345..."
 end
