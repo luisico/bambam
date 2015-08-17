@@ -16,7 +16,7 @@ var tour_track_show = {
     },
     {
       title: "Timestamps",
-      content: "Track creation date <i class='fi-calendar icon-tour'></i> and date of last update <i class='fi-clock icon-tour'></i>.",
+      content: "Track creation date <i class='created-at-icon icon-tour'></i> and date of last update <i class='updated-at-icon icon-tour'></i>.",
       target: "#timestamps",
       placement: 'left'
     },

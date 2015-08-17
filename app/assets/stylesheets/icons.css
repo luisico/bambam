@@ -44,6 +44,14 @@
   @extend .fi-ticket;
 }
 
+.created-at-icon {
+  @extend .fi-calendar;
+}
+
+.updated-at-icon {
+  @extend .fi-clock;
+}
+
 .icon_key {
   padding-right: 1em;
 }
