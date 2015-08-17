@@ -146,7 +146,7 @@ class ProjectsDatapathsController < ApplicationController
       elsif child[:selected]
         child.merge!(hideCheckbox: true) if cannot? :update, @project.tracks.find(child[:object][:id])
       else
-        child.merge!(hideCheckbox: true) unless selected_parent
+        child.merge!(hideCheckbox: true) unless (selected_parent && can?(:update_tracks, @project))
       end
       checkbox_abilities(child[:children], selected_parent) if child[:children]
     end

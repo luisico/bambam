@@ -537,6 +537,7 @@ RSpec.describe ProjectsDatapathsController do
 
       it "should show checkbox when there is a selected parent" do
         allow(controller).to receive(:cannot?).and_return(false)
+        allow(controller).to receive(:can?).and_return(true)
         tree = [
           {title: 'dir1', folder: true, lazy: true, selected: true, children: [
             {title: 'dir11', folder: true, lazy: true, children:[
@@ -550,6 +551,29 @@ RSpec.describe ProjectsDatapathsController do
           {title: 'dir1', folder: true, lazy: true, selected: true, children: [
             {title: 'dir11', folder: true, lazy: true, children:[
               {title: 'track111.bam'}
+            ]}
+          ]}
+        ]
+      end
+    end
+
+    context "read-only users" do
+      it "should hide checkboxes" do
+        allow(controller).to receive(:cannot?).and_return(false)
+        allow(controller).to receive(:can?).and_return(false)
+        tree = [
+          {title: 'dir1', folder: true, lazy: true, selected: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam'}
+            ]}
+          ]}
+        ]
+        result = controller.send :checkbox_abilities, tree
+
+        expect(result).to eq [
+          {title: 'dir1', folder: true, lazy: true, selected: true, children: [
+            {title: 'dir11', folder: true, lazy: true, children:[
+              {title: 'track111.bam', :hideCheckbox=>true}
             ]}
           ]}
         ]
