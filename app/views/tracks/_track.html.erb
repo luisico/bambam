@@ -16,7 +16,7 @@
       <li class="owner-icon icon-key">
         <%= can?(:show, track.owner) ? link_to(track.owner.handle, track.owner) : track.owner.handle %>
       </li>
-      <li class="fi-clock icon-key" title="updated">
+      <li class="updated-at-icon icon-key" title="updated">
         <%= local_time_ago(track.updated_at) %>
       </li>
     </ul>
