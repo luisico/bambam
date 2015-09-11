@@ -100,7 +100,16 @@ class ProjectsDatapathsController < ApplicationController
               # hide checkbox for silbing files on selected folders
               item.merge!(hideCheckbox: true) if child[:children].any? {|child| child[:folder] && child[:selected]}
             end
-            child[:children] << item unless child[:children].any?{|child| child[:title] == item[:title]}
+            # Begin process of adding item to node only if it wasn't already put there by top_level_tree)
+            unless child[:children].any?{|child| child[:title] == item[:title]}
+              if can? :manage, @project
+                child[:children] << item
+              else
+                # don't show regular users sibling folders/files of checked folder
+                child[:children] << item unless child[:children].any? {|child| child[:folder] && child[:selected]}
+              end
+            end
+
           end
         else
           # add children to child node only if child is selected

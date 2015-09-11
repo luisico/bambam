@@ -341,6 +341,7 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "should hide checkboxes on sibling files of selected folders" do
+      allow(controller).to receive(:can?).and_return(true)
       tree = [
         {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true}
@@ -362,6 +363,56 @@ RSpec.describe ProjectsDatapathsController do
           {:title=>"track1.bam", :hideCheckbox=>true}
         ]}
       ]
+    end
+
+    context "users" do
+      before { allow(controller).to receive(:can?).and_return(false) }
+
+      it "should should not show users sibling folders of checked folder" do
+        tree = [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true}
+          ]}
+        ]
+
+        {
+          File.join('tmp/tests')                            => ['dir1/', 'dir2/'],
+          File.join('tmp/tests', 'dir1')                    => ['track11.bam']
+          }.each do |path, items|
+          allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+        end
+
+        expect(controller.send :fill_in_tree, tree).to eq [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, :children=>[
+              {:title=>"track11.bam"}
+            ]}
+          ]}
+        ]
+      end
+
+      it "should should not show users sibling files of checked folder" do
+        tree = [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true}
+          ]}
+        ]
+
+        {
+          File.join('tmp/tests')                            => ['dir1/', 'track1.bam'],
+          File.join('tmp/tests', 'dir1')                    => ['track11.bam']
+          }.each do |path, items|
+          allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+        end
+
+        expect(controller.send :fill_in_tree, tree).to eq [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, :children=>[
+              {:title=>"track11.bam"}
+            ]}
+          ]}
+        ]
+      end
     end
   end
 

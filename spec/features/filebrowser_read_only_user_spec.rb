@@ -34,4 +34,18 @@ RSpec.feature "Read-only user filebrowser functions", js: true do
 
     expect(fancytree_parent('track11')).not_to have_css '.fancytree-checkbox'
   end
+
+  scenario "cannot sees siblings folders of selected folder" do
+    preselect_datapath(@project, @datapaths[0], 'dir11')
+    visit project_path(@project)
+
+    expect(page).not_to have_selector ".fancytree-title", text: "dir12"
+  end
+
+  scenario "cannot sees siblings files of selected folder" do
+    preselect_datapath(@project, @datapaths[0], 'dir11')
+    visit project_path(@project)
+
+    expect(page).not_to have_selector ".fancytree-title", text: "track11.bam"
+  end
 end
