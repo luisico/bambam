@@ -1,6 +1,6 @@
 class @FilebrowserNode
   constructor: (@node, @filebrowser) ->
-    # TODO: make sure @url is defined
+    throw new Error('url not defined') unless @url?
 
   fullpath: ->
     $.map(@node.getParentList(false, true), (val, i) ->
