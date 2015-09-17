@@ -48,7 +48,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   selectedChildFolders: ->
     FilebrowserFolderNode.selectedFolderFilter(FilebrowserFolderNode.deepChildrenList(@node))
 
-  selectedChildFiles: () ->
+  selectedChildFiles: ->
     FilebrowserFolderNode.selectedFileFilter(FilebrowserFolderNode.deepChildrenList(@node))
 
   childFiles: ->

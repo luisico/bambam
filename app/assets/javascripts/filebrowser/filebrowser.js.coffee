@@ -55,11 +55,13 @@ class @Filebrowser
           if fsNode.isSelected() then fsNode.confirmSelectedFolder() else fsNode.confirmUnselectedFolder()
 
       click: (event, data) ->
-        console.log(data)
-        console.log(event)
-        node = Filebrowser.node(data.node)
-        console.log(node)
-        console.log(node.isSelectable())
+        fsNode = Filebrowser.node(data.node, filebrowser)
+        # console.log("NODE CLICKED")
+        # console.log(data)
+        # console.log(event)
+        # console.log(node)
+        # console.log(node.isSelectable())
+        # console.log("----------")
 
   @node: (node, filebrowser) ->
     # Instantiates a new FilebrowserNode
