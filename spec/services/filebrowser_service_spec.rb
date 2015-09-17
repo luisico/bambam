@@ -54,7 +54,7 @@ RSpec.describe FilebrowserService do
       files = ["track1.#{FilebrowserService::FORMATS.first}", 'another.file'].
         each {|file| Pathname.new(File.join(@path, file)).open("w") {}}
 
-      expect(subject.call).to eq ['dir1/', 'dir2/', files.first]
+      expect(subject.call.sort).to eq ['dir1/', 'dir2/', files.first].sort
     end
 
     it "return an empty array when path is not a directory" do
