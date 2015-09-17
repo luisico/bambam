@@ -45,40 +45,6 @@ class @FilebrowserNode
   updateSuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)
 
-  selectedParent: ->
-    FilebrowserNode.selectedFilter(@node.getParentList())[0]
-
-  siblingFiles: ->
-    FilebrowserNode.fileFilter(@node.getParent().children)
-
-  siblingFolders: ->
-    FilebrowserNode.folderFilter(@node.getParent().children)
-
-  @selectedFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.isSelected())
-
-  @selectedFolderFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
-
-  @selectedFileFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
-
-  @fileFilter: (nodes) ->
-    $.grep(nodes, (node) -> !node.isFolder())
-
-  @folderFilter: (nodes) ->
-    $.grep(nodes, (node) -> node.isFolder())
-
-  @resetFileCheckboxes: (files, remove) ->
-    for file in files
-      tr = $(file.tr)
-      if remove
-        file.hideCheckbox = true
-        tr.find('td span').first().removeClass('fancytree-checkbox')
-      else
-        file.hideCheckbox = false
-        tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
-
   @ajaxSuccess: (node) ->
     tr = $(node.tr)
     tr.effect("highlight", {}, 1500) if tr.is(':visible')

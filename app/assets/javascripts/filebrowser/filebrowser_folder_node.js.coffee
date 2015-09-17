@@ -54,6 +54,15 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   childFiles: ->
     FilebrowserFolderNode.fileFilter(FilebrowserFolderNode.deepChildrenList(@node))
 
+  selectedParent: ->
+    FilebrowserFolderNode.selectedFilter(@node.getParentList())[0]
+
+  siblingFiles: ->
+    FilebrowserFolderNode.fileFilter(@node.getParent().children)
+
+  siblingFolders: ->
+    FilebrowserFolderNode.folderFilter(@node.getParent().children)
+
   confirmSelectedFolder: ->
     selectedParent = @selectedParent()
     selectedChildFolders = @selectedChildFolders()
@@ -66,16 +75,16 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         false
 
   confirmUnselectedFolder: ->
-    selectedSiblingFiles = FilebrowserNode.selectedFilter(@siblingFiles())
+    selectedSiblingFiles = FilebrowserFolderNode.selectedFilter(@siblingFiles())
     array = []
-    array.push(FilebrowserNode.selectedFilter(Filebrowser.node(parent).siblingFiles())) for parent in @node.getParentList()
+    array.push(FilebrowserFolderNode.selectedFilter(Filebrowser.node(parent).siblingFiles())) for parent in @node.getParentList()
     selectedSiblingFilesOfParents = [].concat.apply([], array)
     selectedSiblingFiles = selectedSiblingFiles.concat(selectedSiblingFilesOfParents)
     if selectedSiblingFiles.length > 0
       if confirm("Selecting this folder will permanently delete all sibling files. Are you sure you want to continue?")
         for file in selectedSiblingFiles
           file.toggleSelected()
-          FilebrowserNode.resetFileCheckboxes([file], true)
+          FilebrowserFolderNode.resetFileCheckboxes([file], true)
         true
       else
         false
@@ -95,7 +104,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         Filebrowser.node(folder).transitionChildFiles(projectsDatapathId)
         folder.toggleSelected()
       children = FilebrowserFolderNode.deepChildrenList(@node)
-      FilebrowserNode.resetFileCheckboxes(FilebrowserNode.fileFilter(children), false)
+      FilebrowserFolderNode.resetFileCheckboxes(FilebrowserFolderNode.fileFilter(children), false)
     else if selectedChildFiles.length > 0
       @transitionChildFiles(projectsDatapathId)
 
@@ -119,13 +128,14 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   resetSiblingCheckboxes: ->
     for sibling in @siblingFolders().concat(@siblingFiles())
       if sibling.isFolder() && !sibling.isSelected() && Filebrowser.node(sibling).selectedChildFolders().length == 0
-        FilebrowserNode.resetFileCheckboxes(Filebrowser.node(sibling).childFiles(), true)
+        FilebrowserFolderNode.resetFileCheckboxes(Filebrowser.node(sibling).childFiles(), true)
       else if !sibling.isFolder()
-        FilebrowserNode.resetFileCheckboxes([sibling], true)
+        FilebrowserFolderNode.resetFileCheckboxes([sibling], true)
 
   resetParentCheckboxes: ->
     for parent in @node.getParentList()
-      FilebrowserNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
+      FilebrowserFolderNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
+      # TODO: calling Filebrowser here might call for moving that method to FilebrowserNode
 
   @deepChildrenList: (node, array = []) ->
     node = node.getFirstChild()
@@ -134,3 +144,28 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       FilebrowserFolderNode.deepChildrenList(node, array)
       node = node.getNextSibling()
     array
+
+  @selectedFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected())
+
+  @selectedFolderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
+
+  @selectedFileFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
+
+  @fileFilter: (nodes) ->
+    $.grep(nodes, (node) -> !node.isFolder())
+
+  @folderFilter: (nodes) ->
+    $.grep(nodes, (node) -> node.isFolder())
+
+  @resetFileCheckboxes: (files, remove) ->
+    for file in files
+      tr = $(file.tr)
+      if remove
+        file.hideCheckbox = true
+        tr.find('td span').first().removeClass('fancytree-checkbox')
+      else
+        file.hideCheckbox = false
+        tr.find('td').first().html("<span class='fancytree-checkbox'></span>")
