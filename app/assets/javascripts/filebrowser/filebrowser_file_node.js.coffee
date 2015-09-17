@@ -23,16 +23,16 @@ class @FilebrowserFileNode extends @FilebrowserNode
     [projects_datapath_id, path, name] = @buildNode()
     { track: { name: name, path: path, projects_datapath_id: projects_datapath_id } }
 
-  createSuccess: (jqXHR) ->
-    @node.data['object'] = jqXHR
+  createSuccess: (data, textStatus, jqXHR) ->
+    @node.data['object'] = data
     tr = $(@node.tr)
-    tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + jqXHR.id + "'>" + jqXHR.name + "</a>").attr('title', @node.data.object.name)
-    tr.find('.track-genome').html("<span class='label genome'>" + jqXHR.genome + "</span>")
-    tr.find('.track-igv').html(jqXHR.igv)
+    tr.find('.track-link').html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + data.id + "'>" + data.name + "</a>").attr('title', @node.data.object.name)
+    tr.find('.track-genome').html("<span class='label genome'>" + data.genome + "</span>")
+    tr.find('.track-igv').html(data.igv)
     $('.track-count').trigger('filebrowserUpdateFileCount')
     super
 
-  destroySuccess: () ->
+  destroySuccess: (data, textStatus, jqXHR) ->
     tr = $(@node.tr)
     tr.find('.track-link').html('')
     tr.find('.track-genome').html('')

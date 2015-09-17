@@ -19,10 +19,10 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     [datapath_id, path, name] = @buildNode()
     { projects_datapath: {datapath_id: datapath_id, project_id: @filebrowser.project_id, path: path, name: name }}
 
-  createSuccess: (jqXHR) ->
-    if @node.data.object then $.extend(@node.data.object, jqXHR) else @node.data['object'] = jqXHR
-    $(@node.tr).find('.projects-datapath-name').html(jqXHR.name).attr('title', jqXHR.name)
-    @resetDatapathHierarchy(jqXHR.id)
+  createSuccess: (data, textStatus, jqXHR) ->
+    if @node.data.object then $.extend(@node.data.object, data) else @node.data['object'] = data
+    $(@node.tr).find('.projects-datapath-name').html(data.name).attr('title', data.name)
+    @resetDatapathHierarchy(data.id)
     FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), false)
     super
 
@@ -31,7 +31,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       FilebrowserFolderNode.resetFileCheckboxes(@childFiles(), true)
     super
 
-  destroySuccess: ->
+  destroySuccess: (data, textStatus, jqXHR) ->
     $(@node.tr).find('.projects-datapath-name').html('').attr('title', '')
     delete @node.data.object.id
     delete @node.data.object.name

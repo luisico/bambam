@@ -36,13 +36,13 @@ class @FilebrowserNode
       success: success
       error: error
 
-  createSuccess:  ->
+  createSuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)
 
-  destroySuccess: ->
+  destroySuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)
 
-  updateSuccess: ->
+  updateSuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)
 
   selectedParent: ->
