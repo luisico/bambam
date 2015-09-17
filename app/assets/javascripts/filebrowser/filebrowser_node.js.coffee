@@ -46,7 +46,7 @@ class @FilebrowserNode
     FilebrowserNode.ajaxSuccess(@node)
 
   selectedParent: ->
-    FilebrowserNode.selectedFolderFilter(@node.getParentList())[0]
+    FilebrowserNode.selectedFilter(@node.getParentList())[0]
 
   siblingFiles: ->
     FilebrowserNode.fileFilter(@node.getParent().children)
