@@ -64,25 +64,25 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     FilebrowserFolderNode.folders(@node.getParent().children)
 
   confirmSelectedFolder: ->
-    selectedParent = @selectedParent()
-    selectedChildFolders = @selectedChildFolders()
-    selectedChildFiles = @selectedChildFiles()
-    if selectedParent == undefined and selectedChildFolders.length == 0 and selectedChildFiles.length > 0
+    parent = @parent()
+    folders = @selectedChildFolders()
+    files = @selectedChildFiles()
+    if parent == undefined and folders.length == 0 and files.length > 0
       if confirm("Deselecting this folder will permanently delete all child files. Are you sure you want to continue?")
-        file.toggleSelected() for file in selectedChildFiles
+        file.toggleSelected() for file in files
         true
       else
         false
 
   confirmUnselectedFolder: ->
-    selectedSiblingFiles = FilebrowserFolderNode.selected(@siblingFiles())
+    siblings = FilebrowserFolderNode.selected(@siblingFiles())
     array = []
     array.push(FilebrowserFolderNode.selected(Filebrowser.node(parent).siblingFiles())) for parent in @node.getParentList()
-    selectedSiblingFilesOfParents = [].concat.apply([], array)
-    selectedSiblingFiles = selectedSiblingFiles.concat(selectedSiblingFilesOfParents)
-    if selectedSiblingFiles.length > 0
+    selected_sibling_files_of_parents = [].concat.apply([], array)
+    siblings = siblings.concat(selected_sibling_files_of_parents)
+    if siblings.length > 0
       if confirm("Selecting this folder will permanently delete all sibling files. Are you sure you want to continue?")
-        for file in selectedSiblingFiles
+        for file in siblings
           file.toggleSelected()
           FilebrowserFolderNode.resetFileCheckboxes([file], true)
         true
