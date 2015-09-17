@@ -46,22 +46,22 @@ class @FilebrowserFolderNode extends @FilebrowserNode
     [datapath_id, path, name]
 
   selectedChildFolders: ->
-    FilebrowserFolderNode.selectedFolderFilter(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.selectedFolders(FilebrowserFolderNode.deepChildrenList(@node))
 
   selectedChildFiles: ->
-    FilebrowserFolderNode.selectedFileFilter(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.selectedFiles(FilebrowserFolderNode.deepChildrenList(@node))
 
   childFiles: ->
-    FilebrowserFolderNode.fileFilter(FilebrowserFolderNode.deepChildrenList(@node))
+    FilebrowserFolderNode.files(FilebrowserFolderNode.deepChildrenList(@node))
 
   selectedParent: ->
-    FilebrowserFolderNode.selectedFilter(@node.getParentList())[0]
+    FilebrowserFolderNode.selected(@node.getParentList())[0]
 
   siblingFiles: ->
-    FilebrowserFolderNode.fileFilter(@node.getParent().children)
+    FilebrowserFolderNode.files(@node.getParent().children)
 
   siblingFolders: ->
-    FilebrowserFolderNode.folderFilter(@node.getParent().children)
+    FilebrowserFolderNode.folders(@node.getParent().children)
 
   confirmSelectedFolder: ->
     selectedParent = @selectedParent()
@@ -75,9 +75,9 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         false
 
   confirmUnselectedFolder: ->
-    selectedSiblingFiles = FilebrowserFolderNode.selectedFilter(@siblingFiles())
+    selectedSiblingFiles = FilebrowserFolderNode.selected(@siblingFiles())
     array = []
-    array.push(FilebrowserFolderNode.selectedFilter(Filebrowser.node(parent).siblingFiles())) for parent in @node.getParentList()
+    array.push(FilebrowserFolderNode.selected(Filebrowser.node(parent).siblingFiles())) for parent in @node.getParentList()
     selectedSiblingFilesOfParents = [].concat.apply([], array)
     selectedSiblingFiles = selectedSiblingFiles.concat(selectedSiblingFilesOfParents)
     if selectedSiblingFiles.length > 0
@@ -104,7 +104,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
         Filebrowser.node(folder).transitionChildFiles(projectsDatapathId)
         folder.toggleSelected()
       children = FilebrowserFolderNode.deepChildrenList(@node)
-      FilebrowserFolderNode.resetFileCheckboxes(FilebrowserFolderNode.fileFilter(children), false)
+      FilebrowserFolderNode.resetFileCheckboxes(FilebrowserFolderNode.files(children), false)
     else if selectedChildFiles.length > 0
       @transitionChildFiles(projectsDatapathId)
 
@@ -135,7 +135,7 @@ class @FilebrowserFolderNode extends @FilebrowserNode
   resetParentCheckboxes: ->
     for parent in @node.getParentList()
       FilebrowserFolderNode.resetFileCheckboxes(Filebrowser.node(parent).siblingFiles(), true)
-      # TODO: calling Filebrowser here might call for moving that method to FilebrowserNode
+      # TODO: calling Filebrowser.node here might call for moving that method to FilebrowserNode
 
   @deepChildrenList: (node, array = []) ->
     node = node.getFirstChild()
@@ -145,19 +145,19 @@ class @FilebrowserFolderNode extends @FilebrowserNode
       node = node.getNextSibling()
     array
 
-  @selectedFilter: (nodes) ->
+  @selected: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected())
 
-  @selectedFolderFilter: (nodes) ->
+  @selectedFolders: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected() and node.isFolder())
 
-  @selectedFileFilter: (nodes) ->
+  @selectedFiles: (nodes) ->
     $.grep(nodes, (node) -> node.isSelected() and !node.isFolder())
 
-  @fileFilter: (nodes) ->
+  @files: (nodes) ->
     $.grep(nodes, (node) -> !node.isFolder())
 
-  @folderFilter: (nodes) ->
+  @folders: (nodes) ->
     $.grep(nodes, (node) -> node.isFolder())
 
   @resetFileCheckboxes: (files, remove) ->
