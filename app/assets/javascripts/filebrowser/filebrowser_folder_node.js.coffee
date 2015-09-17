@@ -1,9 +1,9 @@
 #= require filebrowser/filebrowser_node
 
 class @FilebrowserFolderNode extends @FilebrowserNode
-  constructor: (@node, filebrowser) ->
-    @filebrowser = filebrowser
+  constructor: ->
     @url = "/projects_datapaths"
+    super
 
   isSelectable: ->
     $.grep(@node.getParentList(false, true), (node) -> node.isSelected())

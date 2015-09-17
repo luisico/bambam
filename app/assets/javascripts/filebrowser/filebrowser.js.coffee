@@ -24,11 +24,11 @@ class @Filebrowser
         nodeColumnIdx: 1     # render node expander, icon, and title to this column (default: #0)
 
       renderColumns: (event, data) ->
-        fsNode = Filebrowser.node(data.node)
+        fsNode = Filebrowser.node(data.node, filebrowser)
         fsNode.renderColumns()
 
       lazyLoad: (event, data) ->
-        fsNode = new FilebrowserNode(data.node)
+        fsNode = Filebrowser.node(data.node, filebrowser)
         data.result = {
           url: url
           data:
@@ -39,7 +39,7 @@ class @Filebrowser
 
       postProcess: (event, data) ->
         # Node triggering lazyLoad
-        fsNode = Filebrowser.node(data.node)
+        fsNode = Filebrowser.node(data.node, filebrowser)
 
         # Hide checkboxes for non-selectable, non-folder nodes
         if !fsNode.isSelectable()
@@ -50,7 +50,7 @@ class @Filebrowser
         if fsNode.isSelected() then fsNode.createNode() else fsNode.destroyNode()
 
       beforeSelect: (event, data) ->
-        fsNode = Filebrowser.node(data.node)
+        fsNode = Filebrowser.node(data.node, filebrowser)
         if fsNode instanceof FilebrowserFolderNode
           if fsNode.isSelected() then fsNode.confirmSelectedFolder() else fsNode.confirmUnselectedFolder()
 
@@ -66,4 +66,4 @@ class @Filebrowser
     if node.isFolder()
       new FilebrowserFolderNode(node, filebrowser)
     else
-      new FilebrowserFileNode(node)
+      new FilebrowserFileNode(node, filebrowser)

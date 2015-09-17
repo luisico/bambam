@@ -1,5 +1,6 @@
 class @FilebrowserNode
-  constructor: (@node) ->
+  constructor: (@node, @filebrowser) ->
+    # TODO: make sure @url is defined
 
   fullpath: ->
     $.map(@node.getParentList(false, true), (val, i) ->
