@@ -271,6 +271,7 @@ RSpec.describe ProjectsDatapathsController do
 
   describe "#fill_in_tree" do
     it "should fill in directories and tracks" do
+      allow(controller).to receive(:can?).and_return(true)
       tree = [
         {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
           {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
@@ -409,6 +410,34 @@ RSpec.describe ProjectsDatapathsController do
           {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
             {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, :children=>[
               {:title=>"track11.bam"}
+            ]}
+          ]}
+        ]
+      end
+
+      it "should not show siblings of checked folder parents" do
+        tree = [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
+              {title: 'dir11', folder: true, lazy: true, expanded: true, selected: true}
+              ]}
+          ]}
+        ]
+
+        {
+          File.join('tmp/tests')                            => ['dir1/', 'dir2/'],
+          File.join('tmp/tests', 'dir1')                    => ['dir11'],
+          File.join('tmp/tests', 'dir1', 'dir11')           => ['track111.bam']
+          }.each do |path, items|
+          allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+        end
+
+        expect(controller.send :fill_in_tree, tree).to eq [
+          {:title=>"tmp/tests", :folder=>true, :lazy=>true, :expanded=>true, :children=>[
+            {:title=>"dir1", :folder=>true, :lazy=>true, :expanded=>true, :children=>[
+              {:title=>"dir11", :folder=>true, :lazy=>true, :expanded=>true, :selected=>true, :children=>[
+                {:title=>"track111.bam"}
+              ]}
             ]}
           ]}
         ]
