@@ -90,6 +90,7 @@ class ProjectsDatapathsController < ApplicationController
       child[:children] = fill_in_tree(child[:children], path) if child[:children]
       # Retrive directory structure from filesystem
       items = FilebrowserService.new(path).to_fancytree
+
       if !items.empty?
         # add unselected nodes to children of selected child node
         if child[:children]
@@ -102,9 +103,9 @@ class ProjectsDatapathsController < ApplicationController
             unless child[:children].any?{|child| child[:title] == item[:title]}
               if can? :manage, @project
                 child[:children] << item
-              # don't show regular users sibling folders/files of checked folder
-              elsif child[:children].any? {|child| child[:folder] && child[:selected]}
-                child[:children] << item if child[:children].any?{|child| child[:title] == item[:title]}
+              else
+                # don't show regular users folders not in top_level or sibling folders/files of checked folder
+                child[:children] << item unless item[:folder] || child[:children].any? {|child| child[:folder] && child[:selected]}
               end
             end
 

@@ -369,6 +369,33 @@ RSpec.describe ProjectsDatapathsController do
     context "users" do
       before { allow(controller).to receive(:can?).and_return(false) }
 
+      it "should show sibling files to selected files" do
+        tree = [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, children: [
+              {title: 'track11.bam', selected: true}
+            ]}
+          ]}
+        ]
+
+        {
+          File.join('tmp/tests')                            => ['dir1/'],
+          File.join('tmp/tests', 'dir1')                    => ['track11.bam', 'track12.bam', 'track13.bam'],
+        }.each do |path, items|
+          allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+        end
+
+        expect(controller.send :fill_in_tree, tree).to eq [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, children: [
+              {title: 'track11.bam', selected: true},
+              {title: 'track12.bam'},
+              {title: 'track13.bam'},
+            ]},
+          ]}
+        ]
+      end
+
       it "should should not show users sibling folders of checked folder" do
         tree = [
           {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
