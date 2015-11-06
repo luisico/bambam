@@ -238,7 +238,7 @@ RSpec.describe ProjectsDatapathsController do
       expect(controller.send :top_level_tree).to eq [
         {title: datapaths[0].path, folder: true, lazy: true, selected: true, object: {datapath_id: datapaths[0].id, type: 'projects_datapath', id: projects_datapath1.id, name: projects_datapath1.name}, expanded: true },
         {title: datapaths[1].path, folder: true, lazy: true, object: {datapath_id: datapaths[1].id}, expanded: true, children: [
-          {title: 'subdir', folder: true, lazy: true, selected: true, expanded: true, object: {type: 'projects_datapath', id: projects_datapath2.id, name: projects_datapath2.name}}
+          {title: 'subdir', folder: true, lazy: true, selected: true, expanded: true, on_disk: true, object: {type: 'projects_datapath', id: projects_datapath2.id, name: projects_datapath2.name}}
         ]}
       ]
     end
@@ -256,11 +256,11 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :top_level_tree).to eq [
         {title: datapath.path, object: {datapath_id: datapath.id}, folder: true, lazy: true, expanded: true, children: [
-          {title: 'dir1', folder: true, lazy: true, expanded: true, children: [
-            {title: 'dir11', folder: true, lazy: true, selected: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
-              {title: 'dir111', folder: true, lazy: true, expanded: true, children: [
-                {title: 'track1111.bam', selected: true, object: {type: 'track', id: track1111.id, name: track1111.name, genome: track1111.genome, igv: 'igv_url'}},
-                {title: 'track1112.bam', selected: true, object: {type: 'track', id: track1112.id, name: track1112.name, genome: track1112.genome, igv: 'igv_url'}}
+          {title: 'dir1', folder: true, lazy: true, expanded: true, on_disk: true, children: [
+            {title: 'dir11', folder: true, lazy: true, selected: true, on_disk: true, object: {type: 'projects_datapath', id: projects_datapath.id, name: projects_datapath.name}, expanded: true, children: [
+              {title: 'dir111', folder: true, lazy: true, expanded: true, on_disk: true, children: [
+                {title: 'track1111.bam', selected: true, on_disk: true, object: {type: 'track', id: track1111.id, name: track1111.name, genome: track1111.genome, igv: 'igv_url'}},
+                {title: 'track1112.bam', selected: true, on_disk: true, object: {type: 'track', id: track1112.id, name: track1112.name, genome: track1112.genome, igv: 'igv_url'}}
               ]}
             ]}
           ]}
@@ -323,6 +323,18 @@ RSpec.describe ProjectsDatapathsController do
 
       expect(controller.send :fill_in_tree, tree).to eq [
         {:title=>"tmp/tests", :folder=>true, :lazy=>true}
+      ]
+    end
+
+    it "should not expand node missing from disk" do
+      tree = [
+        {title: 'tmp/tests', folder: true, lazy: true, on_disk: false}
+      ]
+
+      allow_any_instance_of(FilebrowserService).to receive(:entries).with(File.join('tmp/tests')).and_return(['dir1/', 'track1.bam'])
+
+      expect(controller.send :fill_in_tree, tree).to eq [
+        {:title=>"tmp/tests", :folder=>true, :lazy=>true, on_disk: false}
       ]
     end
 
@@ -499,36 +511,39 @@ RSpec.describe ProjectsDatapathsController do
 
   describe "#add_path" do
     it "adds a path to a node" do
+      allow(File).to receive(:directory?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path'
-      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true)
+      result = controller.send :add_path, node, 'path', false, 'parent'
+      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true, on_disk: true)
       expect(node).to eq Hash(expanded: true, children: [result])
     end
 
     it "adds multiple paths to a node" do
+      allow(File).to receive(:directory?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/path2'
-      expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
+      result = controller.send :add_path, node, 'path1/path2', false, 'parent'
+      expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true, on_disk: true)
       expect(node).to eq Hash(expanded: true, children: [
-        {title: 'path1', folder: true, lazy: true, expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, on_disk: true, children: [
           result
         ]}
       ])
     end
 
     it "adds multiple subpaths to a node" do
+      allow(File).to receive(:directory?).and_return(true)
       node = {}
 
-      result1 = controller.send :add_path, node, 'path/path1'
-      expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true, expanded: true)
+      result1 = controller.send :add_path, node, 'path/path1', false, 'parent'
+      expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true, expanded: true, on_disk: true)
 
-      result2 = controller.send :add_path, node, 'path/path2'
-      expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
+      result2 = controller.send :add_path, node, 'path/path2', false, 'parent'
+      expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true, on_disk: true)
 
       expect(node).to eq Hash(expanded: true, children: [
-        {title: 'path', folder: true, lazy: true, expanded: true, children: [
+        {title: 'path', folder: true, lazy: true, expanded: true, on_disk: true, children: [
           result1,
           result2
         ]}
@@ -536,12 +551,14 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "add path with a track to a node" do
+      allow(File).to receive(:directory?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/track.bam', true
-      expect(result).to eq Hash(title: 'track.bam', selected: true)
+      result = controller.send :add_path, node, 'path1/track.bam', true, 'parent'
+      expect(result).to eq Hash(title: 'track.bam', selected: true, on_disk: true)
       expect(node).to eq Hash(expanded: true, children: [
-        {title: 'path1', folder: true, lazy: true, expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, on_disk: true, children: [
           result
         ]}
       ])
@@ -553,6 +570,29 @@ RSpec.describe ProjectsDatapathsController do
       expect {
         controller.send :add_path, node, ''
       }.to raise_error(ArgumentError)
+    end
+
+    it "adds path missing from disk" do
+      allow(File).to receive(:directory?).and_return(false)
+      node = {}
+
+      result = controller.send :add_path, node, 'path', false, 'parent'
+      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true, on_disk: false)
+      expect(node).to eq Hash(expanded: true, children: [result])
+    end
+
+    it "adds file missing from disk" do
+      allow(File).to receive(:directory?).and_return(true)
+      allow(File).to receive(:exist?).and_return(false)
+      node = {}
+
+      result = controller.send :add_path, node, 'path1/track.bam', true, 'parent'
+      expect(result).to eq Hash(title: 'track.bam', selected: true, on_disk: false)
+      expect(node).to eq Hash(expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, on_disk: true, children: [
+          result
+        ]}
+      ])
     end
   end
 

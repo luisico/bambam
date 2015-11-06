@@ -12,7 +12,9 @@ class @FilebrowserNode
 
   renderColumns: ->
     @tdList = $(@node.tr).find(">td")
-    @tdList.eq(1).attr('title', @node.title)
+    col1 = @tdList.eq(1)
+    col1.attr('title', @node.title)
+    col1.addClass('missing').attr('title', 'missing') if @node.data.on_disk == false
 
   createNode: ->
     @ajaxRequest("POST", @url, @data(), @createSuccess, FilebrowserNode.ajaxError)

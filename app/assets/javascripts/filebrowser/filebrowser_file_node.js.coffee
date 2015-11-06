@@ -17,7 +17,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     if @node.isSelected()
       col2.html("<a href='" + RAILS_RELATIVE_URL_ROOT + "/tracks/" + @node.data.object.id + "'>" + @node.data.object.name + "</a>").attr('title', @node.data.object.name)
       col3.html("<span class='label genome'>" + @node.data.object.genome + "</span>")
-      col4.html(@node.data.object.igv)
+      if @node.data.on_disk then col4.html(@node.data.object.igv) else col4.html("<span class='broken-link-to-igv'>igv</span>")
 
   data: ->
     [projects_datapath_id, path, name] = @buildNode()
