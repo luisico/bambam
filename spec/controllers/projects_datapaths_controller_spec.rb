@@ -511,7 +511,7 @@ RSpec.describe ProjectsDatapathsController do
 
   describe "#add_path" do
     it "adds a path to a node" do
-      allow(File).to receive(:directory?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
       result = controller.send :add_path, node, 'path', false, 'parent'
@@ -520,7 +520,7 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "adds multiple paths to a node" do
-      allow(File).to receive(:directory?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
       result = controller.send :add_path, node, 'path1/path2', false, 'parent'
@@ -533,7 +533,7 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "adds multiple subpaths to a node" do
-      allow(File).to receive(:directory?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
       result1 = controller.send :add_path, node, 'path/path1', false, 'parent'
@@ -551,7 +551,6 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "add path with a track to a node" do
-      allow(File).to receive(:directory?).and_return(true)
       allow(File).to receive(:exist?).and_return(true)
       node = {}
 
@@ -573,7 +572,7 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "adds path missing from disk" do
-      allow(File).to receive(:directory?).and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
       node = {}
 
       result = controller.send :add_path, node, 'path', false, 'parent'
@@ -582,8 +581,7 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "adds file missing from disk" do
-      allow(File).to receive(:directory?).and_return(true)
-      allow(File).to receive(:exist?).and_return(false)
+      allow(File).to receive(:exist?).and_return(true, false)
       node = {}
 
       result = controller.send :add_path, node, 'path1/track.bam', true, 'parent'

@@ -132,11 +132,7 @@ class ProjectsDatapathsController < ApplicationController
     node.merge!(folder: true, lazy: true) if (is_track && tail) || !is_track
     node.merge!(selected: true) unless tail
     node.merge!(expanded: true) unless is_track
-    if tail || !is_track
-      node.merge!(iconclass: 'missing') unless File.directory?(full_path)
-    else
-      node.merge!(iconclass: 'missing') unless File.exist?(full_path)
-    end
+    node.merge!(iconclass: 'missing') unless File.exist?(full_path)
 
     # Add node to parent if not already present
     parent[:expanded] = true
