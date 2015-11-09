@@ -153,4 +153,20 @@ RSpec.feature "Manager basic filebrowser functions", js: true do
 
     expect(fancytree_parent('track111')[:class]).not_to include 'fancytree-selected'
   end
+
+  scenario "removes a missing track from a nested datapath" do
+    dir11 = preselect_datapath(@project, @datapaths[0], 'dir11')
+    preselect_track(dir11, 'track111', 'bam', @manager)
+    allow(File).to receive(:exist?).and_return(true, false)
+    visit project_path(@project)
+
+    expect(page).to have_selector 'span.fancytree-title', text: 'track111'
+    expect(fancytree_parent('track111')[:class]).to include 'fancytree-selected'
+
+    expect {
+      deselect_node('track111.bam')
+    }.to change(@project.tracks, :count).by(-1)
+
+    expect(page).not_to have_selector 'span.fancytree-title', text: 'track111'
+  end
 end

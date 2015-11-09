@@ -41,7 +41,15 @@ class @FilebrowserNode
     FilebrowserNode.ajaxSuccess(@node)
 
   destroySuccess: (data, textStatus, jqXHR) ->
-    FilebrowserNode.ajaxSuccess(@node)
+    if @node.data.iconclass == 'missing'
+      tr = $(@node.tr)
+      tr.effect("highlight", {}, 1500)
+      setTimeout (->
+        tr.remove()
+      ), 1500
+      return false
+    else
+      FilebrowserNode.ajaxSuccess(@node)
 
   updateSuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)
