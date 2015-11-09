@@ -119,4 +119,15 @@ RSpec.feature "User basic filebrowser functions", js: true do
 
     expect(fancytree_parent('track11')).not_to have_css '.fancytree-checkbox'
   end
+
+  scenario "track file missing from disk" do
+    datapath1 = preselect_datapath(@project, @datapaths[0])
+    track11 = preselect_track(datapath1, 'track11', 'bam', @user)
+    allow(File).to receive(:exist?).and_return(false)
+    visit project_path(@project)
+
+    expect(fancytree_parent('track11')).to have_css ".service.fi-eye.secondary"
+    expect(fancytree_parent('track11')).to have_selector "a[href='#']"
+    expect(fancytree_parent('track11')).to have_xpath "//span[@title='file missing']"
+  end
 end

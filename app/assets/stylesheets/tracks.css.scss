@@ -34,13 +34,3 @@ i.large-calendar {
   font-size: rem-calc(10);
   vertical-align: super;
 }
-
-.broken-link-to-igv {
-  @extend .tiny;
-  @extend .service;
-  @extend .radius;
-  @extend .button;
-  @extend .secondary;
-  @extend .fi-eye;
-  @extend .text-left;
-}
