@@ -78,4 +78,5 @@ only screen and (max-width: 760px),
 .missing {
   @extend .icon-alert;
   color: red;
+  margin-left: 7px;
 }
