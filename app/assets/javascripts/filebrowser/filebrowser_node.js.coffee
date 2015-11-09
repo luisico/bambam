@@ -12,7 +12,8 @@ class @FilebrowserNode
 
   renderColumns: ->
     @tdList = $(@node.tr).find(">td")
-    @tdList.eq(1).attr('title', @node.title)
+    if @node.data.iconclass == 'missing' then title = 'missing from disk' else title = @node.title
+    @tdList.eq(1).attr('title', title)
 
   createNode: ->
     @ajaxRequest("POST", @url, @data(), @createSuccess, FilebrowserNode.ajaxError)
@@ -40,7 +41,15 @@ class @FilebrowserNode
     FilebrowserNode.ajaxSuccess(@node)
 
   destroySuccess: (data, textStatus, jqXHR) ->
-    FilebrowserNode.ajaxSuccess(@node)
+    if @node.data.iconclass == 'missing'
+      tr = $(@node.tr)
+      tr.effect("highlight", {}, 1500)
+      setTimeout (->
+        tr.remove()
+      ), 1500
+      return false
+    else
+      FilebrowserNode.ajaxSuccess(@node)
 
   updateSuccess: (data, textStatus, jqXHR) ->
     FilebrowserNode.ajaxSuccess(@node)

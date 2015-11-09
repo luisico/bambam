@@ -326,6 +326,18 @@ RSpec.describe ProjectsDatapathsController do
       ]
     end
 
+    it "should not expand selected node missing from disk" do
+      tree = [
+        {title: 'tmp/tests', folder: true, lazy: true, selected: true, iconclass: 'missing'}
+      ]
+
+      allow_any_instance_of(FilebrowserService).to receive(:entries).with(File.join('tmp/tests')).and_return(['dir1/', 'track1.bam'])
+
+      expect(controller.send :fill_in_tree, tree).to eq [
+        {:title=>"tmp/tests", :folder=>true, :lazy=>true, selected: true, iconclass: 'missing'}
+      ]
+    end
+
     it "should load direct children of selected folder node" do
       tree = [
         {title: 'tmp/tests', folder: true, lazy: true, selected: true}
@@ -499,17 +511,19 @@ RSpec.describe ProjectsDatapathsController do
 
   describe "#add_path" do
     it "adds a path to a node" do
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path'
+      result = controller.send :add_path, node, 'path', 'parent'
       expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [result])
     end
 
     it "adds multiple paths to a node" do
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/path2'
+      result = controller.send :add_path, node, 'path1/path2', 'parent'
       expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
@@ -519,12 +533,13 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "adds multiple subpaths to a node" do
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result1 = controller.send :add_path, node, 'path/path1'
+      result1 = controller.send :add_path, node, 'path/path1', 'parent'
       expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true, expanded: true)
 
-      result2 = controller.send :add_path, node, 'path/path2'
+      result2 = controller.send :add_path, node, 'path/path2', 'parent'
       expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
 
       expect(node).to eq Hash(expanded: true, children: [
@@ -536,9 +551,10 @@ RSpec.describe ProjectsDatapathsController do
     end
 
     it "add path with a track to a node" do
+      allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/track.bam', true
+      result = controller.send :add_path, node, 'path1/track.bam', 'parent', true
       expect(result).to eq Hash(title: 'track.bam', selected: true)
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
@@ -553,6 +569,28 @@ RSpec.describe ProjectsDatapathsController do
       expect {
         controller.send :add_path, node, ''
       }.to raise_error(ArgumentError)
+    end
+
+    it "adds path missing from disk" do
+      allow(File).to receive(:exist?).and_return(false)
+      node = {}
+
+      result = controller.send :add_path, node, 'path', 'parent'
+      expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true, iconclass: 'missing')
+      expect(node).to eq Hash(expanded: true, children: [result])
+    end
+
+    it "adds file missing from disk" do
+      allow(File).to receive(:exist?).and_return(true, false)
+      node = {}
+
+      result = controller.send :add_path, node, 'path1/track.bam', 'parent', true
+      expect(result).to eq Hash(title: 'track.bam', selected: true, iconclass: 'missing')
+      expect(node).to eq Hash(expanded: true, children: [
+        {title: 'path1', folder: true, lazy: true, expanded: true, children: [
+          result
+        ]}
+      ])
     end
   end
 

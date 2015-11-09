@@ -74,3 +74,9 @@ only screen and (max-width: 760px),
     display: block;
   }
 }
+
+.missing {
+  @extend .icon-alert;
+  color: red;
+  margin-left: 7px;
+}

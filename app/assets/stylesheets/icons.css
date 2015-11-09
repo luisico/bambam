@@ -61,3 +61,7 @@
     padding-right: rem-calc(5);
   }
 }
+
+.icon-alert {
+  @extend .fi-alert;
+}
