@@ -326,15 +326,15 @@ RSpec.describe ProjectsDatapathsController do
       ]
     end
 
-    it "should not expand node missing from disk" do
+    it "should not expand selected node missing from disk" do
       tree = [
-        {title: 'tmp/tests', folder: true, lazy: true, on_disk: false}
+        {title: 'tmp/tests', folder: true, lazy: true, selected: true, iconclass: 'missing'}
       ]
 
       allow_any_instance_of(FilebrowserService).to receive(:entries).with(File.join('tmp/tests')).and_return(['dir1/', 'track1.bam'])
 
       expect(controller.send :fill_in_tree, tree).to eq [
-        {:title=>"tmp/tests", :folder=>true, :lazy=>true, on_disk: false}
+        {:title=>"tmp/tests", :folder=>true, :lazy=>true, selected: true, iconclass: 'missing'}
       ]
     end
 
