@@ -514,7 +514,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path', false, 'parent'
+      result = controller.send :add_path, node, 'path', 'parent'
       expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [result])
     end
@@ -523,7 +523,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/path2', false, 'parent'
+      result = controller.send :add_path, node, 'path1/path2', 'parent'
       expect(result).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
@@ -536,10 +536,10 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result1 = controller.send :add_path, node, 'path/path1', false, 'parent'
+      result1 = controller.send :add_path, node, 'path/path1', 'parent'
       expect(result1).to eq Hash(title: 'path1', folder: true, lazy: true, selected: true, expanded: true)
 
-      result2 = controller.send :add_path, node, 'path/path2', false, 'parent'
+      result2 = controller.send :add_path, node, 'path/path2', 'parent'
       expect(result2).to eq Hash(title: 'path2', folder: true, lazy: true, selected: true, expanded: true)
 
       expect(node).to eq Hash(expanded: true, children: [
@@ -554,7 +554,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(true)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/track.bam', true, 'parent'
+      result = controller.send :add_path, node, 'path1/track.bam', 'parent', true
       expect(result).to eq Hash(title: 'track.bam', selected: true)
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
@@ -575,7 +575,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(false)
       node = {}
 
-      result = controller.send :add_path, node, 'path', false, 'parent'
+      result = controller.send :add_path, node, 'path', 'parent'
       expect(result).to eq Hash(title: 'path', folder: true, lazy: true, selected: true, expanded: true, iconclass: 'missing')
       expect(node).to eq Hash(expanded: true, children: [result])
     end
@@ -584,7 +584,7 @@ RSpec.describe ProjectsDatapathsController do
       allow(File).to receive(:exist?).and_return(true, false)
       node = {}
 
-      result = controller.send :add_path, node, 'path1/track.bam', true, 'parent'
+      result = controller.send :add_path, node, 'path1/track.bam', 'parent', true
       expect(result).to eq Hash(title: 'track.bam', selected: true, iconclass: 'missing')
       expect(node).to eq Hash(expanded: true, children: [
         {title: 'path1', folder: true, lazy: true, expanded: true, children: [
