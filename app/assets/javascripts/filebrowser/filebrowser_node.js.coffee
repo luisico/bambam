@@ -12,9 +12,8 @@ class @FilebrowserNode
 
   renderColumns: ->
     @tdList = $(@node.tr).find(">td")
-    col1 = @tdList.eq(1)
-    col1.attr('title', @node.title)
-    col1.addClass('missing').attr('title', 'missing') if @node.data.on_disk == false
+    if @node.data.iconclass == 'missing' then title = 'missing from disk' else title = @node.title
+    @tdList.eq(1).attr('title', title)
 
   createNode: ->
     @ajaxRequest("POST", @url, @data(), @createSuccess, FilebrowserNode.ajaxError)

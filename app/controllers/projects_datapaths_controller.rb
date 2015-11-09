@@ -82,7 +82,7 @@ class ProjectsDatapathsController < ApplicationController
     tree.each do |child|
       # Tracks at same level as top level datapath are not rendered in tree
       next unless child[:folder]
-      next if child[:on_disk] == false
+      next if child[:iconclass] == 'missing'
 
       # If top level datapath set path to title , else add child title to existing root
       path = root.blank? ? child[:title] : File.join(root, child[:title])
@@ -133,9 +133,9 @@ class ProjectsDatapathsController < ApplicationController
     node.merge!(selected: true) unless tail
     node.merge!(expanded: true) unless is_track
     if tail || !is_track
-      node.merge!(on_disk: File.directory?(full_path))
+      node.merge!(iconclass: 'missing') unless File.directory?(full_path)
     else
-      node.merge!(on_disk: File.exist?(full_path))
+      node.merge!(iconclass: 'missing') unless File.exist?(full_path)
     end
 
     # Add node to parent if not already present
