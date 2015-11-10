@@ -59,6 +59,18 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
+  $('.igv-js-track').on 'click', '.igv-js-link', (event) ->
+    $('.igv-js-hide').show()
+    if igv.browser
+      $('.igv-js').show()
+    else
+      igvViewer = new IgvViewer()
+      igvViewer.show()
+
+  $('.igv-js-track').on 'click', '.igv-js-hide', (event) ->
+    $(this).hide()
+    $('.igv-js').hide()
+
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 

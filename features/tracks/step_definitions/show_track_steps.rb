@@ -83,3 +83,9 @@ Then /^a (bam|bai|bw) file should download$/ do |ext|
   filename = Pathname.new(@track.path).sub_ext(".#{ext}").basename.to_s
   expect(page.response_headers['Content-Disposition']).to eq "attachment; filename=\"#{filename}\""
 end
+
+Then /^I should be able to activate igv js viewer$/ do
+  click_link 'igv (embeded)'
+  expect(page).to have_selector '.igv-js-hide', text: 'hide'
+  expect(page).to have_selector '.igv-logo'
+end
