@@ -5,7 +5,7 @@ class @IgvViewer
       showNavigation: true
       genome: $.trim($('.genome').text())
       tracks: [ {
-        url: RAILS_RELATIVE_URL_ROOT + $('#track-igv').data('igv-url')
+        url: RAILS_RELATIVE_URL_ROOT + $('.igv-js').data('igv-url')
         label: 'genericTrack'
         type: 'bam'
       } ]
