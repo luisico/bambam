@@ -32,6 +32,9 @@
           <li>
             <%= link_to_igv(@track) %>
           </li>
+          <li>
+            <%= link_to "igv (embedded)", "#", class: 'igv-js-link fi-eye' %>
+          </li>
           <% if Pathname.new(@track.path).extname == ".bam" %>
             <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %></li>
             <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download icon-key' %></li>
@@ -70,11 +73,7 @@
         </div>
       </div>
 
-      <div class="igv-js-track">
-        <%= link_to "igv (embeded)", "#", class: 'igv-js-link fi-eye' %>
-        <%= link_to "hide", "#", class: 'igv-js-hide' %>
-        <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %>>
-        </div>
+      <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %>>
       </div>
 
     </div>
