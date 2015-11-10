@@ -592,6 +592,46 @@ div.ui-dialog fieldset {
 
 }
 
+.igvNavigationSearchResults {
+
+    position: absolute;
+    top: 32px;
+    left: 2px;
+
+    height: 320px;
+    width: 213px;
+
+    background-color: white;
+
+    border-color: rgb(127, 127, 127);
+    border-style: solid;
+    border-width: thin;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    z-index: 9999;
+}
+
+.igvNavigationSearchResultsTable {
+
+}
+
+.igvNavigationSearchResultsTableRow {
+    font-family: 'Open Sans', sans-serif;
+    font-size: small;
+    font-weight: 400;
+    color: #444;
+}
+
+.igvNavigationSearchResultsTableRow:hover,
+.igvNavigationSearchResultsTableRow:focus,
+.igvNavigationSearchResultsTableRow:active  {
+    cursor: pointer;
+    font-weight: 700;
+    color: #141414;
+}
+
 .shim-left-6 {
     padding-left: 6px;
 }
@@ -740,6 +780,8 @@ div.ui-dialog fieldset {
     top: 0;
     left: 0;
 
+    min-width: 128px;
+
     z-index: 1000;
 
     font-family: 'PT Sans', sans-serif;
@@ -808,15 +850,16 @@ div.ui-dialog fieldset {
     top: 0;
     left: 0;
 
-    width: 100%;
-    max-width: 100%;
-
+    /*width: 100%;*/
+    /*max-width: 384px;*/
     max-height: 384px;
 
     overflow-x: hidden;
     overflow-y: auto;
 
-    margin-right: 24px;
+    /*text-overflow: ellipsis;*/
+
+    /*margin-right: 24px;*/
 
 }
 
@@ -838,15 +881,24 @@ div.ui-dialog fieldset {
     text-wrap: none;
     white-space:nowrap;
 
+    max-width: 384px;
+
 }
 
 .igv-popoverName {
     font-weight: bold;
     padding-right: 4px;
+    float: left;
 }
 
 .igv-popoverValue {
     padding-left: 4px;
+
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    max-width:256px;
+    display:inline-block;
 }
 
 .igv-spinner-container {
