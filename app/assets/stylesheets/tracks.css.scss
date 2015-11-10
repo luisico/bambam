@@ -34,3 +34,17 @@ i.large-calendar {
   font-size: rem-calc(10);
   vertical-align: super;
 }
+
+.igv-js-link {
+  @extend .button;
+  @extend .tiny;
+  @extend .radius;
+  @extend .service;
+  margin-bottom: rem_calc(20);
+}
+
+.igv-js-hide {
+  display: none;
+  margin-left: rem_calc(20);
+  color: grey;
+}

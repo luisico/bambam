@@ -70,7 +70,13 @@
         </div>
       </div>
 
-      <div id="track-igv"></div>
+      <div class="igv-js-track">
+        <%= link_to "igv (embeded)", "#", class: 'igv-js-link fi-eye' %>
+        <%= link_to "hide", "#", class: 'igv-js-hide' %>
+        <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %>>
+        </div>
+      </div>
+
     </div>
     <%= link_to 'Back', :back, class: 'button tiny radius' %>
     <% if can? :destroy, @track %>
