@@ -15872,7 +15872,7 @@ var igv = (function (igv) {
             searchContainer = $('<div class="igvNavigationSearch">');
             navigation.append(searchContainer[0]);
 
-            browser.searchInput = $('<input class="igvNavigationSearchInput" type="text" placeholder="Locus Search">');
+            browser.searchInput = $('<input class="igvNavigationSearchInput" id="igv-js-search-input" type="text" placeholder="Locus Search">');
             searchContainer.append(browser.searchInput[0]);
 
             searchButton = $('<i class="igv-app-icon fa fa-search fa-18px shim-left-6">');
