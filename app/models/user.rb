@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :tracks, foreign_key: :owner_id
   has_many :datapaths_users, dependent: :destroy
   has_many :datapaths, through: :datapaths_users
+  has_many :tracks_users, dependent: :destroy
 
   # Authentication
   devise :database_authenticatable, :invitable, :registerable,

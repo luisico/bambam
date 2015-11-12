@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623165500) do
+ActiveRecord::Schema.define(version: 20151111220317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,17 @@ ActiveRecord::Schema.define(version: 20150623165500) do
   end
 
   add_index "tracks", ["name"], name: "index_tracks_on_name", using: :btree
+
+  create_table "tracks_users", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "track_id"
+    t.string   "locus"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tracks_users", ["track_id"], name: "index_tracks_users_on_track_id", using: :btree
+  add_index "tracks_users", ["user_id"], name: "index_tracks_users_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

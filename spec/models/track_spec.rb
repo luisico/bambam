@@ -153,6 +153,12 @@ RSpec.describe Track do
     it { is_expected.to respond_to :share_link_ids }
   end
 
+  describe "tracks_users" do
+    it { is_expected.to have_many :tracks_users }
+    it { is_expected.to respond_to :tracks_users }
+    it { is_expected.to respond_to :tracks_user_ids }
+  end
+
   describe "#full_path" do
     it "should return the full path of the track" do
       expect(@track.full_path).to eq File.join(
@@ -177,6 +183,26 @@ RSpec.describe Track do
         @track.update_attributes(project: FactoryGirl.create(:project))
         @track.reload
       }.to change(@track.projects_datapath, :project_id)
+    end
+  end
+
+  describe "when track is destroyed" do
+    before do
+      FactoryGirl.create(:tracks_user, track: @track, user: FactoryGirl.create(:user))
+      @track.save!
+    end
+
+    it "should destroy the project" do
+      expect { @track.destroy }.to change(Track, :count).by(-1)
+      expect { Track.find(@track.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should destroy associated tracks_users" do
+      expect { @track.destroy }.to change(TracksUser, :count).by(-1)
+    end
+
+    it "should not destroy the user" do
+      expect { @track.destroy }.not_to change(User, :count)
     end
   end
 end
