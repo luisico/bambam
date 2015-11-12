@@ -60,8 +60,15 @@ jQuery ->
     event.preventDefault()
 
   $('#track-download-links').on 'click', '.igv-js-link', (event) ->
-    igvViewer = new IgvViewer()
-    igvViewer.show()
+    new IgvViewer('.igv-js')
+
+  $('.igv-js').on 'click input', '.igvNavigationSearchInput', (event) ->
+    locus = $(this).val()
+    $.ajax
+      type: "PATCH"
+      dataType: "json"
+      url: RAILS_RELATIVE_URL_ROOT + '/tracks_users/' + $('.igv-js').data('tracks-user-id')
+      data: {tracks_user: {locus: locus}}
 
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");

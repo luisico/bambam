@@ -62,10 +62,13 @@ Feature: Show a track
     When I am on the track page
     Then I should be able to activate a tooltip on the IGV button
 
-  @javascript
+  @javascript @now
   Scenario: IGV js viewer
     Given I am signed in
     And I belong to a project
     And there is a bam track in that project
     When I am on the track page
+    And I have previously set a locus
     Then I should be able to activate igv js viewer
+    And my track should be loaded to the last locus
+    And any changes I make in the locus should be saved
