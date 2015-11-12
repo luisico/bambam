@@ -109,7 +109,7 @@ RSpec.describe User do
           end
 
           it { is_expected.to     be_able_to(:manage, FactoryGirl.create(:tracks_user, track: @owned_project_track, user: @project_user)) }
-          it { is_expected.to     be_able_to(:create, FactoryGirl.create(:tracks_user, track: @user_on_project_track)) }
+          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @user_on_project_track)) }
           it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @user_on_project_track)) }
         end
 
@@ -223,19 +223,13 @@ RSpec.describe User do
         end
 
         context "tracks_users" do
-          before do
-            @my_tracks_user = FactoryGirl.create(:tracks_user, track: @my_track, user: @user)
-            @project_tracks_user = FactoryGirl.create(:tracks_user, track: @project_track)
-            @other_project_tracks_user = FactoryGirl.create(:tracks_user, track: @other_project_track)
-          end
+          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @my_track, user: @user)) }
+          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @project_track)) }
+          it { is_expected.not_to be_able_to(:create, FactoryGirl.build(:tracks_user, track: @other_project_track)) }
 
-          it { is_expected.to     be_able_to(:create, @my_tracks_user) }
-          it { is_expected.to     be_able_to(:create, @project_tracks_user) }
-          it { is_expected.not_to be_able_to(:create, @other_project_tracks_user) }
-
-          it { is_expected.to     be_able_to(:update, @my_tracks_user) }
-          it { is_expected.to     be_able_to(:update, @project_tracks_user) }
-          it { is_expected.not_to be_able_to(:update, @other_project_tracks_user) }
+          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @my_track, user: @user)) }
+          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @project_track)) }
+          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:tracks_user, track: @other_project_track)) }
         end
       end
 

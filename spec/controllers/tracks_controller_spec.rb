@@ -448,4 +448,28 @@ RSpec.describe TracksController do
       end
     end
   end
+
+  describe "#tracks_user_for" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @track = FactoryGirl.create(:track)
+    end
+
+    it "creates new track user for track and user when non exists" do
+      controller.instance_variable_set(:@track, @track)
+      expect {
+        controller.send(:tracks_user_for, @user)
+      }.to change(TracksUser, :count).by(1)
+      expect(TracksUser.last.track).to eq @track
+      expect(TracksUser.last.user).to eq @user
+    end
+
+    it "does not create new tracks user for track and user when it already exists" do
+      tracks_user = FactoryGirl.create(:tracks_user, track: @track, user: @user)
+      controller.instance_variable_set(:@track, @track)
+      expect {
+        controller.send(:tracks_user_for, @user)
+      }.not_to change(TracksUser, :count)
+    end
+  end
 end

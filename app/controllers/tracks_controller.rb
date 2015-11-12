@@ -19,6 +19,7 @@ class TracksController < ApplicationController
   end
 
   def show
+    @tracks_user = tracks_user_for(current_user)
   end
 
   def create
@@ -71,5 +72,9 @@ class TracksController < ApplicationController
   def error_messages(track, default)
     errors = track.errors.full_messages.join('; ')
     errors.empty? ? default : errors
+  end
+
+  def tracks_user_for(user)
+    TracksUser.find_by(track: @track, user: user) || TracksUser.create(track: @track, user: user, locus: nil)
   end
 end

@@ -32,6 +32,12 @@ When /^I click on the "(.*?)" link$/ do |text|
   click_link text
 end
 
+When /^I have previously set a locus$/ do
+  expect {
+    @tracks_user = FactoryGirl.create(:tracks_user, track: @track, user: @user, locus: '123')
+  }.to change(TracksUser, :count).by(1)
+end
+
 ### Then
 
 Then /^I should be on the show track page$/ do
@@ -85,7 +91,18 @@ Then /^a (bam|bai|bw) file should download$/ do |ext|
 end
 
 Then /^I should be able to activate igv js viewer$/ do
-  click_link 'igv (embeded)'
-  expect(page).to have_selector '.igv-js-hide', text: 'hide'
+  click_link 'igv (embedded)'
   expect(page).to have_selector '.igv-logo'
+end
+
+Then /^my track should be loaded to the last locus$/ do
+  # expect(find_field('.igvNavigationSearchInput')[:value]).to eq @tracks_user.locus
+end
+
+Then /^any changes I make in the locus should be saved$/ do
+  new_locus = '123456789'
+  # expect {
+  #   fill_in '.igvNavigationSearchInput', with: new_locus
+  # }.to change(@tracks_user, :locus)
+  # expect(@tracks_user.locus).to eq new_locus
 end
