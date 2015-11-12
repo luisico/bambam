@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   resources :tracks, except: [:new, :edit]
 
+  resources :tracks_users, only: [:create, :update]
+
   resources :projects_datapaths, only: [:create, :destroy] do
     get 'browser', on: :collection
   end

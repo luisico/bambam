@@ -42,6 +42,10 @@ RSpec.describe User do
       context "projects_datapaths" do
         it { is_expected.to be_able_to(:manage, ProjectsDatapath) }
       end
+
+      context "tracks_users" do
+        it { is_expected.to be_able_to(:manage, TracksUser) }
+      end
     end
 
     describe "as manager" do
@@ -96,6 +100,17 @@ RSpec.describe User do
 
           it { is_expected.to     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
           it { is_expected.not_to be_able_to(:read, FactoryGirl.create(:track)) }
+        end
+
+        context "tracks_user" do
+          before do
+            @owned_project_track = FactoryGirl.create(:track, project: @project, owner: @project_user)
+            @user_on_project_track = FactoryGirl.create(:track, project: @project_as_user)
+          end
+
+          it { is_expected.to     be_able_to(:manage, FactoryGirl.create(:tracks_user, track: @owned_project_track, user: @project_user)) }
+          it { is_expected.to     be_able_to(:create, FactoryGirl.create(:tracks_user, track: @user_on_project_track)) }
+          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @user_on_project_track)) }
         end
 
         context "projects_datapaths" do
@@ -205,6 +220,22 @@ RSpec.describe User do
           it { is_expected.not_to be_able_to(:destroy, @my_track) }
           it { is_expected.not_to be_able_to(:destroy, @project_track) }
           it { is_expected.not_to be_able_to(:update_tracks, @project) }
+        end
+
+        context "tracks_users" do
+          before do
+            @my_tracks_user = FactoryGirl.create(:tracks_user, track: @my_track, user: @user)
+            @project_tracks_user = FactoryGirl.create(:tracks_user, track: @project_track)
+            @other_project_tracks_user = FactoryGirl.create(:tracks_user, track: @other_project_track)
+          end
+
+          it { is_expected.to     be_able_to(:create, @my_tracks_user) }
+          it { is_expected.to     be_able_to(:create, @project_tracks_user) }
+          it { is_expected.not_to be_able_to(:create, @other_project_tracks_user) }
+
+          it { is_expected.to     be_able_to(:update, @my_tracks_user) }
+          it { is_expected.to     be_able_to(:update, @project_tracks_user) }
+          it { is_expected.not_to be_able_to(:update, @other_project_tracks_user) }
         end
       end
 
