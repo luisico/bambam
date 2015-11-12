@@ -36,6 +36,7 @@ i.large-calendar {
 }
 
 .igv-js-link {
+  @extend .fi-eye;
   @extend .button;
   @extend .tiny;
   @extend .radius;
