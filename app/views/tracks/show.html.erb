@@ -57,12 +57,12 @@
         <span class="subhead-note">
           Manage shared passwordless access to tracks for outside collaborators and the UCSC browser
         </span>
-        <p class="medium-margin-top" id="create-share-links">
+        <div id="create-share-links">
           <%= link_to "Create new share link", new_share_link_path(share_link: { track_id: @track.id}), id: "new_link", class: "big-margin-right", remote: true %>
           <% if @track.share_links.any? {|f| f.expired?} %>
             <%= link_to "show expired links", "#", class: "show-expired-share-links" %>
           <% end %>
-        </p>
+        </div>
 
         <div id="share-links-list">
           <% if @track.share_links.any? %>

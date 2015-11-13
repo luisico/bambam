@@ -43,3 +43,12 @@ i.large-calendar {
   @extend .service;
   margin-bottom: rem_calc(20);
 }
+
+#create-share-links {
+  margin-top: rem-calc(10);
+  margin-bottom: rem-calc(10);
+}
+
+#share-links-list {
+  margin-bottom: rem-calc(50);
+}
