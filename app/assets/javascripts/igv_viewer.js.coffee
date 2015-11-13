@@ -3,6 +3,7 @@ class @IgvViewer
     @igvJS = $(selector)
     @load()
     @updateSearchInput()
+    @setInputIDforCapybara()
 
   load: ->
     div = @igvJS[0]
@@ -29,3 +30,6 @@ class @IgvViewer
           url: RAILS_RELATIVE_URL_ROOT + '/tracks_users/' + tracks_user_id
           data: {tracks_user: {locus: current_locus}}
         existing_locus = current_locus
+
+  setInputIDforCapybara: ->
+    $('.igvNavigationSearchInput').attr("id", "igv-js-search-input")
