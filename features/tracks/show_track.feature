@@ -62,7 +62,7 @@ Feature: Show a track
     When I am on the track page
     Then I should be able to activate a tooltip on the IGV button
 
-  @javascript @now
+  @javascript
   Scenario: IGV js viewer
     Given I am signed in
     And I belong to a project
