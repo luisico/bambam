@@ -33,9 +33,15 @@ var tour_track_show_update = {
       placement: 'bottom'
     },
     {
+      title: "IGV (embedded)",
+      content: "Click to open view track within browser embedded IGV.",
+      target: ".igv-js-link",
+      placement: 'bottom'
+    },
+    {
       title: "Track download links",
       content: "Click links to download track file(s).",
-      target: "#track-download-links",
+      target: ".fi-download",
       placement: 'bottom',
       arrowOffset: 'center'
     },
