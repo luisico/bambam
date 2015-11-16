@@ -1,0 +1,24 @@
+input.igvNavigationSearchInput {
+  /* reset foundation settings */
+  background-color: unset;
+  box-shadow: unset;
+  box-sizing: unset;
+  display: unset;
+  margin: unset;
+  transition: unset;
+  padding: unset;
+
+  border-color: #7f7f7f;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: thin;
+  color: #444;
+  font-family: "Open Sans",sans-serif;
+  font-size: small;
+  font-weight: 400;
+  height: 24px;
+  outline: medium none;
+  padding-left: 8px;
+  position: relative;
+  width: 80%;
+}
