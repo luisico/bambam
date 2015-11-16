@@ -7,9 +7,11 @@
 <div class="row">
   <div class="small-12 medium-10 medium-centered columns">
     <div class="transpanel">
-      <h3 class="track-name">
-        <%= best_in_place_if can?(:update, @track), @track, :name,
-          {ok_button: 'save', cancel_button: 'cancel'} %>
+      <h3 class="track-info">
+        <span class="track-name">
+          <%= best_in_place_if can?(:update, @track), @track, :name,
+            {ok_button: 'save', cancel_button: 'cancel'} %>
+        </span>
         <span class="label genome">
           <%= best_in_place_if can?(:update, @track), @track, :genome,
             {ok_button: 'save', cancel_button: 'cancel'} %>
