@@ -94,7 +94,7 @@ end
 Then /^I should be able to activate igv js viewer$/ do
   click_link 'igv (embedded)'
   sleep 1
-  expect(page).to have_selector '.igv-logo'
+  expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
 end
 
 Then /^my track should be loaded to the last locus$/ do
