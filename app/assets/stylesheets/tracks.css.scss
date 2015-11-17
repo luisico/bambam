@@ -30,6 +30,7 @@ i.large-calendar {
   @extend .radius;
   @extend .service;
   margin-bottom: rem_calc(20);
+  @extend .hide-for-small-only;
 }
 
 #share-links-list {
