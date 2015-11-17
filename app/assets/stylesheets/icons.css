@@ -65,3 +65,7 @@
 .icon-alert {
   @extend .fi-alert;
 }
+
+.share-icon {
+  @extend .fi-share;
+}

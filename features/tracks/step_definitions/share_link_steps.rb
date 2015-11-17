@@ -6,7 +6,7 @@ def expiration_date(time)
 end
 
 def create_shareable_link(opts={})
-  click_link "Create new share link"
+  click_link "new"
   within('.new_share_link') {
     yield if block_given?
     page.execute_script "$('#share_link_expires_at').datepicker('hide')"
@@ -19,7 +19,7 @@ def renew_shared_link(shared_link, opts={})
   click_link "edit_link_#{shared_link.id}"
   within(".edit_share_link") {
     yield if block_given?
-    opts[:cancel] ? click_link('Cancel') : click_button('Update Share link')
+    opts[:cancel] ? click_link('Cancel') : find('input[value="Update Share link"]').trigger('click')
   }
   expect(page).not_to have_css(".edit_share_link") unless opts[:keep]
   shared_link.reload
