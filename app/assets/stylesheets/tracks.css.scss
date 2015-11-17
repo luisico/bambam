@@ -14,11 +14,6 @@ i.large-calendar {
   color: red;
 }
 
-.track-info {
-  width: 100%;
-  margin-bottom: rem-calc(32);
-}
-
 .label.genome {
   @extend .secondary;
   @extend .round;
@@ -37,11 +32,24 @@ i.large-calendar {
   margin-bottom: rem_calc(20);
 }
 
-#create-share-links {
-  margin-top: rem-calc(10);
-  margin-bottom: rem-calc(10);
+#share-links-list {
+  margin-top: rem-calc(15);
+  margin-bottom: rem-calc(50);
 }
 
-#share-links-list {
-  margin-bottom: rem-calc(50);
+.track-info {
+  margin-bottom: rem-calc(25);
+  ul {
+    @include block-grid(2)
+  }
+}
+
+.igv-js {
+  margin-bottom: rem-calc(25);
+}
+
+.track-links {
+  ul {
+    @extend .inline-list;
+  }
 }

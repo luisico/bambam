@@ -59,7 +59,7 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
-  $('#track-download-links').on 'click', '.igv-js-link', (event) ->
+  $('.track-links').on 'click', '.igv-js-link', (event) ->
     new IgvViewer('.igv-js')
 
   format_date = (time) ->
