@@ -11,12 +11,14 @@ class @IgvViewer
       showNavigation: true
       genome: $.trim($('.genome').text())
       locus: @igvJS.data('track-locus')
-      tracks: [ {
-        url: RAILS_RELATIVE_URL_ROOT + @igvJS.data('igv-url')
-        label: $.trim($('.track-name').text())
-        type: 'bam'
-      } ]
     igv.createBrowser div, options
+    config = {
+      url: RAILS_RELATIVE_URL_ROOT + @igvJS.data('igv-url')
+      label: $.trim($('.track-name').text())
+      }
+    bamTrack = new igv.BAMTrack(config)
+    bamTrack.alignmentShading = 'strand'
+    igv.browser.addTrack(bamTrack)
 
   updateSearchInput: ->
     tracks_user_id = @igvJS.data('tracks-user-id')
