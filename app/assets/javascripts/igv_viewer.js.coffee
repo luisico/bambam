@@ -13,7 +13,7 @@ class @IgvViewer
       locus: @igvJS.data('track-locus')
     igv.createBrowser div, options
     config = {
-      url: RAILS_RELATIVE_URL_ROOT + @igvJS.data('igv-url')
+      url: @igvJS.data('igv-url')
       label: $.trim($('.track-name').text())
       }
     bamTrack = new igv.BAMTrack(config)
