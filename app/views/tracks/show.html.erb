@@ -52,7 +52,7 @@
         </ul>
       </div>
 
-      <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %> data-tracks-user-id=<%= @tracks_user.id %> data-track-locus=<%= @tracks_user.locus %>>
+      <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %> data-tracks-user-path=<%= tracks_user_path(@tracks_user) %> data-track-locus=<%= @tracks_user.locus %>>
       </div>
 
       <div class="share-track">
