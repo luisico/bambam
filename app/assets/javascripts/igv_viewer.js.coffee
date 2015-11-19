@@ -21,7 +21,7 @@ class @IgvViewer
     igv.browser.addTrack(bamTrack)
 
   updateSearchInput: ->
-    tracks_user_id = @igvJS.data('tracks-user-id')
+    tracks_user_path = @igvJS.data('tracks-user-path')
     existing_locus = @igvJS.data('track-locus')
     $(igv.browser.div).on 'click input', (event) ->
       current_locus = $('.igvNavigationSearchInput').val()
@@ -29,7 +29,7 @@ class @IgvViewer
         $.ajax
           type: "PATCH"
           dataType: "json"
-          url: RAILS_RELATIVE_URL_ROOT + '/tracks_users/' + tracks_user_id
+          url: tracks_user_path
           data: {tracks_user: {locus: current_locus}}
         existing_locus = current_locus
 
