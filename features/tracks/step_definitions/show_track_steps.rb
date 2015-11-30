@@ -74,6 +74,14 @@ Then /^I should see a link to open the track in IGV$/ do
   expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
 end
 
+Then /^I should( not)? see a link to open track in embedded IGV$/ do |negate|
+  if negate
+    expect(page).not_to have_css ".igv-js-link"
+  else
+    expect(page).to have_css ".igv-js-link"
+  end
+end
+
 Then /^I should see a link to download a (bam|bw) file$/ do |type|
   expect(page).to have_link "download #{type} file"
 end

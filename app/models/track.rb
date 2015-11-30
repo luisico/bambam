@@ -20,6 +20,10 @@ class Track < ActiveRecord::Base
     File.join projects_datapath.full_path, path
   end
 
+  def file_format
+    Pathname.new(path).extname.gsub('.', '')
+  end
+
   protected
 
   def update_projects_datapath
