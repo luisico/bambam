@@ -37,18 +37,7 @@
 
       <div class="track-links">
         <ul id="track-download-links">
-          <li>
-            <%= link_to_igv(@track) %>
-          </li>
-          <li>
-            <%= link_to "igv (embedded)", "#", class: 'igv-js-link' %>
-          </li>
-          <% if Pathname.new(@track.path).extname == ".bam" %>
-            <li><%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %></li>
-            <li><%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download icon-key' %></li>
-            <% elsif Pathname.new(@track.path).extname == ".bw" %>
-            <li><%= link_to "download bw file", stream_services_track_path(@track), class: 'fi-download icon-key' %></li>
-          <% end %>
+          <%= render "#{@track.file_format}_links" %>
         </ul>
       </div>
 

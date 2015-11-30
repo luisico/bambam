@@ -1,0 +1,8 @@
+<li><%= link_to_igv(@track) %></li>
+<li><%= link_to "igv (embedded)", "#", class: 'igv-js-link' %></li>
+<li>
+  <%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %>
+</li>
+<li>
+  <%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download icon-key' %>
+</li>

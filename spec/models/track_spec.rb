@@ -186,6 +186,15 @@ RSpec.describe Track do
     end
   end
 
+  describe "#file_format" do
+    %w(bam bw).each do |file_format|
+      it "should return file format" do
+        track = FactoryGirl.build(:track, path: File.join("tracks", "track1.#{file_format}"))
+        expect(track.file_format).to eq file_format
+      end
+    end
+  end
+
   describe "when track is destroyed" do
     before do
       FactoryGirl.create(:tracks_user, track: @track, user: FactoryGirl.create(:user))
