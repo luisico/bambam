@@ -14,6 +14,11 @@ When /^I am on the project page$/ do
   visit project_path(@project)
 end
 
+When /^I am on the Users tab$/ do
+  click_link "users-tab"
+  expect(page).to have_selector "#project-users"
+end
+
 ### Then
 
 Then /^I should be on the project page$/ do
@@ -28,6 +33,12 @@ Then /^I should see a project track count of "(.*?)"$/ do |count|
   within(find(".track-count")) {
     expect(page).to have_content count
   }
+end
+
+Then /^I should see tabs labled Files, Users and IGV$/ do
+  expect(page).to have_selector "#files-tab", text: "Files"
+  expect(page).to have_selector "#users-tab", text: "Users"
+  expect(page).to have_selector "#igv-tab", text: "IGV"
 end
 
 Then /^I should see a section titled "(.*?)"$/ do |title|

@@ -13,12 +13,14 @@ Feature: Show a project
     When I am on the project page
     Then I should see the project's name
     And I should see a project track count of "3"
+    And I should see tabs labled Files, Users and IGV
     And I should see a section titled "<title>"
     And I should see a note about contacting "<contact>"
     And I should see the project's tracks
-    And I should see the project's users <privilege> profile links
     And I should see the project's owner
     And I should see the project's timestamps
+    When I am on the Users tab
+    And I should see the project's users <privilege> profile links
     And I <privilege2> see a "Delete" button
 
     Examples:
@@ -53,6 +55,7 @@ Feature: Show a project
     And there are 3 datapaths in that project
     And there are 3 tracks in that project
     When I am on the project page
+    And I am on the Users tab
     Then I should be able to designate a user read only
     And that user should move to the read-only list
     And the regular user counts should be 2
@@ -67,6 +70,7 @@ Feature: Show a project
     And there are 3 tracks in that project
     And there is a read only user in that project
     When I am on the project page
+    And I am on the Users tab
     Then I should be able to remove a user from the read only list
     And that user should move to the regular user list
     And the regular user counts should be 3

@@ -10,6 +10,7 @@ Feature: Edit project users
     And there are 3 additional users of that project
     And there are 3 other users in the system
     When I am on the project page
+    And I am on the Users tab
     Then I <privilege> be able to change users in the project
 
     Examples:
@@ -22,4 +23,5 @@ Feature: Edit project users
     Given I am signed in as a manager
     And I own a project
     When I am on the project page
+    And I am on the Users tab
     Then I should be able to cancel out of the edit project user form

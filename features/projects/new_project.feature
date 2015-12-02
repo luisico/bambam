@@ -11,6 +11,7 @@ Feature: Create a project
     And I should be on the project page
     And I should see a message that the project was created successfully
     And I should see myself listed as the project's owner
+    When I am on the Users tab
     And I should not see my handle among the list of project member handles
     # TODO: this last step, is it repeated in show features?
 
