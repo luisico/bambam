@@ -16,3 +16,14 @@ jQuery ->
   $('.track-count').on 'filebrowserUpdateFileCount', (event) ->
     count = $('a.service.fi-eye').length
     $('.track-count').text("[" + count + "]")
+
+  $('.project-tabs').on 'click', '#igv-tab', (event) ->
+    igvDiv = $('.igv-js')
+    unless igv.browser
+      igvViewer = new IgvViewer()
+      igvViewer.load(igvDiv[0], igvDiv.data('genome'))
+
+  $('.project-js-igv').on 'click', '.project-track', (event) ->
+    igvDiv = $(this)
+    igvViewer = new IgvViewer()
+    igvViewer.addTrack(igvDiv.data('stream-url'), igvDiv.data('track-name'))

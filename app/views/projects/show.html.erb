@@ -35,7 +35,7 @@
       <div class="row">
         <div class="small-12 columns">
 
-          <ul class="tabs" data-tab>
+          <ul class="project-tabs" data-tab>
             <li class="tab-title active"><a id="files-tab" href="#panel1">Files</a></li>
             <li class="tab-title"><a id="users-tab" href="#panel2">Users</a></li>
             <li class="tab-title"><a id="igv-tab" href="#panel3">IGV</a></li>
@@ -103,8 +103,10 @@
               </div>
             </div>
 
-            <div class="content" id="panel3">
-              <p>IGV VIEWER GOES HERE</p>
+            <div class="content project-js-igv" id="panel3">
+              <%= render "project_tracks" %>
+              <div class="igv-js" data-genome="hg19">
+              </div>
             </div>
           </div>
         </div>
