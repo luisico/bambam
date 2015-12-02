@@ -1,37 +1,30 @@
 class @IgvViewer
-  constructor: (selector) ->
-    @igvJS = $(selector)
-    @load()
-    @updateSearchInput()
-    @setInputIDforCapybara()
-
-  load: ->
-    div = @igvJS[0]
+  load: (div, genome, locus)->
     options =
       showNavigation: true
-      genome: $.trim($('.genome').text())
-      locus: @igvJS.data('locus-range')
+      genome: genome
+      locus: locus
     igv.createBrowser div, options
+
+  addTrack: (url, name) ->
     config = {
-      url: @igvJS.data('igv-url')
-      label: $.trim($('.track-name').text())
+      url: url
+      label: name
       }
     bamTrack = new igv.BAMTrack(config)
     bamTrack.alignmentShading = 'strand'
     igv.browser.addTrack(bamTrack)
 
-  updateSearchInput: ->
-    locus_path = @igvJS.data('locus-path')
-    existing_range = @igvJS.data('locus-range')
+  updateSearchInput: (tracksUserPath, existingLocus) ->
     $(igv.browser.div).on 'click input', (event) ->
-      current_range = $('.igvNavigationSearchInput').val()
-      unless current_range == existing_range
+      currentLocus = $('.igvNavigationSearchInput').val()
+      unless currentLocus == existingLocus
         $.ajax
           type: "PATCH"
           dataType: "json"
-          url: locus_path
-          data: {locus: {range: current_range}}
-        existing_range = current_range
+          url: tracksUserPath
+          data: {locus: {range: currentLocus}}
+        existingLocus = currentLocus
 
   setInputIDforCapybara: ->
     $('.igvNavigationSearchInput').attr("id", "igv-js-search-input")

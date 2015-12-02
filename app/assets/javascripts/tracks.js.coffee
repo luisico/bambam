@@ -60,7 +60,12 @@ jQuery ->
     event.preventDefault()
 
   $('.track-links').on 'click', '.igv-js-link', (event) ->
-    new IgvViewer('.igv-js')
+    igvDiv = $('.igv-js')
+    igvViewer = new IgvViewer()
+    igvViewer.load(igvDiv[0], igvDiv.data('genome'), igvDiv.data('locus-range'))
+    igvViewer.addTrack(igvDiv.data('stream-url'), igvDiv.data('track-name'))
+    igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
+    igvViewer.setInputIDforCapybara()
 
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
