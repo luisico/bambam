@@ -41,7 +41,7 @@
         </ul>
       </div>
 
-      <div class="igv-js" data-igv-url=<%= stream_services_track_path(@track) %> data-locus-path=<%= locus_path(@locus) %> data-locus-range=<%= @locus.range %>>
+      <div class="igv-js" data-stream-url=<%= stream_services_track_path(@track) %> data-locus-path=<%= locus_path(@locus) %> data-locus-range=<%= @locus.range %> data-track-name=<%= @track.name %> data-genome=<%= @track.genome %>>
       </div>
 
       <div class="share-track">
