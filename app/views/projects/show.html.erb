@@ -110,9 +110,11 @@
               <div class="subhead-note">
                 Only tracks with 'bam' extension are available to view in the igv javascript viewer
               </div>
-              <div class="project-tracks">
-                <%= render "project_tracks" %>
-              </div>
+              <ul class="track-cloud">
+                <% @project.tracks.select{|track| track.file_format == 'bam'}.each do |track| %>
+                  <%= render partial: "project_track", locals: {track: track} %>
+                <% end %>
+              </ul>
               <hr>
               <div class="igv-js" data-genome="hg19">
               </div>
