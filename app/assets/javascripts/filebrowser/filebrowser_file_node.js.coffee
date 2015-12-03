@@ -40,6 +40,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-link').html('')
     tr.find('.track-genome').html('')
     tr.find('.track-igv').html('')
+    $('#project-track-'+ @node.data.object.id).remove()
     delete @node.data.object
     $('.track-count').trigger('filebrowserUpdateFileCount')
     super
