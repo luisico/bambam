@@ -104,7 +104,16 @@
             </div>
 
             <div class="content project-js-igv" id="panel3">
-              <%= render "project_tracks" %>
+              <h6>
+                Click <span class="track-icon icon-key">tracks</span> below to load them into igv viewer
+              </h6>
+              <div class="subhead-note">
+                Only tracks with 'bam' extension are available to view in the igv javascript viewer
+              </div>
+              <div class="project-tracks">
+                <%= render "project_tracks" %>
+              </div>
+              <hr>
               <div class="igv-js" data-genome="hg19">
               </div>
             </div>

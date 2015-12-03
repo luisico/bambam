@@ -1,5 +1,5 @@
-<ul class="cloud-tag">
-  <% @project.tracks.each do |track| %>
+<ul class="track-cloud">
+  <% @project.tracks.select{|track| track.file_format == 'bam'}.each do |track| %>
     <li class="project-track" data-stream-url=<%= stream_services_track_path(track) %> data-track-name=<%= track.name %>>
       <%= link_to track.name, "#" %>
     </li>

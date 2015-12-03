@@ -22,3 +22,14 @@
 .project-tabs {
   @extend .tabs;
 }
+
+.track-cloud {
+  @extend .inline-list;
+  li {
+    @include label(
+      $bg: $secondary-color,
+      $radius: $global-radius
+    );
+  }
+  margin-bottom: 0;
+}
