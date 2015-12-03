@@ -164,15 +164,17 @@ RSpec.describe TracksController do
       context "with valid parameters" do
         it "should be a success" do
           allow(controller).to receive_message_chain(:view_context, :link_to_igv).and_return('igv_url')
+          allow(controller).to receive(:render_to_string).and_return('project_track')
           post :create, track: @track_attr, format: :json
           expect(response).to be_success
           expect(response.header['Content-Type']).to include 'application/json'
           json = JSON.parse(response.body)
           new_track = Track.last
-          expect(json).to eq ({"type" => "track", "id" => new_track.id, "name" => new_track.name, "genome" => new_track.genome, "igv" => 'igv_url'})
+          expect(json).to eq ({"type" => "track", "id" => new_track.id, "name" => new_track.name, "genome" => new_track.genome, "igv" => 'igv_url', "project_track" => "project_track"})
         end
 
         it "should create a new track" do
+          allow(controller).to receive(:render_to_string).and_return('project_track')
           expect{
             post :create, track: @track_attr, format: :json
           }.to change(Track, :count).by(1)

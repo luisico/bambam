@@ -25,7 +25,8 @@ class TracksController < ApplicationController
   def create
     @track.owner = current_user
     if @track.save
-      render json: {type: "track", id: @track.id, name: @track.name, genome: @track.genome, igv: view_context.link_to_igv(@track)}, status: 200
+      project_track = render_to_string('projects/_project_track', :layout => false, :locals => { track: @track })
+      render json: {type: "track", id: @track.id, name: @track.name, genome: @track.genome, igv: view_context.link_to_igv(@track), project_track: project_track}, status: 200
     else
       render json: {status: :error, message: error_messages(@track, "Record not created") }, status: 400
     end

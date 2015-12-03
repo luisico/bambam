@@ -32,6 +32,7 @@ class @FilebrowserFileNode extends @FilebrowserNode
     tr.find('.track-genome').html("<span class='label genome'>" + data.genome + "</span>")
     tr.find('.track-igv').html(data.igv)
     $('.track-count').trigger('filebrowserUpdateFileCount')
+    $('.track-cloud').append(data.project_track)
     super
 
   destroySuccess: (data, textStatus, jqXHR) ->
