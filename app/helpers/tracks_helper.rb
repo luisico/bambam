@@ -43,4 +43,9 @@ module TracksHelper
     url = stream_services_track_url(share_link.track)
     url.to_s + "?access_token=#{share_link.access_token}"
   end
+
+  def manual_load_into_igv_url(share_link)
+    url = stream_services_track_url(share_link.track)
+    url.to_s + Pathname.new(share_link.track.path).extname + "?access_token=#{share_link.access_token}"
+  end
 end

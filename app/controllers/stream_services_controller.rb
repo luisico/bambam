@@ -2,7 +2,7 @@ class StreamServicesController < ApplicationController
   before_action :authenticate_user!, unless: :has_access_token?
 
   def has_access_token?
-    if params[:access_token] && share_link = ShareLink.where(access_token: params[:access_token]).first
+    if params[:access_token] && share_link = ShareLink.where(access_token: params[:access_token].gsub(/.tdf$/, '')).first
       (share_link.track_id.to_s == params[:id]) && (share_link.expires_at >= Time.now)
     else
       false

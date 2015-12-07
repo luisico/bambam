@@ -147,4 +147,26 @@ RSpec.describe TracksHelper do
       end
     end
   end
+
+  describe "#manual_load_into_igv_url" do
+    before do
+      @track = FactoryGirl.create(:track)
+      @share_link = FactoryGirl.create(:share_link, track: @track)
+    end
+
+    it "needs a share_link as argument" do
+      expect{helper.manual_load_into_igv_url}.to raise_error(ArgumentError)
+    end
+
+    it "points to the track's stream service" do
+      url = helper.manual_load_into_igv_url(@share_link)
+      url_with_access_token = url.sub("?access_token=#{@share_link.access_token}",'')
+      expect(url_with_access_token).to eq stream_services_track_url(@track) + Pathname.new(@track.path).extname
+    end
+
+    it "access_token is encoded" do
+      uri = URI(helper.manual_load_into_igv_url(@share_link))
+      expect(uri.query).to eq "access_token=#{@share_link.access_token}"
+    end
+  end
 end

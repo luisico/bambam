@@ -187,6 +187,11 @@ RSpec.describe StreamServicesController do
       expect(controller.send(:has_access_token?)).to be true
     end
 
+    it "should be true when .tdf extension present at end of access token" do
+      controller.params = {access_token: @share_link.access_token + '.tdf', id: "#{@track.id}"}
+      expect(controller.send(:has_access_token?)).to be true
+    end
+
     it "should be false with invalid access token" do
       controller.params = {access_token: "invalid_token", id: "#{@track.id}"}
       expect(controller.send(:has_access_token?)).to be false
