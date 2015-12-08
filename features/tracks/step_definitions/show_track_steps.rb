@@ -16,8 +16,8 @@ end
 
 Given /^I have previously set a locus$/ do
   expect {
-    @tracks_user = FactoryGirl.create(:tracks_user, track: @track, user: @user, locus: "chr1:1-185,503,660")
-  }.to change(TracksUser, :count).by(1)
+    @locus = FactoryGirl.create(:track_locus, locusable_id: @track.id, user: @user, range: "chr1:1-185,503,660")
+  }.to change(Locus, :count).by(1)
 end
 
 ### When
@@ -107,15 +107,15 @@ end
 
 Then /^my track should be loaded to the last locus$/ do
   search_input = find_field('igv-js-search-input')
-  expect(search_input.value).to eq @tracks_user.locus
+  expect(search_input.value).to eq @locus.range
 end
 
 Then /^any changes I make in the locus should be saved$/ do
-  new_locus = "chr1:1-185,503,670"
+  new_range = "chr1:1-185,503,670"
   expect {
-    fill_in 'igv-js-search-input', with: new_locus
+    fill_in 'igv-js-search-input', with: new_range
     loop until page.evaluate_script('jQuery.active').zero?
-    @tracks_user.reload
-  }.to change(@tracks_user, :locus)
-  expect(@tracks_user.locus).to eq new_locus
+    @locus.reload
+  }.to change(@locus, :range)
+  expect(@locus.range).to eq new_range
 end

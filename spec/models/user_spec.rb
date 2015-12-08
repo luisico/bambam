@@ -256,10 +256,10 @@ RSpec.describe User do
       it { is_expected.to respond_to :datapaths_user_ids }
     end
 
-    describe "tracks_users" do
-      it { is_expected.to have_many :tracks_users }
-      it { is_expected.to respond_to :tracks_users }
-      it { is_expected.to respond_to :tracks_user_ids }
+    describe "loci" do
+      it { is_expected.to have_many :loci }
+      it { is_expected.to respond_to :loci }
+      it { is_expected.to respond_to :locus_ids }
     end
   end
 
@@ -267,7 +267,7 @@ RSpec.describe User do
     before do
       FactoryGirl.create(:group, members: [@user])
       FactoryGirl.create(:project, users: [@user])
-      FactoryGirl.create(:tracks_user, track: FactoryGirl.create(:track), user: @user)
+      FactoryGirl.create(:track_locus, locusable_id: FactoryGirl.create(:track).id, user: @user)
       @user.save!
     end
 
@@ -285,7 +285,7 @@ RSpec.describe User do
     end
 
     it "should destroy associated projects_users" do
-      expect { @user.destroy }.to change(TracksUser, :count).by(-1)
+      expect { @user.destroy }.to change(Locus, :count).by(-1)
     end
   end
 end

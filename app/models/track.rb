@@ -6,7 +6,7 @@ class Track < ActiveRecord::Base
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
-  has_many :tracks_users, dependent: :destroy
+  has_many :loci, as: :locusable, dependent: :destroy
 
   validates_presence_of :name, :owner_id, :genome
   #TODO adding presence validation on project_id breaks nested updated.
