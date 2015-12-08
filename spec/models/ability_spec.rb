@@ -43,8 +43,8 @@ RSpec.describe User do
         it { is_expected.to be_able_to(:manage, ProjectsDatapath) }
       end
 
-      context "tracks_users" do
-        it { is_expected.to be_able_to(:manage, TracksUser) }
+      context "loci" do
+        it { is_expected.to be_able_to(:manage, Locus) }
       end
     end
 
@@ -100,17 +100,6 @@ RSpec.describe User do
 
           it { is_expected.to     be_able_to(:read, FactoryGirl.create(:track, project: @project_as_user)) }
           it { is_expected.not_to be_able_to(:read, FactoryGirl.create(:track)) }
-        end
-
-        context "tracks_user" do
-          before do
-            @owned_project_track = FactoryGirl.create(:track, project: @project, owner: @project_user)
-            @user_on_project_track = FactoryGirl.create(:track, project: @project_as_user)
-          end
-
-          it { is_expected.to     be_able_to(:manage, FactoryGirl.create(:tracks_user, track: @owned_project_track, user: @project_user)) }
-          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @user_on_project_track)) }
-          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @user_on_project_track)) }
         end
 
         context "projects_datapaths" do
@@ -222,14 +211,10 @@ RSpec.describe User do
           it { is_expected.not_to be_able_to(:update_tracks, @project) }
         end
 
-        context "tracks_users" do
-          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @my_track, user: @user)) }
-          it { is_expected.to     be_able_to(:create, FactoryGirl.build(:tracks_user, track: @project_track)) }
-          it { is_expected.not_to be_able_to(:create, FactoryGirl.build(:tracks_user, track: @other_project_track)) }
-
-          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @my_track, user: @user)) }
-          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:tracks_user, track: @project_track)) }
-          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:tracks_user, track: @other_project_track)) }
+        context "loci" do
+          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @my_track.id, locusable_type: 'track', user: @user)) }
+          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @project_track)) }
+          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @other_project_track)) }
         end
       end
 

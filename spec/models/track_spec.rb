@@ -153,10 +153,10 @@ RSpec.describe Track do
     it { is_expected.to respond_to :share_link_ids }
   end
 
-  describe "tracks_users" do
-    it { is_expected.to have_many :tracks_users }
-    it { is_expected.to respond_to :tracks_users }
-    it { is_expected.to respond_to :tracks_user_ids }
+  describe "loci" do
+    it { is_expected.to have_many :loci }
+    it { is_expected.to respond_to :loci }
+    it { is_expected.to respond_to :locus_ids }
   end
 
   describe "#full_path" do
@@ -196,18 +196,16 @@ RSpec.describe Track do
   end
 
   describe "when track is destroyed" do
-    before do
-      FactoryGirl.create(:tracks_user, track: @track, user: FactoryGirl.create(:user))
-      @track.save!
-    end
+    before { @track.save! }
 
-    it "should destroy the project" do
+    it "should destroy the track" do
       expect { @track.destroy }.to change(Track, :count).by(-1)
       expect { Track.find(@track.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "should destroy associated tracks_users" do
-      expect { @track.destroy }.to change(TracksUser, :count).by(-1)
+    it "should destroy associated loci" do
+      FactoryGirl.create(:track_locus, locusable_id: @track.id, user: FactoryGirl.create(:user))
+      expect { @track.destroy }.to change(Locus, :count).by(-1)
     end
 
     it "should not destroy the user" do

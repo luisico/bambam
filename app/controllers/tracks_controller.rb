@@ -19,7 +19,7 @@ class TracksController < ApplicationController
   end
 
   def show
-    @tracks_user = tracks_user_for(current_user)
+    @locus = locus_for(current_user)
   end
 
   def create
@@ -74,7 +74,7 @@ class TracksController < ApplicationController
     errors.empty? ? default : errors
   end
 
-  def tracks_user_for(user)
-    TracksUser.find_by(track: @track, user: user) || TracksUser.create(track: @track, user: user, locus: nil)
+  def locus_for(user)
+    Locus.find_by(locusable_id: @track.id, locusable_type: 'Track', user: user) || Locus.create(locusable_id: @track.id, locusable_type: 'Track', user: user, range: '0')
   end
 end

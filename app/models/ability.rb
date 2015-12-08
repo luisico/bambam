@@ -14,7 +14,7 @@ class Ability
       can :update, ProjectsUser
       can :manage, Datapath
       can :manage, ProjectsDatapath
-      can :manage, TracksUser
+      can :manage, Locus
     else
 
       if user.has_role? :manager
@@ -22,7 +22,6 @@ class Ability
         can :manage, Project, owner_id: user.id
         can :manage, Group, owner_id: user.id
         can :manage, Track, projects_datapath: {project: {owner_id: user.id}}
-        can :manage, TracksUser, track: {projects_datapath: {project: {owner_id: user.id}}}
         can :update, ProjectsUser, project: {owner_id: user.id}
         can :manage, ProjectsDatapath, project: {owner_id: user.id}
       end
@@ -46,7 +45,7 @@ class Ability
         track.try(:project).try(:users).try(:include?, user)
       end
 
-      can [:create, :update], TracksUser, track: {projects_datapath: {project: {projects_users: {user_id: user.id}}}}
+      can :update, Locus, user_id: user.id
 
       can :manage, ShareLink do |share_link|
         share_link.track.try(:project).try(:users).try(:include?, user)
