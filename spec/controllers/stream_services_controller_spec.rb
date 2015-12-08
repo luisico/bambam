@@ -187,11 +187,6 @@ RSpec.describe StreamServicesController do
       expect(controller.send(:has_access_token?)).to be true
     end
 
-    it "should be true when .tdf extension present at end of access token" do
-      controller.params = {access_token: @share_link.access_token + '.tdf', id: "#{@track.id}"}
-      expect(controller.send(:has_access_token?)).to be true
-    end
-
     it "should be false with invalid access token" do
       controller.params = {access_token: "invalid_token", id: "#{@track.id}"}
       expect(controller.send(:has_access_token?)).to be false
@@ -216,6 +211,18 @@ RSpec.describe StreamServicesController do
     it "should be false with different track" do
       controller.params = {access_token: @share_link.access_token, id: "#{FactoryGirl.create(:track).id}"}
       expect(controller.send(:has_access_token?)).to be false
+    end
+
+    it "should be call sanitized_access_token when access_token is present" do
+      expect_any_instance_of(StreamServicesController).to receive(:sanitized_access_token)
+      controller.params = {access_token: '123'}
+      controller.send(:has_access_token?)
+    end
+
+    it "should not be call sanitized_access_token when access_toek not present" do
+      expect_any_instance_of(StreamServicesController).not_to receive(:sanitized_access_token)
+      controller.params = {id: "#{@track.id}"}
+      controller.send(:has_access_token?)
     end
   end
 
@@ -294,6 +301,13 @@ RSpec.describe StreamServicesController do
           controller.send(:find_path_with_format, @path, 'non')
         }.to raise_error Errno::EACCES
       end
+    end
+  end
+
+  describe "#sanitized_access_token" do
+    it "should remove everything in token after the ." do
+      controller.params = {access_token: '123.bam.4646.jam'}
+      expect(controller.send(:sanitized_access_token)).to eq '123'
     end
   end
 
