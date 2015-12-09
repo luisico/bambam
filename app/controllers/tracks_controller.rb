@@ -7,6 +7,8 @@ class TracksController < ApplicationController
   respond_to :js, only: [:index]
   respond_to :json, only: [:create, :update]
 
+  include LocusService
+
   def index
     @filter = params[:filter]
     tracks = Track.accessible_by(current_ability).
@@ -19,7 +21,7 @@ class TracksController < ApplicationController
   end
 
   def show
-    @locus = locus_for(current_user)
+    @locus = locus_for(current_user, @track)
   end
 
   def create
@@ -73,9 +75,5 @@ class TracksController < ApplicationController
   def error_messages(track, default)
     errors = track.errors.full_messages.join('; ')
     errors.empty? ? default : errors
-  end
-
-  def locus_for(user)
-    Locus.find_by(locusable_id: @track.id, locusable_type: 'Track', user: user) || Locus.create(locusable_id: @track.id, locusable_type: 'Track', user: user, range: '0')
   end
 end

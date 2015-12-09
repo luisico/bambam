@@ -5,6 +5,8 @@ class ProjectsController < ApplicationController
   respond_to :html, only: [:index, :show]
   respond_to :js, :json, only: [:new, :create, :edit, :update, :index]
 
+  include LocusService
+
   def index
     @filter = params[:filter]
     @projects = Project.accessible_by(current_ability).
@@ -14,7 +16,7 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.includes(:projects_users, :users).find(params[:id])
-    @locus = locus_for(current_user)
+    @locus = locus_for(current_user, @project)
   end
 
   def new
@@ -55,9 +57,5 @@ class ProjectsController < ApplicationController
 
   def update_params
     params.require(:project).permit(:name, :description, user_ids: [])
-  end
-
-  def locus_for(user)
-    Locus.find_by(locusable_id: @project.id, locusable_type: 'Project', user: user) || Locus.create(locusable_id: @project.id, locusable_type: 'Project', user: user, range: '0')
   end
 end
