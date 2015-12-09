@@ -132,6 +132,12 @@ RSpec.describe ProjectsController do
           get :show, id: @project
           expect(assigns(:project)).to eq @project
         end
+
+        it "should return the locus" do
+          locus = FactoryGirl.create(:project_locus, locusable_id: @project.id, user: @user)
+          get :show, id: locus.locusable
+          expect(assigns(:locus)).to eq locus
+        end
       end
 
       context "not project user" do
@@ -512,6 +518,30 @@ RSpec.describe ProjectsController do
           delete :destroy, id: @project
         }.not_to change(Project, :count)
       end
+    end
+  end
+
+  describe "#locus_for" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @project = FactoryGirl.create(:project)
+    end
+
+    it "creates new locus for project and user when non exists" do
+      controller.instance_variable_set(:@project, @project)
+      expect {
+        controller.send(:locus_for, @user)
+      }.to change(Locus, :count).by(1)
+      expect(Locus.last.locusable).to eq @project
+      expect(Locus.last.user).to eq @user
+    end
+
+    it "does not create new locus for project and user when it already exists" do
+      project_locus = FactoryGirl.create(:project_locus, locusable_id: @project.id, user: @user)
+      controller.instance_variable_set(:@project, @project)
+      expect {
+        controller.send(:locus_for, @user)
+      }.not_to change(Locus, :count)
     end
   end
 end

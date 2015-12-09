@@ -21,7 +21,9 @@ jQuery ->
     igvDiv = $('.igv-js')
     unless igv.browser
       igvViewer = new IgvViewer()
-      igvViewer.load(igvDiv[0], igvDiv.data('genome'))
+      igvViewer.load(igvDiv[0], igvDiv.data('genome'), igvDiv.data('locus-range'))
+      igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
+      igvViewer.setInputIDforCapybara()
 
   $('.project-js-igv').on 'click', '.project-track', (event) ->
     igvDiv = $(this)

@@ -30,6 +30,19 @@ Feature: Show a project
       | a manager | Datapaths and Tracks | admin   | I own a project       | with      | should     |
       | a user    | Tracks               | owner   | I belong to a project | without   | should not |
 
+  @javascript
+  Scenario: User can view project tracks in js igv
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    And I had previously set a project locus
+    When I am on the project page
+    And I am on the IGV tab
+    Then the igv js viewer should be activated
+    And the locus should be loaded to the last locus
+    And I should be able to load a track into the viewer
+    And any changes I make in the locus should be saved
+
   Scenario: User can access the tracks page
     Given I am signed in
     And I belong to a project

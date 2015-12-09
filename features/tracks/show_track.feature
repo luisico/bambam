@@ -71,5 +71,5 @@ Feature: Show a track
     And I have previously set a locus
     When I am on the track page
     Then I should be able to activate igv js viewer
-    And my track should be loaded to the last locus
+    And the locus should be loaded to the last locus
     And any changes I make in the locus should be saved

@@ -8,6 +8,12 @@ Given /^there is a read only user in that project$/ do
   expect(@projects_user.read_only).to eq true
 end
 
+Given /^I had previously set a project locus$/ do
+  expect {
+    @locus = FactoryGirl.create(:project_locus, locusable_id: @project.id, user: @user, range: "chr1:1-185,503,660")
+  }.to change(Locus, :count).by(1)
+end
+
 ### When
 
 When /^I am on the project page$/ do
@@ -17,6 +23,11 @@ end
 When /^I am on the Users tab$/ do
   click_link "users-tab"
   expect(page).to have_selector "#project-users"
+end
+
+When /^I am on the IGV tab$/ do
+  click_link "igv-tab"
+  expect(page).to have_selector ".track-cloud"
 end
 
 ### Then
@@ -150,4 +161,14 @@ end
 
 Then /^the read only user count should be (\d+)$/ do |n|
   expect(find("#read-only-users").text).to include n
+end
+
+Then /^the igv js viewer should be activated$/ do
+  expect(page).to have_selector ".igv-root-div"
+  sleep 1
+end
+
+Then /^I should be able to load a track into the viewer$/ do
+  click_link @track.name
+  expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
 end

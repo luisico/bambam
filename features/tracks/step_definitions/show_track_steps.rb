@@ -105,7 +105,7 @@ Then /^I should be able to activate igv js viewer$/ do
   expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
 end
 
-Then /^my track should be loaded to the last locus$/ do
+Then /^the locus should be loaded to the last locus$/ do
   search_input = find_field('igv-js-search-input')
   expect(search_input.value).to eq @locus.range
 end

@@ -14,6 +14,7 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.includes(:projects_users, :users).find(params[:id])
+    @locus = locus_for(current_user)
   end
 
   def new
@@ -54,5 +55,9 @@ class ProjectsController < ApplicationController
 
   def update_params
     params.require(:project).permit(:name, :description, user_ids: [])
+  end
+
+  def locus_for(user)
+    Locus.find_by(locusable_id: @project.id, locusable_type: 'Project', user: user) || Locus.create(locusable_id: @project.id, locusable_type: 'Project', user: user, range: '0')
   end
 end
