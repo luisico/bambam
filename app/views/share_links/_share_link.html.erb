@@ -1,7 +1,7 @@
 <div class="share-link" id="share_link_<%= share_link.id %>" data-expires_at="<%= share_link.expires_at %>">
   <ul class="width-limited-inline-list">
     <li>
-      <a href="#" class="fi-link show-track-link" id="show_track_link_<%= share_link.id %>"> Link</a>
+      <a href="#" class="fi-link show-track-link" id="show_track_link_<%= share_link.id %>"> IGV url</a>
     </li>
     <li>
       <a href="#" class="show-ucsc-link" id="show_ucsc_link_<%= share_link.id %>">UCSC track line</a>
@@ -21,8 +21,11 @@
   </ul>
 
   <p class="clipboard-box track-share-link">
+    <small>Copy and paste link below into IGV -> File -> Load from URL</small></br>
     <i class="fi-clipboard copy-to-clipboard pointer" data-clipboard-id="clip_track_share_link"></i>
-    <span id="clip_track_share_link"><%= ucsc_url(share_link) %></span>
+    <span id="clip_track_share_link">
+      <%= manual_load_into_igv_url(share_link) %>
+    </span>
   </p>
 
   <p class="clipboard-box ucsc-track-line">

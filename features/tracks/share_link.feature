@@ -51,7 +51,7 @@ Feature: Create link to share track
     When I am on the track page
     Then I should not be able to create a shareable link with expired date
 
-  Scenario: Show a track's share link
+  Scenario: Show a track's share igv url link
     Given I am signed in
     And I belong to a project
     And there is a bam track in that project

@@ -2,7 +2,7 @@ class StreamServicesController < ApplicationController
   before_action :authenticate_user!, unless: :has_access_token?
 
   def has_access_token?
-    if params[:access_token] && share_link = ShareLink.where(access_token: params[:access_token]).first
+    if params[:access_token] && share_link = ShareLink.where(access_token: sanitized_access_token).first
       (share_link.track_id.to_s == params[:id]) && (share_link.expires_at >= Time.now)
     else
       false
@@ -80,5 +80,9 @@ class StreamServicesController < ApplicationController
     raise Errno::ENOENT unless File.size?(path)
 
     path
+  end
+
+  def sanitized_access_token
+    params[:access_token].sub(/\..*$/, '')
   end
 end
