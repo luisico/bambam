@@ -17,13 +17,13 @@ jQuery ->
     count = $('a.service.fi-eye').length
     $('.track-count').text("[" + count + "]")
 
-  $('.project-tabs').on 'click', '#igv-tab', (event) ->
+  $('.project-js-igv').on 'click', '.igv-js-link', (event) ->
+    $('.project-tracks').show()
     igvDiv = $('.igv-js')
-    unless igv.browser
-      igvViewer = new IgvViewer()
-      igvViewer.load(igvDiv[0], igvDiv.data('genome'), igvDiv.data('locus-range'))
-      igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
-      igvViewer.setInputIDforCapybara()
+    igvViewer = new IgvViewer()
+    igvViewer.load(igvDiv[0], $(this).data('project-genome'), igvDiv.data('locus-range'))
+    igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
+    igvViewer.setInputIDforCapybara()
 
   $('.project-js-igv').on 'click', '.project-track', (event) ->
     igvDiv = $(this)

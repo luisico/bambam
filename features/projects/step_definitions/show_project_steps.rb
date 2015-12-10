@@ -27,7 +27,7 @@ end
 
 When /^I am on the IGV tab$/ do
   click_link "igv-tab"
-  expect(page).to have_selector ".track-cloud"
+  expect(page).to have_selector ".igv-js-link"
 end
 
 ### Then
@@ -163,9 +163,10 @@ Then /^the read only user count should be (\d+)$/ do |n|
   expect(find("#read-only-users").text).to include n
 end
 
-Then /^the igv js viewer should be activated$/ do
-  expect(page).to have_selector ".igv-root-div"
+Then /^I should be able to activate the igv js viewer$/ do
+  click_link 'hg19'
   sleep 1
+  expect(page).to have_selector ".igv-root-div"
 end
 
 Then /^I should be able to load a track into the viewer$/ do

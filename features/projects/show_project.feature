@@ -38,7 +38,7 @@ Feature: Show a project
     And I had previously set a project locus
     When I am on the project page
     And I am on the IGV tab
-    Then the igv js viewer should be activated
+    Then I should be able to activate the igv js viewer
     And the locus should be loaded to the last locus
     And I should be able to load a track into the viewer
     And any changes I make in the locus should be saved

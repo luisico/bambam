@@ -41,8 +41,8 @@
             <li class="tab-title"><a id="igv-tab" href="#panel3">IGV</a></li>
           </ul>
 
-          <div class="tabs-content project-datapaths">
-            <div class="content active" id="panel1">
+          <div class="tabs-content project-show-content">
+            <div class="content project-datapaths active" id="panel1">
               <h4 class="no-margin-bottom">
                 <% if can? :manage, @project %>
                   <span class="datapath-icon icon-key">Datapaths</span>
@@ -105,18 +105,29 @@
 
             <div class="content project-js-igv" id="panel3">
               <h6>
-                Click <span class="track-icon icon-key">tracks</span> below to load them into igv viewer
+                Please select genome to launch embedded igv viewer
               </h6>
-              <div class="subhead-note">
-                Only tracks with 'bam' extension are available to view in the igv javascript viewer
-              </div>
-              <ul class="track-cloud">
-                <% @project.tracks.select{|track| track.file_format == 'bam'}.each do |track| %>
-                  <%= render partial: "project_track", locals: {track: track} %>
-                <% end %>
+              <ul class="inline-list">
+                <li><a href="#" class="igv-js-link" data-project-genome='hg18'>hg18</a></li>
+                <li><a href="#" class="igv-js-link" data-project-genome='hg19'>hg19</a></li>
               </ul>
-              <hr>
-              <div class="igv-js" data-genome="hg19" data-locus-path=<%= locus_path(@locus) %> data-locus-range=<%= @locus.range %>>
+
+              <div class="project-tracks">
+                <h6>
+                  Click <span class="track-icon icon-key">tracks</span> below to load them into igv viewer
+                </h6>
+                <div class="subhead-note">
+                  Only tracks with 'bam' extension are available to view in the igv javascript viewer
+                </div>
+                <ul class="track-cloud">
+                  <% @project.tracks.select{|track| track.file_format == 'bam'}.each do |track| %>
+                    <%= render partial: "project_track", locals: {track: track} %>
+                  <% end %>
+                </ul>
+                <hr>
+              </div>
+
+              <div class="igv-js" data-locus-path=<%= locus_path(@locus) %> data-locus-range=<%= @locus.range %>>
               </div>
             </div>
           </div>
