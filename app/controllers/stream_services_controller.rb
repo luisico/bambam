@@ -83,6 +83,6 @@ class StreamServicesController < ApplicationController
   end
 
   def sanitized_access_token
-    params[:access_token].gsub(/\..*/, '')
+    params[:access_token].sub(/\..*$/, '')
   end
 end
