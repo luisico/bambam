@@ -70,13 +70,13 @@ jQuery ->
 
   $('.track-links').on 'click', '.load-fasta-form', (event) ->
     button = $(this)
-    button.parent().hide()
+    button.toggleClass('load-fasta-form disable secondary')
     form = button.data('form')
     $('.track-links').append(form)
 
   $('.track-links').on 'click', '.cancel-fasta-form', (event) ->
     $('.fasta-form').remove()
-    $('.load-fasta-form').parent().show()
+    $('.igv-js-link').toggleClass('load-fasta-form disable secondary')
 
 
   format_date = (time) ->

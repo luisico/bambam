@@ -54,3 +54,11 @@ i.large-calendar {
     @extend .inline-list;
   }
 }
+
+.igv-form-button {
+  &.fi-eye:before {
+    font-size: rem-calc(20);
+    vertical-align: middle;
+    margin-right: rem-calc(5);
+  }
+}

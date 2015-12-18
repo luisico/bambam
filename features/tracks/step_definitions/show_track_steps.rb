@@ -107,7 +107,7 @@ Then /^a (bam|bai|bw) file should download$/ do |ext|
 end
 
 Then /^I should be able to activate igv js viewer$/ do
-  click_link 'igv (embedded)'
+  click_link 'igv js'
   sleep 1
   expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
 end
@@ -128,7 +128,7 @@ Then /^any changes I make in the locus should be saved$/ do
 end
 
 Then /^I should be able to load igv js viewer with reference genome url$/ do
-  click_link 'igv (embedded)'
+  click_link 'igv js'
   fill_in 'fasta-url', with: "http://dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta"
   within(find('.fasta-form')) {
     find('.launch-igv').click
