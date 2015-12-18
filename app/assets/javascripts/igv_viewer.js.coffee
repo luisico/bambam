@@ -1,9 +1,12 @@
 class @IgvViewer
-  load: (div, genome, locus)->
+  load: (div, reference, locus, fastaUrl)->
     options =
       showNavigation: true
-      genome: genome
       locus: locus
+    if fastaUrl
+      options['reference'] = reference
+    else
+      options['genome'] = reference
     igv.createBrowser div, options
 
   addTrack: (url, name) ->

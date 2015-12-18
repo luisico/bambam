@@ -59,13 +59,25 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
-  $('.track-links').on 'click', '.igv-js-link', (event) ->
+  $('.track-links').on 'click', '.launch-igv', (event) ->
     igvDiv = $('.igv-js')
     igvViewer = new IgvViewer()
-    igvViewer.load(igvDiv[0], igvDiv.data('genome'), igvDiv.data('locus-range'))
+    reference = $(this).data('genome') or {fastaURL: $('#fasta-url').val()}
+    igvViewer.load(igvDiv[0], reference, igvDiv.data('locus-range'), $(this).data('fasta-url'))
     igvViewer.addTrack(igvDiv.data('stream-url'), igvDiv.data('track-name'))
     igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
     igvViewer.setInputIDforCapybara()
+
+  $('.track-links').on 'click', '.load-fasta-form', (event) ->
+    button = $(this)
+    button.parent().hide()
+    form = button.data('form')
+    $('.track-links').append(form)
+
+  $('.track-links').on 'click', '.cancel-fasta-form', (event) ->
+    $('.fasta-form').remove()
+    $('.load-fasta-form').parent().show()
+
 
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
