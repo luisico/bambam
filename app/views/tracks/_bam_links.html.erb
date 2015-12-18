@@ -1,5 +1,7 @@
 <li><%= link_to_igv(@track) %></li>
-<li><%= link_to "igv (embedded)", "#", class: 'igv-js-link' %></li>
+<% if ENV['IGV_JS_PREDEFINED_GENOMES'].include? @track.genome %>
+  <li><%= link_to "igv (embedded)", "#", class: 'igv-js-link' %></li>
+<% end %>
 <li>
   <%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %>
 </li>
