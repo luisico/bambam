@@ -21,7 +21,7 @@ class Track < ActiveRecord::Base
   end
 
   def file_format
-    Pathname.new(path).extname.gsub('.', '')
+    Pathname.new(path).extname.sub(/^\./, '')
   end
 
   protected
