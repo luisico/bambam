@@ -14,6 +14,7 @@ class Ability
       can :update, ProjectsUser
       can :manage, Datapath
       can :manage, ProjectsDatapath
+      can :manage, Locus
     else
 
       if user.has_role? :manager
@@ -43,6 +44,8 @@ class Ability
       can :create, Track do |track|
         track.try(:project).try(:users).try(:include?, user)
       end
+
+      can :update, Locus, user_id: user.id
 
       can :manage, ShareLink do |share_link|
         share_link.track.try(:project).try(:users).try(:include?, user)

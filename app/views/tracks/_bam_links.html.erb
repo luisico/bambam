@@ -1,0 +1,15 @@
+<li><%= link_to_igv(@track) %></li>
+<% if ENV['IGV_JS_PREDEFINED_GENOMES'].include? @track.genome %>
+  <li><%= link_to "igv js", "#", class: 'igv-js-link launch-igv' %></li>
+<% else %>
+  <% fasta_form = render "fasta_form" %>
+  <li>
+    <%= link_to "igv js", "#", class: 'igv-js-link load-fasta-form', data: {form: fasta_form.gsub("\n", "")} %>
+  </li>
+<% end %>
+<li>
+  <%= link_to "download bam file", stream_services_track_path(@track), class: 'fi-download icon-key' %>
+</li>
+<li>
+  <%= link_to "download bai file", stream_services_track_path(@track, format: 'bai'), class: 'fi-download icon-key' %>
+</li>

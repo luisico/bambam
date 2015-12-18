@@ -255,12 +255,19 @@ RSpec.describe User do
       it { is_expected.to respond_to :datapaths_users }
       it { is_expected.to respond_to :datapaths_user_ids }
     end
+
+    describe "loci" do
+      it { is_expected.to have_many :loci }
+      it { is_expected.to respond_to :loci }
+      it { is_expected.to respond_to :locus_ids }
+    end
   end
 
   describe "when user destroyed" do
     before do
       FactoryGirl.create(:group, members: [@user])
       FactoryGirl.create(:project, users: [@user])
+      FactoryGirl.create(:track_locus, locusable_id: FactoryGirl.create(:track).id, user: @user)
       @user.save!
     end
 
@@ -275,6 +282,10 @@ RSpec.describe User do
 
     it "should destroy associated projects_users" do
       expect { @user.destroy }.to change(ProjectsUser, :count).by(-1)
+    end
+
+    it "should destroy associated projects_users" do
+      expect { @user.destroy }.to change(Locus, :count).by(-1)
     end
   end
 end

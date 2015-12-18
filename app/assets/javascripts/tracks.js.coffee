@@ -59,6 +59,26 @@ jQuery ->
     $(this).closest('form').find('#share_link_expires_at').val(time)
     event.preventDefault()
 
+  $('.track-links').on 'click', '.launch-igv', (event) ->
+    igvDiv = $('.igv-js')
+    igvViewer = new IgvViewer()
+    reference = $(this).data('genome') or {fastaURL: $('#fasta-url').val()}
+    igvViewer.load(igvDiv[0], reference, igvDiv.data('locus-range'), $(this).data('fasta-url'))
+    igvViewer.addTrack(igvDiv.data('stream-url'), igvDiv.data('track-name'))
+    igvViewer.updateSearchInput(igvDiv.data('locus-path'), igvDiv.data('locus-range'))
+    igvViewer.setInputIDforCapybara()
+
+  $('.track-links').on 'click', '.load-fasta-form', (event) ->
+    button = $(this)
+    button.toggleClass('load-fasta-form disable secondary')
+    form = button.data('form')
+    $('.track-links').append(form)
+
+  $('.track-links').on 'click', '.cancel-fasta-form', (event) ->
+    $('.fasta-form').remove()
+    $('.igv-js-link').toggleClass('load-fasta-form disable secondary')
+
+
   format_date = (time) ->
     m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 

@@ -13,6 +13,20 @@ Given /^there is a (bam|bw) track in that project$/ do |type|
   end
 end
 
+Given /^I have previously set a locus$/ do
+  expect {
+    @locus = FactoryGirl.create(:track_locus, locusable_id: @track.id, user: @user, range: "chr1:1-185,503,660")
+  }.to change(Locus, :count).by(1)
+end
+
+Given /^that track has a (un)?supported genome$/ do |negate|
+  if negate
+    expect {
+      @track.update_attributes(genome: 'mm10')
+    }.to change(@track, :genome)
+  end
+end
+
 ### When
 
 When /^I click on the track name$/ do
@@ -67,6 +81,14 @@ Then /^I should see a link to open the track in IGV$/ do
   expect(page).to have_selector(:xpath, "//a[contains(@href, '#{encoded}') and text()='igv']")
 end
 
+Then /^I should( not)? see a link to open track in embedded IGV$/ do |negate|
+  if negate
+    expect(page).not_to have_css ".igv-js-link"
+  else
+    expect(page).to have_css ".igv-js-link"
+  end
+end
+
 Then /^I should see a link to download a (bam|bw) file$/ do |type|
   expect(page).to have_link "download #{type} file"
 end
@@ -82,4 +104,35 @@ end
 Then /^a (bam|bai|bw) file should download$/ do |ext|
   filename = Pathname.new(@track.path).sub_ext(".#{ext}").basename.to_s
   expect(page.response_headers['Content-Disposition']).to eq "attachment; filename=\"#{filename}\""
+end
+
+Then /^I should be able to activate igv js viewer$/ do
+  click_link 'igv js'
+  sleep 1
+  expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
+end
+
+Then /^my track should be loaded to the last locus$/ do
+  search_input = find_field('igv-js-search-input')
+  expect(search_input.value).to eq @locus.range
+end
+
+Then /^any changes I make in the locus should be saved$/ do
+  new_range = "chr1:1-185,503,670"
+  expect {
+    fill_in 'igv-js-search-input', with: new_range
+    loop until page.evaluate_script('jQuery.active').zero?
+    @locus.reload
+  }.to change(@locus, :range)
+  expect(@locus.range).to eq new_range
+end
+
+Then /^I should be able to load igv js viewer with reference genome url$/ do
+  click_link 'igv js'
+  fill_in 'fasta-url', with: "http://dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta"
+  within(find('.fasta-form')) {
+    find('.launch-igv').click
+  }
+  sleep 1
+  expect(page).to have_selector '.igv-track-label-span-base', text: @track.name
 end

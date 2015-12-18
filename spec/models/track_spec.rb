@@ -153,6 +153,12 @@ RSpec.describe Track do
     it { is_expected.to respond_to :share_link_ids }
   end
 
+  describe "loci" do
+    it { is_expected.to have_many :loci }
+    it { is_expected.to respond_to :loci }
+    it { is_expected.to respond_to :locus_ids }
+  end
+
   describe "#full_path" do
     it "should return the full path of the track" do
       expect(@track.full_path).to eq File.join(
@@ -177,6 +183,33 @@ RSpec.describe Track do
         @track.update_attributes(project: FactoryGirl.create(:project))
         @track.reload
       }.to change(@track.projects_datapath, :project_id)
+    end
+  end
+
+  describe "#file_format" do
+    %w(bam bw).each do |file_format|
+      it "should return file format" do
+        track = FactoryGirl.build(:track, path: File.join("tracks", "track1.#{file_format}"))
+        expect(track.file_format).to eq file_format
+      end
+    end
+  end
+
+  describe "when track is destroyed" do
+    before { @track.save! }
+
+    it "should destroy the track" do
+      expect { @track.destroy }.to change(Track, :count).by(-1)
+      expect { Track.find(@track.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should destroy associated loci" do
+      FactoryGirl.create(:track_locus, locusable_id: @track.id, user: FactoryGirl.create(:user))
+      expect { @track.destroy }.to change(Locus, :count).by(-1)
+    end
+
+    it "should not destroy the user" do
+      expect { @track.destroy }.not_to change(User, :count)
     end
   end
 end

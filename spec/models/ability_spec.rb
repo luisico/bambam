@@ -42,6 +42,10 @@ RSpec.describe User do
       context "projects_datapaths" do
         it { is_expected.to be_able_to(:manage, ProjectsDatapath) }
       end
+
+      context "loci" do
+        it { is_expected.to be_able_to(:manage, Locus) }
+      end
     end
 
     describe "as manager" do
@@ -205,6 +209,12 @@ RSpec.describe User do
           it { is_expected.not_to be_able_to(:destroy, @my_track) }
           it { is_expected.not_to be_able_to(:destroy, @project_track) }
           it { is_expected.not_to be_able_to(:update_tracks, @project) }
+        end
+
+        context "loci" do
+          it { is_expected.to     be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @my_track.id, locusable_type: 'track', user: @user)) }
+          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @project_track)) }
+          it { is_expected.not_to be_able_to(:update, FactoryGirl.create(:track_locus, locusable_id: @other_project_track)) }
         end
       end
 

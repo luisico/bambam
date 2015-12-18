@@ -10,3 +10,23 @@
 .track-share-link {
   display: none;
 }
+
+#track-share-links {
+  margin-bottom: 0 !important;
+  @extend .inline-list;
+  h5 {
+    margin-bottom: rem-calc(5) !important;
+  }
+}
+
+.new-button {
+  @extend .button;
+  @extend .tiny;
+  @extend .radius;
+  padding: 5px 10px;
+  margin-bottom: 0;
+}
+
+#create-share-links {
+  margin-top: rem-calc(15);
+}

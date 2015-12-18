@@ -6,6 +6,7 @@ class Track < ActiveRecord::Base
 
   belongs_to :owner, class_name: "User", foreign_key: :owner_id
   has_many :share_links
+  has_many :loci, as: :locusable, dependent: :destroy
 
   validates_presence_of :name, :owner_id, :genome
   #TODO adding presence validation on project_id breaks nested updated.
@@ -17,6 +18,10 @@ class Track < ActiveRecord::Base
 
   def full_path
     File.join projects_datapath.full_path, path
+  end
+
+  def file_format
+    Pathname.new(path).extname.sub(/^\./, '')
   end
 
   protected

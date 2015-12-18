@@ -36,6 +36,7 @@ gem 'foundation-rails', '~> 5.2.3.0'
 gem 'local_time', '~> 1.0.2'
 gem 'foundation-icons-sass-rails'
 gem 'best_in_place', '~> 3.0.3'
+gem 'font-awesome-sass', '~> 4.3.2'
 
 # JSON APIs
 gem 'jbuilder', '~> 2.2.16'

@@ -27,23 +27,57 @@ var tour_track_show_update = {
       placement: 'left'
     },
     {
+      title: "Server path",
+      content: "Path of track on server. Click clipboard icon to copy server path to clipboard.",
+      target: "#track-server-path",
+      placement: 'bottom'
+    },
+    {
       title: "IGV",
       content: "Click to open track in IGV. For link to work, IGV must already be open on your computer.",
       target: ".fi-eye",
       placement: 'bottom'
     },
     {
-      title: "Track download links",
-      content: "Click links to download track file(s).",
-      target: "#track-download-links",
+      title: "IGV (embedded within browser)",
+      content: "Click to try it youself.",
+      target: ".igv-js-link",
       placement: 'bottom',
+      ctaLabel: "Skip",
+      showCTAButton: true,
+      showNextButton: false,
+      nextOnTargetClick: true,
+      onCTA: function() {
+        hopscotch.showStep(hopscotch.getCurrStepNum() + 4);
+      }
+    },
+    {
+      title: "Explore track",
+      content: "Search by range",
+      target: ".igv-root-div",
+      placement: 'top',
+      arrowOffset: 'center',
+      delay: '250'
+    },
+    {
+      title: "Explore track",
+      content: "Zoom in or out",
+      target: ".igvNavigationZoom",
+      placement: 'left'
+    },
+    {
+      title: "Explore track",
+      content: "Drag on graph to change locus",
+      target: ".igv-content-canvas",
+      placement: 'top',
       arrowOffset: 'center'
     },
     {
-      title: "Server path",
-      content: "Path of track on server. Click clipboard icon to copy server path to clipboard.",
-      target: "#track-server-path",
-      placement: 'bottom'
+      title: "Track download links",
+      content: "Click links to download track file(s).",
+      target: ".fi-download",
+      placement: 'bottom',
+      arrowOffset: 'center'
     },
     {
       title: "Share links",
@@ -53,7 +87,7 @@ var tour_track_show_update = {
     },
     {
       title: "Create new share link",
-      content: "Try it yourself!<br/>Click 'Create new share link'",
+      content: "Try it yourself!<br/>Click 'new'",
       target: "#new_link",
       placement: 'bottom',
       ctaLabel: "Skip",

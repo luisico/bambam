@@ -14,18 +14,6 @@ i.large-calendar {
   color: red;
 }
 
-.track-name {
-  width: 100%;
-  margin-bottom: rem-calc(32);
-  h3 {
-    margin-bottom: 0;
-  }
-  .project-name {
-    font-size: rem-calc(14);
-    color: $subheader-font-color;
-  }
-}
-
 .label.genome {
   @extend .secondary;
   @extend .round;
@@ -33,4 +21,44 @@ i.large-calendar {
   padding: rem-calc(1 6 2);
   font-size: rem-calc(10);
   vertical-align: super;
+}
+
+.igv-js-link {
+  @extend .fi-eye;
+  @extend .button;
+  @extend .tiny;
+  @extend .radius;
+  @extend .service;
+  margin-bottom: rem_calc(20);
+  @extend .hide-for-small-only;
+}
+
+#share-links-list {
+  margin-top: rem-calc(15);
+  margin-bottom: rem-calc(50);
+}
+
+.track-info {
+  margin-bottom: rem-calc(25);
+  ul {
+    @include block-grid(2)
+  }
+}
+
+.igv-js {
+  margin-bottom: rem-calc(25);
+}
+
+.track-links {
+  ul {
+    @extend .inline-list;
+  }
+}
+
+.igv-form-button {
+  &.fi-eye:before {
+    font-size: rem-calc(20);
+    vertical-align: middle;
+    margin-right: rem-calc(5);
+  }
 }

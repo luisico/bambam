@@ -18,7 +18,8 @@ Feature: Show a track
     And I should see button to copy the track path to the clipboard
     And I should see the track's timestamps
     And I should see a link to open the track in IGV
-    And I should see a link to "Create new share link"
+    And I <status> see a link to open track in embedded IGV
+    And I should see a link to "new"
 
    Examples:
     | user type| type | link status | status     |
@@ -61,3 +62,26 @@ Feature: Show a track
     And there is a bam track in that project
     When I am on the track page
     Then I should be able to activate a tooltip on the IGV button
+
+  @javascript
+  Scenario: IGV js viewer for default genomes
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    And I have previously set a locus
+    When I am on the track page
+    Then I should be able to activate igv js viewer
+    And my track should be loaded to the last locus
+    And any changes I make in the locus should be saved
+
+  @javascript
+  Scenario: IGV js viewer for non-default genomes
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    And that track has a unsupported genome
+    And I have previously set a locus
+    When I am on the track page
+    Then I should be able to load igv js viewer with reference genome url
+    And my track should be loaded to the last locus
+    And any changes I make in the locus should be saved

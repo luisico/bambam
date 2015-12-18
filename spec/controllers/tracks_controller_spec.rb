@@ -115,9 +115,9 @@ RSpec.describe TracksController do
 
     context "as a signed in user with a project" do
       before do
-        user = FactoryGirl.create(:user)
-        @project.users << user
-        sign_in user
+        @user = FactoryGirl.create(:user)
+        @project.users << @user
+        sign_in @user
       end
 
       it "should be successful" do
@@ -129,6 +129,12 @@ RSpec.describe TracksController do
       it "should return the track" do
         get :show, id: @track
         expect(assigns(:track)).to eq @track
+      end
+
+      it "should return the locus" do
+        locus = FactoryGirl.create(:track_locus, locusable_id: @track.id, user: @user)
+        get :show, id: locus.locusable
+        expect(assigns(:locus)).to eq locus
       end
     end
 
@@ -446,6 +452,30 @@ RSpec.describe TracksController do
           delete :destroy, id: @track.id, format: :json
         }.not_to change(Track, :count)
       end
+    end
+  end
+
+  describe "#locus_for" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @track = FactoryGirl.create(:track)
+    end
+
+    it "creates new track user for track and user when non exists" do
+      controller.instance_variable_set(:@track, @track)
+      expect {
+        controller.send(:locus_for, @user)
+      }.to change(Locus, :count).by(1)
+      expect(Locus.last.locusable).to eq @track
+      expect(Locus.last.user).to eq @user
+    end
+
+    it "does not create new tracks user for track and user when it already exists" do
+      track_locus = FactoryGirl.create(:track_locus, locusable_id: @track.id, user: @user)
+      controller.instance_variable_set(:@track, @track)
+      expect {
+        controller.send(:locus_for, @user)
+      }.not_to change(Locus, :count)
     end
   end
 end
