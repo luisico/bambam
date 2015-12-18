@@ -7,7 +7,6 @@ Feature: Show a track
     Given I am signed in as <user type>
     And I belong to a project
     And there is a <type> track in that project
-    And that track has a <support_status> genome
     When I am on the track page
     Then I should see the track's name
     And I should see the track's genome
@@ -15,18 +14,17 @@ Feature: Show a track
     And I should see the track's project
     And I <link status> see a link to the track's owner
     And I should see a link to download a <type> file
-    And I <status1> see a "download bai file" link
+    And I <status> see a "download bai file" link
     And I should see button to copy the track path to the clipboard
     And I should see the track's timestamps
     And I should see a link to open the track in IGV
-    And I <status2> see a link to open track in embedded IGV
+    And I <status> see a link to open track in embedded IGV
     And I should see a link to "new"
 
    Examples:
-    | user type| type | support_status | link status | status1    | status2    |
-    | a user   | bam  | supported      | should not  | should     | should     |
-    | a user   | bam  | unsupported    | should not  | should     | should not |
-    | an admin | bw   | supported      | should      | should not | should not |
+    | user type| type | link status | status     |
+    | a user   | bam  | should not  | should     |
+    | an admin | bw   | should      | should not |
 
   Scenario Outline: Download track
     Given I am signed in
@@ -66,12 +64,24 @@ Feature: Show a track
     Then I should be able to activate a tooltip on the IGV button
 
   @javascript
-  Scenario: IGV js viewer
+  Scenario: IGV js viewer for default genomes
     Given I am signed in
     And I belong to a project
     And there is a bam track in that project
     And I have previously set a locus
     When I am on the track page
     Then I should be able to activate igv js viewer
+    And my track should be loaded to the last locus
+    And any changes I make in the locus should be saved
+
+  @javascript
+  Scenario: IGV js viewer for non-default genomes
+    Given I am signed in
+    And I belong to a project
+    And there is a bam track in that project
+    And that track has a unsupported genome
+    And I have previously set a locus
+    When I am on the track page
+    Then I should be able to load igv js viewer with reference genome url
     And my track should be loaded to the last locus
     And any changes I make in the locus should be saved
