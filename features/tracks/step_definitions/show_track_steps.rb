@@ -13,11 +13,18 @@ Given /^there is a (bam|bw) track in that project$/ do |type|
   end
 end
 
-
 Given /^I have previously set a locus$/ do
   expect {
     @locus = FactoryGirl.create(:track_locus, locusable_id: @track.id, user: @user, range: "chr1:1-185,503,660")
   }.to change(Locus, :count).by(1)
+end
+
+Given /^that track has a (un)?supported genome$/ do |negate|
+  if negate
+    expect {
+      @track.update_attributes(genome: 'mm10')
+    }.to change(@track, :genome)
+  end
 end
 
 ### When
