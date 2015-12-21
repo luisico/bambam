@@ -1,5 +1,5 @@
 <li><%= link_to_igv(@track) %></li>
-<% if ENV['IGV_JS_PREDEFINED_GENOMES'].include? @track.genome %>
+<% if ENV['IGV_JS_PREDEFINED_GENOMES'].split(':').include? @track.genome %>
   <li><%= link_to "igv js", "#", class: 'igv-js-link launch-igv' %></li>
 <% else %>
   <% fasta_form = render "fasta_form" %>
