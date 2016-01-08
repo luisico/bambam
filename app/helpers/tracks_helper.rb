@@ -28,10 +28,8 @@ module TracksHelper
   end
 
   def ucsc_track_line(share_link)
-    types = {'.bam' => 'bam', '.bw' => 'bigWig'}
-
     track_line = {
-      'type'       => types[Pathname.new(share_link.track.path).extname],
+      'type'       => share_link.track.file_format,
       'name'       => share_link.track.name.blank? ? nil : "\"#{share_link.track.name}\"",
       'bigDataUrl' => ucsc_url(share_link)
     }

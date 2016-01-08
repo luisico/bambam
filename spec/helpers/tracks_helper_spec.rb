@@ -109,14 +109,11 @@ RSpec.describe TracksHelper do
     end
 
     context "track type" do
-      it "for bam files" do
-        @track.path << '.bam'
-        expect(helper.ucsc_track_line(@share_link)).to match /type=bam/
-      end
-
-      it "for bigwig files" do
-        @track.path << '.bw'
-        expect(helper.ucsc_track_line(@share_link)).to match /type=bigWig/
+      Track::FILE_FORMATS.each do |label, value|
+        it "for #{label} files" do
+          @track.path << ".#{value[:extension]}"
+          expect(helper.ucsc_track_line(@share_link)).to match /type=#{label}/
+        end
       end
 
       it "is not included when unkown" do
