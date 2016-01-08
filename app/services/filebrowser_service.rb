@@ -1,5 +1,5 @@
 class FilebrowserService
-  FORMATS = %w(bw bam)
+  FORMATS = Track::FILE_FORMATS.collect{|k,v| v[:extension]}
 
   attr_reader :path
 
