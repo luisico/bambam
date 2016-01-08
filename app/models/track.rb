@@ -8,11 +8,17 @@ class Track < ActiveRecord::Base
   has_many :share_links
   has_many :loci, as: :locusable, dependent: :destroy
 
+  FILE_FORMATS = {
+    'bam' => { extension: 'bam' },
+    'bigWig' => { extension: 'bw' },
+    'bed' => { extension: 'bed' }
+  }
+
   validates_presence_of :name, :owner_id, :genome
   #TODO adding presence validation on project_id breaks nested updated.
   validates_path_of :path
-  validates :path, format: { with: /\A.*\.(bw|bam)\z/,
-    message: "file must have extension .bw or .bam" }
+  validates :path, format: { with: /\A.*\.(#{FILE_FORMATS.collect{|k, v| v[:extension]}.join('|')})\z/,
+    message: "file must have one of following extension: #{FILE_FORMATS.collect{|k,v| v[:extension]}.join(', ')}" }
 
   after_save :update_projects_datapath
 
@@ -20,8 +26,12 @@ class Track < ActiveRecord::Base
     File.join projects_datapath.full_path, path
   end
 
-  def file_format
+  def file_extension
     Pathname.new(path).extname.sub(/^\./, '')
+  end
+
+  def file_format
+    FILE_FORMATS.key({extension: self.file_extension})
   end
 
   protected
