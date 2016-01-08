@@ -8,7 +8,7 @@ module Tracks
     end
 
     def preselect_track(projects_datapath, name, ext, owner)
-      formats = %w(*.bw *.bam)
+      formats = Track::FILE_FORMATS.collect{|key, value| '*.' + value[:extension]}
       globs = formats.map{ |f| File.join(projects_datapath.full_path, "**", f) }
       files = Dir.glob(globs)
 
