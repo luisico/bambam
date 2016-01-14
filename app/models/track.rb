@@ -9,7 +9,7 @@ class Track < ActiveRecord::Base
   has_many :loci, as: :locusable, dependent: :destroy
 
   FILE_FORMATS = {
-    'bam' => { extension: 'bam' },
+    'bam' => { extension: 'bam' , aux_formats: %w(.bai .bam.bai)},
     'bigWig' => { extension: 'bw' },
     'bed' => { extension: 'bed' }
   }
@@ -31,7 +31,7 @@ class Track < ActiveRecord::Base
   end
 
   def file_format
-    FILE_FORMATS.key({extension: self.file_extension})
+    FILE_FORMATS.select{|k,v| k if v[:extension] == self.file_extension}.keys.first
   end
 
   protected
