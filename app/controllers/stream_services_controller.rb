@@ -9,8 +9,6 @@ class StreamServicesController < ApplicationController
     end
   end
 
-  AUX_FORMATS = %w(.bai .bam.bai)
-
   def show
     begin
       track = Track.find(params[:id])
@@ -67,7 +65,9 @@ class StreamServicesController < ApplicationController
       altpath2 = path + format
 
       unless File.extname(path) == format
-        raise Errno::EACCES unless AUX_FORMATS.include?(format)
+        unless Track::FILE_FORMATS.collect{|k,v| v[:aux_formats]}.flatten.compact.include?(format)
+          raise Errno::EACCES
+        end
       end
 
       begin

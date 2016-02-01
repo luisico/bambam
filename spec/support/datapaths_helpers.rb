@@ -14,7 +14,7 @@ module Datapaths
 
     def preselect_datapath(project, datapath, subdir=nil)
       if subdir
-        formats = %w(*.bw *.bam /)
+        formats = Track::FILE_FORMATS.collect{|key, value| "*.#{value[:extension]}"} << "/"
         globs = formats.map{ |f| File.join(datapath.path, "**", f) }
         file_path = Dir.glob(globs).select {|path| Pathname.new(path).basename.to_s == subdir}.join
         path = file_path.gsub(datapath.path + '/', "")[0...-1]

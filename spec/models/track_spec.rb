@@ -25,15 +25,14 @@ RSpec.describe Track do
     context 'is validated' do
       after { File.unlink(@track.path) if File.exist?(@track.path) }
 
-      it "should be valid when it exists with a .bam file extension" do
-        expect(@track).to be_valid
-      end
-
-      it "should be valid when it exists with a .bw file extension" do
-        track = FactoryGirl.build(:track, path: File.join('tmp', 'mytrack.bw'))
-        cp_track track.path, 'bw'
-        expect(track).to be_valid
-        File.unlink track.path
+      Track::FILE_FORMATS.each do |key, value|
+        extension = ".#{value[:extension]}"
+        it "should be valid when it exists with a #{extension} file extension" do
+          track = FactoryGirl.build(:track, path: File.join('tmp', "mytrack#{extension}"))
+          cp_track track.path, extension
+          expect(track).to be_valid
+          File.unlink track.path
+        end
       end
 
       it "strips leading and trailing whitespace from path" do
@@ -186,14 +185,25 @@ RSpec.describe Track do
     end
   end
 
-  describe "#file_format" do
-    %w(bam bw).each do |file_format|
+  describe "#file_extension" do
+    Track::FILE_FORMATS.each do |key, value|
+      extension = value[:extension]
       it "should return file format" do
-        track = FactoryGirl.build(:track, path: File.join("tracks", "track1.#{file_format}"))
-        expect(track.file_format).to eq file_format
+        track = FactoryGirl.build(:track, path: File.join("tracks", "track1.#{extension}"))
+        expect(track.file_extension).to eq extension
       end
     end
   end
+
+  describe "#file_format" do
+    Track::FILE_FORMATS.each do |key, value|
+      it "should return file format" do
+        track = FactoryGirl.build(:track, path: File.join("tracks", "track1.#{value[:extension]}"))
+        expect(track.file_format).to eq key
+      end
+    end
+  end
+
 
   describe "when track is destroyed" do
     before { @track.save! }

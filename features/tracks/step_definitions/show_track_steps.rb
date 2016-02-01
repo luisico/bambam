@@ -2,14 +2,14 @@
 
 ### Given
 
-Given /^there is a (bam|bw) track in that project$/ do |type|
+Given /^there is a (#{Track::FILE_FORMATS.collect{|k,v| v[:extension]}.join('|')}) track in that project$/ do |type|
   @project ||= @projects.last
   projects_datapath = FactoryGirl.create(:projects_datapath, project: @project)
   if type == 'bam'
     @track = FactoryGirl.create(:track, projects_datapath: projects_datapath)
     cp_track Pathname.new(@track.full_path).sub_ext('.bai'), 'bai'
-  elsif type== 'bw'
-    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "bw_track.bw"), projects_datapath: projects_datapath)
+  else
+    @track = FactoryGirl.create(:track, path: File.join("tmp", "tests", "#{type}_track.#{type}"), projects_datapath: projects_datapath)
   end
 end
 
@@ -38,7 +38,7 @@ When /^I am on the track page$/ do
   visit track_path(@track)
 end
 
-When /^I click on the download (bam|bai|bw) track link$/ do |type|
+When /^I click on the download (#{Track::FILE_FORMATS.collect{|k,v| v[:extension]}.join('|')}|bai) track link$/ do |type|
   click_link "download #{type} file"
 end
 
@@ -89,7 +89,7 @@ Then /^I should( not)? see a link to open track in embedded IGV$/ do |negate|
   end
 end
 
-Then /^I should see a link to download a (bam|bw) file$/ do |type|
+Then /^I should see a link to download a (#{Track::FILE_FORMATS.collect{|k,v| v[:extension]}.join('|')}) file$/ do |type|
   expect(page).to have_link "download #{type} file"
 end
 
@@ -101,7 +101,7 @@ Then /^I should( not)? see a "(.*?)" link$/ do |negate, text|
   end
 end
 
-Then /^a (bam|bai|bw) file should download$/ do |ext|
+Then /^a (#{Track::FILE_FORMATS.collect{|k,v| v[:extension]}.join('|')}|bai) file should download$/ do |ext|
   filename = Pathname.new(@track.path).sub_ext(".#{ext}").basename.to_s
   expect(page.response_headers['Content-Disposition']).to eq "attachment; filename=\"#{filename}\""
 end

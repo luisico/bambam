@@ -24,6 +24,7 @@ Feature: Show a track
    Examples:
     | user type| type | link status | status     |
     | a user   | bam  | should not  | should     |
+    | a user   | bed  | should not  | should not |
     | an admin | bw   | should      | should not |
 
   Scenario Outline: Download track
@@ -39,6 +40,7 @@ Feature: Show a track
       | bam  | bam |
       | bam  | bai |
       | bw   | bw  |
+      | bed  | bed |
 
   @javascript
   Scenario Outline: Back button
