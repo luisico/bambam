@@ -1,5 +1,5 @@
 body {
-  background-image: asset-url("bambam-helix-fade.png");
+  background-image: asset-url("background.png");
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
