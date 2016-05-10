@@ -93,12 +93,12 @@ Open the application in the browser and follow one of the interactive tours that
 Evolution into a platform to share any local data with collaborators, regardless of size or type.
 
 ## Authors
-Luis Gracia - [luisico](https://github.com/luisico)
-John Richardson - [richardsonjm](https://github.com/richardsonjm)
+- Luis Gracia - [luisico](https://github.com/luisico)
+- John Richardson - [richardsonjm](https://github.com/richardsonjm)
 
 And the endless conversations and testing of:
-Jason Banfelder
-Luce Skrabanek
+- Jason Banfelder
+- Luce Skrabanek
 
 ## Contributing
 Bambam is open source. To contribute please follow instructions below:
