@@ -142,4 +142,21 @@ RSpec.feature "User basic filebrowser functions", js: true do
     expect(fancytree_parent('dir11')).to have_css ".fancytree-custom-icon.missing"
     expect(fancytree_parent('dir11')).to have_xpath "//td[@title='missing from disk']"
   end
+
+  scenario "can see immediate subfolders of projects datapath" do
+    datapath1 = preselect_datapath(@project, @datapaths[0])
+    visit project_path(@project)
+
+    expect(page).to have_xpath  "//td[@title='dir11']"
+    expect(page).to have_xpath  "//td[@title='dir12']"
+  end
+
+  scenario "can see immediate subfolders of projects datapath when tracks selected" do
+    datapath1 = preselect_datapath(@project, @datapaths[0])
+    preselect_track(datapath1, 'track111', 'bam', @project.owner)
+    visit project_path(@project)
+
+    expect(page).to have_xpath  "//td[@title='dir11']"
+    expect(page).to have_xpath  "//td[@title='dir12']"
+  end
 end

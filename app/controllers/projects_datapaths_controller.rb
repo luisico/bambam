@@ -106,7 +106,8 @@ class ProjectsDatapathsController < ApplicationController
                 child[:children] << item
               else
                 # don't show regular users folders not in top_level or sibling folders/files of checked folder
-                child[:children] << item unless item[:folder] || child[:children].any? {|child| child[:folder] && child[:selected]}
+                selected_sibling = child[:children].any? {|child| child[:folder] && child[:selected]}
+                child[:children] << item unless selected_sibling || !child[:selected]
               end
             end
 

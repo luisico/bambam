@@ -481,6 +481,39 @@ RSpec.describe ProjectsDatapathsController do
           ]}
         ]
       end
+
+      it "should show siblings of checked track parents" do
+        tree = [
+          {title: 'tmp/tests', folder: true, lazy: true, expanded: true, children: [
+            {title: 'dir1', folder: true, lazy: true, expanded: true, selected: true, children: [
+              {title: 'dir11', folder: true, lazy: true, expanded: true, children: [
+                {title: 'track111.bam', selected: true}
+              ]}
+            ]}
+          ]}
+        ]
+
+        {
+          File.join('tmp/tests')                            => ['dir1/'],
+          File.join('tmp/tests', 'dir1')                    => ['dir11/', 'dir12/', 'track11.bam'],
+          File.join('tmp/tests', 'dir1', 'dir11')           => ['track111.bam'],
+          File.join('tmp/tests', 'dir1', 'dir12')           => ['track112.bam']
+        }.each do |path, items|
+          allow_any_instance_of(FilebrowserService).to receive(:entries).with(path).and_return(items)
+        end
+
+        expect(controller.send :fill_in_tree, tree).to eq [
+          {:title=>"tmp/tests", :folder=>true, :lazy=>true, :expanded=>true, :children=>[
+            {:title=>"dir1", :folder=>true, :lazy=>true, :expanded=>true, :selected=>true, :children=>[
+              {:title=>"dir11", :folder=>true, :lazy=>true, :expanded=>true, :children=>[
+                {:title=>"track111.bam", :selected=>true }
+              ]},
+              {:title=>"dir12", :folder=>true, :lazy=>true},
+              {:title=>"track11.bam" }
+            ]}
+          ]}
+        ]
+      end
     end
   end
 
