@@ -83,6 +83,14 @@ class StreamServicesController < ApplicationController
   end
 
   def sanitized_access_token
+    set_format unless params[:format]
     params[:access_token].sub(/\..*$/, '')
+  end
+
+  def set_format
+    extension = File.extname(params[:access_token])
+    unless extension.empty?
+      params.merge!(format: extension.sub(/^\./, ''))
+    end
   end
 end

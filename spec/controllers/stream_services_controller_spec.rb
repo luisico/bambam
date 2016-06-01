@@ -309,6 +309,38 @@ RSpec.describe StreamServicesController do
       controller.params = {access_token: '123.bam.4646.jam'}
       expect(controller.send(:sanitized_access_token)).to eq '123'
     end
+
+    it "should call #set_format when no format is set" do
+      expect_any_instance_of(StreamServicesController).to receive(:set_format)
+      controller.params = {access_token: '123456789'}
+      controller.send(:sanitized_access_token)
+    end
+
+    it "should not call #set_format when format is already set" do
+      expect_any_instance_of(StreamServicesController).not_to receive(:set_format)
+      controller.params = {access_token: '123456789', format: 'abc'}
+      controller.send(:sanitized_access_token)
+    end
+  end
+
+  describe "set_format" do
+    it "should set format when extension present" do
+      controller.params = {access_token: '123456789.abc'}
+      controller.send(:set_format)
+      expect(controller.params[:format]).to eq 'abc'
+    end
+
+    it "should set format to terminal format when extension present" do
+      controller.params = {access_token: '123456789.abc.def'}
+      controller.send(:set_format)
+      expect(controller.params[:format]).to eq 'def'
+    end
+
+    it "should not set format parameter if no extension present" do
+      controller.params = {access_token: '123456789'}
+      controller.send(:set_format)
+      expect(controller.params[:format]).to eq nil
+    end
   end
 
   # As a reminder of the inner workins of Rack::Utils.byte_ranges
