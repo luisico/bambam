@@ -11,7 +11,8 @@ class Track < ActiveRecord::Base
   FILE_FORMATS = {
     'bam' => { extension: 'bam' , aux_formats: %w(.bai .bam.bai)},
     'bigWig' => { extension: 'bw' },
-    'bed' => { extension: 'bed' }
+    'bed' => { extension: 'bed' },
+    'narrowPeak' => { extension: 'narrowPeak'}
   }
 
   validates_presence_of :name, :owner_id, :genome
