@@ -9,7 +9,7 @@ class Track < ActiveRecord::Base
   has_many :loci, as: :locusable, dependent: :destroy
 
   FILE_FORMATS = {
-    'bam' => { extension: 'bam' , aux_formats: %w(.bai .bam.bai)},
+    'bam' => { extension: 'bam' , aux_formats: %w(.bai)},
     'bigWig' => { extension: 'bw' },
     'bed' => { extension: 'bed' },
     'narrowPeak' => { extension: 'narrowPeak'}
