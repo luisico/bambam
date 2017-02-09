@@ -5,7 +5,7 @@
 <li>
   <%= link_to "download #{@track.file_extension} file", stream_services_track_path(@track), class: 'fi-download icon-key' %>
 </li>
-<% if aux_formats = Track::FILE_FORMATS[@track.file_format][:aux_formats] %>
+<% if aux_formats = @track.aux_formats %>
   <% aux_formats.map{|af| af.sub(/^\./, '')}.each do |aux_format| %>
     <li>
       <%= link_to "download #{aux_format} file", stream_services_track_path(@track, format: aux_format), class: 'fi-download icon-key' %>

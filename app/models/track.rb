@@ -35,6 +35,10 @@ class Track < ActiveRecord::Base
     FILE_FORMATS.select{|k,v| k if v[:extension] == self.file_extension}.keys.first
   end
 
+  def aux_formats
+    FILE_FORMATS[file_format][:aux_formats]
+  end
+
   protected
 
   def update_projects_datapath
