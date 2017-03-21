@@ -9,9 +9,10 @@ class Track < ActiveRecord::Base
   has_many :loci, as: :locusable, dependent: :destroy
 
   FILE_FORMATS = {
-    'bam' => { extension: 'bam' , aux_formats: %w(.bai .bam.bai)},
+    'bam' => { extension: 'bam' , aux_formats: %w(.bai)},
     'bigWig' => { extension: 'bw' },
-    'bed' => { extension: 'bed' }
+    'bed' => { extension: 'bed' },
+    'narrowPeak' => { extension: 'narrowPeak'}
   }
 
   validates_presence_of :name, :owner_id, :genome
@@ -32,6 +33,10 @@ class Track < ActiveRecord::Base
 
   def file_format
     FILE_FORMATS.select{|k,v| k if v[:extension] == self.file_extension}.keys.first
+  end
+
+  def aux_formats
+    FILE_FORMATS[file_format][:aux_formats]
   end
 
   protected

@@ -204,6 +204,17 @@ RSpec.describe Track do
     end
   end
 
+  describe "#aux_formats" do
+    it "returns nil when there are no aux formats" do
+      track = FactoryGirl.build(:track, path: File.join("tracks", "track1.bw"))
+      expect(track.aux_formats).to eq nil
+    end
+
+    it "returns aux formats when they exist" do
+      track = FactoryGirl.build(:track)
+      expect(track.aux_formats).to eq ['.bai']
+    end
+  end
 
   describe "when track is destroyed" do
     before { @track.save! }

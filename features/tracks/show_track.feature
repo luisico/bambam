@@ -22,10 +22,11 @@ Feature: Show a track
     And I should see a link to "new"
 
    Examples:
-    | user type| type | link status | status     |
-    | a user   | bam  | should not  | should     |
-    | a user   | bed  | should not  | should not |
-    | an admin | bw   | should      | should not |
+    | user type| type       | link status | status     |
+    | a user   | bam        | should not  | should     |
+    | a user   | bed        | should not  | should not |
+    | an admin | bw         | should      | should not |
+    | an admin | narrowPeak | should      | should not |
 
   Scenario Outline: Download track
     Given I am signed in
@@ -36,11 +37,12 @@ Feature: Show a track
     Then a <ext> file should download
 
     Examples:
-      | type | ext |
-      | bam  | bam |
-      | bam  | bai |
-      | bw   | bw  |
-      | bed  | bed |
+      | type       | ext        |
+      | bam        | bam        |
+      | bam        | bai        |
+      | bw         | bw         |
+      | bed        | bed        |
+      | narrowPeak | narrowPeak |
 
   @javascript
   Scenario Outline: Back button

@@ -285,12 +285,13 @@ RSpec.describe StreamServicesController do
     end
 
     context "acceptable auxiliary files" do
-      %w(bai bam.bai).each do |format|
-        it "should allow #{format} extension" do
-          auxpath = @path + '.bai'
-          cp_track auxpath, 'bai'
+      Track::FILE_FORMATS.collect{|k,v| v[:aux_formats]}.flatten.compact.each do |aux_format|
+        it "should allow #{aux_format} extension" do
+          auxpath = @path.sub('.bam', aux_format)
+          aux_format = aux_format.sub(/^\./, '')
+          cp_track auxpath, aux_format
           expect {
-            controller.send(:find_path_with_format, @path, format)
+            controller.send(:find_path_with_format, @path, aux_format)
           }.not_to raise_error
           File.unlink(auxpath)
         end
